@@ -8,7 +8,7 @@
 }}
 
 with slack_reported_incidents as (
-    select * from {{ source('landing_zone', 'v_qualify_slack_messages') }}
+    select * from {{ ref('v_qualify_slack_messages') }}
     where incident_number is null
 ),
 

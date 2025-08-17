@@ -15,7 +15,7 @@ with recent_recorded_incidents as (
 select 
     sm.*,
     i.incident_number
-from {{ source('landing_zone', 'v_qualify_slack_messages') }} sm
+from {{ ref('v_qualify_slack_messages') }} sm
 left join recent_recorded_incidents i 
 on sm.channel = i.external_source_id  -- where incident was reported from the same channel
 and ai_filter(prompt($$

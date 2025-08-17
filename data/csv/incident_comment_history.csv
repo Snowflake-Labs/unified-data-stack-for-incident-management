@@ -18,9 +18,5 @@ cmt_016,INC-2024-004,usr_004,Configuration restored. Email service operational. 
 cmt_017,INC-2024-005,usr_006,Users reporting that items added to cart are not persisting between sessions.,2024-02-01 13:28:00
 cmt_018,INC-2024-005,usr_007,Investigating session storage and database persistence for cart functionality.,2024-02-01 14:00:00
 cmt_019,INC-2024-005,usr_007,Found issue with session token validation. Working on a fix.,2024-02-01 15:00:00
-cmt_020,INC-2024-006,usr_008,iOS app crashing on startup for iOS 17.x users. Investigating crash logs.,2024-02-03 16:18:00
-cmt_021,INC-2024-007,usr_004,Database connection pool exhausted. Multiple services affected.,2024-02-05 07:33:00
-cmt_022,INC-2024-008,usr_009,Search returning no results even for common product names.,2024-02-06 10:47:00
 cmt_023,INC-2024-009,usr_005,SSL certificate expires in 7 days. Renewing now to prevent service disruption.,2024-02-07 12:03:00
 cmt_024,INC-2024-009,usr_005,Certificate renewed successfully. Updated load balancer configuration.,2024-02-07 13:25:00
-cmt_025,INC-2024-010,usr_010,Inventory counts not matching between systems. Investigating sync process.,2024-02-08 15:22:00
