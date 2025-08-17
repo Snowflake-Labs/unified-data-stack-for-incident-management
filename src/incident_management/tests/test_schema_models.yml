@@ -1,0 +1,257 @@
+version: 2
+
+models:
+  # Landing Zone Models Tests
+  - name: incidents
+    description: "Incidents table with comprehensive validation"
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "affected_customers_count >= 0"
+          config:
+            severity: error
+      - dbt_utils.expression_is_true:
+          expression: "estimated_revenue_impact >= 0"
+          config:
+            severity: error
+    columns:
+      - name: incident_number
+        description: "Primary key for incidents"
+        tests:
+          - unique
+          - not_null
+      - name: title
+        description: "Incident title"
+        tests:
+          - not_null
+      - name: status
+        description: "Current incident status"
+        tests:
+          - accepted_values:
+              values: ['open', 'resolved', 'closed']
+      - name: priority
+        description: "Incident priority"
+        tests:
+          - accepted_values:
+              values: ['low', 'medium', 'high', 'critical']
+      - name: reporter_id
+        description: "Reporter user reference"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('users')
+              field: id
+      - name: assignee_id
+        description: "Assignee user reference"
+        tests:
+          - relationships:
+              to: ref('users')
+              field: id
+      - name: created_at
+        description: "Incident creation timestamp"
+        tests:
+          - not_null
+      - name: sla_breach
+        description: "SLA breach indicator"
+        tests:
+          - not_null
+
+  - name: users
+    description: "Users table with validation"
+    columns:
+      - name: id
+        description: "Primary key for users"
+        tests:
+          - unique
+          - not_null
+      - name: email
+        description: "User email address"
+        tests:
+          - unique
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "email like '%@%.%'"
+      - name: first_name
+        description: "User first name"
+        tests:
+          - not_null
+      - name: last_name
+        description: "User last name"
+        tests:
+          - not_null
+      - name: role
+        description: "User role"
+        tests:
+          - not_null
+      - name: is_active
+        description: "User active status"
+        tests:
+          - not_null
+
+  - name: incident_comment_history
+    description: "Comment history with referential integrity"
+    columns:
+      - name: id
+        description: "Primary key for comments"
+        tests:
+          - unique
+          - not_null
+      - name: incident_number
+        description: "Reference to incident"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('incidents')
+              field: incident_number
+      - name: author_id
+        description: "Comment author reference"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('users')
+              field: id
+      - name: content
+        description: "Comment content"
+        tests:
+          - not_null
+      - name: created_at
+        description: "Comment creation timestamp"
+        tests:
+          - not_null
+
+  - name: incident_attachments
+    description: "Attachments with referential integrity"
+    columns:
+      - name: id
+        description: "Primary key for attachments"
+        tests:
+          - unique
+          - not_null
+      - name: incident_number
+        description: "Reference to incident"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('incidents')
+              field: incident_number
+      - name: uploaded_at
+        description: "Upload timestamp"
+        tests:
+          - not_null
+
+  # Curated Zone Views Tests
+  - name: v_active_incidents
+    description: "Active incidents view validation"
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "age_hours >= 0"
+          config:
+            severity: error
+      - dbt_utils.expression_is_true:
+          expression: "affected_customers_count >= 0"
+          config:
+            severity: error
+    columns:
+      - name: incident_number
+        description: "Incident identifier"
+        tests:
+          - unique
+          - not_null
+      - name: status
+        description: "Should only be open"
+        tests:
+          - accepted_values:
+              values: ['open']
+      - name: sla_status
+        description: "SLA status indicator"
+        tests:
+          - accepted_values:
+              values: ['OVERDUE', 'DUE_SOON', 'ON_TRACK']
+
+  - name: v_category_performance
+    description: "Category performance metrics validation"
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "resolution_rate_percentage >= 0 and resolution_rate_percentage <= 100"
+          config:
+            severity: error
+      - dbt_utils.expression_is_true:
+          expression: "total_incidents >= resolved_incidents"
+          config:
+            severity: error
+    columns:
+      - name: category_name
+        description: "Category identifier"
+        tests:
+          - not_null
+      - name: total_incidents
+        description: "Total incident count"
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+
+  - name: v_high_impact_incidents
+    description: "High impact incidents validation"
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "business_impact_score > 0"
+          config:
+            severity: error
+    columns:
+      - name: incident_number
+        description: "Incident identifier"
+        tests:
+          - unique
+          - not_null
+      - name: time_hours
+        description: "Time calculation"
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+
+  - name: v_incident_overview
+    description: "Incident overview validation"
+    columns:
+      - name: incident_number
+        description: "Incident identifier"
+        tests:
+          - unique
+          - not_null
+      - name: status_category
+        description: "Status category mapping"
+        tests:
+          - accepted_values:
+              values: ['Active', 'Resolved', 'Closed', 'Unknown']
+      - name: priority_score
+        description: "Priority scoring"
+        tests:
+          - accepted_values:
+              values: [0, 1, 2, 3, 4]
+
+  - name: v_monthly_incident_trends
+    description: "Monthly trends validation"
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "resolution_rate_percentage >= 0 and resolution_rate_percentage <= 100"
+          config:
+            severity: error
+    columns:
+      - name: month
+        description: "Month identifier"
+        tests:
+          - unique
+          - not_null
+
+  - name: v_weekly_incident_trends
+    description: "Weekly trends validation"
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "resolution_rate_percentage >= 0 and resolution_rate_percentage <= 100"
+          config:
+            severity: error
+    columns:
+      - name: week
+        description: "Week identifier"
+        tests:
+          - unique
+          - not_null

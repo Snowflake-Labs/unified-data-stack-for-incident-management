@@ -1,0 +1,11 @@
+id,email,first_name,last_name,role,department,team,is_active,created_at,updated_at
+usr_001,john.smith@company.com,John,Smith,incident_manager,IT,Infrastructure,true,2024-01-15 09:00:00,2024-01-15 09:00:00
+usr_002,sarah.johnson@company.com,Sarah,Johnson,engineer,Engineering,Backend,true,2024-01-15 09:00:00,2024-01-15 09:00:00
+usr_003,mike.wilson@company.com,Mike,Wilson,support_agent,Customer Support,Level 2,true,2024-01-15 09:00:00,2024-01-15 09:00:00
+usr_004,lisa.chen@company.com,Lisa,Chen,devops_engineer,IT,DevOps,true,2024-01-15 09:00:00,2024-01-15 09:00:00
+usr_005,david.brown@company.com,David,Brown,security_analyst,Security,InfoSec,true,2024-01-15 09:00:00,2024-01-15 09:00:00
+usr_006,jennifer.davis@company.com,Jennifer,Davis,product_manager,Product,Ecommerce,true,2024-01-15 09:00:00,2024-01-15 09:00:00
+usr_007,robert.taylor@company.com,Robert,Taylor,engineer,Engineering,Frontend,true,2024-01-15 09:00:00,2024-01-15 09:00:00
+usr_008,amanda.white@company.com,Amanda,White,qa_engineer,Quality Assurance,Testing,true,2024-01-15 09:00:00,2024-01-15 09:00:00
+usr_009,thomas.garcia@company.com,Thomas,Garcia,support_agent,Customer Support,Level 1,true,2024-01-15 09:00:00,2024-01-15 09:00:00
+usr_010,maria.rodriguez@company.com,Maria,Rodriguez,data_analyst,Analytics,Business Intelligence,true,2024-01-15 09:00:00,2024-01-15 09:00:00
