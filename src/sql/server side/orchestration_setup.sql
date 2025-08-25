@@ -2,7 +2,6 @@ use role dbt_projects_admin;
 use database incident_management;
 use schema DBT_PROJECT_DEPLOYMENTS;
 
-
 create or replace task DEV_DEMO_PIPELINE_BOOKING_BY_DAY
 	warehouse=incident_management_dbt_wh
 	schedule='USING CRON 1 0 * * * America/Toronto'

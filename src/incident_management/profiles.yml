@@ -1,0 +1,24 @@
+incident_management:
+  outputs:
+    dev:
+      account: "{{ env_var('DBT_SNOWFLAKE_ACCOUNT') }}"
+      database: "{{ env_var('DBT_SNOWFLAKE_DATABASE_DEV') }}"
+      private_key_path: "{{ env_var('DBT_SNOWFLAKE_PRIVATE_KEY_PATH') }}"
+      role: "{{ env_var('DBT_SNOWFLAKE_ROLE_DEV') }}"
+      schema: "{{ env_var('DBT_SNOWFLAKE_SCHEMA_DEV') }}"
+      threads: "{{ env_var('DBT_THREADS', 1) | as_number }}"
+      type: snowflake
+      user: "{{ env_var('DBT_SNOWFLAKE_USER_DEV') }}"
+      warehouse: "{{ env_var('DBT_SNOWFLAKE_WAREHOUSE_DEV') }}"
+    prod:
+      account: "{{ env_var('DBT_SNOWFLAKE_ACCOUNT') }}"
+      database: "{{ env_var('DBT_SNOWFLAKE_DATABASE_PROD') }}"
+      private_key_path: "{{ env_var('DBT_SNOWFLAKE_PRIVATE_KEY_PATH') }}"
+      role: "{{ env_var('DBT_SNOWFLAKE_ROLE_PROD') }}"
+      schema: "{{ env_var('DBT_SNOWFLAKE_SCHEMA_PROD') }}"
+      threads: "{{ env_var('DBT_THREADS', 2) | as_number }}"
+      type: snowflake
+      user: "{{ env_var('DBT_SNOWFLAKE_USER_PROD') }}"
+      warehouse: "{{ env_var('DBT_SNOWFLAKE_WAREHOUSE_PROD') }}"
+  target: "{{ env_var('DBT_TARGET', 'dev') }}"
+

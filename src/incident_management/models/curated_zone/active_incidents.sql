@@ -1,6 +1,6 @@
 {{
   config(
-    materialized='view',
+    materialized='table',
     description='Active incidents requiring attention with SLA status and priority ordering'
   )
 }}

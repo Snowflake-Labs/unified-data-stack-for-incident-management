@@ -1,11 +1,11 @@
 -- Test: Active incidents view data quality and business logic
--- Tests for the curated_zone v_active_incidents view
+-- Tests for the curated_zone active_incidents table
 
 -- Test 1: Ensure only open incidents are included
 select 'test_active_incidents_only_open_status' as test_name
 where (
     select count(*)
-    from {{ ref('v_active_incidents') }}
+    from {{ ref('active_incidents') }}
     where status != 'open'
 ) > 0
 
@@ -15,7 +15,7 @@ union all
 select 'test_active_incidents_sla_status_logic' as test_name
 where (
     select count(*)
-    from {{ ref('v_active_incidents') }}
+    from {{ ref('active_incidents') }}
     where (sla_due_at is not null and sla_due_at < current_timestamp() and sla_status != 'OVERDUE')
        or (sla_due_at is not null and sla_due_at >= current_timestamp() 
            and sla_due_at < dateadd('hour', 2, current_timestamp()) and sla_status != 'DUE_SOON')
@@ -28,7 +28,7 @@ union all
 select 'test_active_incidents_age_hours_reasonable' as test_name
 where (
     select count(*)
-    from {{ ref('v_active_incidents') }}
+    from {{ ref('active_incidents') }}
     where age_hours < 0 or age_hours > 8760 -- More than a year seems unreasonable for active incidents
 ) > 0
 
@@ -38,7 +38,7 @@ union all
 select 'test_active_incidents_non_negative_customers' as test_name
 where (
     select count(*)
-    from {{ ref('v_active_incidents') }}
+    from {{ ref('active_incidents') }}
     where affected_customers_count < 0
 ) > 0
 
@@ -48,7 +48,7 @@ union all
 select 'test_active_incidents_non_negative_revenue' as test_name
 where (
     select count(*)
-    from {{ ref('v_active_incidents') }}
+    from {{ ref('active_incidents') }}
     where estimated_revenue_impact < 0
 ) > 0
 
@@ -58,7 +58,7 @@ union all
 select 'test_active_incidents_incident_number_populated' as test_name
 where (
     select count(*)
-    from {{ ref('v_active_incidents') }}
+    from {{ ref('active_incidents') }}
     where incident_number is null or trim(incident_number) = ''
 ) > 0
 
@@ -68,6 +68,6 @@ union all
 select 'test_active_incidents_title_populated' as test_name
 where (
     select count(*)
-    from {{ ref('v_active_incidents') }}
+    from {{ ref('active_incidents') }}
     where title is null or trim(title) = ''
 ) > 0

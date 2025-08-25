@@ -16,9 +16,9 @@ select
     '' as department,
     '' as team,
     true as is_active,
-    sm.lastupdated as created_at,
+    current_timestamp() as created_at,
     current_timestamp() as updated_at
 from {{ source('landing_zone', 'slack_members') }} sm 
 {% if is_incremental() %}   
-where sm.lastupdated > (select max(sm.lastupdated) from {{ this }})
+where sm.lastupdated > (select max(created_at) from {{ this }})
 {% endif %}

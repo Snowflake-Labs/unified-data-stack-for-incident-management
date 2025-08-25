@@ -41,5 +41,3 @@ models:
       +materialized: table
     curated_zone:
       +materialized: table
-    transformed_zone:
-      +materialized: view

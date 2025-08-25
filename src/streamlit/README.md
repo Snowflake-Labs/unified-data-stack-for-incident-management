@@ -1,10 +1,19 @@
 # Incident Management Dashboard
 
-A multi-page Streamlit application for visualizing incident management metrics and comparing incident-related images.
+A modular, multi-page Streamlit application for visualizing incident management metrics and analytics.
+
+## Architecture
+
+The application uses a **modular page system** where each page is a separate Python module in the `pages/` directory. This allows for:
+
+- **Easy maintenance**: Each page is isolated in its own module
+- **Dynamic loading**: Pages are loaded dynamically by the main app
+- **Extensibility**: New pages can be added by creating new modules
+- **Code organization**: Clean separation of concerns
 
 ## Features
 
-### 📊 Dashboard Page
+### 🚨 Dashboard Page (`pages/dashboard.py`)
 - **Key Metrics Tiles**: Active incidents, critical incidents, SLA status, resolution time, and resolution rate
 - **Monthly Trends**: Line chart showing incident volume over time
 - **Weekly Trends**: Bar chart with critical incident overlay
@@ -13,11 +22,17 @@ A multi-page Streamlit application for visualizing incident management metrics a
 - **SLA Status**: Bar chart of SLA compliance
 - **Active Incidents Table**: Filterable table with detailed incident information
 
-### 🖼️ Image Comparison Page
+### 🖼️ Image Comparison Page (`pages/image_comparison.py`)
 - **Side-by-side Image Display**: Compare two images simultaneously
 - **Image Selection**: Dropdown menus to select images from the data/images directory
 - **Image Information**: Display dimensions and metadata
-- **Comparison Tools**: Notes, analysis, and save functionality (placeholder features)
+- **Comparison Tools**: Notes, analysis, and save functionality
+
+### 📊 Analytics Page (`pages/analytics.py`)
+- **Advanced KPIs**: Detailed performance indicators with trend analysis
+- **Time Series Analysis**: Interactive date range selection and trend visualization
+- **Team Performance**: Multi-dimensional team efficiency analysis
+- **Statistical Summary**: Correlation analysis and trend detection
 
 ## Installation
 
@@ -31,31 +46,74 @@ pip install -r requirements.txt
 streamlit run main.py
 ```
 
-## Data Source
-
-The dashboard currently uses sample data for demonstration purposes. In a production environment, this would be connected to:
-- DBT curated zone models for incident metrics
-- Database connections for real-time data
-- File system or cloud storage for images
-
 ## File Structure
 
 ```
 streamlit/
-├── main.py              # Main Streamlit application
-├── requirements.txt     # Python dependencies
-└── README.md           # This file
+├── main.py                      # Main application with dynamic page loading
+├── requirements.txt             # Python dependencies
+├── README.md                   # This file
+└── pages/                      # Modular page components
+    ├── __init__.py             # Package initialization
+    ├── dashboard.py            # Main dashboard page
+    ├── image_comparison.py     # Image comparison functionality
+    └── analytics.py            # Advanced analytics page
 ```
+
+## Adding New Pages
+
+To add a new page to the application:
+
+1. **Create a new module** in the `pages/` directory (e.g., `pages/reports.py`)
+
+2. **Implement a `render()` function** in your module:
+```python
+def render():
+    st.title("📊 My New Page")
+    st.write("Page content goes here...")
+```
+
+3. **Register the page** in `main.py` by adding it to the `PAGE_REGISTRY`:
+```python
+PAGE_REGISTRY = {
+    "🚨 Dashboard": "dashboard",
+    "🖼️ Image Comparison": "image_comparison", 
+    "📊 Analytics": "analytics",
+    "📊 Reports": "reports"  # Add your new page here
+}
+```
+
+4. **Restart the app** and your new page will appear in the sidebar navigation!
+
+## Dynamic Page Loading
+
+The main application (`main.py`) uses Python's `importlib` to dynamically load page modules at runtime. This provides several benefits:
+
+- **Performance**: Only the selected page is loaded into memory
+- **Modularity**: Each page is completely independent
+- **Error Isolation**: Issues in one page don't affect others
+- **Development**: Pages can be developed and tested independently
+
+## Data Sources
+
+The application currently uses sample data for demonstration. In production, you would:
+
+- **Replace sample data functions** with database connections
+- **Connect to DBT curated zone models** for real incident metrics
+- **Integrate with external APIs** for real-time data
+- **Add authentication** for secure data access
 
 ## Customization
 
-- **Data Connection**: Replace the `create_sample_data()` function with actual database connections
-- **Styling**: Modify the CSS in the main.py file to customize appearance
-- **Charts**: Add or modify Plotly charts in the dashboard functions
-- **Image Sources**: Update image directory path or add cloud storage integration
+- **Styling**: Modify CSS in `main.py` for global styles, or add page-specific styles in individual modules
+- **Charts**: Each page module can use any visualization library (Plotly, Matplotlib, Altair, etc.)
+- **Data Processing**: Add utility modules for data processing and transformation
+- **Configuration**: Add environment variables or config files for different deployment environments
 
 ## Navigation
 
-Use the sidebar to navigate between:
-- **Dashboard**: Main incident metrics and analytics
-- **Image Comparison**: Side-by-side image comparison tool
+The application features a dynamic sidebar that:
+- **Auto-generates navigation** from the page registry
+- **Shows current page status** and application information
+- **Provides contextual help** and usage information
+- **Updates timestamps** and connection status

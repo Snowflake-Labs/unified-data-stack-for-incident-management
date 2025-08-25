@@ -9,12 +9,12 @@
 with recent_recorded_incidents as (
     select * from {{ ref('incidents') }}
     where status = 'open' 
-    and created_at > date_add('day', -30, current_timestamp())
+    and created_at > dateadd('day', -30, current_timestamp())
 )
 
 select 
-    sm.*,
-    i.incident_number
+    sm.* exclude (incident_number),
+    coalesce(i.incident_number, sm.incident_number) as incident_number
 from {{ ref('v_qualify_slack_messages') }} sm
 left join recent_recorded_incidents i 
 on sm.channel = i.external_source_id  -- where incident was reported from the same channel

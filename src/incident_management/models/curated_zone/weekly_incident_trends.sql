@@ -1,6 +1,6 @@
 {{
   config(
-    materialized='view',
+    materialized='table',
     description='Weekly incident trends for the last 12 weeks showing resolution patterns'
   )
 }}

@@ -1,11 +1,11 @@
 -- Test: Incident overview view data quality and business logic
--- Tests for the curated_zone v_incident_overview view
+-- Tests for the curated_zone incident_overview table
 
 -- Test 1: Ensure all time calculations are non-negative when populated
 select 'test_incident_overview_non_negative_times' as test_name
 where (
     select count(*)
-    from {{ ref('v_incident_overview') }}
+    from {{ ref('incident_overview') }}
     where acknowledgment_time_hours < 0
        or first_response_time_hours < 0
        or resolution_time_hours < 0
@@ -19,7 +19,7 @@ union all
 select 'test_incident_overview_status_category_mapping' as test_name
 where (
     select count(*)
-    from {{ ref('v_incident_overview') }}
+    from {{ ref('incident_overview') }}
     where (status = 'open' and status_category != 'Active')
        or (status = 'resolved' and status_category != 'Resolved')
        or (status = 'closed' and status_category != 'Closed')
@@ -32,7 +32,7 @@ union all
 select 'test_incident_overview_priority_score_mapping' as test_name
 where (
     select count(*)
-    from {{ ref('v_incident_overview') }}
+    from {{ ref('incident_overview') }}
     where (priority = 'critical' and priority_score != 4)
        or (priority = 'high' and priority_score != 3)
        or (priority = 'medium' and priority_score != 2)
@@ -45,7 +45,7 @@ union all
 select 'test_incident_overview_risk_indicator_logic' as test_name
 where (
     select count(*)
-    from {{ ref('v_incident_overview') }}
+    from {{ ref('incident_overview') }}
     where (sla_breach = true and risk_indicator != 'SLA Breached')
        or (sla_breach = false and status = 'open' and sla_due_at is not null 
            and datediff('hour', current_timestamp(), sla_due_at) <= 2 
@@ -60,7 +60,7 @@ union all
 select 'test_incident_overview_current_age_open_only' as test_name
 where (
     select count(*)
-    from {{ ref('v_incident_overview') }}
+    from {{ ref('incident_overview') }}
     where status != 'open' and current_age_hours is not null
 ) > 0
 
@@ -70,7 +70,7 @@ union all
 select 'test_incident_overview_sla_hours_open_only' as test_name
 where (
     select count(*)
-    from {{ ref('v_incident_overview') }}
+    from {{ ref('incident_overview') }}
     where (status != 'open' or sla_due_at is null) and hours_until_sla_breach is not null
 ) > 0
 
@@ -80,7 +80,7 @@ union all
 select 'test_incident_overview_non_negative_customers' as test_name
 where (
     select count(*)
-    from {{ ref('v_incident_overview') }}
+    from {{ ref('incident_overview') }}
     where affected_customers_count < 0
 ) > 0
 
@@ -90,7 +90,7 @@ union all
 select 'test_incident_overview_non_negative_revenue' as test_name
 where (
     select count(*)
-    from {{ ref('v_incident_overview') }}
+    from {{ ref('incident_overview') }}
     where estimated_revenue_impact < 0
 ) > 0
 
@@ -100,7 +100,7 @@ union all
 select 'test_incident_overview_incident_number_populated' as test_name
 where (
     select count(*)
-    from {{ ref('v_incident_overview') }}
+    from {{ ref('incident_overview') }}
     where incident_number is null or trim(incident_number) = ''
 ) > 0
 
@@ -110,6 +110,6 @@ union all
 select 'test_incident_overview_title_populated' as test_name
 where (
     select count(*)
-    from {{ ref('v_incident_overview') }}
+    from {{ ref('incident_overview') }}
     where title is null or trim(title) = ''
 ) > 0

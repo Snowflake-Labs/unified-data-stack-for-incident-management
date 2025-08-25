@@ -41,7 +41,7 @@ select 'test_cross_model_incident_count_consistency' as test_name
 where (
     select abs(
         (select count(*) from {{ ref('incidents') }}) - 
-        (select count(*) from {{ ref('v_incident_overview') }})
+        (select count(*) from {{ ref('incident_overview') }})
     )
 ) > 0
 
@@ -52,7 +52,7 @@ select 'test_cross_model_active_incident_consistency' as test_name
 where (
     select abs(
         (select count(*) from {{ ref('incidents') }} where status = 'open') - 
-        (select count(*) from {{ ref('v_active_incidents') }})
+        (select count(*) from {{ ref('active_incidents') }})
     )
 ) > 0
 
@@ -62,7 +62,7 @@ union all
 select 'test_cross_model_high_impact_subset' as test_name
 where (
     select count(*)
-    from {{ ref('v_high_impact_incidents') }} hi
+    from {{ ref('high_impact_incidents') }} hi
     left join {{ ref('incidents') }} i on hi.incident_number = i.incident_number
     where i.incident_number is null
 ) > 0

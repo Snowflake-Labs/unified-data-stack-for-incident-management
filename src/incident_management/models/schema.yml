@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: landing_zone
     description: "Raw incident management data"
-    schema: incident_management.landing_zone
+    schema: landing_zone
     tables:
 
       - name: slack_messages

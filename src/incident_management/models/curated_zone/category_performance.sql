@@ -1,6 +1,6 @@
 {{
   config(
-    materialized='view',
+    materialized='table',
     description='Performance metrics grouped by incident category including resolution rates and timing'
   )
 }}

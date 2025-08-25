@@ -1,6 +1,6 @@
 {{
   config(
-    materialized='view',
+    materialized='table',
     description='Comprehensive incident overview with calculated metrics and comment activity'
   )
 }}
@@ -25,8 +25,6 @@ SELECT
     -- Business impact
     i.affected_customers_count,
     i.estimated_revenue_impact,
-    i.customer_id,
-    i.order_id,
     
     -- Timing metrics (original timestamps)
     i.created_at,

@@ -1,6 +1,6 @@
 {{
   config(
-    materialized='view',
+    materialized='table',
     description='High-impact incidents with calculated business impact scores and priority filtering'
   )
 }}
@@ -43,8 +43,6 @@ SELECT
     i.source_system,
     i.external_source_id,
     i.has_attachments,
-    i.customer_id,
-    i.order_id,
     i.resolution_summary,
     i.root_cause,
     i.resolution_category

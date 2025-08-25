@@ -1,6 +1,6 @@
 {{
   config(
-    materialized='view',
+    materialized='table',
     description='Monthly incident trends and metrics for reporting and analysis'
   )
 }}
