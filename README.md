@@ -46,13 +46,13 @@ The following environment variables **must** be set before running dbt:
 
 | Variable | Description |
 |----------|-------------|
-| `DBT_SNOWFLAKE_DATABASE` | Database name for dev |
-| `DBT_SNOWFLAKE_ROLE`  | Role for dev environment |
-| `DBT_SNOWFLAKE_SCHEMA`  | Schema for dev environment |
+| `DBT_MODEL_DATABASE` | Database name for dev |
+| `DBT_MODEL_ROLE`  | Role for dev environment |
+| `DBT_MODEL_SCHEMA`  | Schema for dev environment |
 | `DBT_SNOWFLAKE_WAREHOUSE`  | Warehouse for dev |
-| `DBT_SNOWFLAKE_DATABASE_PROD`  | Database name for prod |
-| `DBT_SNOWFLAKE_ROLE_PROD` | Role for prod environment |
-| `DBT_SNOWFLAKE_SCHEMA_PROD`  | Schema for prod environment |
+| `DBT_MODEL_DATABASE_PROD`  | Database name for prod |
+| `DBT_MODEL_ROLE_PROD` | Role for prod environment |
+| `DBT_MODEL_SCHEMA_PROD`  | Schema for prod environment |
 | `DBT_SNOWFLAKE_WAREHOUSE_PROD` | Warehouse for prod |
 | `DBT_TARGET`  | Default target environment |
 | `DBT_THREADS`  | Number of threads |
