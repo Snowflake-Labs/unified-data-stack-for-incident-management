@@ -8,6 +8,7 @@ incident_management:
       threads: "{{ env_var('DBT_THREADS', 1) | as_number }}"
       type: snowflake
       user: "{{ env_var('DBT_SNOWFLAKE_USER') }}"
+      password: "{{ env_var('DBT_SNOWFLAKE_PASSWORD') }}"
       warehouse: "{{ env_var('DBT_SNOWFLAKE_WAREHOUSE') }}"
     prod:
       account: "{{ env_var('DBT_SNOWFLAKE_ACCOUNT') }}"

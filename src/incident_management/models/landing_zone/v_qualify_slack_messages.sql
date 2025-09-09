@@ -40,7 +40,7 @@ select
             $$
             Find the incident number that may be present either in the image {0} or in the text {1}. 
             Use the one in the image if found.Look for alphanumeric codes preceded by the keyword 'incident' (case-insensitive). 
-            Examples: INC-12345, incident_001, INCIDENT-ABC123.
+            Examples: INC-12345, incident_001, INC-2025-001.
             Respond only in JSON format with a single key called 'incident_code'.
             Do not add any explanation in the response.
             $$, 
@@ -84,7 +84,7 @@ select
                 $$
                 Extract incident codes from Slack text {0}. 
                 Look for alphanumeric codes preceded by the keyword 'incident' (case-insensitive). 
-                Examples: INC-12345, incident_001, INCIDENT-ABC123.
+                Examples: INC-12345, incident_001, INC-2025-001.
                 Respond only in JSON format with a single key called 'incident_code'.
                 Do not add any explanation in the response.
                 $$, 

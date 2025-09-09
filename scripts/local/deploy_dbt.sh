@@ -6,7 +6,7 @@
 # env_file_path - Optional path to custom environment file (defaults to ../.env)
 
 # Default environment file
-DEFAULT_ENV_FILE="../.env"
+DEFAULT_ENV_FILE="../../.env"
 
 # Check if argument is provided
 if [ $# -eq 0 ]; then
@@ -130,6 +130,8 @@ if [ "$DEPLOY_TYPE" = "force" ]; then
         exit 1
     fi
     
+    echo "Deploying new dbt project with --force flag using SNOWFLAKE_JWT authentication"
+
     # Deploy new dbt project with --force flag
     snow dbt deploy $DBT_PROJECT_NAME \
         --source $DBT_PROJECT_DIR \
@@ -149,6 +151,8 @@ else
         echo "Required for refresh deployment with password authentication"
         exit 1
     fi
+
+    echo "Deploying existing dbt project without --force flag using password authentication"
     
     # Deploy existing dbt project without --force flag
     snow dbt deploy $DBT_PROJECT_NAME \

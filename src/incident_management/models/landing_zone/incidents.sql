@@ -10,7 +10,7 @@
 -- Create only new incidents in this incremental mode; new incidents are detected by absence of an incident number from previous step in the pipeline
 with slack_reported_incidents as (
     select * from {{ ref('v_qualify_slack_messages') }}
-    where incident_number is null
+    where IS_NULL_VALUE(parse_json(incident_number):incident_code)
 ),
 
 enriched_incidents as (
@@ -19,7 +19,7 @@ enriched_incidents as (
         concat_ws('-', 'INC', '2025', randstr(3,  random())) as incident_number,
         ai_complete('claude-3-5-sonnet', prompt(
             $$
-            Generate a title for the incident based on the description.
+            Generate a title for the incident based on the given description {0}.
             Examples:
             - "Website Performance Degradation"
             - "Payment Gateway Outage"
@@ -32,6 +32,8 @@ enriched_incidents as (
         -- User information
         i.reporter_id,
         '' as assignee_id,
+        '' as customer_id,
+        '' as order_id,
         
         -- Business impact
         0 as affected_customers_count,
@@ -74,4 +76,8 @@ enriched_incidents as (
     from slack_reported_incidents i
 )
 
-select * from enriched_incidents
+select * 
+from enriched_incidents
+{% if is_incremental() %}
+WHERE created_at > (SELECT MAX(created_at) FROM {{ this }})
+{% endif %}
