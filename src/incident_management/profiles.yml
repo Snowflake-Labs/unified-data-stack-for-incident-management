@@ -1,23 +1,20 @@
 incident_management:
   outputs:
     dev:
-      account: "{{ env_var('DBT_SNOWFLAKE_ACCOUNT') }}"
-      database: "{{ env_var('DBT_MODEL_DATABASE') }}"
-      role: "{{ env_var('DBT_MODEL_ROLE') }}"
-      schema: "{{ env_var('DBT_MODEL_SCHEMA') }}"
-      threads: "{{ env_var('DBT_THREADS', 1) | as_number }}"
+      account: "uib27272"
+      database: "incident_management"
+      role: "dbt_projects_engineer"
+      schema: "landing_zone"
       type: snowflake
-      user: "{{ env_var('DBT_SNOWFLAKE_USER') }}"
-      password: "{{ env_var('DBT_SNOWFLAKE_PASSWORD') }}"
-      warehouse: "{{ env_var('DBT_SNOWFLAKE_WAREHOUSE') }}"
+      user: "genp_service_usr"
+      warehouse: "incident_management_dbt_wh"
     prod:
-      account: "{{ env_var('DBT_SNOWFLAKE_ACCOUNT') }}"
-      database: "{{ env_var('DBT_MODEL_DATABASE') }}"
-      role: "{{ env_var('DBT_MODEL_ROLE') }}"
-      schema: "{{ env_var('DBT_MODEL_SCHEMA') }}"
-      threads: "{{ env_var('DBT_THREADS', 2) | as_number }}"
+      account: "uib27272"
+      database: "incident_management"
+      role: "dbt_projects_engineer"
+      schema: "landing_zone"
       type: snowflake
-      user: "{{ env_var('DBT_SNOWFLAKE_USER') }}"
-      warehouse: "{{ env_var('DBT_SNOWFLAKE_WAREHOUSE') }}"
-  target: "{{ env_var('DBT_TARGET', 'dev') }}"
+      user: "genp_service_usr"
+      warehouse: "incident_management_dbt_wh"
+  target: "dev"
 

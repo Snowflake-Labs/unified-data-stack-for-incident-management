@@ -9,6 +9,8 @@ import plotly.graph_objects as go
 import plotly.express as px
 from datetime import datetime, timedelta
 import random
+import app_utils as au
+import os
 
 # Page configuration
 st.set_page_config(
@@ -18,6 +20,22 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
+st.logo("snowflake.png")
+
+def initialize_session_state():
+    if "snowpark_session" not in st.session_state:
+        snowflake_connection = au.SnowflakeConnection()
+        st.session_state.snowpark_session, st.session_state.snowflake_root = snowflake_connection.connect(
+            **{
+                "account": os.getenv("DBT_SNOWFLAKE_ACCOUNT"),
+                "database": os.getenv("DBT_MODEL_DATABASE"), 
+                "schema": "curated_zone", 
+                "warehouse": os.getenv("DBT_SNOWFLAKE_WAREHOUSE"),
+                "role": os.getenv("DBT_MODEL_ROLE"),
+                "user": os.getenv("DBT_SNOWFLAKE_USER"),
+                "password": os.getenv("DBT_SNOWFLAKE_PASSWORD")
+            }
+        )
 def generate_sample_incident_data():
     """Generate sample incident data for the dashboard"""
     
@@ -117,14 +135,17 @@ def create_header():
         </div>
         """, unsafe_allow_html=True)
 
-def create_metrics_cards(data):
+def create_metrics_cards():
     """Create key metrics cards"""
+
+    database = st.session_state.snowpark_session.get_current_database()
+    schema = st.session_state.snowpark_session.get_current_schema()
     
     # Calculate current metrics
-    total_active = len(data["active_incidents"])
-    critical_count = len([inc for inc in data["active_incidents"] if inc["Priority"] == "Critical"])
-    high_count = len([inc for inc in data["active_incidents"] if inc["Priority"] == "High"])
-    avg_resolution = f"{np.mean(data['resolution_times']):.1f}h"
+    total_active = au.execute_sql(f"SELECT COUNT(*) FROM {database}.{schema}.active_incidents", st.session_state.snowpark_session)
+    critical_count = au.execute_sql(f"SELECT COUNT(*) FROM {database}.{schema}.active_incidents WHERE priority = 'Critical'", st.session_state.snowpark_session)
+    high_count = au.execute_sql(f"SELECT COUNT(*) FROM {database}.{schema}.active_incidents WHERE priority = 'High'", st.session_state.snowpark_session)
+    # avg_resolution = au.execute_sql(f"SELECT AVG(resolution_time) FROM {database}.{schema}.active_incidents", st.session_state.snowpark_session)
     
     col1, col2, col3, col4 = st.columns(4)
     
@@ -328,11 +349,14 @@ def create_hourly_chart(data):
 def create_active_incidents_table(data):
     """Create active incidents table"""
     
-    st.subheader("🔄 Active Incidents")
+    st.subheader("🔄 Top 5 Active Incidents")
+
+    database = st.session_state.snowpark_session.get_current_database()
+    schema = st.session_state.snowpark_session.get_current_schema()
     
     # Convert to DataFrame
-    df = pd.DataFrame(data["active_incidents"])
-    
+    df = au.execute_sql(f"SELECT * FROM {database}.{schema}.active_incidents LIMIT 5 ORDER BY created_at DESC", st.session_state.snowpark_session)
+
     # Define priority colors
     def get_priority_color(priority):
         colors = {
@@ -363,59 +387,10 @@ def create_active_incidents_table(data):
         }
     )
 
-def create_performance_metrics(data):
-    """Create performance metrics section"""
-    
-    st.subheader("📊 Performance Metrics")
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.markdown("""
-        <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 4px solid #10b981;">
-            <h4 style="margin: 0 0 1rem 0; color: #374151;">SLA Compliance</h4>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                <span style="color: #6b7280;">Current Month</span>
-                <strong style="color: #10b981; font-size: 1.2rem;">94%</strong>
-            </div>
-            <div style="background: #f3f4f6; height: 8px; border-radius: 4px;">
-                <div style="background: #10b981; height: 100%; width: 94%; border-radius: 4px;"></div>
-            </div>
-            <p style="margin: 0.5rem 0 0 0; color: #6b7280; font-size: 0.8rem;">Target: 95%</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col2:
-        st.markdown("""
-        <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 4px solid #3b82f6;">
-            <h4 style="margin: 0 0 1rem 0; color: #374151;">First Response Time</h4>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                <span style="color: #6b7280;">Average</span>
-                <strong style="color: #3b82f6; font-size: 1.2rem;">12 min</strong>
-            </div>
-            <div style="background: #f3f4f6; height: 8px; border-radius: 4px;">
-                <div style="background: #3b82f6; height: 100%; width: 80%; border-radius: 4px;"></div>
-            </div>
-            <p style="margin: 0.5rem 0 0 0; color: #6b7280; font-size: 0.8rem;">Target: < 15 min</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col3:
-        st.markdown("""
-        <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 4px solid #f59e0b;">
-            <h4 style="margin: 0 0 1rem 0; color: #374151;">Customer Satisfaction</h4>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                <span style="color: #6b7280;">This Month</span>
-                <strong style="color: #f59e0b; font-size: 1.2rem;">4.2/5</strong>
-            </div>
-            <div style="background: #f3f4f6; height: 8px; border-radius: 4px;">
-                <div style="background: #f59e0b; height: 100%; width: 84%; border-radius: 4px;"></div>
-            </div>
-            <p style="margin: 0.5rem 0 0 0; color: #6b7280; font-size: 0.8rem;">Target: > 4.5</p>
-        </div>
-        """, unsafe_allow_html=True)
-
 def main():
+
+    initialize_session_state()
+
     """Main application function"""
     
     # Custom CSS
@@ -456,8 +431,8 @@ def main():
     </style>
     """, unsafe_allow_html=True)
     
-    # Generate sample data
-    data = generate_sample_incident_data()
+    # # Generate sample data
+    # data = generate_sample_incident_data()
     
     # Header section
     create_header()
@@ -465,24 +440,19 @@ def main():
     st.markdown("<br>", unsafe_allow_html=True)
     
     # Key metrics
-    create_metrics_cards(data)
+    create_metrics_cards()
     
     st.markdown("<br><br>", unsafe_allow_html=True)
     
-    # Charts section
-    create_charts(data)
+    # # Charts section
+    # create_charts(data)
     
-    st.markdown("<br>", unsafe_allow_html=True)
+    # st.markdown("<br>", unsafe_allow_html=True)
     
-    # Hourly chart
-    create_hourly_chart(data)
+    # # Hourly chart
+    # create_hourly_chart(data)
     
-    st.markdown("<br>", unsafe_allow_html=True)
-    
-    # Performance metrics
-    create_performance_metrics(data)
-    
-    st.markdown("<br>", unsafe_allow_html=True)
+    # st.markdown("<br>", unsafe_allow_html=True)
     
     # Active incidents table
     create_active_incidents_table(data)

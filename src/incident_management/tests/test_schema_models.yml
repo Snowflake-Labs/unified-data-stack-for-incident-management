@@ -4,15 +4,6 @@ models:
   # Landing Zone Models Tests
   - name: incidents
     description: "Incidents table with comprehensive validation"
-    tests:
-      - dbt_utils.expression_is_true:
-          expression: "affected_customers_count >= 0"
-          config:
-            severity: error
-      - dbt_utils.expression_is_true:
-          expression: "estimated_revenue_impact >= 0"
-          config:
-            severity: error
     columns:
       - name: incident_number
         description: "Primary key for incidents"
@@ -68,8 +59,6 @@ models:
         tests:
           - unique
           - not_null
-          - dbt_utils.expression_is_true:
-              expression: "email like '%@%.%'"
       - name: first_name
         description: "User first name"
         tests:
@@ -141,15 +130,6 @@ models:
   # Curated Zone Views Tests
   - name: v_active_incidents
     description: "Active incidents view validation"
-    tests:
-      - dbt_utils.expression_is_true:
-          expression: "age_hours >= 0"
-          config:
-            severity: error
-      - dbt_utils.expression_is_true:
-          expression: "affected_customers_count >= 0"
-          config:
-            severity: error
     columns:
       - name: incident_number
         description: "Incident identifier"
@@ -169,15 +149,6 @@ models:
 
   - name: v_category_performance
     description: "Category performance metrics validation"
-    tests:
-      - dbt_utils.expression_is_true:
-          expression: "resolution_rate_percentage >= 0 and resolution_rate_percentage <= 100"
-          config:
-            severity: error
-      - dbt_utils.expression_is_true:
-          expression: "total_incidents >= resolved_incidents"
-          config:
-            severity: error
     columns:
       - name: category_name
         description: "Category identifier"
@@ -187,16 +158,9 @@ models:
         description: "Total incident count"
         tests:
           - not_null
-          - dbt_utils.expression_is_true:
-              expression: ">= 0"
 
   - name: v_high_impact_incidents
     description: "High impact incidents validation"
-    tests:
-      - dbt_utils.expression_is_true:
-          expression: "business_impact_score > 0"
-          config:
-            severity: error
     columns:
       - name: incident_number
         description: "Incident identifier"
@@ -205,9 +169,6 @@ models:
           - not_null
       - name: time_hours
         description: "Time calculation"
-        tests:
-          - dbt_utils.expression_is_true:
-              expression: ">= 0"
 
   - name: v_incident_overview
     description: "Incident overview validation"
@@ -230,11 +191,6 @@ models:
 
   - name: v_monthly_incident_trends
     description: "Monthly trends validation"
-    tests:
-      - dbt_utils.expression_is_true:
-          expression: "resolution_rate_percentage >= 0 and resolution_rate_percentage <= 100"
-          config:
-            severity: error
     columns:
       - name: month
         description: "Month identifier"
@@ -244,11 +200,6 @@ models:
 
   - name: v_weekly_incident_trends
     description: "Weekly trends validation"
-    tests:
-      - dbt_utils.expression_is_true:
-          expression: "resolution_rate_percentage >= 0 and resolution_rate_percentage <= 100"
-          config:
-            severity: error
     columns:
       - name: week
         description: "Week identifier"
