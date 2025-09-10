@@ -2,7 +2,6 @@
     config(
         materialized='incremental',
         incremental_strategy='append',
-        unique_key='id',
         description='Simplified incident comment history for tracking communication'
     )
 }}

@@ -2,7 +2,6 @@
     config(
         materialized='incremental',
         incremental_strategy='append',
-        unique_key='incident_number',
         description='Materialized incidents table with enriched data and calculated fields'
     )
 }}
@@ -57,6 +56,3 @@ enriched_incidents as (
 
 select * 
 from enriched_incidents
-{% if is_incremental() %}
-WHERE created_at > (SELECT MAX(created_at) FROM {{ this }})
-{% endif %}
