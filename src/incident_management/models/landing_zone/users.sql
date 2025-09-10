@@ -19,6 +19,3 @@ select
     current_timestamp() as created_at,
     current_timestamp() as updated_at
 from {{ source('landing_zone', 'slack_members') }} sm 
-{% if is_incremental() %}   
-where sm.lastupdated > (select max(created_at) from {{ this }})
-{% endif %}
