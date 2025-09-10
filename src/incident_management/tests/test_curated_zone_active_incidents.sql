@@ -11,20 +11,7 @@ where (
 
 union all
 
--- Test 2: Ensure SLA status logic is correct
-select 'test_active_incidents_sla_status_logic' as test_name
-where (
-    select count(*)
-    from {{ ref('active_incidents') }}
-    where (sla_due_at is not null and sla_due_at < current_timestamp() and sla_status != 'OVERDUE')
-       or (sla_due_at is not null and sla_due_at >= current_timestamp() 
-           and sla_due_at < dateadd('hour', 2, current_timestamp()) and sla_status != 'DUE_SOON')
-       or (sla_due_at is null and sla_status != 'ON_TRACK')
-) > 0
-
-union all
-
--- Test 3: Ensure age_hours calculation is reasonable
+-- Test 2: Ensure age_hours calculation is reasonable
 select 'test_active_incidents_age_hours_reasonable' as test_name
 where (
     select count(*)
@@ -34,22 +21,32 @@ where (
 
 union all
 
--- Test 4: Ensure affected_customers_count is non-negative
-select 'test_active_incidents_non_negative_customers' as test_name
+-- Test 3: Ensure category is populated
+select 'test_active_incidents_category_populated' as test_name
 where (
     select count(*)
     from {{ ref('active_incidents') }}
-    where affected_customers_count < 0
+    where category is null or trim(category) = ''
 ) > 0
 
 union all
 
--- Test 5: Ensure estimated_revenue_impact is non-negative
-select 'test_active_incidents_non_negative_revenue' as test_name
+-- Test 4: Ensure priority is valid
+select 'test_active_incidents_valid_priority' as test_name
 where (
     select count(*)
     from {{ ref('active_incidents') }}
-    where estimated_revenue_impact < 0
+    where priority not in ('low', 'medium', 'high', 'critical')
+) > 0
+
+union all
+
+-- Test 5: Ensure source_system is populated
+select 'test_active_incidents_source_system_populated' as test_name
+where (
+    select count(*)
+    from {{ ref('active_incidents') }}
+    where source_system is null or trim(source_system) = ''
 ) > 0
 
 union all

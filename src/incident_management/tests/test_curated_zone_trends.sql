@@ -17,7 +17,7 @@ select 'test_monthly_trends_incident_count_consistency' as test_name
 where (
     select count(*)
     from {{ ref('monthly_incident_trends') }}
-    where total_incidents < (resolved_incidents + closed_incidents + open_incidents)
+    where total_incidents < (closed_incidents + open_incidents)
 ) > 0
 
 union all
@@ -32,25 +32,22 @@ where (
 
 union all
 
--- Test 4: Ensure average times are non-negative when populated
+-- Test 4: Ensure average resolution time is non-negative when populated
 select 'test_monthly_trends_non_negative_times' as test_name
 where (
     select count(*)
     from {{ ref('monthly_incident_trends') }}
     where avg_resolution_time_hours < 0
-       or avg_acknowledgment_time_hours < 0
-       or avg_first_response_time_hours < 0
 ) > 0
 
 union all
 
--- Test 5: Ensure revenue impact and customer counts are non-negative
-select 'test_monthly_trends_non_negative_impact' as test_name
+-- Test 5: Ensure category counts are consistent
+select 'test_monthly_trends_category_consistency' as test_name
 where (
     select count(*)
     from {{ ref('monthly_incident_trends') }}
-    where total_estimated_revenue_impact < 0
-       or total_affected_customers < 0
+    where (payment_incidents + authentication_incidents + performance_incidents + security_incidents) > total_incidents
 ) > 0
 
 union all
@@ -82,7 +79,7 @@ select 'test_weekly_trends_incident_count_consistency' as test_name
 where (
     select count(*)
     from {{ ref('weekly_incident_trends') }}
-    where total_incidents < (resolved_incidents + closed_incidents + open_incidents)
+    where total_incidents < (closed_incidents + open_incidents)
 ) > 0
 
 union all
@@ -97,25 +94,22 @@ where (
 
 union all
 
--- Test 10: Ensure average times are non-negative when populated
+-- Test 10: Ensure average resolution time is non-negative when populated
 select 'test_weekly_trends_non_negative_times' as test_name
 where (
     select count(*)
     from {{ ref('weekly_incident_trends') }}
     where avg_resolution_time_hours < 0
-       or avg_acknowledgment_time_hours < 0
-       or avg_first_response_time_hours < 0
 ) > 0
 
 union all
 
--- Test 11: Ensure revenue impact and customer counts are non-negative
-select 'test_weekly_trends_non_negative_impact' as test_name
+-- Test 11: Ensure source system counts are reasonable
+select 'test_weekly_trends_source_system_consistency' as test_name
 where (
     select count(*)
     from {{ ref('weekly_incident_trends') }}
-    where total_revenue_impact < 0
-       or total_affected_customers < 0
+    where (monitoring_incidents + customer_portal_incidents) > total_incidents
 ) > 0
 
 union all

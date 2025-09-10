@@ -1,15 +1,13 @@
+# Core Streamlit and data processing
 streamlit>=1.28.0
 pandas>=1.5.0
-numpy>=1.24.0
-plotly>=5.15.0
-Pillow>=9.5.0
-streamlit>=1.28.0
-pandas>=1.5.0
-numpy>=1.24.0
-plotly>=5.15.0
-Pillow>=9.5.0
-blinker>=1.8.0
+
+# Visualization libraries
+altair
+
+# Snowflake integration
 snowflake-snowpark-python
-snowflake-ml-python
-ipykernel
 python-dotenv
+
+# Development tools (optional)
+ipykernel

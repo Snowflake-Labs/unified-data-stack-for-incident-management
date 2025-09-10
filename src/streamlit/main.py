@@ -3,14 +3,9 @@ Incident Management Dashboard - Single Page Streamlit Application
 """
 
 import streamlit as st
-import pandas as pd
-import numpy as np
-import plotly.graph_objects as go
-import plotly.express as px
 from datetime import datetime, timedelta
-import random
 import app_utils as au
-import os
+import pandas as pd
 
 # Page configuration
 st.set_page_config(
@@ -26,67 +21,8 @@ def initialize_session_state():
     if "snowpark_session" not in st.session_state:
         snowflake_connection = au.SnowflakeConnection()
         st.session_state.snowpark_session, st.session_state.snowflake_root = snowflake_connection.connect()
-def generate_sample_incident_data():
-    """Generate sample incident data for the dashboard"""
-    
-    # Generate incident data for the last 30 days
-    dates = pd.date_range(end=datetime.now(), periods=30, freq='D')
-    
-    # Sample incident counts by priority
-    critical_incidents = [random.randint(0, 5) for _ in range(30)]
-    high_incidents = [random.randint(2, 12) for _ in range(30)]
-    medium_incidents = [random.randint(5, 25) for _ in range(30)]
-    low_incidents = [random.randint(10, 40) for _ in range(30)]
-    
-    # Sample resolution times (in hours)
-    resolution_times = [random.uniform(0.5, 48) for _ in range(30)]
-    
-    # Sample categories
-    categories = ["Network", "Security", "Hardware", "Software", "Database", "API", "Infrastructure"]
-    
-    # Generate incidents by category
-    incidents_by_category = {cat: random.randint(5, 50) for cat in categories}
-    
-    # Generate current active incidents
-    active_incidents = []
-    incident_ids = [f"INC{1000 + i}" for i in range(50)]
-    
-    for i in range(15):  # Generate 15 active incidents
-        priority = random.choice(["Critical", "High", "Medium", "Low"])
-        status = random.choice(["New", "In Progress", "Pending", "Investigating"])
-        category = random.choice(categories)
-        
-        # Age in hours
-        age_hours = random.randint(1, 72)
-        created_time = datetime.now() - timedelta(hours=age_hours)
-        
-        active_incidents.append({
-            "ID": incident_ids[i],
-            "Title": f"{category} Issue - {random.choice(['Outage', 'Performance', 'Error', 'Failure'])}",
-            "Priority": priority,
-            "Status": status,
-            "Category": category,
-            "Created": created_time.strftime("%Y-%m-%d %H:%M"),
-            "Age": f"{age_hours}h",
-            "Assigned To": f"Team {random.choice(['Alpha', 'Beta', 'Gamma', 'Delta'])}"
-        })
-    
-    # Generate hourly incident data for today
-    hours = [f"{i:02d}:00" for i in range(24)]
-    hourly_incidents = [random.randint(0, 8) for _ in range(24)]
-    
-    return {
-        "dates": dates,
-        "critical_incidents": critical_incidents,
-        "high_incidents": high_incidents,
-        "medium_incidents": medium_incidents,
-        "low_incidents": low_incidents,
-        "resolution_times": resolution_times,
-        "incidents_by_category": incidents_by_category,
-        "active_incidents": active_incidents,
-        "hours": hours,
-        "hourly_incidents": hourly_incidents
-    }
+        st.session_state.snowpark_session.use_schema("curated_zone")
+
 
 def create_header():
     """Create the main dashboard header"""
@@ -132,12 +68,12 @@ def create_metrics_cards():
     schema = st.session_state.snowpark_session.get_current_schema()
     
     # Calculate current metrics
-    total_active = au.execute_sql(f"SELECT COUNT(*) FROM {database}.{schema}.active_incidents", st.session_state.snowpark_session)
-    critical_count = au.execute_sql(f"SELECT COUNT(*) FROM {database}.{schema}.active_incidents WHERE priority = 'Critical'", st.session_state.snowpark_session)
-    high_count = au.execute_sql(f"SELECT COUNT(*) FROM {database}.{schema}.active_incidents WHERE priority = 'High'", st.session_state.snowpark_session)
+    total_active = au.execute_sql(f"SELECT COUNT(*) as count FROM {database}.{schema}.active_incidents", st.session_state.snowpark_session)
+    critical_count = au.execute_sql(f"SELECT COUNT(*) as count FROM {database}.{schema}.active_incidents WHERE lower(priority) = 'critical'", st.session_state.snowpark_session)
+    high_count = au.execute_sql(f"SELECT COUNT(*) as count FROM {database}.{schema}.active_incidents WHERE lower(priority) = 'high'", st.session_state.snowpark_session)
     # avg_resolution = au.execute_sql(f"SELECT AVG(resolution_time) FROM {database}.{schema}.active_incidents", st.session_state.snowpark_session)
     
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3 = st.columns(3)
     
     with col1:
         st.markdown("""
@@ -153,7 +89,7 @@ def create_metrics_cards():
             <h1 style="margin: 15px 0 10px 0; color: #dc2626; font-size: 3rem; font-weight: 700;">{}</h1>
             <p style="margin: 0; color: #991b1b; font-size: 0.85rem; font-weight: 500;">Immediate attention required</p>
         </div>
-        """.format(critical_count), unsafe_allow_html=True)
+        """.format(critical_count['COUNT'][0]), unsafe_allow_html=True)
     
     with col2:
         st.markdown("""
@@ -169,7 +105,7 @@ def create_metrics_cards():
             <h1 style="margin: 15px 0 10px 0; color: #f59e0b; font-size: 3rem; font-weight: 700;">{}</h1>
             <p style="margin: 0; color: #92400e; font-size: 0.85rem; font-weight: 500;">Requires urgent action</p>
         </div>
-        """.format(high_count), unsafe_allow_html=True)
+        """.format(high_count['COUNT'][0]), unsafe_allow_html=True)
     
     with col3:
         st.markdown("""
@@ -185,158 +121,193 @@ def create_metrics_cards():
             <h1 style="margin: 15px 0 10px 0; color: #3b82f6; font-size: 3rem; font-weight: 700;">{}</h1>
             <p style="margin: 0; color: #1e40af; font-size: 0.85rem; font-weight: 500;">Currently being worked on</p>
         </div>
-        """.format(total_active), unsafe_allow_html=True)
+        """.format(total_active['COUNT'][0]), unsafe_allow_html=True)
     
-    with col4:
-        st.markdown("""
-        <div style="
-            background: linear-gradient(135deg, #f0fdf4 0%, #d1fae5 100%);
-            padding: 25px; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
-            text-align: center;
-            border-left: 4px solid #10b981;
-        ">
-            <h3 style="margin: 0; color: #065f46; font-size: 0.95rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Avg Resolution</h3>
-            <h1 style="margin: 15px 0 10px 0; color: #10b981; font-size: 3rem; font-weight: 700;">{}</h1>
-            <p style="margin: 0; color: #065f46; font-size: 0.85rem; font-weight: 500;">Target: < 4h</p>
-        </div>
-        """.format(avg_resolution), unsafe_allow_html=True)
 
-def create_charts(data):
-    """Create dashboard charts"""
+def create_charts():
+    """Create dashboard charts using real data from the database"""
     
-    col1, col2 = st.columns(2)
+    database = st.session_state.snowpark_session.get_current_database()
+    schema = st.session_state.snowpark_session.get_current_schema()
+    
+    col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.subheader("📈 Incident Trends (Last 30 Days)")
-        
-        fig1 = go.Figure()
-        
-        fig1.add_trace(go.Scatter(
-            x=data["dates"],
-            y=data["critical_incidents"],
-            mode='lines+markers',
-            name='Critical',
-            line=dict(color='#dc2626', width=3),
-            marker=dict(size=6)
-        ))
-        
-        fig1.add_trace(go.Scatter(
-            x=data["dates"],
-            y=data["high_incidents"],
-            mode='lines+markers',
-            name='High',
-            line=dict(color='#f59e0b', width=3),
-            marker=dict(size=6)
-        ))
-        
-        fig1.add_trace(go.Scatter(
-            x=data["dates"],
-            y=data["medium_incidents"],
-            mode='lines+markers',
-            name='Medium',
-            line=dict(color='#3b82f6', width=3),
-            marker=dict(size=6)
-        ))
-        
-        fig1.add_trace(go.Scatter(
-            x=data["dates"],
-            y=data["low_incidents"],
-            mode='lines+markers',
-            name='Low',
-            line=dict(color='#10b981', width=3),
-            marker=dict(size=6)
-        ))
-        
-        fig1.update_layout(
-            height=400,
-            margin=dict(l=40, r=40, t=40, b=40),
-            xaxis_title="Date",
-            yaxis_title="Number of Incidents",
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-            xaxis=dict(gridcolor='#f3f4f6'),
-            yaxis=dict(gridcolor='#f3f4f6'),
-            legend=dict(
-                orientation="h",
-                yanchor="bottom",
-                y=1.02,
-                xanchor="right",
-                x=1
-            )
-        )
-        
-        st.plotly_chart(fig1, use_container_width=True)
+        st.subheader("📈 Monthly Incident Trends")
+        try:
+            # Get monthly trends data
+            monthly_query = f"""
+                SELECT 
+                    month,
+                    total_incidents,
+                    critical_incidents,
+                    high_priority_incidents
+                FROM {database}.{schema}.monthly_incident_trends
+                ORDER BY month DESC
+                LIMIT 12
+            """
+            monthly_df = au.execute_sql(monthly_query, st.session_state.snowpark_session)
+            
+            if not monthly_df.empty:
+                import altair as alt
+                chart = alt.Chart(monthly_df).mark_line(
+                    color='#3b82f6',
+                    strokeWidth=3,
+                    point=True
+                ).encode(
+                    x=alt.X('MONTH:T', title='Month'),
+                    y=alt.Y('TOTAL_INCIDENTS:Q', title='Total Incidents'),
+                    tooltip=['MONTH:T', 'TOTAL_INCIDENTS:Q']
+                ).properties(   
+                    height=400
+                ).configure_axis(
+                    grid=True,
+                    gridColor='#f3f4f6'
+                )
+                st.altair_chart(chart, use_container_width=True)
+            else:
+                st.info("No monthly trend data available")
+        except Exception as e:
+            st.error(f"Error loading monthly trends: {str(e)}")
     
     with col2:
-        st.subheader("🎯 Incidents by Category")
-        
-        categories = list(data["incidents_by_category"].keys())
-        values = list(data["incidents_by_category"].values())
-        
-        fig2 = go.Figure(data=[
-            go.Pie(
-                labels=categories,
-                values=values,
-                hole=0.4,
-                marker=dict(
-                    colors=['#dc2626', '#f59e0b', '#3b82f6', '#10b981', '#8b5cf6', '#ef4444', '#06b6d4']
+        st.subheader("🎯 Weekly Incident Trends")
+        try:
+            # Get weekly trends data
+            weekly_query = f"""
+                SELECT 
+                    week,
+                    total_incidents,
+                    critical_incidents,
+                    high_incidents
+                FROM {database}.{schema}.weekly_incident_trends
+                ORDER BY week DESC
+                LIMIT 12
+            """
+            weekly_df = au.execute_sql(weekly_query, st.session_state.snowpark_session)
+            
+            if not weekly_df.empty:
+                import altair as alt
+                chart = alt.Chart(weekly_df).mark_line(
+                    color='#10b981',
+                    strokeWidth=3,
+                    point=True
+                ).encode(
+                    x=alt.X('WEEK:T', title='Week'),
+                    y=alt.Y('TOTAL_INCIDENTS:Q', title='Total Incidents'),
+                    tooltip=['WEEK:T', 'TOTAL_INCIDENTS:Q']
+                ).properties(
+                    height=400
+                ).configure_axis(
+                    grid=True,
+                    gridColor='#f3f4f6'
                 )
-            )
-        ])
-        
-        fig2.update_layout(
-            height=400,
-            margin=dict(l=40, r=40, t=40, b=40),
-            paper_bgcolor='rgba(0,0,0,0)',
-            showlegend=True,
-            legend=dict(
-                orientation="v",
-                yanchor="middle",
-                y=0.5,
-                xanchor="left",
-                x=1.05
-            )
-        )
-        
-        st.plotly_chart(fig2, use_container_width=True)
+                st.altair_chart(chart, use_container_width=True)
+            else:
+                st.info("No weekly trend data available")
+        except Exception as e:
+            st.error(f"Error loading weekly trends: {str(e)}")
+    
+    with col3:
+        st.subheader("🎯 Incidents by Category")
+        try:
+            # Get category breakdown from current incidents
+            category_query = f"""
+                SELECT 
+                    category,
+                    COUNT(*) as incident_count
+                FROM {database}.landing_zone.incidents
+                WHERE created_at >= DATEADD('month', -1, CURRENT_DATE())
+                GROUP BY category
+                ORDER BY incident_count DESC
+            """
+            category_df = au.execute_sql(category_query, st.session_state.snowpark_session)
+            
+            if not category_df.empty:
+                import plotly.graph_objects as go
+                fig = go.Figure(data=[
+                    go.Pie(
+                        labels=category_df['CATEGORY'],
+                        values=category_df['INCIDENT_COUNT'],
+                        hole=0.4,
+                        marker=dict(
+                            colors=['#dc2626', '#f59e0b', '#3b82f6', '#10b981', '#8b5cf6', '#ef4444', '#06b6d4']
+                        )
+                    )
+                ])
+                
+                fig.update_layout(
+                    height=400,
+                    margin=dict(l=40, r=40, t=40, b=40),
+                    paper_bgcolor='rgba(0,0,0,0)',
+                    showlegend=True,
+                    legend=dict(
+                        orientation="v",
+                        yanchor="middle",
+                        y=0.5,
+                        xanchor="left",
+                        x=1.05
+                    )
+                )
+                st.plotly_chart(fig, use_container_width=True)
+            else:
+                st.info("No category data available")
+        except Exception as e:
+            st.error(f"Error loading category data: {str(e)}")
 
-def create_hourly_chart(data):
-    """Create hourly incidents chart"""
-    
-    st.subheader("⏰ Incidents by Hour (Today)")
-    
-    fig = go.Figure(data=[
-        go.Bar(
-            x=data["hours"],
-            y=data["hourly_incidents"],
-            marker_color='#3b82f6',
-            marker_line_color='#1d4ed8',
-            marker_line_width=1,
-            text=data["hourly_incidents"],
-            textposition='auto',
-        )
-    ])
-    
-    fig.update_layout(
-        height=300,
-        margin=dict(l=40, r=40, t=40, b=40),
-        xaxis_title="Hour",
-        yaxis_title="Number of Incidents",
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        xaxis=dict(
-            gridcolor='#f3f4f6',
-            tickangle=45
-        ),
-        yaxis=dict(gridcolor='#f3f4f6'),
-        showlegend=False
-    )
-    
-    st.plotly_chart(fig, use_container_width=True)
 
-def create_active_incidents_table(data):
+def get_incident_attachments(incident_id):
+    """Fetch attachments for a specific incident"""
+    database = st.session_state.snowpark_session.get_current_database()
+    schema = st.session_state.snowpark_session.get_current_schema()
+    
+    # Query to get attachments for the incident
+    query = f"""
+    SELECT 
+        attachment_file,
+        uploaded_at
+    FROM {database}.landing_zone.incident_attachments 
+    WHERE incident_number = '{incident_id}'
+    ORDER BY uploaded_at DESC
+    """
+    
+    try:
+        attachments = au.execute_sql(query, st.session_state.snowpark_session)
+        return attachments
+    except Exception as e:
+        st.error(f"Error fetching attachments: {str(e)}")
+        return pd.DataFrame()
+
+def create_attachments_popover(incident_id, title):
+    """Create a popover to display attachments for an incident"""
+    with st.popover(f"📎 Attachments - {incident_id}", use_container_width=True):
+        
+        # Fetch attachments
+        attachments = get_incident_attachments(incident_id)
+        
+        if not attachments.empty:
+            st.markdown(f"**Found {len(attachments)} attachment(s):**")
+            
+            for idx, attachment in attachments.iterrows():
+                with st.container():
+                    col1, col2 = st.columns([3, 1])
+                    
+                    with col1:
+                        # Display attachment info
+                        st.markdown(f"**📄 {attachment['ATTACHMENT_FILE']}**")
+                        if pd.notna(attachment['UPLOADED_AT']):
+                            st.caption(f"Uploaded: {attachment['UPLOADED_AT']}")
+                    
+                    with col2:
+                        # You could add download button here if needed
+                        st.button("View", key=f"view_{incident_id}_{idx}", disabled=True, help="View functionality not implemented")
+                    
+                    if idx < len(attachments) - 1:
+                        st.markdown("---")
+        else:
+            st.info("No attachments found for this incident.")
+
+def create_active_incidents_table():
     """Create active incidents table"""
     
     st.subheader("🔄 Top 5 Active Incidents")
@@ -345,43 +316,148 @@ def create_active_incidents_table(data):
     schema = st.session_state.snowpark_session.get_current_schema()
     
     # Convert to DataFrame
-    df = au.execute_sql(f"SELECT * FROM {database}.{schema}.active_incidents LIMIT 5 ORDER BY created_at DESC", st.session_state.snowpark_session)
+    df = au.execute_sql(f"""
+        SELECT 
+            ai."INCIDENT_NUMBER", 
+            ai."TITLE", 
+            ai."PRIORITY", 
+            ai."STATUS", 
+            ai."CATEGORY", 
+            ai."CREATED_AT", 
+            ai."ASSIGNEE_ID",
+            ai."ASSIGNEE_NAME", 
+            ai."HAS_ATTACHMENTS",
+            ai."SOURCE_SYSTEM",
+            ai."EXTERNAL_SOURCE_ID",
+            ic."CONTENT" as "LAST_COMMENT"
+        FROM {database}.{schema}.active_incidents ai 
+        LEFT JOIN {database}.landing_zone.incident_comment_history ic ON ai.incident_number = ic.incident_number
+        ORDER BY ai.created_at DESC 
+        LIMIT 5
+    """, st.session_state.snowpark_session)
 
     # Define priority colors
     def get_priority_color(priority):
         colors = {
-            "Critical": "🔴",
-            "High": "🟡", 
-            "Medium": "🔵",
-            "Low": "🟢"
+            "critical": "🔴",
+            "high": "🟡", 
+            "medium": "🔵",
+            "low": "🟢"
         }
-        return colors.get(priority, "⚪")
+        return colors.get(priority.lower(), "⚪")
     
     # Add priority icons
-    df["Priority"] = df["Priority"].apply(lambda x: f"{get_priority_color(x)} {x}")
+    df["PRIORITY"] = df["PRIORITY"].apply(lambda x: f"{get_priority_color(x)} {x}")
     
-    # Configure columns
-    st.dataframe(
-        df,
+    # Display the dataframe
+    active_incidents = st.dataframe(
+        df[["INCIDENT_NUMBER", "TITLE", "PRIORITY", "STATUS", "CATEGORY", "CREATED_AT", "ASSIGNEE_NAME", "HAS_ATTACHMENTS", "SOURCE_SYSTEM", "LAST_COMMENT"]],
         use_container_width=True,
-        height=400,
         column_config={
-            "ID": st.column_config.TextColumn("Incident ID", width="small"),
-            "Title": st.column_config.TextColumn("Title", width="large"),
-            "Priority": st.column_config.TextColumn("Priority", width="small"),
-            "Status": st.column_config.TextColumn("Status", width="small"),
-            "Category": st.column_config.TextColumn("Category", width="small"),
-            "Created": st.column_config.TextColumn("Created", width="medium"),
-            "Age": st.column_config.TextColumn("Age", width="small"),
-            "Assigned To": st.column_config.TextColumn("Assigned To", width="medium"),
-        }
+            "INCIDENT_NUMBER": st.column_config.TextColumn("Incident ID", width="small"),
+            "TITLE": st.column_config.TextColumn("Title", width="large"),
+            "PRIORITY": st.column_config.TextColumn("Priority", width="small"),
+            "STATUS": st.column_config.TextColumn("Status", width="small"),
+            "CATEGORY": st.column_config.TextColumn("Category", width="small"),
+            "CREATED_AT": st.column_config.DatetimeColumn("Created", width="medium"),
+            "ASSIGNEE_NAME": st.column_config.TextColumn("Assigned To", width="medium"),
+            "HAS_ATTACHMENTS": st.column_config.TextColumn("Has attachments?", width="small"),
+            "SOURCE_SYSTEM": st.column_config.TextColumn("Source", width="small"),
+            "LAST_COMMENT": st.column_config.TextColumn("Last Comment", width="large"),
+        },
+        selection_mode="single-row",
+        hide_index=True,
+        on_select="rerun",
+        key="incidents_table"
     )
+    
+    # Handle row selection for attachments popover
+    if active_incidents.selection.rows:
+        selected_row_idx = active_incidents.selection.rows[0]
+        selected_incident = df.iloc[selected_row_idx]
+        
+        if selected_incident['HAS_ATTACHMENTS']:
+            st.markdown("### 📎 Attachments")
+            create_attachments_popover(selected_incident['INCIDENT_NUMBER'], selected_incident['TITLE'])
+
+
+def create_recently_closed_incidents_table():
+    """Display table of recently closed incidents"""
+    st.subheader("🎯 Recently Closed Incidents")
+
+    database = st.session_state.snowpark_session.get_current_database()
+    schema = st.session_state.snowpark_session.get_current_schema()
+
+    # Get last 5 closed incidents from the new closed_incidents model
+    query = f"""
+        SELECT 
+            incident_number,
+            title,
+            priority,
+            category,
+            status,
+            closed_at,
+            created_at,
+            total_resolution_hours,
+            source_system,
+            has_attachments
+        FROM {database}.{schema}.closed_incidents
+        ORDER BY closed_at DESC
+        LIMIT 5
+    """
+    
+    closed_incidents = au.execute_sql(query, st.session_state.snowpark_session)
+
+    if not closed_incidents.empty:
+        # Add priority colors
+        def get_priority_color(priority):
+            colors = {
+                "critical": "🔴",
+                "high": "🟡", 
+                "medium": "🔵",
+                "low": "🟢"
+            }
+            return colors.get(priority.lower(), "⚪")
+        
+        def get_status_icon(status):
+            icons = {
+                "closed": "✅",
+                "resolved": "🎯"
+            }
+            return icons.get(status.lower(), "❓")
+        
+        # Add icons to the dataframe
+        closed_incidents["PRIORITY"] = closed_incidents["PRIORITY"].apply(
+            lambda x: f"{get_priority_color(x)} {x}"
+        )
+        closed_incidents["STATUS"] = closed_incidents["STATUS"].apply(
+            lambda x: f"{get_status_icon(x)} {x}"
+        )
+        
+        st.dataframe(
+            closed_incidents,
+            column_config={
+                "INCIDENT_NUMBER": st.column_config.TextColumn("Incident #", width="small"),
+                "TITLE": st.column_config.TextColumn("Title", width="large"),
+                "PRIORITY": st.column_config.TextColumn("Priority", width="small"),
+                "CATEGORY": st.column_config.TextColumn("Category", width="small"), 
+                "STATUS": st.column_config.TextColumn("Status", width="small"),
+                "CREATED_AT": st.column_config.DatetimeColumn("Created At", width="medium"),
+                "CLOSED_AT": st.column_config.DatetimeColumn("Closed At", width="medium"),
+                "TOTAL_RESOLUTION_HOURS": st.column_config.NumberColumn("Resolution (hrs)", width="small", format="%.1f"),
+                "SOURCE_SYSTEM": st.column_config.TextColumn("Source", width="small"),
+                "HAS_ATTACHMENTS": st.column_config.CheckboxColumn("Attachments", width="small")
+            },
+            hide_index=True,
+            use_container_width=True
+        )
+    else:
+        st.info("No recently closed incidents found.")
+
 
 def main():
 
     initialize_session_state()
-
-    """Main application function"""
     
     # Custom CSS
     st.markdown("""
@@ -421,8 +497,6 @@ def main():
     </style>
     """, unsafe_allow_html=True)
     
-    # # Generate sample data
-    # data = generate_sample_incident_data()
     
     # Header section
     create_header()
@@ -434,19 +508,21 @@ def main():
     
     st.markdown("<br><br>", unsafe_allow_html=True)
     
-    # # Charts section
-    # create_charts(data)
+    # Charts section
+    create_charts()
     
-    # st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
     
-    # # Hourly chart
-    # create_hourly_chart(data)
-    
-    # st.markdown("<br>", unsafe_allow_html=True)
     
     # Active incidents table
-    create_active_incidents_table(data)
+    create_active_incidents_table()
     
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # Recently closed incidents table
+    create_recently_closed_incidents_table()
+    st.markdown("<br>", unsafe_allow_html=True)
+
     # Footer with refresh
     st.markdown("---")
     col1, col2 = st.columns([3, 1])

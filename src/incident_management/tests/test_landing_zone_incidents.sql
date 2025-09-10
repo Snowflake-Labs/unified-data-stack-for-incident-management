@@ -46,67 +46,53 @@ where (
 
 union all
 
--- Test 5: Ensure resolved_at is after created_at when populated
-select 'test_incidents_resolved_after_created' as test_name
-where (
-    select count(*)
-    from {{ ref('incidents') }}
-    where resolved_at is not null 
-      and resolved_at <= created_at
-) > 0
-
-union all
-
--- Test 6: Ensure closed_at is after resolved_at when both are populated
-select 'test_incidents_closed_after_resolved' as test_name
+-- Test 5: Ensure closed_at is after created_at when populated
+select 'test_incidents_closed_after_created' as test_name
 where (
     select count(*)
     from {{ ref('incidents') }}
     where closed_at is not null 
-      and resolved_at is not null 
-      and closed_at <= resolved_at
+      and closed_at <= created_at
 ) > 0
 
 union all
 
--- Test 7: Ensure acknowledged_at is after created_at when populated
-select 'test_incidents_acknowledged_after_created' as test_name
+-- Test 6: Ensure updated_at is after or equal to created_at
+select 'test_incidents_updated_after_created' as test_name
 where (
     select count(*)
     from {{ ref('incidents') }}
-    where acknowledged_at is not null 
-      and acknowledged_at <= created_at
+    where updated_at < created_at
 ) > 0
 
 union all
 
--- Test 8: Ensure first_response_at is after created_at when populated
-select 'test_incidents_first_response_after_created' as test_name
+-- Test 7: Ensure category is populated
+select 'test_incidents_category_populated' as test_name
 where (
     select count(*)
     from {{ ref('incidents') }}
-    where first_response_at is not null 
-      and first_response_at <= created_at
+    where category is null or trim(category) = ''
 ) > 0
 
 union all
 
--- Test 9: Ensure affected_customers_count is non-negative
-select 'test_incidents_non_negative_customer_count' as test_name
+-- Test 8: Ensure source_system is valid
+select 'test_incidents_valid_source_system' as test_name
 where (
     select count(*)
     from {{ ref('incidents') }}
-    where affected_customers_count < 0
+    where source_system not in ('monitoring', 'customer_portal', 'manual', 'Slack')
 ) > 0
 
 union all
 
--- Test 10: Ensure estimated_revenue_impact is non-negative
-select 'test_incidents_non_negative_revenue_impact' as test_name
+-- Test 9: Ensure has_attachments is boolean
+select 'test_incidents_has_attachments_boolean' as test_name
 where (
     select count(*)
     from {{ ref('incidents') }}
-    where estimated_revenue_impact < 0
+    where has_attachments not in (true, false)
 ) > 0
 
 union all
@@ -121,12 +107,11 @@ where (
 
 union all
 
--- Test 12: Ensure SLA due date is in the future for open incidents
-select 'test_incidents_sla_due_future_for_open' as test_name
+-- Test 10: Ensure external_source_id is populated when source_system is not manual
+select 'test_incidents_external_source_id_consistency' as test_name
 where (
     select count(*)
     from {{ ref('incidents') }}
-    where status = 'open' 
-      and sla_due_at is not null 
-      and sla_due_at <= created_at
+    where source_system != 'manual' 
+      and (external_source_id is null or trim(external_source_id) = '')
 ) > 0

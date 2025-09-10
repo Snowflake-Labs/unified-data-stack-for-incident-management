@@ -23,31 +23,18 @@ where (
 
 union all
 
--- Test 3: Ensure all user references in incidents are valid
+-- Test 3: Ensure all assignee references in incidents are valid
 select 'test_cross_model_incident_user_refs' as test_name
 where (
     select count(*)
     from {{ ref('incidents') }} i
-    left join {{ ref('users') }} reporter on i.reporter_id = reporter.id
     left join {{ ref('users') }} assignee on i.assignee_id = assignee.id
-    where (i.reporter_id is not null and reporter.id is null)
-       or (i.assignee_id is not null and assignee.id is null)
+    where i.assignee_id is not null and assignee.id is null
 ) > 0
 
 union all
 
--- Test 4: Ensure incident counts match between landing and curated zones
-select 'test_cross_model_incident_count_consistency' as test_name
-where (
-    select abs(
-        (select count(*) from {{ ref('incidents') }}) - 
-        (select count(*) from {{ ref('incident_overview') }})
-    )
-) > 0
-
-union all
-
--- Test 5: Ensure active incidents count consistency
+-- Test 4: Ensure active incidents count consistency
 select 'test_cross_model_active_incident_consistency' as test_name
 where (
     select abs(
@@ -58,13 +45,13 @@ where (
 
 union all
 
--- Test 6: Ensure high impact incidents are subset of all incidents
-select 'test_cross_model_high_impact_subset' as test_name
+-- Test 5: Ensure closed incidents count consistency
+select 'test_cross_model_closed_incident_consistency' as test_name
 where (
-    select count(*)
-    from {{ ref('high_impact_incidents') }} hi
-    left join {{ ref('incidents') }} i on hi.incident_number = i.incident_number
-    where i.incident_number is null
+    select abs(
+        (select count(*) from {{ ref('incidents') }} where status in ('closed', 'resolved')) - 
+        (select count(*) from {{ ref('closed_incidents') }})
+    )
 ) > 0
 
 union all
