@@ -1,9 +1,13 @@
 #! /usr/bin/env bash
 
-# Usage: ./deploy_dbt.sh [force|refresh] [env_file_path]
+# Usage: ./deploy.sh [force|refresh] [env_file_path]
 # force   - Deploy new dbt project with --force flag
 # refresh - Deploy existing dbt project without --force flag
 # env_file_path - Optional path to custom environment file (defaults to ../.env)
+#
+# This script clones the git repository into a temporary directory for deployment.
+# Required environment variables:
+#   GIT_REPOSITORY_URL - Git repository URL to clone
 
 # Default environment file
 DEFAULT_ENV_FILE="../../.env"
@@ -14,6 +18,10 @@ if [ $# -eq 0 ]; then
     echo "  force         - Deploy new dbt project with --force flag"
     echo "  refresh       - Deploy existing dbt project without --force flag"
     echo "  env_file_path - Optional path to custom environment file (defaults to ../.env)"
+    echo ""
+    echo "This script clones a git repository into a temporary directory for deployment."
+    echo "Required environment variables in your .env file:"
+    echo "  GIT_REPOSITORY_URL - Git repository URL to clone"
     echo ""
     echo "Examples:"
     echo "  $0 force"
@@ -31,6 +39,9 @@ if [ "$DEPLOY_TYPE" != "force" ] && [ "$DEPLOY_TYPE" != "refresh" ]; then
     echo "  force         - Deploy new dbt project with --force flag"
     echo "  refresh       - Deploy existing dbt project without --force flag"
     echo "  env_file_path - Optional path to custom environment file (defaults to ../.env)"
+    echo ""
+    echo "Required environment variables:"
+    echo "  GIT_REPOSITORY_URL"
     exit 1
 fi
 
@@ -56,7 +67,7 @@ echo "Validating required environment variables..."
 # First check basic required variables
 BASIC_REQUIRED_VARS=(
     "DBT_PROJECT_NAME"
-    "DBT_PROJECT_DIR"
+    "GIT_REPOSITORY_URL"
     "DBT_PROFILES_DIR"
     "DBT_TARGET"
     "SNOW_CLI_CONNECTION"
@@ -86,13 +97,33 @@ fi
 
 echo "All required environment variables are set ✓"
 
-# Validate DBT_PROJECT_DIR exists
-if [ ! -d "$DBT_PROJECT_DIR" ]; then
-    echo "Error: DBT project directory '$DBT_PROJECT_DIR' does not exist"
+# Create temporary directory for git clone
+TEMP_DIR=$(mktemp -d)
+echo "Created temporary directory: $TEMP_DIR"
+
+# Set up cleanup function to remove temporary directory on exit
+cleanup() {
+    echo "Cleaning up temporary directory: $TEMP_DIR"
+    rm -rf "$TEMP_DIR"
+}
+trap cleanup EXIT
+
+# Clone the git repository
+echo "Cloning git repository: $GIT_REPOSITORY_URL (branch: main)"
+git clone --branch main --single-branch "$GIT_REPOSITORY_URL" "$TEMP_DIR"
+
+if [ $? -ne 0 ]; then
+    echo "Error: Failed to clone git repository"
     exit 1
 fi
 
-echo "DBT project directory exists ✓"
+echo "Git repository cloned successfully ✓"
+
+# Set DBT_PROJECT_DIR to the subdirectory within the cloned repo
+DBT_PROJECT_DIR="$TEMP_DIR/src/incident_management"
+
+
+echo "DBT project directory exists: $DBT_PROJECT_DIR ✓"
 
 ## Replace environment variables in configuration files
 echo "Replacing environment variables in configuration files..."
@@ -173,16 +204,14 @@ done
 
 echo "Environment variable replacement completed ✓"
 
-## Refresh local Git repo for the dbt Project
-echo "Refreshing Git repository..."
-cd "$DBT_PROJECT_DIR"
-git pull
-
 ## Deploy the dbt project to Snowflake
 echo "Deploying dbt project with $DEPLOY_TYPE mode for target: $DBT_TARGET..."
 
 # Display environment variables (excluding sensitive information)
 echo "=== Deployment Configuration ==="
+echo "Git Repository: $GIT_REPOSITORY_URL"
+echo "Git Branch: main"
+echo "Temporary Directory: $TEMP_DIR"
 echo "Project Name: $DBT_PROJECT_NAME"
 echo "Project Directory: $DBT_PROJECT_DIR"
 echo "Profiles Directory: $DBT_PROFILES_DIR"

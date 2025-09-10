@@ -40,4 +40,5 @@ models:
     landing_zone:
       +materialized: table
     curated_zone:
+      +schema: curated_zone
       +materialized: table
