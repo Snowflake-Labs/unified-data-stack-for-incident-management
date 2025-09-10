@@ -32,6 +32,4 @@ SELECT
     EXTRACT(quarter FROM i.closed_at) AS closed_quarter
 
 FROM {{ source('landing_zone', 'incidents') }} i
-WHERE LOWER(i.status) IN ('closed', 'resolved')
-  AND i.closed_at IS NOT NULL
-ORDER BY i.closed_at DESC
+WHERE LOWER(i.status) IN ('closed', 'resolved') AND i.closed_at IS NOT NULL

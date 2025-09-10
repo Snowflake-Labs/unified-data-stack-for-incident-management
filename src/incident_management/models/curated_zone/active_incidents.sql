@@ -22,11 +22,3 @@ SELECT
 FROM {{ source('landing_zone', 'incidents') }} i
 LEFT JOIN {{ source('landing_zone', 'users') }} assignee ON i.assignee_id = assignee.id
 WHERE i.status = 'open'
-ORDER BY 
-    CASE i.priority 
-        WHEN 'critical' THEN 1 
-        WHEN 'high' THEN 2 
-        WHEN 'medium' THEN 3 
-        ELSE 4 
-    END,
-    i.created_at

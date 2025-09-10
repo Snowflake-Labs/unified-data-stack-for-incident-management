@@ -1,27 +1,13 @@
 
--- =============================================
--- dbt_projects_admin role grants
--- =============================================
-use role dbt_projects_admin;
-create or replace database incident_management;
-CREATE OR REPLACE WAREHOUSE incident_management_dbt_wh WAREHOUSE_SIZE='X-SMALL' INITIALLY_SUSPENDED=TRUE;
-grant all privileges on all schemas in database incident_management to role dbt_projects_admin;
-grant all privileges on future schemas in database incident_management to role dbt_projects_admin;
-create or replace schema incident_management.DBT_PROJECT_DEPLOYMENTS;
-grant usage on database incident_management to role dbt_projects_engineer;
-grant usage on warehouse incident_management_dbt_wh to role dbt_projects_engineer;
-grant usage on warehouse compute_wh to role dbt_projects_engineer;
-grant create schema on database incident_management to role dbt_projects_engineer;
-
--- =============================================
--- CORE ENTITIES
--- =============================================
-
 use role dbt_projects_engineer;
+-- create or replace database incident_management;
+CREATE OR REPLACE WAREHOUSE incident_management_dbt_wh WAREHOUSE_SIZE='X-SMALL' INITIALLY_SUSPENDED=TRUE;
+
 use database incident_management;
 create or replace schema incident_management.landing_zone;
--- create or replace schema incident_management.transformed_zone;
 create or replace schema incident_management.curated_zone;
+
+-- create or replace schema incident_management.dbt_project_deployments;
 
 -- Users table (employees, customers, system users)
 CREATE OR REPLACE TABLE incident_management.landing_zone.users (

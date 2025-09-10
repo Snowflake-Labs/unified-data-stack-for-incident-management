@@ -5,15 +5,6 @@ incident_management:
       database: "incident_management"
       role: "dbt_projects_engineer"
       schema: "landing_zone"
-      type: snowflake
-      user: "genp_service_usr"
-      warehouse: "incident_management_dbt_wh"
-    prod:
-      account: "uib27272"
-      database: "incident_management"
-      role: "dbt_projects_engineer"
-      schema: "landing_zone"
-      type: snowflake
       user: "genp_service_usr"
       warehouse: "incident_management_dbt_wh"
   target: "dev"
