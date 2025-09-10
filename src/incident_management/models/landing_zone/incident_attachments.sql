@@ -1,7 +1,7 @@
 {{
     config(
         materialized='incremental',
-        incremental_strategy='append',
+        incremental_strategy='merge',
         unique_key='id',
         description='Materialized incident attachments table'
     )

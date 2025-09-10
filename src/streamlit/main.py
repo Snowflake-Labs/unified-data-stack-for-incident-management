@@ -25,17 +25,7 @@ st.logo("snowflake.png")
 def initialize_session_state():
     if "snowpark_session" not in st.session_state:
         snowflake_connection = au.SnowflakeConnection()
-        st.session_state.snowpark_session, st.session_state.snowflake_root = snowflake_connection.connect(
-            **{
-                "account": os.getenv("DBT_SNOWFLAKE_ACCOUNT"),
-                "database": os.getenv("DBT_MODEL_DATABASE"), 
-                "schema": "curated_zone", 
-                "warehouse": os.getenv("DBT_SNOWFLAKE_WAREHOUSE"),
-                "role": os.getenv("DBT_MODEL_ROLE"),
-                "user": os.getenv("DBT_SNOWFLAKE_USER"),
-                "password": os.getenv("DBT_SNOWFLAKE_PASSWORD")
-            }
-        )
+        st.session_state.snowpark_session, st.session_state.snowflake_root = snowflake_connection.connect()
 def generate_sample_incident_data():
     """Generate sample incident data for the dashboard"""
     

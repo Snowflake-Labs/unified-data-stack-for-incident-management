@@ -75,13 +75,13 @@ class SnowflakeConnection:
                     find_and_load_env_file()
                     ## Read from environment variables if no connection parameters are provided using .env file
                     connection_parameters = {
-                        "account": os.getenv("SNOWFLAKE_ACCOUNT"),
-                        "user": os.getenv("SNOWFLAKE_USER"),
-                        "password": os.getenv("SNOWFLAKE_USER_PAT"),
-                        "role": os.getenv("SNOWFLAKE_USER_ROLE"), 
-                        "warehouse": os.getenv("SNOWFLAKE_DEFAULT_WH"),  # optional
-                        "database": os.getenv("SNOWFLAKE_DEFAULT_DB"),  # optional
-                        "schema": os.getenv("SNOWFLAKE_DEFAULT_SCHEMA"),  # optional
+                        "account": os.getenv("DBT_SNOWFLAKE_ACCOUNT"),
+                        "user": os.getenv("DBT_SNOWFLAKE_USER"),
+                        "password": os.getenv("DBT_SNOWFLAKE_PASSWORD"),
+                        "role": os.getenv("DBT_MODEL_ROLE"), 
+                        "warehouse": os.getenv("DBT_SNOWFLAKE_WAREHOUSE"),  # optional
+                        "database": os.getenv("DBT_MODEL_DATABASE"),  # optional
+                        "schema": os.getenv("DBT_MODEL_SCHEMA"),  # optional
                     }
                     self.snowpark_session = Session.builder.configs(connection_parameters).create()
                     self.snowflake_root = Root(self.snowpark_session)

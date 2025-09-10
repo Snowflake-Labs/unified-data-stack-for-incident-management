@@ -14,7 +14,7 @@ with recent_recorded_incidents as (
 
 select 
     sm.* exclude (incident_number),
-    coalesce(i.incident_number, sm.incident_number) as incident_number
+    coalesce(i.incident_number, parse_json(sm.incident_number):incident_code) as incident_number
 from {{ ref('v_qualify_slack_messages') }} sm
 left join recent_recorded_incidents i 
 on sm.channel = i.external_source_id  -- where incident was reported from the same channel
