@@ -12,4 +12,4 @@ select
     reporter_id as author_id,
     text as content,
     current_timestamp() as created_at
-from {{ref('v_slack_msg_incident_number')}}
+from {{ref('incidents')}}
