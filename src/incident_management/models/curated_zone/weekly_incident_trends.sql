@@ -42,6 +42,6 @@ SELECT
         (COUNT(CASE WHEN status IN ('resolved', 'closed') THEN 1 END)::DECIMAL / COUNT(*)) * 100, 2
     ) AS resolution_rate_percentage
 FROM {{ source('landing_zone', 'incidents') }}
-WHERE created_at >= DATEADD('week', -12, CURRENT_DATE())
+WHERE created_at >= DATEADD('year', -1, CURRENT_DATE())
 GROUP BY DATE_TRUNC('week', created_at)
 ORDER BY week DESC

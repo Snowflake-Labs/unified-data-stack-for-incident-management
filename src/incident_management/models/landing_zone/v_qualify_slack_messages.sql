@@ -8,7 +8,7 @@
 -- Only propagate messages from known reporters (users in channel)
 with slack_messages_from_known_reporters as (
     select sm.*, r.id as reporter_id
-    from {{ source('landing_zone', 'slack_messages') }} sm
+    from {{ source('landing_zone', 'stream_slack_messages') }} sm
     inner join {{ source('landing_zone', 'users') }} r on sm.username = split(r.email, '@')[0]
 )
 

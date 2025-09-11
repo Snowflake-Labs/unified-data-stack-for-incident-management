@@ -1,13 +1,12 @@
 
 use role dbt_projects_engineer;
--- create or replace database incident_management;
+create or replace database incident_management;
 CREATE OR REPLACE WAREHOUSE incident_management_dbt_wh WAREHOUSE_SIZE='X-SMALL' INITIALLY_SUSPENDED=TRUE;
 
 use database incident_management;
 create or replace schema incident_management.landing_zone;
 create or replace schema incident_management.curated_zone;
-
--- create or replace schema incident_management.dbt_project_deployments;
+create or replace schema incident_management.dbt_project_deployments;
 
 -- Users table (employees, customers, system users)
 CREATE OR REPLACE TABLE incident_management.landing_zone.users (
@@ -37,6 +36,7 @@ CREATE OR REPLACE TABLE incident_management.landing_zone.incidents (
     
     -- People involved
     assignee_id STRING,
+    reportee_id STRING,
         
     -- Timestamps
     created_at TIMESTAMP_TZ DEFAULT CURRENT_TIMESTAMP(),
@@ -48,7 +48,8 @@ CREATE OR REPLACE TABLE incident_management.landing_zone.incidents (
     external_source_id VARCHAR(100), -- Reference to external source systems
     has_attachments BOOLEAN DEFAULT false, -- Indicates if incident has any attachments
     
-    CONSTRAINT fk_incidents_assignee FOREIGN KEY (assignee_id) REFERENCES incident_management.landing_zone.users(id)
+    CONSTRAINT fk_incidents_assignee FOREIGN KEY (assignee_id) REFERENCES incident_management.landing_zone.users(id),
+    CONSTRAINT fk_incidents_reportee FOREIGN KEY (reportee_id) REFERENCES incident_management.landing_zone.users(id)
 );
 
 -- Simplified comments table for incident communication
@@ -71,6 +72,21 @@ CREATE OR REPLACE TABLE incident_management.landing_zone.incident_attachments (
     uploaded_at TIMESTAMP_TZ DEFAULT CURRENT_TIMESTAMP(),
     CONSTRAINT fk_attachments_incident FOREIGN KEY (incident_number) REFERENCES incident_management.landing_zone.incidents(incident_number)
 );
+
+
+CREATE OR REPLACE STREAM incident_management.landing_zone.stream_slack_messages ON TABLE incident_management.landing_zone.slack_messages APPEND_ONLY = TRUE;
+
+
+CREATE OR REPLACE SECRET incident_management.dbt_project_deployments.incident_management_git_secret
+  TYPE = password
+  USERNAME = '${GITHUB_USERNAME}'
+  PASSWORD = '${GITHUB_PAT}';
+
+CREATE OR REPLACE GIT REPOSITORY incident_management.dbt_project_deployments.incident_management_dbt_project_repo
+ORIGIN = '${GITHUB_REPO_URL}'
+API_INTEGRATION = ${SNOWFLAKE_GIT_API_INT}
+GIT_CREDENTIALS = incident_management.dbt_project_deployments.incident_management_git_secret
+
 
 SELECT 'Setup completed successfully!' AS setup_step;
 

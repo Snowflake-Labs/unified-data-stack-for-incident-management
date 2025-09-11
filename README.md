@@ -2,6 +2,10 @@
 
 ## Setup
 
+### Setup Snowflake objects
+
+### Setup Slack connector (simple ingest)
+
 ## Demo vignettes
 
 ### Openflow based ingestion

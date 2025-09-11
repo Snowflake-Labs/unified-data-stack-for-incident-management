@@ -21,7 +21,7 @@ def initialize_session_state():
     if "snowpark_session" not in st.session_state:
         snowflake_connection = au.SnowflakeConnection()
         st.session_state.snowpark_session, st.session_state.snowflake_root = snowflake_connection.connect()
-        st.session_state.snowpark_session.use_schema("curated_zone")
+        st.session_state.snowpark_session.use_schema("landing_zone")
 
 
 def create_header():
@@ -65,15 +65,15 @@ def create_metrics_cards():
     """Create key metrics cards"""
 
     database = st.session_state.snowpark_session.get_current_database()
-    schema = st.session_state.snowpark_session.get_current_schema()
+    schema = "curated_zone"
     
     # Calculate current metrics
     total_active = au.execute_sql(f"SELECT COUNT(*) as count FROM {database}.{schema}.active_incidents", st.session_state.snowpark_session)
     critical_count = au.execute_sql(f"SELECT COUNT(*) as count FROM {database}.{schema}.active_incidents WHERE lower(priority) = 'critical'", st.session_state.snowpark_session)
     high_count = au.execute_sql(f"SELECT COUNT(*) as count FROM {database}.{schema}.active_incidents WHERE lower(priority) = 'high'", st.session_state.snowpark_session)
-    # avg_resolution = au.execute_sql(f"SELECT AVG(resolution_time) FROM {database}.{schema}.active_incidents", st.session_state.snowpark_session)
+    closed_count = au.execute_sql(f"SELECT COUNT(*) as count FROM {database}.{schema}.closed_incidents WHERE closed_at >= DATEADD('day', -30, CURRENT_DATE())", st.session_state.snowpark_session)
     
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3, col4 = st.columns(4)
     
     with col1:
         st.markdown("""
@@ -123,12 +123,28 @@ def create_metrics_cards():
         </div>
         """.format(total_active['COUNT'][0]), unsafe_allow_html=True)
     
+    with col4:
+        st.markdown("""
+        <div style="
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            padding: 25px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+            text-align: center;
+            border-left: 4px solid #10b981;
+        ">
+            <h3 style="margin: 0; color: #065f46; font-size: 0.95rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Closed (30 days)</h3>
+            <h1 style="margin: 15px 0 10px 0; color: #10b981; font-size: 3rem; font-weight: 700;">{}</h1>
+            <p style="margin: 0; color: #065f46; font-size: 0.85rem; font-weight: 500;">Successfully resolved</p>
+        </div>
+        """.format(closed_count['COUNT'][0]), unsafe_allow_html=True)
+    
 
 def create_charts():
     """Create dashboard charts using real data from the database"""
     
     database = st.session_state.snowpark_session.get_current_database()
-    schema = st.session_state.snowpark_session.get_current_schema()
+    schema = "curated_zone"
     
     col1, col2, col3 = st.columns(3)
     
@@ -209,7 +225,7 @@ def create_charts():
             st.error(f"Error loading weekly trends: {str(e)}")
     
     with col3:
-        st.subheader("🎯 Incidents by Category")
+        st.subheader("🎯 Incidents by Category - To date")
         try:
             # Get category breakdown from current incidents
             category_query = f"""
@@ -217,7 +233,6 @@ def create_charts():
                     category,
                     COUNT(*) as incident_count
                 FROM {database}.landing_zone.incidents
-                WHERE created_at >= DATEADD('month', -1, CURRENT_DATE())
                 GROUP BY category
                 ORDER BY incident_count DESC
             """
@@ -259,12 +274,14 @@ def create_charts():
 def get_incident_attachments(incident_id):
     """Fetch attachments for a specific incident"""
     database = st.session_state.snowpark_session.get_current_database()
-    schema = st.session_state.snowpark_session.get_current_schema()
+    schema = "landing_zone"
     
     # Query to get attachments for the incident
     query = f"""
     SELECT 
         attachment_file,
+        '@{database}.{schema}.DOCUMENTS' as documents_stage,
+        fl_get_relative_path(attachment_file) as attachment_file_path,
         uploaded_at
     FROM {database}.landing_zone.incident_attachments 
     WHERE incident_number = '{incident_id}'
@@ -290,17 +307,11 @@ def create_attachments_popover(incident_id, title):
             
             for idx, attachment in attachments.iterrows():
                 with st.container():
-                    col1, col2 = st.columns([3, 1])
-                    
-                    with col1:
-                        # Display attachment info
-                        st.markdown(f"**📄 {attachment['ATTACHMENT_FILE']}**")
-                        if pd.notna(attachment['UPLOADED_AT']):
-                            st.caption(f"Uploaded: {attachment['UPLOADED_AT']}")
-                    
-                    with col2:
-                        # You could add download button here if needed
-                        st.button("View", key=f"view_{incident_id}_{idx}", disabled=True, help="View functionality not implemented")
+                    img=st.session_state.snowpark_session.file.get_stream(f'{attachment["DOCUMENTS_STAGE"]}/{attachment["ATTACHMENT_FILE_PATH"]}', decompress=False).read()
+
+                    st.image(img, width=300, use_container_width="never")
+
+                    st.caption(f"Uploaded: {attachment['UPLOADED_AT']}")
                     
                     if idx < len(attachments) - 1:
                         st.markdown("---")
@@ -313,7 +324,7 @@ def create_active_incidents_table():
     st.subheader("🔄 Top 5 Active Incidents")
 
     database = st.session_state.snowpark_session.get_current_database()
-    schema = st.session_state.snowpark_session.get_current_schema()
+    schema = "curated_zone"
     
     # Convert to DataFrame
     df = au.execute_sql(f"""
@@ -348,7 +359,12 @@ def create_active_incidents_table():
     
     # Add priority icons
     df["PRIORITY"] = df["PRIORITY"].apply(lambda x: f"{get_priority_color(x)} {x}")
-    
+        # Convert HAS_ATTACHMENTS to icons
+    def get_attachment_icon(has_attachments):
+        return "📎" if has_attachments else "—"
+        
+    df["HAS_ATTACHMENTS"] = df["HAS_ATTACHMENTS"].apply(get_attachment_icon)
+
     # Display the dataframe
     active_incidents = st.dataframe(
         df[["INCIDENT_NUMBER", "TITLE", "PRIORITY", "STATUS", "CATEGORY", "CREATED_AT", "ASSIGNEE_NAME", "HAS_ATTACHMENTS", "SOURCE_SYSTEM", "LAST_COMMENT"]],
@@ -386,7 +402,7 @@ def create_recently_closed_incidents_table():
     st.subheader("🎯 Recently Closed Incidents")
 
     database = st.session_state.snowpark_session.get_current_database()
-    schema = st.session_state.snowpark_session.get_current_schema()
+    schema = "curated_zone"
 
     # Get last 5 closed incidents from the new closed_incidents model
     query = f"""
@@ -434,6 +450,12 @@ def create_recently_closed_incidents_table():
             lambda x: f"{get_status_icon(x)} {x}"
         )
         
+        # Convert HAS_ATTACHMENTS to icons
+        def get_attachment_icon(has_attachments):
+            return "📎" if has_attachments else "—"
+        
+        closed_incidents["HAS_ATTACHMENTS"] = closed_incidents["HAS_ATTACHMENTS"].apply(get_attachment_icon)
+        
         st.dataframe(
             closed_incidents,
             column_config={
@@ -446,7 +468,7 @@ def create_recently_closed_incidents_table():
                 "CLOSED_AT": st.column_config.DatetimeColumn("Closed At", width="medium"),
                 "TOTAL_RESOLUTION_HOURS": st.column_config.NumberColumn("Resolution (hrs)", width="small", format="%.1f"),
                 "SOURCE_SYSTEM": st.column_config.TextColumn("Source", width="small"),
-                "HAS_ATTACHMENTS": st.column_config.CheckboxColumn("Attachments", width="small")
+                "HAS_ATTACHMENTS": st.column_config.TextColumn("Attachments", width="small")
             },
             hide_index=True,
             use_container_width=True
@@ -508,10 +530,10 @@ def main():
     
     st.markdown("<br><br>", unsafe_allow_html=True)
     
-    # Charts section
-    create_charts()
+    # # Charts section
+    # create_charts()
     
-    st.markdown("<br>", unsafe_allow_html=True)
+    # st.markdown("<br>", unsafe_allow_html=True)
     
     
     # Active incidents table

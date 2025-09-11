@@ -12,6 +12,7 @@ SELECT
     i.priority,
     i.status,
     i.assignee_id,
+    i.reportee_id,
     
     -- Timeline fields (only available DDL fields)
     i.created_at,
