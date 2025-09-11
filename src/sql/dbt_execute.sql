@@ -2,13 +2,19 @@ use role dbt_projects_engineer;
 use warehouse incident_management_dbt_wh;
 use database incident_management;
 
+CREATE OR REPLACE STREAM stream_slack_messages 
+ON TABLE landing_zone.slack_messages 
+APPEND_ONLY = TRUE;
 
 
 EXECUTE DBT PROJECT incident_management.DBT_PROJECT_DEPLOYMENTS.dbt_incident_management args='compile';
 
-EXECUTE DBT PROJECT incident_management.DBT_PROJECT_DEPLOYMENTS.dbt_incident_management args='run --select landing_zone';
+EXECUTE DBT PROJECT incident_management.DBT_PROJECT_DEPLOYMENTS.dbt_incident_management args='run --select landing_zone.users';
+EXECUTE DBT PROJECT incident_management.DBT_PROJECT_DEPLOYMENTS.dbt_incident_management args='run --select landing_zone.incidents';
 
-EXECUTE DBT PROJECT incident_management.DBT_PROJECT_DEPLOYMENTS.dbt_incident_management args='run --select curated_zone';
+
+EXECUTE DBT PROJECT incident_management.DBT_PROJECT_DEPLOYMENTS.dbt_incident_management args='run --select curated_zone.incident_comment_history';
+EXECUTE DBT PROJECT incident_management.DBT_PROJECT_DEPLOYMENTS.dbt_incident_management args='run --select curated_zone.incident_attachments';
 
 
 EXECUTE DBT PROJECT incident_management.DBT_PROJECT_DEPLOYMENTS.dbt_incident_management args='run --select curated_zone.weekly_incident_trends';

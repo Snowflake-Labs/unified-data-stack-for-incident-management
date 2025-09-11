@@ -51,19 +51,19 @@ source "$ENV_FILE"
 
 snow sql \
 --connection uib27272 \
--f "../src/sql/roles.sql" 
+-f "../sql/roles.sql" 
 
 # Execute database objects SQL (uncommented and updated)
 snow sql \
 --connection uib27272 \
--f "../src/sql/before_slack_connector.sql"
+-f "../sql/before_slack_connector.sql"
 
 # Conditionally execute after slack connector SQL if flag is set
 if [ "$RUN_AFTER_SLACK" = true ]; then
     echo "Running after slack connector SQL..."
     snow sql \
     --connection uib27272 \
-    -f "../src/sql/after_slack_connector.sql"
+    -f "../sql/after_slack_connector.sql"
 else
     echo "Skipping after slack connector SQL (use -a or --after-slack to enable)"
 fi
