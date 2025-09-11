@@ -5,7 +5,6 @@
     )
 }}
 
-
 with 
 recent_recorded_incidents as (
     select * from {{ ref('incidents') }}
@@ -20,7 +19,6 @@ incident_number_not_in_slack_message as (
     select * from {{ ref('v_qualify_slack_messages') }}
     where IS_NULL_VALUE(parse_json(incident_number):incident_code)
 )
-
 
 select * 
 from incident_number_in_slack_message sm
