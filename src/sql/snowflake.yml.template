@@ -1,0 +1,11 @@
+definition_version: 2
+env:
+  # Database configuration (used in database_objects.sql)
+  dbt_project_database: "${DBT_PROJECT_DATABASE}"
+  dbt_snowflake_warehouse: "${DBT_SNOWFLAKE_WAREHOUSE}"
+  dbt_project_admin_role: "${DBT_PROJECT_ADMIN_ROLE}"
+  dbt_snowflake_user: "${DBT_SNOWFLAKE_USER}"
+  git_user_email: "${GIT_USER_EMAIL}"
+  git_user_repo_pat: "${GIT_USER_REPO_PAT}"
+  git_repository_url: "${GIT_REPOSITORY_URL}"
+  snowflake_git_api_int: "${SNOWFLAKE_GIT_API_INT}"
