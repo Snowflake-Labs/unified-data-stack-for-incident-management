@@ -10,6 +10,7 @@ with slack_messages_from_known_reporters as (
     select sm.*, r.id as reporter_id
     from {{ source('landing_zone', 'stream_slack_messages') }} sm
     inner join {{ source('landing_zone', 'users') }} r on sm.username = split(r.email, '@')[0]
+    where sm.clientmsgid is not null
 )
 
 -- Messages with attachments (with join to doc_metadata)
@@ -24,7 +25,7 @@ select
     sm.reporter_id,
     sm.text,
     sm.ts,
-    randstr(7, random()) as slack_message_id,
+    clientmsgid as slack_message_id,
     
     -- Attachment metadata from doc_metadata
     dm.file_name, 

@@ -1,12 +1,5 @@
 
 use role <% ctx.env.dbt_project_admin_role %>;
-create or replace database <% ctx.env.dbt_project_database %>;
-CREATE OR REPLACE WAREHOUSE <% ctx.env.dbt_snowflake_warehouse %> WAREHOUSE_SIZE='X-SMALL' INITIALLY_SUSPENDED=TRUE;
-
-use database <% ctx.env.dbt_project_database %>;
-create or replace schema <% ctx.env.dbt_project_database %>.landing_zone;
-create or replace schema <% ctx.env.dbt_project_database %>.curated_zone;
-create or replace schema <% ctx.env.dbt_project_database %>.dbt_project_deployments;
 
 -- Users table (employees, customers, system users)
 CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.landing_zone.users (
@@ -47,6 +40,7 @@ CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.landing_zone.incident
     source_system VARCHAR(100), -- Where the incident originated (e.g., 'monitoring', 'customer_portal', 'manual')
     external_source_id VARCHAR(100), -- Reference to external source systems
     has_attachments BOOLEAN DEFAULT false, -- Indicates if incident has any attachments
+    slack_message_id VARCHAR(100), -- Reference to the original Slack message that created this incident
     
     CONSTRAINT fk_incidents_assignee FOREIGN KEY (assignee_id) REFERENCES <% ctx.env.dbt_project_database %>.landing_zone.users(id),
     CONSTRAINT fk_incidents_reportee FOREIGN KEY (reportee_id) REFERENCES <% ctx.env.dbt_project_database %>.landing_zone.users(id)

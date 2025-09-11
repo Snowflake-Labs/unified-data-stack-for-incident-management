@@ -98,7 +98,8 @@ enriched_incidents as (
         -- System fields
         'Slack' as source_system,
         sri.channel as external_source_id,
-        sri.hasfiles as has_attachments
+        sri.hasfiles as has_attachments,
+        sri.slack_message_id
         
     from all_processed_messages sri
 )

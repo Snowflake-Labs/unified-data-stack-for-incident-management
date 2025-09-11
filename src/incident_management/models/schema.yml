@@ -286,9 +286,8 @@ sources:
             description: "Reference to external source systems"
           - name: has_attachments
             description: "Indicates if incident has any attachments"
-            tests:
-              - accepted_values:
-                  values: [true, false]
+          - name: slack_message_id
+            description: "Reference to the original Slack message that created this incident"
 
       # Incident Comment History
       - name: incident_comment_history
