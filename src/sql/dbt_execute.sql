@@ -2,10 +2,6 @@ use role dbt_projects_engineer;
 use warehouse incident_management_dbt_wh;
 use database incident_management;
 
-CREATE OR REPLACE STREAM stream_slack_messages 
-ON TABLE landing_zone.slack_messages 
-APPEND_ONLY = TRUE;
-
 
 EXECUTE DBT PROJECT incident_management.DBT_PROJECT_DEPLOYMENTS.dbt_incident_management args='compile';
 

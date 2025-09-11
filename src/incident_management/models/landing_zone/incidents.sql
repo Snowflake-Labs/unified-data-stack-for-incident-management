@@ -9,7 +9,7 @@
 
 -- Create only new incidents in this incremental mode; new incidents are detected by absence of an incident number from previous step in the pipeline
 with slack_reported_incidents as (
-    select * from {{ ref('v_qualifyv_slack_msg_incident_number') }}
+    select * from {{ ref('v_slack_msg_incident_number') }}
 ),
 
 enriched_incidents as (
