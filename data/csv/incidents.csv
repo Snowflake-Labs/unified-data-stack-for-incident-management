@@ -1,7 +1,7 @@
-incident_number,title,category,priority,status,assignee_id,reportee_id,created_at,closed_at,updated_at,source_system,external_source_id,has_attachments,slack_message_id
-INC-2024-001,Payment Gateway Timeout Issues,payment,high,resolved,usr_002,usr_003,2024-01-20 14:30:00,2024-01-20 16:20:00,2024-01-20 16:20:00,monitoring,mon_001,false,
-INC-2024-002,User Login Authentication Failures,authentication,critical,resolved,usr_005,usr_009,2024-01-22 09:15:00,2024-01-22 10:50:00,2024-01-22 10:50:00,customer_portal,cp_002,false,
-INC-2024-003,Website Performance Degradation,performance,medium,resolved,usr_007,usr_001,2024-01-25 11:20:00,2024-01-25 14:35:00,2024-01-25 14:35:00,monitoring,mon_003,false,
-INC-2024-004,Email Notification System Down,notification,high,resolved,usr_004,usr_010,2024-01-28 08:45:00,2024-01-28 10:20:00,2024-01-28 10:20:00,manual,man_004,false,
-INC-2024-005,Shopping Cart Items Not Saving,cart,high,open,usr_007,usr_003,2024-02-01 13:25:00,,2024-02-01 15:30:00,customer_portal,cp_005,false,slack_msg_001
-INC-2024-009,SSL Certificate Expiration Warning,security,low,resolved,usr_005,usr_004,2024-02-07 12:00:00,2024-02-07 13:35:00,2024-02-07 13:35:00,monitoring,mon_009,false,
+incident_number,title,category,priority,status,assignee_id,reportee_id,created_at,closed_at,updated_at,source_system,external_source_id,has_attachments,slack_message_id,last_comment
+INC-2024-001,Payment Gateway Timeout Issues,payment,high,resolved,usr_002,usr_003,2024-01-20 14:30:00,2024-01-20 16:20:00,2024-01-20 16:20:00,monitoring,mon_001,false,,Incident resolved. Will create follow-up task to review timeout settings for other services.
+INC-2024-002,User Login Authentication Failures,authentication,critical,resolved,usr_005,usr_009,2024-01-22 09:15:00,2024-01-22 10:50:00,2024-01-22 10:50:00,customer_portal,cp_002,false,,Incident closed. Root cause documented and preventive measures implemented.
+INC-2024-003,Website Performance Degradation,performance,medium,resolved,usr_007,usr_001,2024-01-25 11:20:00,2024-01-25 14:35:00,2024-01-25 14:35:00,monitoring,mon_003,false,,Performance stable for 2 hours. Incident resolved.
+INC-2024-004,Email Notification System Down,notification,high,resolved,usr_004,usr_010,2024-01-28 08:45:00,2024-01-28 10:20:00,2024-01-28 10:20:00,manual,man_004,false,,Test notifications successful. Incident resolved.
+INC-2024-005,Shopping Cart Items Not Saving,cart,high,open,usr_007,usr_003,2024-02-01 13:25:00,,2024-02-01 15:30:00,customer_portal,cp_005,false,slack_msg_001,Testing potential fix in staging environment. Will deploy if successful.
+INC-2024-009,SSL Certificate Expiration Warning,security,low,resolved,usr_005,usr_004,2024-02-07 12:00:00,2024-02-07 13:35:00,2024-02-07 13:35:00,monitoring,mon_009,false,,Certificate deployment verified. All services using new certificate. Incident resolved.

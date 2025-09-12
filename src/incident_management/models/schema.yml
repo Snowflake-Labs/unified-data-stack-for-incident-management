@@ -288,6 +288,8 @@ sources:
             description: "Indicates if incident has any attachments"
           - name: slack_message_id
             description: "Reference to the original Slack message that created this incident"
+          - name: last_comment
+            description: "Most recent comment content for this incident"
 
       # Incident Comment History
       - name: incident_comment_history

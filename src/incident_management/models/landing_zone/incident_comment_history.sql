@@ -10,10 +10,12 @@ select
     uuid_string() as id,
     i.incident_number,
     i.reportee_id as author_id,
-    coalesce(sm.text, 'No related Slack message found') as content,
+    i.last_comment as content,
     current_timestamp() as created_at
 from {{ref('incidents')}} i
-inner join {{ref('v_qualify_slack_messages')}} sm 
-on i.reportee_id = sm.username 
-and i.external_source_id = sm.channel
-and i.slack_message_id = sm.slack_message_id
+
+{% if is_incremental() %}
+where i.updated_at > (select max(created_at) from {{this}})
+and i.updated_at >= dateadd('day', -1, current_timestamp())
+and i.status = 'open'
+{% endif %}

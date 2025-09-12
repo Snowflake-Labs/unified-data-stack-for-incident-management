@@ -41,7 +41,7 @@ CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.landing_zone.incident
     external_source_id VARCHAR(100), -- Reference to external source systems
     has_attachments BOOLEAN DEFAULT false, -- Indicates if incident has any attachments
     slack_message_id VARCHAR(100), -- Reference to the original Slack message that created this incident
-    
+    last_comment STRING, -- Most recent comment content for this incident
     CONSTRAINT fk_incidents_assignee FOREIGN KEY (assignee_id) REFERENCES <% ctx.env.dbt_project_database %>.landing_zone.users(id),
     CONSTRAINT fk_incidents_reportee FOREIGN KEY (reportee_id) REFERENCES <% ctx.env.dbt_project_database %>.landing_zone.users(id)
 );

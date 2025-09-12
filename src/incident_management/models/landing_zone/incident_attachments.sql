@@ -7,14 +7,13 @@
 }}
 
 select 
-    uuid_string() as id,
+    dm.file_id as id,
     i.incident_number,
-    sm.attachment_file,
-    sm.ts as uploaded_at
+    to_file('{{ var("docs_stage_path") }}', dm.staged_file_path) as attachment_file,
+    dm.event_ts as uploaded_at
 from {{ref('incidents')}} i
-inner join {{ref('v_qualify_slack_messages')}} sm 
-on sm.hasfiles = true 
-and i.reportee_id = sm.username 
-and i.external_source_id = sm.channel
-and i.slack_message_id = sm.slack_message_id
-and sm.attachment_file is not null
+inner join {{ref('doc_metadata')}} dm 
+on i.has_attachments 
+and i.reportee_id = dm.user_id 
+and i.external_source_id = dm.channel_id
+and i.created_at = dm.event_ts

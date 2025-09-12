@@ -28,6 +28,7 @@ select
     sm.clientmsgid as slack_message_id,
     
     -- Attachment metadata from doc_metadata
+    dm.file_id,
     dm.file_name, 
     dm.file_mimetype, 
     dm.file_size, 
@@ -73,6 +74,7 @@ select
     sm.clientmsgid as slack_message_id,
     
     -- No attachment metadata for messages without files
+    null as file_id,
     null as file_name, 
     null as file_mimetype, 
     null as file_size, 

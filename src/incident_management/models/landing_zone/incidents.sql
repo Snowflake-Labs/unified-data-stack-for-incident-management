@@ -3,7 +3,7 @@
         materialized='incremental',
         incremental_strategy='merge',
         unique_key='incident_number',
-        merge_update_columns=['updated_at'],
+        merge_update_columns=['updated_at', 'slack_message_id', 'last_comment'],
         description='Materialized incidents table with enriched data and calculated fields'
     )
 }}
@@ -92,18 +92,22 @@ enriched_incidents as (
         
         -- People involved
         '' as assignee_id,
-        sri.username as reportee_id,
+        sri.reporter_id as reportee_id,
         
         -- Timestamps
-        current_timestamp() as created_at,
+        sri.ts as created_at,
         null as closed_at,
-        current_timestamp() as updated_at,
+        sri.ts as updated_at,
         
         -- System fields
         'Slack' as source_system,
         sri.channel as external_source_id,
         sri.hasfiles as has_attachments,
-        sri.slack_message_id
+        sri.slack_message_id,
+        
+        -- Latest comment
+        sri.text as last_comment
+
         
     from all_processed_messages sri
 )
