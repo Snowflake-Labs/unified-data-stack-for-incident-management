@@ -15,7 +15,7 @@ select
 from {{ref('incidents')}} i
 
 {% if is_incremental() %}
-where i.updated_at > (select max(created_at) from {{this}})
+where i.updated_at > (select coalesce(max(created_at), dateadd('day', -1, current_timestamp())) from {{this}})
 and i.updated_at >= dateadd('day', -1, current_timestamp())
 and i.status = 'open'
 {% endif %}
