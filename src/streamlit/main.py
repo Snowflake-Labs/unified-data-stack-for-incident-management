@@ -20,6 +20,7 @@ st.logo("snowflake.png")
 def initialize_session_state():
     if "snowpark_session" not in st.session_state:
         snowflake_connection = au.SnowflakeConnection()
+        ## if you're running this locally, make sure you export env variables from the .env file
         st.session_state.snowpark_session, st.session_state.snowflake_root = snowflake_connection.connect()
         st.session_state.snowpark_session.use_schema("landing_zone")
 
@@ -325,7 +326,7 @@ def create_active_incidents_table():
 
     database = st.session_state.snowpark_session.get_current_database()
     schema = "curated_zone"
-    
+
     # Convert to DataFrame
     df = au.execute_sql(f"""
         SELECT 
@@ -347,6 +348,10 @@ def create_active_incidents_table():
         LIMIT 5
     """, st.session_state.snowpark_session)
 
+    if df.empty:
+        st.info("No active incidents found.")
+        return
+    
     # Define priority colors
     def get_priority_color(priority):
         colors = {

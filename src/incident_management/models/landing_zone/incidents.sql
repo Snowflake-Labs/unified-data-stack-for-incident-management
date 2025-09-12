@@ -3,6 +3,7 @@
         materialized='incremental',
         incremental_strategy='merge',
         unique_key='incident_number',
+        merge_update_columns=['updated_at'],
         description='Materialized incidents table with enriched data and calculated fields'
     )
 }}
@@ -42,12 +43,12 @@ messages_with_found_incidents as (
     left join recent_open_incidents roi 
     on sm.channel = roi.external_source_id 
     and roi.reportee_id = sm.username
-    and ai_filter(prompt($$
-        Return true if this incident title {0} refers to the problem now being described in this recent Slack message {1}, else return false.
-        If multiple incidents are related, return true for the most recent incident by created_at timestamp.
-        Only one can be true at a time.
-        Do not add any explanation in the response.
-    $$, roi.title, sm.text))
+    -- and ai_filter(prompt($$
+    --     Return true if this incident title {0} refers to the problem now being described in this recent Slack message {1}, else return false.
+    --     If multiple incidents are related, return true for the most recent incident by created_at timestamp.
+    --     Only one can be true at a time.
+    --     Do not add any explanation in the response.
+    -- $$, roi.title, sm.text))
 ),
 
 -- Combine all messages with their appropriate incident numbers
@@ -74,9 +75,12 @@ enriched_incidents as (
             else sri.final_incident_number
         end as incident_number,        
         
-        -- Image Classification
-        ai_classify(sri.attachment_file, ['payment gateway error', 'login error', 'other']):labels[0] as category,
-        category as title, --reuse the category as the title
+        -- Image or Text Classification
+        case 
+            when sri.attachment_file is not null then ai_classify(sri.attachment_file, ['payment gateway error', 'login error', 'other']):labels[0]
+            else ai_classify(sri.text, ['payment gateway error', 'login error', 'other']):labels[0]
+        end as category,
+        ai_classify(sri.text, ['payment gateway error', 'login error', 'other']):labels[0] as title, 
         case 
             when category = 'payment gateway error' then 'critical'
             when category = 'login error' then 'high'

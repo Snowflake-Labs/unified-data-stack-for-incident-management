@@ -25,7 +25,7 @@ select
     sm.reporter_id,
     sm.text,
     sm.ts,
-    clientmsgid as slack_message_id,
+    sm.clientmsgid as slack_message_id,
     
     -- Attachment metadata from doc_metadata
     dm.file_name, 
@@ -70,7 +70,7 @@ select
     sm.reporter_id,
     sm.text,
     sm.ts,
-    randstr(7, random()) as slack_message_id,
+    sm.clientmsgid as slack_message_id,
     
     -- No attachment metadata for messages without files
     null as file_name, 

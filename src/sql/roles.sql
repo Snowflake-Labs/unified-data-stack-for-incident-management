@@ -11,4 +11,6 @@ grant create database on account to role <% ctx.env.dbt_project_admin_role %>;
 grant create warehouse on account to role <% ctx.env.dbt_project_admin_role %>;
 
 grant role <% ctx.env.dbt_project_admin_role %> to user <% ctx.env.dbt_snowflake_user %>;
+-- TODO: add command to add PAT to user
+
 grant role <% ctx.env.dbt_project_admin_role %> to user clakkad;

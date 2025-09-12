@@ -15,17 +15,6 @@ API_TIMEOUT = 50000  # in milliseconds
 FEEDBACK_API_ENDPOINT = "/api/v2/cortex/analyst/feedback"
 
 
-def find_and_load_env_file(file_path: str = '.env'):
-    # Find the .env file in the current directory or parent directories
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    while not os.path.exists(os.path.join(current_dir, file_path)):
-        current_dir = os.path.dirname(current_dir)
-        if current_dir == os.path.dirname(current_dir):
-            raise FileNotFoundError("No .env file found")
-    # Load environment variables 
-    load_dotenv(os.path.join(current_dir, '.env'))
-
-
 class SnowflakeConnectionException(Exception):
     """Custom exception for Snowflake connection errors."""
     pass
@@ -72,7 +61,6 @@ class SnowflakeConnection:
                     self.snowpark_session = Session.builder.configs({k:v for k,v in kwargs.items() if v is not None and v != ""}).create()
                     self.snowflake_root = Root(self.snowpark_session)
                 else:
-                    find_and_load_env_file()
                     ## Read from environment variables if no connection parameters are provided using .env file
                     connection_parameters = {
                         "account": os.getenv("DBT_SNOWFLAKE_ACCOUNT"),
