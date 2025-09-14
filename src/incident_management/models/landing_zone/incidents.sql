@@ -14,6 +14,8 @@
 -- ),
 
 -- Get recent open incidents for lookback when incident_code is null
+with 
+
 recent_open_incidents as (
     select * from {{ this }}
     where status = 'open' 
