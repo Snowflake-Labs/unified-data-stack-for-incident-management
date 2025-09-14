@@ -58,7 +58,7 @@ all_processed_messages as (
     select *, incident_number as final_incident_number
     from messages_with_incident_code
     
-    union all
+    union
     
     -- Messages without incident codes, use existing if found, otherwise generate new
     select 
