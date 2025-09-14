@@ -70,7 +70,7 @@ recent_open_incidents as (
     
     -- Messages without incident codes, use existing if found, otherwise generate new
     select 
-        * exclude (existing_incident_number),
+        * exclude (existing_incident_number, text_category),
         coalesce(existing_incident_number, concat_ws('-', 'INC', '2025', randstr(3, random()))) as final_incident_number
     from messages_with_matching_incidents
 )
