@@ -35,7 +35,7 @@ messages_without_incident_code as (
 ),
 
 -- For messages without incident codes, try to find existing incidents
-messages_with_found_incidents as (
+messages_with_matching_incidents as (
     select 
         sm.*,
         roi.incident_number as existing_incident_number
@@ -43,12 +43,13 @@ messages_with_found_incidents as (
     left join recent_open_incidents roi 
     on sm.channel = roi.external_source_id 
     and roi.reportee_id = sm.username
-    -- and ai_filter(prompt($$
-    --     Return true if this incident title {0} refers to the problem now being described in this recent Slack message {1}, else return false.
-    --     If multiple incidents are related, return true for the most recent incident by created_at timestamp.
-    --     Only one can be true at a time.
-    --     Do not add any explanation in the response.
-    -- $$, roi.title, sm.text))
+    and ai_filter(prompt($$
+        Compare the incident category "{0}" with the Slack message text "{1}".
+        Return true ONLY for the first record that matches both the category type and describes the same problem.
+        If this is the first matching record based on category similarity and problem description, return true.
+        If this record does not match the category and text, or if a previous record already matched, return false.
+        Do not add any explanation in the response.
+    $$, roi.category, sm.text))
 ),
 
 -- Combine all messages with their appropriate incident numbers
@@ -63,7 +64,7 @@ all_processed_messages as (
     select 
         * exclude (existing_incident_number),
         coalesce(existing_incident_number, concat_ws('-', 'INC', '2025', randstr(3, random()))) as final_incident_number
-    from messages_with_found_incidents
+    from messages_with_matching_incidents
 ),
 
 enriched_incidents as (
