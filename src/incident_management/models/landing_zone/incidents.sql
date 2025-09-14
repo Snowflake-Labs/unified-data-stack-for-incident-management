@@ -9,9 +9,9 @@
 }}
 
 -- Create only new incidents in this incremental mode; new incidents are detected by absence of an incident number from previous step in the pipeline
-with slack_reported_incidents as (
-    select * from {{ ref('v_qualify_slack_messages') }}
-),
+-- with slack_reported_incidents as (
+--     select * from {{ ref('v_qualify_slack_messages') }}
+-- ),
 
 -- Get recent open incidents for lookback when incident_code is null
 recent_open_incidents as (
@@ -19,41 +19,47 @@ recent_open_incidents as (
     where status = 'open' 
     and reportee_id is not null
     and created_at > dateadd('day', -7, current_timestamp())
-),
+)
+
+, new_slack_messages as (
+    select lh.*
+    from landing_zone.v_qualify_slack_messages lh 
+    left join recent_open_incidents rh 
+    on lh.slack_message_id = rh.slack_message_id
+    where rh.slack_message_id is null
+)
+
 
 -- Split messages based on whether they have valid incident codes
-messages_with_incident_code as (
+, messages_with_incident_code as (
     select *
-    from slack_reported_incidents
+    from new_slack_messages
     where not IS_NULL_VALUE(parse_json(incident_number):incident_code)
-),
+)
 
-messages_without_incident_code as (
+, messages_without_incident_code as (
     select *
-    from slack_reported_incidents
+    from new_slack_messages
     where IS_NULL_VALUE(parse_json(incident_number):incident_code)
-),
+)
 
 -- For messages without incident codes, try to find existing incidents
-messages_with_matching_incidents as (
+, messages_with_matching_incidents as (
     select 
         sm.*,
+        ai_classify(sm.text, ['payment gateway error', 'login error', 'other']):labels[0] as text_category,
         roi.incident_number as existing_incident_number
     from messages_without_incident_code sm
     left join recent_open_incidents roi 
     on sm.channel = roi.external_source_id 
-    and roi.reportee_id = sm.username
-    and ai_filter(prompt($$
-        Compare the incident category "{0}" with the Slack message text "{1}".
-        Return true ONLY for the first record that matches both the category type and describes the same problem.
-        If this is the first matching record based on category similarity and problem description, return true.
-        If this record does not match the category and text, or if a previous record already matched, return false.
-        Do not add any explanation in the response.
-    $$, roi.category, sm.text))
-),
+    and sm.username = roi.reportee_id 
+    and ai_filter(
+     prompt('The text category {0} is logically relatable to this record\'s category {1}', text_category, roi.category)
+    )
+)
 
 -- Combine all messages with their appropriate incident numbers
-all_processed_messages as (
+, all_processed_messages as (
     -- Messages that already have incident codes
     select *, incident_number as final_incident_number
     from messages_with_incident_code
@@ -65,9 +71,9 @@ all_processed_messages as (
         * exclude (existing_incident_number),
         coalesce(existing_incident_number, concat_ws('-', 'INC', '2025', randstr(3, random()))) as final_incident_number
     from messages_with_matching_incidents
-),
+)
 
-enriched_incidents as (
+, enriched_incidents as (
     select
         -- Core incident fields matching DDL schema
         case 
