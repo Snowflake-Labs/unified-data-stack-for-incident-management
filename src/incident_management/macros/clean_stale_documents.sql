@@ -1,7 +1,5 @@
-{% macro clean_stale_documents() -%}
+{% macro clean_stale_documents(stage_name: string) -%}
 
-{% set docs_stage_path = var("docs_stage_path") | replace("'", "") %}
-
-remove @INCIDENT_MANAGEMENT.LANDING_ZONE.DOCUMENTS pattern='.*';
+remove {{ stage_name | replace("'", "") }} pattern='.*';
 
 {% endmacro %}
