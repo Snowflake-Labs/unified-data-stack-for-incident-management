@@ -8,4 +8,6 @@ env:
   git_user_email: "${GIT_USER_EMAIL}"
   git_user_repo_pat: "${GIT_USER_REPO_PAT}"
   git_repository_url: "${GIT_REPOSITORY_URL}"
+  repo_dbt_projects_yml_path: "${REPO_DBT_PROJECTS_YML_PATH}"
   snowflake_git_api_int: "${SNOWFLAKE_GIT_API_INT}"
+  external_access_int: "${EXTERNAL_ACCESS_INTEGRATION}"

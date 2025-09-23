@@ -1,8 +1,6 @@
 #! /usr/bin/env bash
 
-# Usage: ./deploy.sh [force|refresh] [env_file_path]
-# force   - Deploy new dbt project with --force flag
-# refresh - Deploy existing dbt project without --force flag
+# Usage: ./deploy.sh [env_file_path]
 # env_file_path - Optional path to custom environment file (defaults to ../.env)
 #
 # This script clones the git repository into a temporary directory for deployment.
@@ -12,11 +10,9 @@
 # Default environment file
 DEFAULT_ENV_FILE="../../.env"
 
-# Check if argument is provided
-if [ $# -eq 0 ]; then
-    echo "Usage: $0 [force|refresh] [env_file_path]"
-    echo "  force         - Deploy new dbt project with --force flag"
-    echo "  refresh       - Deploy existing dbt project without --force flag"
+# Show usage if help is requested
+if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+    echo "Usage: $0 [env_file_path]"
     echo "  env_file_path - Optional path to custom environment file (defaults to ../../.env)"
     echo ""
     echo "This script clones a git repository into a temporary directory for deployment."
@@ -24,30 +20,15 @@ if [ $# -eq 0 ]; then
     echo "  GIT_REPOSITORY_URL - Git repository URL to clone"
     echo ""
     echo "Examples:"
-    echo "  $0 force"
-    echo "  $0 refresh"
-    echo "  $0 force ../my_custom.env"
-    echo "  $0 refresh /path/to/production.env"
-    exit 1
-fi
-
-# Validate first argument (deploy type)
-DEPLOY_TYPE=$1
-if [ "$DEPLOY_TYPE" != "force" ] && [ "$DEPLOY_TYPE" != "refresh" ]; then
-    echo "Error: Invalid deploy type '$DEPLOY_TYPE'"
-    echo "Usage: $0 [force|refresh] [env_file_path]"
-    echo "  force         - Deploy new dbt project with --force flag"
-    echo "  refresh       - Deploy existing dbt project without --force flag"
-    echo "  env_file_path - Optional path to custom environment file (defaults to ../../.env)"
-    echo ""
-    echo "Required environment variables:"
-    echo "  GIT_REPOSITORY_URL"
-    exit 1
+    echo "  $0"
+    echo "  $0 ../my_custom.env"
+    echo "  $0 /path/to/production.env"
+    exit 0
 fi
 
 # Set environment file path
-if [ $# -ge 2 ]; then
-    ENV_FILE=$2
+if [ $# -ge 1 ]; then
+    ENV_FILE=$1
 else
     ENV_FILE=$DEFAULT_ENV_FILE
 fi
@@ -120,7 +101,7 @@ fi
 echo "Git repository cloned successfully ✓"
 
 # Set DBT_PROJECT_DIR to the subdirectory within the cloned repo
-DBT_PROJECT_DIR="$TEMP_DIR/src/incident_management"
+DBT_PROJECT_DIR="$TEMP_DIR/$REPO_DBT_PROJECTS_YML_PATH"
 
 
 echo "DBT project directory exists: $DBT_PROJECT_DIR ✓"
@@ -205,7 +186,7 @@ done
 echo "Environment variable replacement completed ✓"
 
 ## Deploy the dbt project to Snowflake
-echo "Deploying dbt project with $DEPLOY_TYPE mode for target: $DBT_TARGET..."
+echo "Deploying dbt project with force mode for target: $DBT_TARGET..."
 
 # Display environment variables (excluding sensitive information)
 echo "=== Deployment Configuration ==="
@@ -221,58 +202,32 @@ echo "Database: $DBT_PROJECT_DATABASE"
 echo "Schema: $DBT_PROJECT_SCHEMA"
 echo "Role: $DBT_PROJECT_ADMIN_ROLE"
 echo "Warehouse: $DBT_SNOWFLAKE_WAREHOUSE"
-echo "Deploy Type: $DEPLOY_TYPE"
-if [ "$DEPLOY_TYPE" = "force" ]; then
-    echo "Authentication: SNOWFLAKE_JWT (using private key)"
-else
-    echo "Authentication: Password-based"
-fi
+echo "Deploy Type: force"
+echo "Authentication: SNOWFLAKE_JWT (using private key)"
 echo "================================="
 echo ""
 
-if [ "$DEPLOY_TYPE" = "force" ]; then
-    # Validate private key file exists for JWT authentication
-    if [ -z "$DBT_SNOWFLAKE_PRIVATE_KEY_PATH" ] || [ ! -f "$DBT_SNOWFLAKE_PRIVATE_KEY_PATH" ]; then
-        echo "Error: Private key file not found or DBT_SNOWFLAKE_PRIVATE_KEY_PATH not set"
-        echo "Required for force deployment with JWT authentication"
-        exit 1
-    fi
-    
-    echo "Deploying new dbt project with --force flag using SNOWFLAKE_JWT authentication"
-
-    # Deploy new dbt project with --force flag
-    snow dbt deploy $DBT_PROJECT_NAME \
-        --source $DBT_PROJECT_DIR \
-        --profiles-dir $DBT_PROFILES_DIR \
-        --connection $SNOW_CLI_CONNECTION \
-        --force \
-        --database "$DBT_PROJECT_DATABASE" \
-        --schema "$DBT_PROJECT_SCHEMA" \
-        --role "$DBT_PROJECT_ADMIN_ROLE" \
-        --warehouse "$DBT_SNOWFLAKE_WAREHOUSE" \
-        --authenticator SNOWFLAKE_JWT \
-        --private-key-file "$DBT_SNOWFLAKE_PRIVATE_KEY_PATH"
-else
-    # Validate password is set for password authentication
-    if [ -z "$DBT_SNOWFLAKE_PASSWORD" ]; then
-        echo "Error: DBT_SNOWFLAKE_PASSWORD not set"
-        echo "Required for refresh deployment with password authentication"
-        exit 1
-    fi
-
-    echo "Deploying existing dbt project without --force flag using password authentication"
-    
-    # Deploy existing dbt project without --force flag
-    snow dbt deploy $DBT_PROJECT_NAME \
-        --source $DBT_PROJECT_DIR \
-        --profiles-dir $DBT_PROFILES_DIR \
-        --connection $SNOW_CLI_CONNECTION \
-        --database "$DBT_PROJECT_DATABASE" \
-        --schema "$DBT_PROJECT_SCHEMA" \
-        --role "$DBT_PROJECT_ADMIN_ROLE" \
-        --warehouse "$DBT_SNOWFLAKE_WAREHOUSE" \
-        --password "$DBT_SNOWFLAKE_PASSWORD"
+# Validate private key file exists for JWT authentication
+if [ -z "$DBT_SNOWFLAKE_PRIVATE_KEY_PATH" ] || [ ! -f "$DBT_SNOWFLAKE_PRIVATE_KEY_PATH" ]; then
+    echo "Error: Private key file not found or DBT_SNOWFLAKE_PRIVATE_KEY_PATH not set"
+    echo "Required for deployment with JWT authentication"
+    exit 1
 fi
+
+echo "Deploying dbt project with --force flag using SNOWFLAKE_JWT authentication"
+
+# Deploy dbt project with --force flag
+snow dbt deploy $DBT_PROJECT_NAME \
+    --source $DBT_PROJECT_DIR \
+    --profiles-dir $DBT_PROFILES_DIR \
+    --connection $SNOW_CLI_CONNECTION \
+    --force \
+    --database "$DBT_PROJECT_DATABASE" \
+    --schema "$DBT_PROJECT_SCHEMA" \
+    --role "$DBT_PROJECT_ADMIN_ROLE" \
+    --warehouse "$DBT_SNOWFLAKE_WAREHOUSE" \
+    --authenticator SNOWFLAKE_JWT \
+    --private-key-file "$DBT_SNOWFLAKE_PRIVATE_KEY_PATH"
 
 echo ""
 

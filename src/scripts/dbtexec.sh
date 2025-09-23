@@ -4,7 +4,6 @@
 # Examples:
 #   ./execute.sh compile
 #   ./execute.sh run
-#   ./execute.sh deps --external-access-integrations "$EXTERNAL_ACCESS_INTEGRATION"
 #   ./execute.sh test --select my_model
 #   ./execute.sh run --full-refresh
 
@@ -16,14 +15,13 @@ show_help() {
     echo "  Execute dbt commands using Snowflake CLI with predefined connection settings"
     echo ""
     echo "Arguments:"
-    echo "  dbt_command      Required. The dbt command to execute (e.g., compile, run, test, deps)"
+    echo "  dbt_command      Required. The dbt command to execute (e.g., compile, run, test)"
     echo "  additional_options  Optional. Additional dbt options and flags"
     echo ""
     echo "Examples:"
     echo "  $0 compile"
     echo "  $0 run"
     echo "  $0 test"
-    echo "  $0 deps --external-access-integrations \"\$EXTERNAL_ACCESS_INTEGRATION\""
     echo "  $0 run --select my_model"
     echo "  $0 run --full-refresh"
     echo "  $0 test --select tag:critical"
