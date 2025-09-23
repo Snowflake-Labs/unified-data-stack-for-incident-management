@@ -1,9 +1,6 @@
 
-
-*This project demonstrates a modern data stack for an example real-life situaton that of incident management that typically requires multiple steps, and close collaboration between representatives using tools like Slack. This project uses a modern stack with Snowflake to bring AI-powered automation and real-time analytics to this known business process that can benefit from AI inclusion.*
-
 ## Table of Contents
-- [Incident Management System](#incident-management-system)
+- [An Unified Data Stack on Snowflake](#an-unified-data-stack-on-snowflake)
   - [Key Features](#key-features)
   - [Architecture](#architecture)
   - [Data Models](#data-models)
@@ -29,9 +26,14 @@
   - [Questions, Feedback, and Contribution](#questions-feedback-and-contribution)
 
 
-# Incident Management System
+# An Unified Data Stack on Snowflake
 
-A comprehensive incident management platform built on Snowflake that demonstrates modern data engineering practices using dbt, AI/ML capabilities, and real-time visualization through Streamlit. The system ingests incident data from Slack via Snowflake's OpenFlow connector and provides intelligent categorization, tracking, and reporting capabilities.
+*This project demonstrates a modern data stack for an example real-life situaton that of incident management that typically requires multiple steps, and close collaboration between representatives using tools like Slack. This project uses a modern stack with Snowflake to bring AI-powered automation and real-time analytics to this known business process that can benefit from AI inclusion.*
+
+
+An end-to-end incident management platform* built on Snowflake that demonstrates modern data engineering practices using dbt, AI/ML capabilities, and real-time visualization through Streamlit. The system ingests incident data from Slack via Snowflake's OpenFlow connector and provides intelligent categorization, tracking, and reporting capabilities.
+
+*a small cross-section of a much larger process to show the art of possible 
 
 ## Key Features
 
