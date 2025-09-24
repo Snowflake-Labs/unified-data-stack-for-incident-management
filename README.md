@@ -1,6 +1,7 @@
 
 ## Table of Contents
 - [An Unified Data Stack on Snowflake](#an-unified-data-stack-on-snowflake)
+  - [Architecture](#architecture)
   - [Key Features](#key-features)
   - [Demo Vignettes](#demo-vignettes)
     - [1. OpenFlow-Based Slack Ingestion](#1-openflow-based-slack-ingestion)
@@ -8,7 +9,6 @@
     - [3. AI/SQL Integration within dbt Models](#3-aisql-integration-within-dbt-models)
     - [4. Streamlit Integration](#4-streamlit-integration)
     - [5. End-to-End Workflow Example](#5-end-to-end-workflow-example)
-  - [Architecture](#architecture)
   - [Data Models](#data-models)
     - [Landing Zone](#landing-zone)
     - [Curated Zone](#curated-zone)
@@ -34,6 +34,23 @@
 An end-to-end incident management platform* built on Snowflake that demonstrates modern data engineering practices using dbt, AI/ML capabilities, and real-time visualization through Streamlit. The system ingests incident data from Slack via Snowflake's OpenFlow connector and provides intelligent categorization, tracking, and reporting capabilities.
 
 *a small cross-section of a much larger process to show the art of possible 
+
+
+## Architecture
+
+```
+┌─────────────────┐    ┌──────────────┐    ┌─────────────────┐
+│   Slack App     │───▶│   OpenFlow   │───▶│   Snowflake     │
+│                 │    │  Connector   │    │   Landing Zone  │
+└─────────────────┘    └──────────────┘    └─────────────────┘
+                                                     │
+                                                     ▼
+┌─────────────────┐    ┌─────────────────┐    ┌──────────────────┐
+│   Streamlit     │◀───│   Snowflake     │◀───│   dbt Trans-     │
+│   Dashboard     │    │ Curated Zone    │    | - formations     │
+└─────────────────┘    └─────────────────┘    └──────────────────┘
+```
+
 
 ## Key Features
 
@@ -138,22 +155,6 @@ end as category
 6. **Analyze**: System tracks resolution time, updates trends
 
 This demonstrates a complete modern data stack handling real-world operational scenarios with AI enhancement and real-time visibility.
-
-
-## Architecture
-
-```
-┌─────────────────┐    ┌──────────────┐    ┌─────────────────┐
-│   Slack App     │───▶│   OpenFlow   │───▶│   Snowflake     │
-│                 │    │  Connector   │    │   Landing Zone  │
-└─────────────────┘    └──────────────┘    └─────────────────┘
-                                                     │
-                                                     ▼
-┌─────────────────┐    ┌─────────────────┐    ┌──────────────────┐
-│   Streamlit     │◀───│   Snowflake     │◀───│   dbt Trans-     │
-│   Dashboard     │    │ Curated Zone    │    | - formations     │
-└─────────────────┘    └─────────────────┘    └──────────────────┘
-```
 
 ## Data Models
 
