@@ -12,35 +12,44 @@ create or replace task im_root_task_scheduler
 create or replace task im_project_compile
 	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
 	after im_root_task_scheduler
-	as BEGIN
+	as 
+  $$
+    BEGIN
     LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
     LET _dbt_nodes := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('select'));
     LET _eai := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('eai'));
     LET command := 'compile --target '|| _target;
 
-    EXECUTE DBT PROJECT <% ctx.env.dbt_project_database %>.dbt_project_deployments.dbt_incident_management args=:command;
-    
-  END;
+    EXECUTE DBT PROJECT dbt_project_deployments.dbt_incident_management args=:command
+    END;
+  $$
+  ;
 
 create or replace task im_project_run_with_select
 	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
-	after im_project_run_with_select
-	as BEGIN
+	after im_project_compile
+	as 
+  $$
+    BEGIN
     LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
     LET _dbt_nodes := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('select'));
     LET _eai := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('eai'));
     LET command := 'run --select "'|| _dbt_nodes ||'" --target '|| _target;
-    EXECUTE dbt project <% ctx.env.dbt_project_database %>.dbt_project_deployments.dbt_incident_management args=:command;
-  END;
+    EXECUTE dbt project dbt_project_deployments.dbt_incident_management args=:command;
+    END;
+  $$;
 
 create or replace task im_project_test
 	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
-	after im_project_compile, im_project_deps
-	as BEGIN
+	after im_project_compile, im_project_run_with_select
+	as 
+  $$
+    BEGIN
     LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
     LET _dbt_nodes := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('select'));
     LET _eai := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('eai'));
     LET command := 'test --select "'|| _dbt_nodes ||'" --target '|| _target;
 
-    EXECUTE dbt project <% ctx.env.dbt_project_database %>.dbt_project_deployments.dbt_incident_management args=:command;
-  END;
+    EXECUTE dbt project dbt_project_deployments.dbt_incident_management args=:command;
+    END;
+  $$;

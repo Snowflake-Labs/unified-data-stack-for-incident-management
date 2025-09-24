@@ -1,7 +1,7 @@
 # This script executes SQL scripts to set up and configure the incident management system in Snowflake
 #
 # It performs the following:
-# 1. Generates snowflake.yml configuration file from template using environment variables
+# 1. Uses the existing snowflake.yml configuration file from template using environment variables
 # 2. Creates necessary databases, warehouses, schemas and tables for incident management
 # 3. Sets up dbt project configuration and git integration
 # 4. Creates orchestration tasks for automated dbt runs
@@ -22,11 +22,23 @@
 # 2. Ensure you have appropriate Snowflake access and permissions
 #
 # Usage examples:
-# Basic usage with default .env:
+# Basic usage with default .env (runs both SQL scripts):
 #   ./sqlsetup.sh
 #
-# Use custom environment file:
+# Use custom environment file (runs both SQL scripts):
 #   ./sqlsetup.sh -e prod.env
+#
+# Run only database setup SQL:
+#   ./sqlsetup.sh -s
+#   ./sqlsetup.sh --setup-only
+#
+# Run only orchestration SQL:
+#   ./sqlsetup.sh -o
+#   ./sqlsetup.sh --orchestration-only
+#
+# Combine environment file with selective execution:
+#   ./sqlsetup.sh -e prod.env -s
+#   ./sqlsetup.sh -e dev.env --orchestration-only
 #
 
 
@@ -35,6 +47,8 @@
 
 # Default environment file
 ENV_FILE=".env"
+RUN_SETUP=true
+RUN_ORCHESTRATION=true
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -43,17 +57,31 @@ while [[ $# -gt 0 ]]; do
             ENV_FILE="$2"
             shift 2
             ;;
+        -s|--setup-only)
+            RUN_SETUP=true
+            RUN_ORCHESTRATION=false
+            shift
+            ;;
+        -o|--orchestration-only)
+            RUN_SETUP=false
+            RUN_ORCHESTRATION=true
+            shift
+            ;;
         -h|--help)
             echo "Usage: $0 [OPTIONS]"
             echo ""
             echo "Options:"
             echo "  -e, --env FILE        Environment file to use (default: .env)"
+            echo "  -s, --setup-only      Run only database setup SQL (01_before_slack_connector.sql)"
+            echo "  -o, --orchestration-only  Run only orchestration SQL (02_orchestration.sql)"
             echo "  -h, --help            Show this help message"
             echo ""
             echo "Examples:"
-            echo "  $0                        # Uses default .env file"
-            echo "  $0 -e prod.env           # Uses prod.env file"
-            echo "  $0 --env dev.env         # Uses dev.env file"
+            echo "  $0                        # Uses default .env file, runs both SQL scripts"
+            echo "  $0 -e prod.env           # Uses prod.env file, runs both SQL scripts"
+            echo "  $0 -s                     # Runs only setup SQL"
+            echo "  $0 -o                     # Runs only orchestration SQL"
+            echo "  $0 -e prod.env -s        # Uses prod.env and runs only setup SQL"
             exit 0
             ;;
         *)
@@ -72,51 +100,19 @@ fi
 echo "Using environment file: $ENV_FILE"
 source "$ENV_FILE"
 
-# Function to generate snowflake.yml from template
-generate_snowflake_yml() {
-    local template_file="snowflake.yml.template"
-    local output_file="snowflake.yml"
-    
-    if [ ! -f "$template_file" ]; then
-        echo "Warning: Template file '$template_file' not found, skipping snowflake.yml generation"
-        return 1
-    fi
-    
-    echo "Generating $output_file from $template_file..."
-    
-    # Read template and substitute environment variables
-    while IFS= read -r line; do
-        # Replace ${VAR_NAME} patterns with actual environment variable values
-        while [[ $line =~ \$\{([^}]+)\} ]]; do
-            local var_name="${BASH_REMATCH[1]}"
-            local var_value="${!var_name}"
-            
-            if [ -z "$var_value" ]; then
-                echo "Warning: Environment variable '$var_name' is not set"
-                var_value=""
-            fi
-            
-            line="${line/\${$var_name}/$var_value}"
-        done
-        echo "$line"
-    done < "$template_file" > "$output_file"
-    
-    echo "Successfully generated $output_file"
-    return 0
-}
+# Execute SQL scripts based on flags
+if [ "$RUN_SETUP" = true ]; then
+    echo "Running database setup SQL..."
+    snow sql \
+    --connection $SNOW_CLI_CONNECTION \
+    -p ../sql \
+    -f "../sql/01_before_slack_connector.sql"
+fi
 
-# Generate snowflake.yml configuration file from template
-generate_snowflake_yml
-
-snow sql \
---connection $SNOW_CLI_CONNECTION \
--f "../sql/00_roles.sql" 
-
-# Execute database objects SQL (uncommented and updated)
-snow sql \
---connection $SNOW_CLI_CONNECTION \
--f "../sql/01_before_slack_connector.sql"
-
-snow sql \
---connection $SNOW_CLI_CONNECTION \
--f "../sql/02_orchestration.sql"
+if [ "$RUN_ORCHESTRATION" = true ]; then
+    echo "Running orchestration SQL..."
+    snow sql \
+    --connection $SNOW_CLI_CONNECTION \
+    -p ../sql \
+    -f "../sql/02_orchestration.sql"
+fi

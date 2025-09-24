@@ -87,11 +87,11 @@ CREATE OR REPLACE SECRET <% ctx.env.dbt_project_database %>.dbt_project_deployme
 CREATE OR REPLACE GIT REPOSITORY <% ctx.env.dbt_project_database %>.dbt_project_deployments.incident_management_dbt_project_repo
 ORIGIN = '<% ctx.env.git_repository_url %>'
 API_INTEGRATION = <% ctx.env.snowflake_git_api_int %>
-GIT_CREDENTIALS = <% ctx.env.dbt_project_database %>.dbt_project_deployments.incident_management_git_secret
+GIT_CREDENTIALS = <% ctx.env.dbt_project_database %>.dbt_project_deployments.incident_management_git_secret;
 
 
 -- create a new dbt project using Git repo as source
-CREATE DBT PROJECT IF NOT EXISTS dbt_incident_management
+CREATE OR REPLACE DBT PROJECT <% ctx.env.dbt_project_database %>.dbt_project_deployments.dbt_incident_management
     FROM '@<% ctx.env.dbt_project_database %>.dbt_project_deployments.incident_management_dbt_project_repo/branches/main/<% ctx.env.repo_dbt_projects_yml_path %>'
     DEFAULT_VERSION = LAST;
 

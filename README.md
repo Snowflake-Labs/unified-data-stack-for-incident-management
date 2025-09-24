@@ -126,14 +126,22 @@ incident-management/
 
 ### Prerequisites
 
-- Snowflake account with SERVICE users created for Slack identity and dbt Projects identity
+- Snowflake account with SERVICE users created for Slack identity and dbt Projects identity each
 - Python 3.9+ 
 - Streamlit
 - Git
 
+*this script will require ACCOUNTADMIN privilege.
+
 ### Environment Variables
 
-Configure the `.env` file using the [`.env.template`](.env.template) as reference.
+1. Configure the `.env` file using the [`.env.template`](.env.template) as reference.
+2. Once done, use the below script to generate snowflake.yml file for use with Snowflake CLI 
+   ```bash
+   cd src/scripts
+   ./create_snowflake_yaml.sh -e ../../.env
+   ```
+3. Verify that the snowflake.yml is created under `sql` dir
 
 ### Installation
 
@@ -155,17 +163,31 @@ Configure the `.env` file using the [`.env.template`](.env.template) as referenc
 
 3. **Setup Snowflake Infrastructure**
    
-   Run the setup script to create necessary Snowflake objects:
+   3.1 Run the setup script to create necessary Snowflake roles :
+   
+   - Use the script [`00_roles.sql`](src/sql/00_roles.sql)* to create role for dbt Projects service account 
+   ```bash
+   cd src/sql
+   snow sql --connection <named connection in TOML> -f 00_roles.sql
+   ```   
+
+   > ⚠️ Best Practice
+   - As a better authentication practice create and assign a PAT to the service users tied to the role created above.
+   - Make sure that the API Integration object allows `ALL as ALLOWED_AUTHENTICATION_SECRETS` and has the Git repo added to `API_ALLOWED_PREFIXES`
+   
+
+   3.2 Run the setup script to create necessary Snowflake objects:
+    
    ```bash
    cd src/scripts
-   ./sqlsetup.sh ../path/to/your/.env
+   ./sqlsetup.sh -e ../path/to/your/.env
    ```
    
    This script will:
-   - Create a `snowflake.yml` configuration file from [`snowflake.yml.template`](src/scripts/snowflake.yml.template)
-   - Execute [`00_roles.sql`](src/sql/00_roles.sql) to set up database roles and permissions
    - Execute [`01_before_slack_connector.sql`](src/sql/01_before_slack_connector.sql) to create initial database structure
    - Execute [`02_orchestration.sql`](src/sql/02_orchestration.sql) to set up dbt Projects orchestration components
+
+
 
 4. **Load sample data**
     - Load sample CSV data for each of the tables using the Snowsight table loader UI.
@@ -179,7 +201,7 @@ Configure the `.env` file using the [`.env.template`](.env.template) as referenc
 
 Follow the [official Snowflake documentation](https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/slack/setup) to configure a Slack app and set up the OpenFlow Slack connector.
 
-**Best Practices:**
+ > ⚠️ Best Practice
 - Create a dedicated SERVICE account for the Slack app
 - Use Key-Pair authentication with an *encrypted* private key
 - Configure appropriate channel permissions for incident reporting
