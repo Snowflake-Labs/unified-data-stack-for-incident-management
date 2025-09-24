@@ -189,7 +189,7 @@ incident-management/
 
 
 
-4. **Load sample data**
+4. **Load sample data** (optional)
     - Load sample CSV data for each of the tables using the Snowsight table loader UI.
 
 5. **Verify Setup**

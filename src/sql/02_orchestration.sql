@@ -20,7 +20,7 @@ create or replace task im_project_compile
     LET _eai := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('eai'));
     LET command := 'compile --target '|| _target;
 
-    EXECUTE DBT PROJECT dbt_project_deployments.dbt_incident_management args=:command
+    EXECUTE DBT PROJECT dbt_project_deployments.dbt_incident_management args=:command;
     END;
   $$
   ;
