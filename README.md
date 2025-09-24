@@ -2,6 +2,12 @@
 ## Table of Contents
 - [An Unified Data Stack on Snowflake](#an-unified-data-stack-on-snowflake)
   - [Key Features](#key-features)
+  - [Demo Vignettes](#demo-vignettes)
+    - [1. OpenFlow-Based Slack Ingestion](#1-openflow-based-slack-ingestion)
+    - [2. dbt Projects on Snowflake](#2-dbt-projects-on-snowflake)
+    - [3. AI/SQL Integration within dbt Models](#3-aisql-integration-within-dbt-models)
+    - [4. Streamlit Integration](#4-streamlit-integration)
+    - [5. End-to-End Workflow Example](#5-end-to-end-workflow-example)
   - [Architecture](#architecture)
   - [Data Models](#data-models)
     - [Landing Zone](#landing-zone)
@@ -9,19 +15,13 @@
   - [Project Structure](#project-structure)
   - [Setup](#setup)
     - [Prerequisites](#prerequisites)
+    - [Environment Variables](#environment-variables)
     - [Installation](#installation)
-    - [Setup Snowflake Infrastructure](#setup-snowflake-infrastructure)
     - [Setup Slack Connector (OpenFlow)](#setup-slack-connector-openflow)
   - [General Usage](#general-usage)
     - [Running the Dashboard](#running-the-dashboard)
     - [Dashboard Features](#dashboard-features)
     - [Managing Incidents via Slack](#managing-incidents-via-slack)
-  - [Demo Vignettes](#demo-vignettes)
-    - [1. OpenFlow-Based Slack Ingestion](#1-openflow-based-slack-ingestion)
-    - [2. dbt Projects on Snowflake](#2-dbt-projects-on-snowflake)
-    - [3. AI/SQL Integration within dbt Models](#3-aisql-integration-within-dbt-models)
-    - [4. Streamlit Integration](#4-streamlit-integration)
-    - [5. End-to-End Workflow Example](#5-end-to-end-workflow-example)
   - [Additional Resources](#additional-resources)
   - [Questions, Feedback, and Contribution](#questions-feedback-and-contribution)
 
@@ -38,207 +38,11 @@ An end-to-end incident management platform* built on Snowflake that demonstrates
 ## Key Features
 
 - **AI-Powered Classification**: Automatically categorizes incidents using Snowflake's AI functions
+- **Image Processing**: AI analysis of attached images for incident categorization
 - **Real-time Data Pipeline**: Ingests Slack messages and converts them to structured incident records
 - **Interactive Dashboard**: Streamlit-based dashboard for monitoring and managing incidents
-- **dbt Data Transformations**: Clean, documented data models with proper testing
-- **Multi-source Integration**: Supports Slack, monitoring systems, and manual incident creation
-- **Image Processing**: AI analysis of attached images for incident categorization
-- **Trend Analysis**: Monthly and weekly incident trend tracking
+- **dbt Data Transformations**: Data modeling using one of the most popular build tool - dbt - on Snowflake provided runtime engine
 
-## Architecture
-
-```
-┌─────────────────┐    ┌──────────────┐    ┌─────────────────┐
-│   Slack App     │───▶│   OpenFlow   │───▶│   Snowflake     │
-│                 │    │  Connector   │    │   Landing Zone  │
-└─────────────────┘    └──────────────┘    └─────────────────┘
-                                                     │
-                                                     ▼
-┌─────────────────┐    ┌─────────────────┐    ┌──────────────────┐
-│   Streamlit     │◀───│   Snowflake     │◀───│   dbt Trans-     │
-│   Dashboard     │    │ Curated Zone    │    | - formations     │
-└─────────────────┘    └─────────────────┘    └──────────────────┘
-```
-
-## Data Models
-
-### Landing Zone
-- [`incidents`](src/incident_management/models/landing_zone/incidents.sql): Core incident records with AI-powered classification
-- [`incident_comment_history`](src/incident_management/models/landing_zone/incident_comment_history.sql): Chronological updates and comments
-- [`incident_attachments`](src/incident_management/models/landing_zone/incident_attachments.sql): File attachments with metadata (as ingested from Slack)
-- [`users`](src/incident_management/models/landing_zone/users.sql): User directory for assignees and reporters
-
-### Curated Zone
-- [`active_incidents`](src/incident_management/models/curated_zone/active_incidents.sql): Currently open incidents with enriched data
-- [`closed_incidents`](src/incident_management/models/curated_zone/closed_incidents.sql): Resolved incidents with resolution metrics
-- [`monthly_incident_trends`](src/incident_management/models/curated_zone/monthly_incident_trends.sql): Aggregated monthly statistics
-- [`weekly_incident_trends`](src/incident_management/models/curated_zone/weekly_incident_trends.sql): Weekly trend analysis
-
-
-## Project Structure
-
-```
-incident-management/
-├── data/                          # Sample data and test files
-│   ├── csv/                      # CSV seed data
-│   │   ├── incidents.csv         # Sample incident records
-│   │   ├── incident_comment_history.csv
-│   │   └── users.csv             # User directory
-│   └── images/                   # Sample incident attachments
-│       ├── invalid_credentials.jpeg
-│       └── payment_gateway_outage.jpeg
-├── src/
-│   ├── incident_management/      # dbt project
-│   │   ├── models/
-│   │   │   ├── landing_zone/     # Raw data models
-│   │   │   │   ├── incidents.sql        # Core incident processing
-│   │   │   │   ├── incident_attachments.sql
-│   │   │   │   ├── users.sql
-│   │   │   │   └── v_*.sql              # Slack message views
-│   │   │   ├── curated_zone/            # Analytics-ready models
-│   │   │   │   ├── active_incidents.sql
-│   │   │   │   ├── closed_incidents.sql
-│   │   │   │   ├── monthly_incident_trends.sql
-│   │   │   │   └── weekly_incident_trends.sql
-│   │   │   └── schema.yml        # Model documentation
-│   │   ├── macros/               # Custom dbt macros
-│   │   ├── dbt_project.yml       # dbt configuration
-│   │   └── profiles.yml          # Database connections
-│   ├── scripts/                  # Deployment and setup scripts
-│   │   ├── sqlsetup.sh          # Snowflake infrastructure setup
-│   │   ├── dbtdeploy.sh         # dbt deployment automation
-│   │   ├── dbtexec.sh           # dbt execution wrapper
-│   │   └── snowflake.yml.template
-│   ├── sql/                      # Raw SQL scripts
-│   │   ├── 00_roles.sql         # Role and permission setup
-│   │   ├── 01_before_slack_connector.sql
-│   │   └── 02_orchestration.sql
-│   └── streamlit/                # Dashboard application
-│       ├── main.py              # Main dashboard
-│       ├── app_utils.py         # Utility functions
-│       └── snowflake.png        # Assets
-├── requirements.txt              # Python dependencies
-└── README.md                    # This file
-```
-
-
-## Setup
-
-### Prerequisites
-
-- Snowflake account with SERVICE users created for Slack identity and dbt Projects identity each
-- Python 3.9+ 
-- Streamlit
-- Git
-
-*this script will require ACCOUNTADMIN privilege.
-
-### Environment Variables
-
-1. Configure the `.env` file using the [`.env.template`](.env.template) as reference.
-2. Once done, use the below script to generate snowflake.yml file for use with Snowflake CLI 
-   ```bash
-   cd src/scripts
-   ./create_snowflake_yaml.sh -e ../../.env
-   ```
-3. Verify that the snowflake.yml is created under `sql` dir
-
-### Installation
-
-(Assumes local setup)
-
-1. **Clone this repo**
-    ```bash
-    git clone <git url>
-    ```
-    
-2. **Install Python Dependencies**
-   ```bash
-   uv venv
-   source .venv/bin/activate
-   uv pip install -r requirements.txt
-   ```
-   
-   > See [`requirements.txt`](requirements.txt) for the complete list of dependencies.
-
-3. **Setup Snowflake Infrastructure**
-   
-   3.1 Run the setup script to create necessary Snowflake roles :
-   
-   - Use the script [`00_roles.sql`](src/sql/00_roles.sql)* to create role for dbt Projects service account 
-   ```bash
-   cd src/sql
-   snow sql --connection <named connection in TOML> -f 00_roles.sql
-   ```   
-
-   > ⚠️ Best Practice
-   - As a better authentication practice create and assign a PAT to the service users tied to the role created above.
-   - Make sure that the API Integration object allows `ALL as ALLOWED_AUTHENTICATION_SECRETS` and has the Git repo added to `API_ALLOWED_PREFIXES`
-   
-
-   3.2 Run the setup script to create necessary Snowflake objects:
-    
-   ```bash
-   cd src/scripts
-   ./sqlsetup.sh -e ../path/to/your/.env
-   ```
-   
-   This script will:
-   - Execute [`01_before_slack_connector.sql`](src/sql/01_before_slack_connector.sql) to create initial database structure
-   - Execute [`02_orchestration.sql`](src/sql/02_orchestration.sql) to set up dbt Projects orchestration components
-
-
-
-4. **Load sample data** (optional)
-    - Load sample CSV data for each of the tables using the Snowsight table loader UI.
-
-5. **Verify Setup**
-   - Check that Snowflake objects were created successfully
-   - Test Streamlit connectivity by running the dashboard
-   - Verify dbt models compile and run correctly
-
-### Setup Slack Connector (OpenFlow)
-
-Follow the [official Snowflake documentation](https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/slack/setup) to configure a Slack app and set up the OpenFlow Slack connector.
-
- > ⚠️ Best Practice
-- Create a dedicated SERVICE account for the Slack app
-- Use Key-Pair authentication with an *encrypted* private key
-- Configure appropriate channel permissions for incident reporting
-
-## General Usage
-
-### Running the Dashboard
-
-1. **Start the Streamlit Application**
-   ```bash
-   cd src/streamlit
-   streamlit run main.py
-   ```
-   
-   > See [`main.py`](src/streamlit/main.py) for the complete dashboard implementation.
-
-2. **Access the Dashboard**
-   - Open your browser to `http://localhost:8501`
-   - The dashboard will display real-time incident metrics, trends, and detailed tables
-
-### Dashboard Features
-
-- **Metrics Overview**: Critical, high-priority, active, and recently closed incident counts
-- **Active Incidents Table**: Real-time view of open incidents with priority indicators
-- **Recently Closed Incidents**: Track resolution times and outcomes
-- **Attachment Viewer**: Click on incidents with attachments to view images
-- **Trend Analysis**: Monthly and weekly incident patterns (when data is available)
-
-### Managing Incidents via Slack
-
-1. **Report New Incidents**: Post messages in configured Slack channels
-2. **Automatic Processing**: The system will:
-   - Extract incident details from messages
-   - Classify incident type and priority using AI
-   - Process attached images for additional context
-   - Create structured incident records
-3. **Track Progress**: Monitor incidents through the Streamlit dashboard
 
 ## Demo Vignettes
 
@@ -334,6 +138,199 @@ end as category
 6. **Analyze**: System tracks resolution time, updates trends
 
 This demonstrates a complete modern data stack handling real-world operational scenarios with AI enhancement and real-time visibility.
+
+
+## Architecture
+
+```
+┌─────────────────┐    ┌──────────────┐    ┌─────────────────┐
+│   Slack App     │───▶│   OpenFlow   │───▶│   Snowflake     │
+│                 │    │  Connector   │    │   Landing Zone  │
+└─────────────────┘    └──────────────┘    └─────────────────┘
+                                                     │
+                                                     ▼
+┌─────────────────┐    ┌─────────────────┐    ┌──────────────────┐
+│   Streamlit     │◀───│   Snowflake     │◀───│   dbt Trans-     │
+│   Dashboard     │    │ Curated Zone    │    | - formations     │
+└─────────────────┘    └─────────────────┘    └──────────────────┘
+```
+
+## Data Models
+
+### Landing Zone
+- [`incidents`](src/incident_management/models/landing_zone/incidents.sql): Core incident records with AI-powered classification
+- [`incident_comment_history`](src/incident_management/models/landing_zone/incident_comment_history.sql): Chronological updates and comments
+- [`incident_attachments`](src/incident_management/models/landing_zone/incident_attachments.sql): File attachments with metadata (as ingested from Slack)
+- [`users`](src/incident_management/models/landing_zone/users.sql): User directory for assignees and reporters
+
+### Curated Zone
+- [`active_incidents`](src/incident_management/models/curated_zone/active_incidents.sql): Currently open incidents with enriched data
+- [`closed_incidents`](src/incident_management/models/curated_zone/closed_incidents.sql): Resolved incidents with resolution metrics
+- [`monthly_incident_trends`](src/incident_management/models/curated_zone/monthly_incident_trends.sql): Aggregated monthly statistics
+- [`weekly_incident_trends`](src/incident_management/models/curated_zone/weekly_incident_trends.sql): Weekly trend analysis
+
+
+## Project Structure
+
+```
+incident-management/
+├── data/                          # Sample data and test files
+│   ├── csv/                      # CSV seed data
+│   │   ├── incidents.csv         # Sample incident records
+│   │   ├── incident_comment_history.csv
+│   │   └── users.csv             # User directory
+│   └── images/                   # Sample incident attachments
+│       ├── invalid_credentials.jpeg
+│       └── payment_gateway_outage.jpeg
+├── src/
+│   ├── incident_management/      # dbt project
+│   │   ├── models/
+│   │   │   ├── landing_zone/     # Raw data models
+│   │   │   │   ├── incidents.sql        # Core incident processing
+│   │   │   │   ├── incident_attachments.sql
+│   │   │   │   ├── users.sql
+│   │   │   │   └── v_*.sql              # Slack message views
+│   │   │   ├── curated_zone/            # Analytics-ready models
+│   │   │   │   ├── active_incidents.sql
+│   │   │   │   ├── closed_incidents.sql
+│   │   │   │   ├── monthly_incident_trends.sql
+│   │   │   │   └── weekly_incident_trends.sql
+│   │   │   └── schema.yml        # Model documentation
+│   │   ├── macros/               # Custom dbt macros
+│   │   ├── dbt_project.yml       # dbt configuration
+│   │   └── profiles.yml          # Database connections
+│   ├── scripts/                  # Deployment and setup scripts
+│   │   ├── sqlsetup.sh          # Snowflake infrastructure setup
+│   │   ├── dbtdeploy.sh         # dbt deployment automation
+│   │   ├── dbtexec.sh           # dbt execution wrapper
+│   │   └── snowflake.yml.template
+│   ├── sql/                      # Raw SQL scripts
+│   │   ├── 00_roles.sql         # Role and permission setup
+│   │   ├── 01_before_slack_connector.sql
+│   │   └── 02_orchestration.sql
+│   └── streamlit/                # Dashboard application
+│       ├── main.py              # Main dashboard
+│       ├── app_utils.py         # Utility functions
+│       └── snowflake.png        # Assets
+├── requirements.txt              # Python dependencies
+└── README.md                    # This file
+```
+
+## Setup
+
+### Prerequisites
+
+- Snowflake account with SERVICE users created for Slack identity and dbt Projects identity each
+- Python 3.9+ 
+- Streamlit
+- Git
+
+*this script will require ACCOUNTADMIN privilege.
+
+### Environment Variables
+
+1. Configure the `.env` file using the [`.env.template`](.env.template) as reference.
+2. Once done, use the below script to generate snowflake.yml file for use with Snowflake CLI 
+   ```bash
+   cd src/scripts
+   ./create_snowflake_yaml.sh -e ../../.env
+   ```
+3. Verify that the snowflake.yml is created under `sql` dir
+
+### Installation
+
+(Assumes local setup)
+
+1. **Clone this repo**
+    ```bash
+    git clone <git url>
+    ```
+    
+2. **Install Python Dependencies**
+   ```bash
+   uv venv
+   source .venv/bin/activate
+   uv pip install -r requirements.txt
+   ```
+   
+   > See [`requirements.txt`](requirements.txt) for the complete list of dependencies.
+
+3. **Setup Snowflake Infrastructure**
+   
+   3.1 Run the setup script to create necessary Snowflake roles :
+   
+   - Use the script [`00_roles.sql`](src/sql/00_roles.sql)* to create role for dbt Projects service account 
+   ```bash
+   cd src/sql
+   snow sql --connection <named connection in TOML> -f 00_roles.sql
+   ```   
+
+   > ⚠️ Best Practice
+   - As a better authentication practice create and assign a PAT to the service users tied to the role created above.
+   - Make sure that the API Integration object allows `ALL as ALLOWED_AUTHENTICATION_SECRETS` and has the Git repo added to `API_ALLOWED_PREFIXES`
+   
+
+   3.2 Run the setup script to create necessary Snowflake objects:
+    
+   ```bash
+   cd src/scripts
+   ./sqlsetup.sh -e ../path/to/your/.env
+   ```
+   
+   This script will:
+   - Execute [`01_before_slack_connector.sql`](src/sql/01_before_slack_connector.sql) to create initial database structure
+   - Execute [`02_orchestration.sql`](src/sql/02_orchestration.sql) to set up dbt Projects orchestration components
+
+4. **Load sample data** (optional)
+    - Load sample CSV data for each of the tables using the Snowsight table loader UI.
+
+5. **Verify Setup**
+   - Check that Snowflake objects were created successfully
+   - Test Streamlit connectivity by running the dashboard
+   - Verify dbt models compile and run correctly
+
+### Setup Slack Connector (OpenFlow)
+
+Follow the [official Snowflake documentation](https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/slack/setup) to configure a Slack app and set up the OpenFlow Slack connector.
+
+ > ⚠️ Best Practice
+- Create a dedicated SERVICE account for the Slack app
+- Use Key-Pair authentication with an *encrypted* private key
+- Configure appropriate channel permissions for incident reporting
+
+## General Usage
+
+### Running the Dashboard
+
+1. **Start the Streamlit Application**
+   ```bash
+   cd src/streamlit
+   streamlit run main.py
+   ```
+   
+   > See [`main.py`](src/streamlit/main.py) for the complete dashboard implementation.
+
+2. **Access the Dashboard**
+   - Open your browser to `http://localhost:8501`
+   - The dashboard will display real-time incident metrics, trends, and detailed tables
+
+### Dashboard Features
+
+- **Metrics Overview**: Critical, high-priority, active, and recently closed incident counts
+- **Active Incidents Table**: Real-time view of open incidents with priority indicators
+- **Recently Closed Incidents**: Track resolution times and outcomes
+- **Attachment Viewer**: Click on incidents with attachments to view images
+- **Trend Analysis**: Monthly and weekly incident patterns (when data is available)
+
+### Managing Incidents via Slack
+
+1. **Report New Incidents**: Post messages in configured Slack channels
+2. **Automatic Processing**: The system will:
+   - Extract incident details from messages
+   - Classify incident type and priority using AI
+   - Process attached images for additional context
+   - Create structured incident records
+3. **Track Progress**: Monitor incidents through the Streamlit dashboard
 
 ## Additional Resources
 
