@@ -66,10 +66,10 @@ class SnowflakeConnection:
                         "account": os.getenv("DBT_SNOWFLAKE_ACCOUNT"),
                         "user": os.getenv("DBT_SNOWFLAKE_USER"),
                         "password": os.getenv("DBT_SNOWFLAKE_PASSWORD"),
-                        "role": os.getenv("DBT_MODEL_ROLE"), 
+                        "role": os.getenv("DBT_PROJECT_ADMIN_ROLE"), 
                         "warehouse": os.getenv("DBT_SNOWFLAKE_WAREHOUSE"),  # optional
-                        "database": os.getenv("DBT_MODEL_DATABASE"),  # optional
-                        "schema": os.getenv("DBT_MODEL_SCHEMA"),  # optional
+                        "database": os.getenv("DBT_PROJECT_DATABASE"),  # optional
+                        "schema": os.getenv("DBT_PROJECT_SCHEMA"),  # optional
                     }
                     self.snowpark_session = Session.builder.configs(connection_parameters).create()
                     self.snowflake_root = Root(self.snowpark_session)

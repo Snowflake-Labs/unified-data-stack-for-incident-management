@@ -1,0 +1,12 @@
+incident_management:
+  outputs:
+    dev:
+      type: snowflake
+      account: "${DBT_SNOWFLAKE_ACCOUNT}"
+      database: "${DBT_PROJECT_DATABASE}"
+      role: "${DBT_PROJECT_ADMIN_ROLE}"
+      schema: "${DBT_PROJECT_SCHEMA}"
+      user: "${DBT_SNOWFLAKE_USER}"
+      warehouse: "${DBT_SNOWFLAKE_WAREHOUSE}"
+  target: "${DBT_TARGET}"
+

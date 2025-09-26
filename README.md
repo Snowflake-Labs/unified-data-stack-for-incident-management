@@ -221,22 +221,11 @@ incident-management/
 
 ### Prerequisites
 
-- Snowflake account with SERVICE users created for Slack identity and dbt Projects identity each
+- Snowflake account with access to ACCOUNTADMIN privilege to create user and roles.
+- Snowflake CLI (latest version)
 - Python 3.9+ 
 - Streamlit
 - Git
-
-*this script will require ACCOUNTADMIN privilege.
-
-### Environment Variables
-
-1. Configure the `.env` file using the [`.env.template`](.env.template) as reference.
-2. Once done, use the below script to generate snowflake.yml file for use with Snowflake CLI 
-   ```bash
-   cd src/scripts
-   ./create_snowflake_yaml.sh -e ../../.env
-   ```
-3. Verify that the snowflake.yml is created under `sql` dir
 
 ### Installation
 
@@ -258,20 +247,39 @@ incident-management/
 
 3. **Setup Snowflake Infrastructure**
    
-   3.1 Run the setup script to create necessary Snowflake roles :
+   3.1 Create service user and role :
    
    - Use the script [`00_roles.sql`](src/sql/00_roles.sql)* to create role for dbt Projects service account 
    ```bash
    cd src/sql
    snow sql --connection <named connection in TOML> -f 00_roles.sql
    ```   
-
-   > ⚠️ Best Practice
-   - As a better authentication practice create and assign a PAT to the service users tied to the role created above.
-   - Make sure that the API Integration object allows `ALL as ALLOWED_AUTHENTICATION_SECRETS` and has the Git repo added to `API_ALLOWED_PREFIXES`
+   ⚠️ NOTE
+   > This will need a user with ACCOUNTADMIN privilege assigned.
+   > As a better authentication practice the script will create a PAT for the service user and tie it to the role created above. This command is last to execute and so the output of this command is the only place where the token appears. Copy the token from the output for use when authenticating to an endpoint.
    
+   3.2 Generate a key-pair for this user following the steps [here](https://docs.snowflake.com/en/user-guide/key-pair-auth#configuring-key-pair-authentication) and `ALTER USER` to update the public key.
 
-   3.2 Run the setup script to create necessary Snowflake objects:
+   3.3 Update the environment variables and generate required YAML files
+
+      3.3.1. Configure all variable in the `.env` file using the [`.env.template`](.env.template)
+   
+      3.3.2. Generate snowflake.yml file for use with Snowflake CLI 
+         ```bash
+         cd src/scripts
+         ./create_snowflake_yaml.sh -e <path to .env file>
+         ```
+         Verify that the snowflake.yml is created under `sql` dir
+      
+      3.3.3. Generate profile.yml file for creating the dbt Project
+           ```bash
+         cd src/scripts
+         ./create_profiles_yml.sh -e <path to .env file>
+
+
+   3.3 Grant usage on the `GIT API INTEGRATION` and `EXTERNAL_ACCESS_INTEGRATION` objects configured in the env file to the user above.
+   
+   3.4 Run the setup script to create necessary Snowflake objects:
     
    ```bash
    cd src/scripts

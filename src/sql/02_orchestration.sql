@@ -13,6 +13,7 @@ create or replace task im_project_compile
 	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
 	after im_root_task_scheduler
 	as 
+  EXECUTE IMMEDIATE
   $$
     BEGIN
     LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
@@ -29,6 +30,7 @@ create or replace task im_project_run_with_select
 	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
 	after im_project_compile
 	as 
+  EXECUTE IMMEDIATE
   $$
     BEGIN
     LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
@@ -42,7 +44,8 @@ create or replace task im_project_run_with_select
 create or replace task im_project_test
 	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
 	after im_project_compile, im_project_run_with_select
-	as 
+	as
+  EXECUTE IMMEDIATE 
   $$
     BEGIN
     LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));

@@ -49,7 +49,6 @@ echo "Validating required environment variables..."
 BASIC_REQUIRED_VARS=(
     "DBT_PROJECT_NAME"
     "GIT_REPOSITORY_URL"
-    "DBT_PROFILES_DIR"
     "DBT_TARGET"
     "SNOW_CLI_CONNECTION"
     "DBT_PROJECT_DATABASE"
@@ -175,7 +174,6 @@ replace_env_vars() {
 CONFIG_FILES=(
     "$DBT_PROJECT_DIR/dbt_project.yml"
     "$DBT_PROJECT_DIR/profiles.yml"
-    "$DBT_PROFILES_DIR/profiles.yml"
 )
 
 # Process each configuration file
@@ -195,7 +193,6 @@ echo "Git Branch: main"
 echo "Temporary Directory: $TEMP_DIR"
 echo "Project Name: $DBT_PROJECT_NAME"
 echo "Project Directory: $DBT_PROJECT_DIR"
-echo "Profiles Directory: $DBT_PROFILES_DIR"
 echo "Target: $DBT_TARGET"
 echo "Connection: $SNOW_CLI_CONNECTION"
 echo "Database: $DBT_PROJECT_DATABASE"
@@ -219,7 +216,6 @@ echo "Deploying dbt project with --force flag using SNOWFLAKE_JWT authentication
 # Deploy dbt project with --force flag
 snow dbt deploy $DBT_PROJECT_NAME \
     --source $DBT_PROJECT_DIR \
-    --profiles-dir $DBT_PROFILES_DIR \
     --connection $SNOW_CLI_CONNECTION \
     --force \
     --database "$DBT_PROJECT_DATABASE" \
