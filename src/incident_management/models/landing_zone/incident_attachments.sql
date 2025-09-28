@@ -1,7 +1,9 @@
 {{
     config(
         materialized='incremental',
-        incremental_strategy='append',
+        incremental_strategy='merge',
+        unique_key=['id'],
+        merge_update_columns=['uploaded_at', 'attachment_file'],
         description='Materialized incident attachments table'
     )
 }}

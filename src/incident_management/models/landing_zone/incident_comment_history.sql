@@ -1,13 +1,15 @@
 {{
     config(
         materialized='incremental',
-        incremental_strategy='append',
+        incremental_strategy='merge',
+        unique_key=['id'],
+        merge_update_columns=['created_at', 'content', 'author_id', 'incident_number'],
         description='Simplified incident comment history for tracking communication'
     )
 }}
 
 select 
-    uuid_string() as id,
+    slack_message_id as id,
     i.incident_number,
     i.reportee_id as author_id,
     i.last_comment as content,
