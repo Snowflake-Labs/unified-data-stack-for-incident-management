@@ -1,0 +1,12 @@
+incident_management:
+  outputs:
+    dev:
+      type: snowflake
+      account: "uib27272"
+      database: "incident_management"
+      role: "dbt_projects_engineer"
+      schema: "dbt_project_deployments"
+      user: "genp_service_usr"
+      warehouse: "incident_management_dbt_wh"
+  target: "dev"
+

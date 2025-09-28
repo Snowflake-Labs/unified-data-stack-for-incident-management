@@ -65,14 +65,20 @@ def create_header():
 def create_metrics_cards():
     """Create key metrics cards"""
 
-    database = st.session_state.snowpark_session.get_current_database()
-    schema = "curated_zone"
-    
-    # Calculate current metrics
-    total_active = au.execute_sql(f"SELECT COUNT(*) as count FROM {database}.{schema}.active_incidents", st.session_state.snowpark_session)
-    critical_count = au.execute_sql(f"SELECT COUNT(*) as count FROM {database}.{schema}.active_incidents WHERE lower(priority) = 'critical'", st.session_state.snowpark_session)
-    high_count = au.execute_sql(f"SELECT COUNT(*) as count FROM {database}.{schema}.active_incidents WHERE lower(priority) = 'high'", st.session_state.snowpark_session)
-    closed_count = au.execute_sql(f"SELECT COUNT(*) as count FROM {database}.{schema}.closed_incidents WHERE closed_at >= DATEADD('day', -30, CURRENT_DATE())", st.session_state.snowpark_session)
+    try:
+        database = st.session_state.snowpark_session.get_current_database()
+        schema = "curated_zone"
+        
+        # Calculate current metrics
+        total_active = au.execute_sql(f"SELECT COUNT(*) as count FROM {database}.{schema}.active_incidents", st.session_state.snowpark_session)
+        critical_count = au.execute_sql(f"SELECT COUNT(*) as count FROM {database}.{schema}.active_incidents WHERE lower(priority) = 'critical'", st.session_state.snowpark_session)
+        high_count = au.execute_sql(f"SELECT COUNT(*) as count FROM {database}.{schema}.active_incidents WHERE lower(priority) = 'high'", st.session_state.snowpark_session)
+        closed_count = au.execute_sql(f"SELECT COUNT(*) as count FROM {database}.{schema}.closed_incidents WHERE closed_at >= DATEADD('day', -30, CURRENT_DATE())", st.session_state.snowpark_session)
+    except Exception as e:
+        total_active = pd.DataFrame({"COUNT": 0}, index=[0])
+        critical_count = pd.DataFrame({"COUNT": 0}, index=[0])
+        high_count = pd.DataFrame({"COUNT": 0}, index=[0])
+        closed_count = pd.DataFrame({"COUNT": 0}, index=[0])
     
     col1, col2, col3, col4 = st.columns(4)
     
@@ -324,11 +330,11 @@ def create_active_incidents_table():
     
     st.subheader("🔄 Top 5 Active Incidents")
 
-    database = st.session_state.snowpark_session.get_current_database()
-    schema = "curated_zone"
-
-    # Convert to DataFrame
-    df = au.execute_sql(f"""
+    try:
+        database = st.session_state.snowpark_session.get_current_database()
+        schema = "curated_zone"
+            # Convert to DataFrame
+        df = au.execute_sql(f"""
         SELECT 
             ai."INCIDENT_NUMBER", 
             ai."TITLE", 
@@ -346,7 +352,9 @@ def create_active_incidents_table():
         LEFT JOIN {database}.landing_zone.incident_comment_history ic ON ai.incident_number = ic.incident_number
         ORDER BY ai.created_at DESC 
         LIMIT 5
-    """, st.session_state.snowpark_session)
+        """, st.session_state.snowpark_session)
+    except Exception as e:
+        df = pd.DataFrame()
 
     if df.empty:
         st.info("No active incidents found.")
@@ -406,28 +414,34 @@ def create_recently_closed_incidents_table():
     """Display table of recently closed incidents"""
     st.subheader("🎯 Recently Closed Incidents")
 
-    database = st.session_state.snowpark_session.get_current_database()
-    schema = "curated_zone"
+    try:
+        database = st.session_state.snowpark_session.get_current_database()
+        schema = "curated_zone"
 
-    # Get last 5 closed incidents from the new closed_incidents model
-    query = f"""
-        SELECT 
-            incident_number,
-            title,
-            priority,
-            category,
-            status,
-            closed_at,
-            created_at,
-            total_resolution_hours,
-            source_system,
-            has_attachments
-        FROM {database}.{schema}.closed_incidents
-        ORDER BY closed_at DESC
-        LIMIT 5
-    """
-    
-    closed_incidents = au.execute_sql(query, st.session_state.snowpark_session)
+        # Get last 5 closed incidents from the new closed_incidents model
+        query = f"""
+            SELECT 
+                incident_number,
+                title,
+                priority,
+                category,
+                status,
+                closed_at,
+                created_at,
+                total_resolution_hours,
+                source_system,
+                has_attachments
+            FROM {database}.{schema}.closed_incidents
+            ORDER BY closed_at DESC
+            LIMIT 5
+        """
+        closed_incidents = au.execute_sql(query, st.session_state.snowpark_session)
+    except Exception as e:
+        closed_incidents = pd.DataFrame()
+
+    if closed_incidents.empty:
+        st.info("No recently closed incidents found.")
+        return
 
     if not closed_incidents.empty:
         # Add priority colors

@@ -7,6 +7,8 @@
     - [1. OpenFlow-Based Slack Ingestion](#1-openflow-based-slack-ingestion)
     - [2. dbt Projects on Snowflake](#2-dbt-projects-on-snowflake)
     - [3. AI/SQL Integration within dbt Models](#3-aisql-integration-within-dbt-models)
+      - [Unstructured Text Processing](#unstructured-text-processing)
+      - [Image Processing](#image-processing)
     - [4. Streamlit Integration](#4-streamlit-integration)
     - [5. End-to-End Workflow Example](#5-end-to-end-workflow-example)
   - [Data Models](#data-models)
@@ -15,7 +17,6 @@
   - [Project Structure](#project-structure)
   - [Setup](#setup)
     - [Prerequisites](#prerequisites)
-    - [Environment Variables](#environment-variables)
     - [Installation](#installation)
     - [Setup Slack Connector (OpenFlow)](#setup-slack-connector-openflow)
   - [General Usage](#general-usage)
@@ -229,7 +230,7 @@ incident-management/
 
 ### Installation
 
-(Assumes local setup)
+This project demonstrates dbt Projects deployment and execution from local dev machine. But once deployed, it is easy to switch to Snowflake Workspaces to manage further redeployments and test executions.
 
 1. **Clone this repo**
     ```bash
@@ -255,26 +256,34 @@ incident-management/
    snow sql --connection <named connection in TOML> -f 00_roles.sql
    ```   
    ⚠️ NOTE
-   > This will need a user with ACCOUNTADMIN privilege assigned.
-   > As a better authentication practice the script will create a PAT for the service user and tie it to the role created above. This command is last to execute and so the output of this command is the only place where the token appears. Copy the token from the output for use when authenticating to an endpoint.
+   - This will need a user with ACCOUNTADMIN privilege assigned.
+   
+   > Best Practice 
+   - The script generates a PAT for the service user and ties it to the role created above.This executes as the last step.Note and copy the token from the output for use during authentication.
    
    3.2 Generate a key-pair for this user following the steps [here](https://docs.snowflake.com/en/user-guide/key-pair-auth#configuring-key-pair-authentication) and `ALTER USER` to update the public key.
+
+   ```sql
+   ALTER USER <user name>
+   SET rsa_public_key = <rsa public key>
+   ```
 
    3.3 Update the environment variables and generate required YAML files
 
       3.3.1. Configure all variable in the `.env` file using the [`.env.template`](.env.template)
    
       3.3.2. Generate snowflake.yml file for use with Snowflake CLI 
-         ```bash
-         cd src/scripts
-         ./create_snowflake_yaml.sh -e <path to .env file>
-         ```
-         Verify that the snowflake.yml is created under `sql` dir
+      ```bash
+      cd src/scripts
+      ./create_snowflake_yaml.sh -e <path to .env file>
+      ```
+      Verify that the snowflake.yml is created under `sql` dir
       
       3.3.3. Generate profile.yml file for creating the dbt Project
-           ```bash
-         cd src/scripts
-         ./create_profiles_yml.sh -e <path to .env file>
+      ```bash
+      cd src/scripts
+      ./create_profiles_yml.sh -e <path to .env file>
+      ```
 
 
    3.3 Grant usage on the `GIT API INTEGRATION` and `EXTERNAL_ACCESS_INTEGRATION` objects configured in the env file to the user above.
@@ -285,27 +294,45 @@ incident-management/
    cd src/scripts
    ./sqlsetup.sh -e ../path/to/your/.env
    ```
-   
-   This script will:
-   - Execute [`01_before_slack_connector.sql`](src/sql/01_before_slack_connector.sql) to create initial database structure
-   - Execute [`02_orchestration.sql`](src/sql/02_orchestration.sql) to set up dbt Projects orchestration components
+      This script will:
+      - Execute [`01_before_slack_connector.sql`](src/sql/01_before_slack_connector.sql) to create initial database structure
+      - Execute [`02_orchestration.sql`](src/sql/02_orchestration.sql) to set up dbt Projects orchestration components
+      - Load sample CSV data for each of the tables using the Snowsight table loader UI.
 
-4. **Load sample data** (optional)
-    - Load sample CSV data for each of the tables using the Snowsight table loader UI.
-
-5. **Verify Setup**
+4. **Verify Setup**
    - Check that Snowflake objects were created successfully
-   - Test Streamlit connectivity by running the dashboard
    - Verify dbt models compile and run correctly
+   - Test Streamlit connectivity by running the dashboard
+
+   ```bash
+   cd src/streamlit
+   streamlit run main.py
+   ```
 
 ### Setup Slack Connector (OpenFlow)
 
-Follow the [official Snowflake documentation](https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/slack/setup) to configure a Slack app and set up the OpenFlow Slack connector.
+1. Follow the [official Snowflake documentation](https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/slack/setup) to configure a Slack app and set up the OpenFlow Slack connector.
 
- > ⚠️ Best Practice
-- Create a dedicated SERVICE account for the Slack app
-- Use Key-Pair authentication with an *encrypted* private key
-- Configure appropriate channel permissions for incident reporting
+   > Best Practice
+   - Create a dedicated SERVICE account for the Slack app
+   - Use Key-Pair authentication with an *encrypted* private key
+   - Configure appropriate channel permissions for incident reporting
+
+   ⚠️NOTE
+      - The SERVICE user that you will create for the Slack connector to assume, should have grants to operate on the landing zone namespace to:
+         - create tables
+         - insert into tables
+         - create stages
+         - write to stages
+
+2. Verify that you see the following tables and stages in your landing zone to confirm Slack connector has been configured correctly:
+   - SLACK_MEMBERS
+   - SLACK_MEMBERS_STAGING
+   - DOC_METADATA
+   - FILE_HASHES
+   - SLACK_MESSAGES
+
+3. Drop a test message in your Slack channel that has your test app added to it and verify that you can see a record for it created in the SLACK_MESSAGES table (might take a few seconds).   
 
 ## General Usage
 

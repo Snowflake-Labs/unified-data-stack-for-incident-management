@@ -13,6 +13,8 @@ create or replace role dbt_projects_engineer;
 grant database role snowflake.cortex_user to role dbt_projects_engineer; 
 grant create warehouse on account to role dbt_projects_engineer;
 
+grant create database on account to role dbt_projects_engineer;
+
 grant role dbt_projects_engineer to user genp_service_usr;
 
 ALTER USER IF EXISTS genp_service_usr

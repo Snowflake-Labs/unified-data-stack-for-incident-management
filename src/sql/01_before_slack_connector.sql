@@ -9,6 +9,7 @@ create or replace schema <% ctx.env.dbt_project_database %>.landing_zone;
 create or replace schema <% ctx.env.dbt_project_database %>.curated_zone;
 create or replace schema <% ctx.env.dbt_project_database %>.dbt_project_deployments;
 
+create or replace stage <% ctx.env.dbt_project_database %>.landing_zone.csv_stage;
 
 -- Users table (employees, customers, system users)
 CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.landing_zone.users (
@@ -76,6 +77,22 @@ CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.landing_zone.incident
     CONSTRAINT fk_attachments_incident FOREIGN KEY (incident_number) REFERENCES <% ctx.env.dbt_project_database %>.landing_zone.incidents(incident_number)
 );
 
+put file://../../data/csv/users.csv  @<% ctx.env.dbt_project_database %>.landing_zone.csv_stage overwrite=true;
+put file://../../data/csv/incidents.csv @<% ctx.env.dbt_project_database %>.landing_zone.csv_stage overwrite=true;
+put file://../../data/csv/incident_comment_history.csv @<% ctx.env.dbt_project_database %>.landing_zone.csv_stage overwrite=true;
+
+copy into <% ctx.env.dbt_project_database %>.landing_zone.users from 
+    @<% ctx.env.dbt_project_database %>.landing_zone.csv_stage/users.csv 
+    file_format = (type = csv field_delimiter = ',' skip_header = 1);
+copy into <% ctx.env.dbt_project_database %>.landing_zone.incidents from 
+    @<% ctx.env.dbt_project_database %>.landing_zone.csv_stage/incidents.csv 
+    file_format = (type = csv field_delimiter = ',' skip_header = 1);
+copy into <% ctx.env.dbt_project_database %>.landing_zone.incident_comment_history from 
+    @<% ctx.env.dbt_project_database %>.landing_zone.csv_stage/incident_comment_history.csv 
+    file_format = (type = csv field_delimiter = ',' skip_header = 1);
+
+
+
 use database <% ctx.env.dbt_project_database %>;
 use schema dbt_project_deployments;
 
@@ -90,14 +107,14 @@ API_INTEGRATION = <% ctx.env.snowflake_git_api_int %>
 GIT_CREDENTIALS = <% ctx.env.dbt_project_database %>.dbt_project_deployments.incident_management_git_secret;
 
 
--- create a new dbt project using Git repo as source
-CREATE OR REPLACE DBT PROJECT <% ctx.env.dbt_project_database %>.dbt_project_deployments.dbt_incident_management
-    FROM '@<% ctx.env.dbt_project_database %>.dbt_project_deployments.incident_management_dbt_project_repo/branches/main/<% ctx.env.repo_dbt_projects_yml_path %>'
-    DEFAULT_VERSION = LAST;
+-- -- create a new dbt project using Git repo as source
+-- CREATE OR REPLACE DBT PROJECT <% ctx.env.dbt_project_database %>.dbt_project_deployments.dbt_incident_management
+--     FROM '@<% ctx.env.dbt_project_database %>.dbt_project_deployments.incident_management_dbt_project_repo/branches/main/<% ctx.env.repo_dbt_projects_yml_path %>'
+--     DEFAULT_VERSION = LAST;
 
 
--- provides grants to the dbt_projects_engineer role on the dbt project
-grant usage on dbt project dbt_incident_management to role <% ctx.env.dbt_project_admin_role %>;
+-- -- provides grants to the dbt_projects_engineer role on the dbt project
+-- grant usage on dbt project dbt_incident_management to role <% ctx.env.dbt_project_admin_role %>;
 
 
 

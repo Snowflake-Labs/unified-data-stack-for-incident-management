@@ -15,7 +15,7 @@
 
 # Default values
 ENV_FILE=".env"
-TEMPLATE_FILE="../incident_management/profiles.yml.template"
+TEMPLATE_FILE="profiles.yml.template"
 OUTPUT_FILE="../incident_management/profiles.yml"
 
 # Parse command line arguments

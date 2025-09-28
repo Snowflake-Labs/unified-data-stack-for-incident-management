@@ -61,6 +61,8 @@ class SnowflakeConnection:
                     self.snowpark_session = Session.builder.configs({k:v for k,v in kwargs.items() if v is not None and v != ""}).create()
                     self.snowflake_root = Root(self.snowpark_session)
                 else:
+                    load_dotenv()
+                    
                     ## Read from environment variables if no connection parameters are provided using .env file
                     connection_parameters = {
                         "account": os.getenv("DBT_SNOWFLAKE_ACCOUNT"),
