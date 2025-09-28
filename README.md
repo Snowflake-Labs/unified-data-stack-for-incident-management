@@ -270,20 +270,22 @@ This project demonstrates dbt Projects deployment and execution from local dev m
 
    3.3 Update the environment variables and generate required YAML files
 
-      3.3.1. Configure all variable in the `.env` file using the [`.env.template`](.env.template)
+         3.3.1. Configure all variable in the `.env` file using the [`.env.template`](.env.template)
    
-      3.3.2. Generate snowflake.yml file for use with Snowflake CLI 
-      ```bash
-      cd src/scripts
-      ./create_snowflake_yaml.sh -e <path to .env file>
-      ```
-      Verify that the snowflake.yml is created under `sql` dir
-      
-      3.3.3. Generate profile.yml file for creating the dbt Project
-      ```bash
-      cd src/scripts
-      ./create_profiles_yml.sh -e <path to .env file>
-      ```
+         3.3.2. Generate snowflake.yml file for use with Snowflake CLI 
+         ```bash
+         cd src/scripts
+         ./create_snowflake_yaml.sh -e <path to .env file>
+         ```
+         Verify that the snowflake.yml is created under `sql` dir
+         
+         3.3.3. Generate profile.yml file for creating the dbt Project
+         ```bash
+         cd src/scripts
+         ./create_profiles_yml.sh -e <path to .env file>
+         ```
+
+         3.3.4 Because profiles.yml is generated on the fly, check it into Git repo that will be used to create the dbt Projects
 
 
    3.3 Grant usage on the `GIT API INTEGRATION` and `EXTERNAL_ACCESS_INTEGRATION` objects configured in the env file to the user above.

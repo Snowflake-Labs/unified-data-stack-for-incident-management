@@ -5,8 +5,9 @@ incident_management:
       account: "uib27272"
       database: "incident_management"
       role: "dbt_projects_engineer"
-      schema: "dbt_project_deployments"
+      schema: "landing_zone"
       user: "genp_service_usr"
       warehouse: "incident_management_dbt_wh"
   target: "dev"
+
 
