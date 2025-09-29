@@ -420,7 +420,7 @@ def create_active_incidents_table():
 
 def create_recently_closed_incidents_table():
     """Display table of recently closed incidents"""
-    st.subheader("🎯 Recently Closed Incidents")
+    st.subheader("🎯 Last known Closed Incidents")
 
     try:
         database = st.session_state.snowpark_session.get_current_database()
