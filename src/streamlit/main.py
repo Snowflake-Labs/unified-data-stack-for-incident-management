@@ -335,23 +335,31 @@ def create_active_incidents_table():
         schema = "curated_zone"
             # Convert to DataFrame
         df = au.execute_sql(f"""
-        SELECT 
-            ai."INCIDENT_NUMBER", 
-            ai."TITLE", 
-            ai."PRIORITY", 
-            ai."STATUS", 
-            ai."CATEGORY", 
-            ai."CREATED_AT", 
-            ai."ASSIGNEE_ID",
-            ai."ASSIGNEE_NAME", 
-            ai."HAS_ATTACHMENTS",
-            ai."SOURCE_SYSTEM",
-            ai."EXTERNAL_SOURCE_ID",
-            ic."CONTENT" as "LAST_COMMENT"
-        FROM {database}.{schema}.active_incidents ai 
-        LEFT JOIN {database}.landing_zone.incident_comment_history ic ON ai.incident_number = ic.incident_number
-        ORDER BY ai.created_at DESC 
-        LIMIT 5
+                WITH latest_comments AS (
+                    SELECT 
+                        incident_number,
+                        MAX(content) as content,
+                        MAX(created_at) as created_at
+                    FROM {database}.landing_zone.incident_comment_history
+                    GROUP BY incident_number
+                )
+                SELECT 
+                    ai."INCIDENT_NUMBER", 
+                    ai."TITLE", 
+                    ai."PRIORITY", 
+                    ai."STATUS", 
+                    ai."CATEGORY", 
+                    ai."CREATED_AT", 
+                    ai."ASSIGNEE_ID",
+                    ai."ASSIGNEE_NAME", 
+                    ai."HAS_ATTACHMENTS",
+                    ai."SOURCE_SYSTEM",
+                    ai."EXTERNAL_SOURCE_ID",
+                    lc."CONTENT" as "LAST_COMMENT"
+                FROM {database}.{schema}.active_incidents ai 
+                LEFT JOIN latest_comments lc ON ai.incident_number = lc.incident_number
+                ORDER BY ai.created_at DESC 
+                LIMIT 5
         """, st.session_state.snowpark_session)
     except Exception as e:
         df = pd.DataFrame()
