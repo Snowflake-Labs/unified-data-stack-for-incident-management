@@ -335,13 +335,26 @@ def create_active_incidents_table():
         schema = "curated_zone"
             # Convert to DataFrame
         df = au.execute_sql(f"""
-                WITH latest_comments AS (
-                    SELECT 
+                WITH latest_created_at AS (
+                    SELECT
                         incident_number,
-                        MAX(content) as content,
-                        MAX(created_at) as created_at
-                    FROM {database}.landing_zone.incident_comment_history
-                    GROUP BY incident_number
+                        MAX(created_at) AS latest_created_at
+                    FROM
+                        landing_zone.incident_comment_history
+                    GROUP BY
+                        incident_number
+                ),
+                latest_comments AS (
+                    SELECT
+                        ich.incident_number,
+                        ich.created_at,
+                        ich.content AS latest_comment
+                    FROM
+                        landing_zone.incident_comment_history AS ich
+                        INNER JOIN latest_created_at AS lc ON ich.incident_number = lc.incident_number
+                    AND ich.created_at = lc.latest_created_at
+                    ORDER BY
+                        ich.created_at DESC
                 )
                 SELECT 
                     ai."INCIDENT_NUMBER", 
@@ -355,7 +368,7 @@ def create_active_incidents_table():
                     ai."HAS_ATTACHMENTS",
                     ai."SOURCE_SYSTEM",
                     ai."EXTERNAL_SOURCE_ID",
-                    lc."CONTENT" as "LAST_COMMENT"
+                    lc."LATEST_COMMENT" as "LAST_COMMENT"
                 FROM {database}.{schema}.active_incidents ai 
                 LEFT JOIN latest_comments lc ON ai.incident_number = lc.incident_number
                 ORDER BY ai.created_at DESC 

@@ -255,7 +255,7 @@ This project demonstrates dbt Projects deployment and execution from local dev m
    cd src/sql
    snow sql --connection <named connection in TOML> -f 00_roles.sql
    ```   
-   ⚠️ NOTE
+   > Note
    - This will need a user with ACCOUNTADMIN privilege assigned.
    
    > Best Practice 
@@ -263,10 +263,20 @@ This project demonstrates dbt Projects deployment and execution from local dev m
    
    3.2 Generate a key-pair for this user following the steps [here](https://docs.snowflake.com/en/user-guide/key-pair-auth#configuring-key-pair-authentication) and `ALTER USER` to update the public key.
 
-   ```sql
-   ALTER USER <user name>
-   SET rsa_public_key = <rsa public key>
-   ```
+      3.2.1. Open your terminal (Mac/Linux) or Git Bash (Windows).
+      3.2.2. Run the following commands to generate a private and public key:
+      ```bash
+      openssl genrsa -out rsa_private_key.pem 2048
+      openssl rsa -in rsa_private_key.pem -pubout -out rsa_public_key.pem
+      ```
+      3.2.3. Open rsa_public_key.pem file in a text editor. Copy your public key.
+      3.2.4. In Snowsight, run the following SQL (replace placeholder):
+      ```sql
+      ALTER USER <user name> SET RSA_PUBLIC_KEY='
+      -----BEGIN PUBLIC KEY-----
+      MIIBIjANBgkqhkiG9w0BAQEFAA...
+      -----END PUBLIC KEY-----';
+      ```
 
    3.3 Update the environment variables and generate required YAML files
 
@@ -320,12 +330,12 @@ This project demonstrates dbt Projects deployment and execution from local dev m
    - Use Key-Pair authentication with an *encrypted* private key
    - Configure appropriate channel permissions for incident reporting
 
-   ⚠️NOTE
-      - The SERVICE user that you will create for the Slack connector to assume, should have grants to operate on the landing zone namespace to:
-         - create tables
-         - insert into tables
-         - create stages
-         - write to stages
+   > Note
+   - The SERVICE user that you will create for the Slack connector to assume, should have grants to operate on the landing zone namespace to:
+      - create tables
+      - insert into tables
+      - create stages
+      - write to stages
 
 2. Verify that you see the following tables and stages in your landing zone to confirm Slack connector has been configured correctly:
    - SLACK_MEMBERS
@@ -346,7 +356,7 @@ This project demonstrates dbt Projects deployment and execution from local dev m
    streamlit run main.py
    ```
    
-   > See [`main.py`](src/streamlit/main.py) for the complete dashboard implementation.
+   See [`main.py`](src/streamlit/main.py) for the complete dashboard implementation.
 
 2. **Access the Dashboard**
    - Open your browser to `http://localhost:8501`
