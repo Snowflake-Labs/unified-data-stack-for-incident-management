@@ -29,7 +29,7 @@
 
 # An Unified Data Stack on Snowflake
 
-*This project demonstrates a modern data stack for an example real-life situaton that of incident management that typically requires multiple steps, and close collaboration between representatives using tools like Slack. This project uses a modern stack with Snowflake to bring AI-powered automation and real-time analytics to this known business process that can benefit from AI inclusion.*
+*This project demonstrates a modern data stack for an example real-life situation that of incident management that typically requires multiple steps, and close collaboration between representatives using tools like Slack. This project uses a modern stack with Snowflake to bring AI-powered automation and real-time analytics to this known business process that can benefit from AI inclusion.*
 
 
 An end-to-end incident management platform* built on Snowflake that demonstrates modern data engineering practices using dbt, AI/ML capabilities, and real-time visualization through Streamlit. The system ingests incident data from Slack via Snowflake's OpenFlow connector and provides intelligent categorization, tracking, and reporting capabilities.
