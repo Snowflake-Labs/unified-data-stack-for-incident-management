@@ -66,7 +66,7 @@ class SnowflakeConnection:
                     ## Read from environment variables if no connection parameters are provided using .env file
                     connection_parameters = {
                         "account": os.getenv("DBT_SNOWFLAKE_ACCOUNT"),
-                        "user": os.getenv("DBT_SNOWFLAKE_USER"),
+                        "user": os.getenv("SNOWFLAKE_USER"),
                         "password": os.getenv("DBT_SNOWFLAKE_PASSWORD"),
                         "role": os.getenv("DBT_PROJECT_ADMIN_ROLE"), 
                         "warehouse": os.getenv("DBT_SNOWFLAKE_WAREHOUSE"),  # optional

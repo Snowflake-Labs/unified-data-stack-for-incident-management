@@ -27,7 +27,7 @@ show_help() {
     echo "  $0 test --select tag:critical"
     echo ""
     echo "Environment Variables Required:"
-    echo "  SNOW_CLI_CONNECTION     - Snowflake CLI connection name"
+    echo "  SNOWFLAKE_USER     - Snowflake CLI connection name"
     echo "  DBT_PROJECT_DATABASE    - Target database name"
     echo "  DBT_PROJECT_SCHEMA      - Target schema name"
     echo "  DBT_PROJECT_NAME        - dbt project name"
@@ -49,7 +49,7 @@ if [[ $# -eq 0 ]]; then
 fi
 
 # Check required environment variables
-required_vars=("SNOW_CLI_CONNECTION" "DBT_PROJECT_DATABASE" "DBT_PROJECT_SCHEMA" "DBT_PROJECT_NAME")
+required_vars=("SNOWFLAKE_USER" "DBT_PROJECT_DATABASE" "DBT_PROJECT_SCHEMA" "DBT_PROJECT_NAME")
 for var in "${required_vars[@]}"; do
     if [[ -z "${!var}" ]]; then
         echo "Error: Required environment variable $var is not set"
@@ -63,7 +63,7 @@ shift  # Remove the first argument, leaving any additional options
 ADDITIONAL_OPTIONS="$@"
 
 # Construct and execute the snow dbt command
-SNOW_DBT_CMD="snow dbt execute --connection $SNOW_CLI_CONNECTION $DBT_PROJECT_DATABASE.$DBT_PROJECT_SCHEMA.$DBT_PROJECT_NAME $DBT_COMMAND $ADDITIONAL_OPTIONS"
+SNOW_DBT_CMD="snow dbt execute --connection $SNOWFLAKE_USER $DBT_PROJECT_DATABASE.$DBT_PROJECT_SCHEMA.$DBT_PROJECT_NAME $DBT_COMMAND $ADDITIONAL_OPTIONS"
 
 echo "Executing: $SNOW_DBT_CMD"
 echo ""

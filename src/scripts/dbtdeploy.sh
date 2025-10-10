@@ -50,7 +50,7 @@ BASIC_REQUIRED_VARS=(
     "DBT_PROJECT_NAME"
     "GIT_REPOSITORY_URL"
     "DBT_TARGET"
-    "SNOW_CLI_CONNECTION"
+    "SNOWFLAKE_USER"
     "DBT_PROJECT_DATABASE"
     "DBT_PROJECT_SCHEMA"
     "DBT_PROJECT_ADMIN_ROLE"
@@ -194,7 +194,7 @@ echo "Temporary Directory: $TEMP_DIR"
 echo "Project Name: $DBT_PROJECT_NAME"
 echo "Project Directory: $DBT_PROJECT_DIR"
 echo "Target: $DBT_TARGET"
-echo "Connection: $SNOW_CLI_CONNECTION"
+echo "Connection: $SNOWFLAKE_USER"
 echo "Database: $DBT_PROJECT_DATABASE"
 echo "Schema: $DBT_PROJECT_SCHEMA"
 echo "Role: $DBT_PROJECT_ADMIN_ROLE"
@@ -216,7 +216,7 @@ echo "Deploying dbt project with --force flag using SNOWFLAKE_JWT authentication
 # Deploy dbt project with --force flag
 snow dbt deploy $DBT_PROJECT_NAME \
     --source $DBT_PROJECT_DIR \
-    --connection $SNOW_CLI_CONNECTION \
+    --connection $SNOWFLAKE_USER \
     --force \
     --database "$DBT_PROJECT_DATABASE" \
     --schema "$DBT_PROJECT_SCHEMA" \

@@ -40,10 +40,10 @@ An end-to-end incident management platform* built on Snowflake that demonstrates
 ## Architecture
 
 ```
-┌─────────────────┐    ┌──────────────┐    ┌─────────────────┐
-│   Slack App     │───▶│   OpenFlow   │───▶│   Snowflake     │
-│                 │    │  Connector   │    │   Landing Zone  │
-└─────────────────┘    └──────────────┘    └─────────────────┘
+┌─────────────────┐    ┌──────────────┐         ┌─────────────────┐
+│   Slack App     │───▶│   OpenFlow   │────────▶│   Snowflake     │
+│                 │    │  Connector   │         |    Landing Zone │
+└─────────────────┘    └──────────────┘         └─────────────────┘
                                                      │
                                                      ▼
 ┌─────────────────┐    ┌─────────────────┐    ┌──────────────────┐
@@ -202,14 +202,14 @@ incident-management/
 │   │   ├── dbt_project.yml       # dbt configuration
 │   │   └── profiles.yml          # Database connections
 │   ├── scripts/                  # Deployment and setup scripts
-│   │   ├── sqlsetup.sh          # Snowflake infrastructure setup
+│   │   ├── create_snowflake_yaml.sh # Generate snowflake.yml from template
 │   │   ├── dbtdeploy.sh         # dbt deployment automation
 │   │   ├── dbtexec.sh           # dbt execution wrapper
 │   │   └── snowflake.yml.template
 │   ├── sql/                      # Raw SQL scripts
-│   │   ├── 00_roles.sql         # Role and permission setup
-│   │   ├── 01_before_slack_connector.sql
-│   │   └── 02_orchestration.sql
+│   │   ├── 01_dbt_projects_stack.sql # dbt Projects infrastructure setup
+│   │   ├── 02_slack_connector.sql    # Slack connector setup
+│   │   └── snowflake.yml
 │   └── streamlit/                # Dashboard application
 │       ├── main.py              # Main dashboard
 │       ├── app_utils.py         # Utility functions
@@ -222,22 +222,159 @@ incident-management/
 
 ### Prerequisites
 
-- Snowflake account with access to ACCOUNTADMIN privilege to create user and roles.
+- Snowflake account with access to ACCOUNTADMIN privilege to create user and roles
 - Snowflake CLI (latest version)
-- Python 3.9+ 
-- Streamlit
+- *Openflow SPCS deployment and a Small runtime
 - Git
+- [uv](https://docs.astral.sh/uv/getting-started/installation/) for Python virtual environment and dependency management
 
 ### Installation
 
 This project demonstrates dbt Projects deployment and execution from local dev machine. But once deployed, it is easy to switch to Snowflake Workspaces to manage further redeployments and test executions.
 
+#### Prerequisites
+
+Before starting the installation, ensure you have:
+- **Snowflake CLI** installed ([installation guide](https://docs.snowflake.com/en/developer-guide/snowflake-cli/installation/installation))
+- **Snowflake connection** configured in `~/.snowflake/config.toml`
+- **ACCOUNTADMIN privileges** in your Snowflake account
+- **Openflow SPCS** Use these installation instructions to setup Openflow SPCS deployment and a runtime on top within your Snowflake account
+
+#### Installation Steps
+
 1. **Clone this repo**
-    ```bash
-    git clone <git url>
-    ```
-    
-2. **Install Python Dependencies**
+
+   ```bash
+   git clone https://github.com/Snowflake-Labs/unified-data-stack-for-incident-management.git
+   cd unified-data-stack-for-incident-management
+   ```
+
+2. **Configure Environment Variables**
+
+   Copy the template and configure your environment:
+   ```bash
+   cp env.template .env
+   ```
+   
+   Edit `.env` file and configure all variables except these two (generated later):
+   - `DBT_SNOWFLAKE_PASSWORD`
+   - `DBT_SNOWFLAKE_PRIVATE_KEY_PATH`
+
+   > **Note:** If you change any of the below parameters, be sure to change the profiles.yml as well
+      - `DBT_PROJECT_DATABASE=incident_management`
+      - `DBT_PROJECT_SCHEMA=dbt_project_deployments`
+      - `MODEL_SCHEMA=landing_zone`
+      - `DBT_SNOWFLAKE_WAREHOUSE=incident_management_dbt_wh`
+      - `DBT_PROJECT_ADMIN_ROLE=dbt_projects_engineer`
+
+3. **Setup Snowflake Infrastructure (Automated)**
+
+   Use the Makefile to automate the entire Snowflake setup:
+
+   **Option A: Complete Setup (Recommended)**
+   ```bash
+   # Run complete installation
+   make install ENV_FILE=.env CONN=<your-connection-name>
+   ```
+
+   **Option B: Step-by-Step Setup**
+   ```bash
+   # Step 2.1: Generate snowflake.yml configuration
+   make generate-yaml ENV_FILE=.env
+   
+   # Step 2.2: Setup dbt Projects infrastructure
+   make setup-dbt-stack CONN=<your-connection-name>
+   
+   # Step 2.3: Setup Slack connector infrastructure
+   make setup-slack-connector CONN=<your-connection-name>
+   ```
+
+   > **Note:** Replace `<your-connection-name>` with the connection name defined in your `~/.snowflake/config.toml`
+
+   > **Note:** Role setup commands require ACCOUNTADMIN privileges
+
+4. **Setup User Authentication (Optional)**
+
+   Execute this step if planning to run Streamlit app remotely and/or deploy dbt Projects remotely:
+   
+   a. **Generate PAT Token**: From Snowsight UI generate a PAT for the dbt Projects service user tied to the role created in previous step. Note and copy the token for use during authentication.
+   
+   b. **Generate Key-Pair Authentication**: Follow the steps [here](https://docs.snowflake.com/en/user-guide/key-pair-auth#configuring-key-pair-authentication):
+      ```bash
+      # Generate private and public key
+      openssl genrsa -out rsa_private_key.pem 2048
+      openssl rsa -in rsa_private_key.pem -pubout -out rsa_public_key.pem
+      ```
+      
+      Then update the user in Snowflake (replace placeholder):
+      ```sql
+      ALTER USER <user name> SET RSA_PUBLIC_KEY='
+      -----BEGIN PUBLIC KEY-----
+      MIIBIjANBgkqhkiG9w0BAQEFAA...
+      -----END PUBLIC KEY-----';
+      ```
+   
+   c. **Update Environment Variables**: Update `.env` with:
+      - `DBT_SNOWFLAKE_PASSWORD=<your-PAT-token>`
+      - `DBT_SNOWFLAKE_PRIVATE_KEY_PATH=<path-to-private-key-file>`
+
+5. **Configure Slack Connector (Post-Installation)**
+
+   After running the Makefile setup, configure the Slack connector in your OpenFlow SPCS runtime:
+   
+   a. **Review Prerequisites**: Check the [pre-requisites](https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/slack/setup#prerequisites)
+   
+   b. **Create Slack App**: Create a Slack app in your workspace using the given [manifest](https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/slack/setup#set-up-a-slack-app)
+   
+   c. **Update External Access**: [Update](https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/slack/setup#setup-necessary-ingress-rules) the External Access Integration object to add `slack.com` domain for egress from SPCS containers
+   
+   d. **Configure Connector**: Use these [instructions](https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/slack/setup#configure-the-connector) to configure the connector. Ensure to use the database and role parameters created by the Makefile:
+   
+      ![Destination Parameters](screenshots/destination_params.png)
+      ![Snowflake Role Parameters](screenshots/snowflake_role_params.png)
+   
+   e. **Start and Test**: Start the connector and add the Slack app to a channel. Verify these tables are created:
+      - `SLACK_MEMBERS`, `SLACK_MEMBERS_STAGING`
+      - `DOC_METADATA`, `FILE_HASHES`, `SLACK_MESSAGES`
+
+6. **Test the Setup**
+
+   Drop a test message in your Slack channel and verify that a record appears in the `SLACK_MESSAGES` table (might take a few seconds).
+
+#### Makefile Usage Reference
+
+For detailed information about available Makefile targets:
+```bash
+make help
+```
+
+**Common Commands:**
+```bash
+# Check prerequisites
+make check-prereqs
+
+# Complete automated setup
+make install ENV_FILE=.env CONN=myconnection
+
+# Individual steps
+make generate-yaml ENV_FILE=.env
+make setup-dbt-stack CONN=myconnection  
+make setup-slack-connector CONN=myconnection
+```
+
+**Troubleshooting:**
+- Ensure your Snowflake connection is properly configured in `~/.snowflake/config.toml`
+- Verify you have ACCOUNTADMIN privileges
+- Check that all environment variables are set in your `.env` file
+- Run `make check-prereqs` to verify prerequisites
+
+## General Usage
+
+### Running the Dashboard
+
+1. **Start the Streamlit Application**
+
+   1.1 Install Python Dependencies
    ```bash
    uv venv
    source .venv/bin/activate
@@ -246,117 +383,13 @@ This project demonstrates dbt Projects deployment and execution from local dev m
    
    > See [`requirements.txt`](requirements.txt) for the complete list of dependencies.
 
-3. **Setup Snowflake Infrastructure**
-   
-   3.1 Create service user and role :
-   
-   - Use the script [`00_roles.sql`](src/sql/00_roles.sql)* to create role for dbt Projects service account 
-   ```bash
-   cd src/sql
-   snow sql --connection <named connection in TOML> -f 00_roles.sql
-   ```   
-   > Note
-   - This will need a user with ACCOUNTADMIN privilege assigned.
-   
-   > Best Practice 
-   - The script generates a PAT for the service user and ties it to the role created above.This executes as the last step.Note and copy the token from the output for use during authentication.
-   
-   3.2 Generate a key-pair for this user following the steps [here](https://docs.snowflake.com/en/user-guide/key-pair-auth#configuring-key-pair-authentication) and `ALTER USER` to update the public key.
-
-      3.2.1. Open your terminal (Mac/Linux) or Git Bash (Windows).
-      3.2.2. Run the following commands to generate a private and public key:
-      ```bash
-      openssl genrsa -out rsa_private_key.pem 2048
-      openssl rsa -in rsa_private_key.pem -pubout -out rsa_public_key.pem
-      ```
-      3.2.3. Open rsa_public_key.pem file in a text editor. Copy your public key.
-      3.2.4. In Snowsight, run the following SQL (replace placeholder):
-      ```sql
-      ALTER USER <user name> SET RSA_PUBLIC_KEY='
-      -----BEGIN PUBLIC KEY-----
-      MIIBIjANBgkqhkiG9w0BAQEFAA...
-      -----END PUBLIC KEY-----';
-      ```
-
-   3.3 Update the environment variables and generate required YAML files
-
-         3.3.1. Configure all variable in the `.env` file using the [`.env.template`](.env.template)
-   
-         3.3.2. Generate snowflake.yml file for use with Snowflake CLI 
-         ```bash
-         cd src/scripts
-         ./create_snowflake_yaml.sh -e <path to .env file>
-         ```
-         Verify that the snowflake.yml is created under `sql` dir
-         
-         3.3.3. Generate profile.yml file for creating the dbt Project
-         ```bash
-         cd src/scripts
-         ./create_profiles_yml.sh -e <path to .env file>
-         ```
-
-         3.3.4 Because profiles.yml is generated on the fly, check it into Git repo that will be used to create the dbt Projects
-
-
-   3.3 Grant usage on the `GIT API INTEGRATION` and `EXTERNAL_ACCESS_INTEGRATION` objects configured in the env file to the user above.
-   
-   3.4 Run the setup script to create necessary Snowflake objects:
-    
-   ```bash
-   cd src/scripts
-   ./sqlsetup.sh -e ../path/to/your/.env
-   ```
-      This script will:
-      - Execute [`01_before_slack_connector.sql`](src/sql/01_before_slack_connector.sql) to create initial database structure
-      - Execute [`02_orchestration.sql`](src/sql/02_orchestration.sql) to set up dbt Projects orchestration components
-      - Load sample CSV data for each of the tables using the Snowsight table loader UI.
-
-4. **Verify Setup**
-   - Check that Snowflake objects were created successfully
-   - Verify dbt models compile and run correctly
-   - Test Streamlit connectivity by running the dashboard
-
-   ```bash
-   cd src/streamlit
-   streamlit run main.py
-   ```
-
-### Setup Slack Connector (OpenFlow)
-
-1. Follow the [official Snowflake documentation](https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/slack/setup) to configure a Slack app and set up the OpenFlow Slack connector.
-
-   > Best Practice
-   - Create a dedicated SERVICE account for the Slack app
-   - Use Key-Pair authentication with an *encrypted* private key
-   - Configure appropriate channel permissions for incident reporting
-
-   > Note
-   - The SERVICE user that you will create for the Slack connector to assume, should have grants to operate on the landing zone namespace to:
-      - create tables
-      - insert into tables
-      - create stages
-      - write to stages
-
-2. Verify that you see the following tables and stages in your landing zone to confirm Slack connector has been configured correctly:
-   - SLACK_MEMBERS
-   - SLACK_MEMBERS_STAGING
-   - DOC_METADATA
-   - FILE_HASHES
-   - SLACK_MESSAGES
-
-3. Drop a test message in your Slack channel that has your test app added to it and verify that you can see a record for it created in the SLACK_MESSAGES table (might take a few seconds).   
-
-## General Usage
-
-### Running the Dashboard
-
-1. **Start the Streamlit Application**
+   1.2 Now run the Streamlit app locally
    ```bash
    cd src/streamlit
    streamlit run main.py
    ```
    
-   See [`main.py`](src/streamlit/main.py) for the complete dashboard implementation.
+   > See [`main.py`](src/streamlit/main.py) for the complete dashboard implementation.
 
 2. **Access the Dashboard**
    - Open your browser to `http://localhost:8501`
