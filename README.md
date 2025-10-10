@@ -1,30 +1,32 @@
 
 ## Table of Contents
 - [An Unified Data Stack on Snowflake](#an-unified-data-stack-on-snowflake)
-  - [Architecture](#architecture)
-  - [Key Features](#key-features)
-  - [Demo Vignettes](#demo-vignettes)
-    - [1. OpenFlow-Based Slack Ingestion](#1-openflow-based-slack-ingestion)
-    - [2. dbt Projects on Snowflake](#2-dbt-projects-on-snowflake)
-    - [3. AI/SQL Integration within dbt Models](#3-aisql-integration-within-dbt-models)
-      - [Unstructured Text Processing](#unstructured-text-processing)
-      - [Image Processing](#image-processing)
-    - [4. Streamlit Integration](#4-streamlit-integration)
-    - [5. End-to-End Workflow Example](#5-end-to-end-workflow-example)
-  - [Data Models](#data-models)
-    - [Landing Zone](#landing-zone)
-    - [Curated Zone](#curated-zone)
-  - [Project Structure](#project-structure)
-  - [Setup](#setup)
-    - [Prerequisites](#prerequisites)
-    - [Installation](#installation)
-    - [Setup Slack Connector (OpenFlow)](#setup-slack-connector-openflow)
-  - [General Usage](#general-usage)
-    - [Running the Dashboard](#running-the-dashboard)
-    - [Dashboard Features](#dashboard-features)
-    - [Managing Incidents via Slack](#managing-incidents-via-slack)
-  - [Additional Resources](#additional-resources)
-  - [Questions, Feedback, and Contribution](#questions-feedback-and-contribution)
+- [Architecture](#architecture)
+- [Key Features](#key-features)
+- [Demo Vignettes](#demo-vignettes)
+  - [1. OpenFlow-Based Slack Ingestion](#1-openflow-based-slack-ingestion)
+  - [2. dbt Projects on Snowflake](#2-dbt-projects-on-snowflake)
+  - [3. AI/SQL Integration within dbt Models](#3-aisql-integration-within-dbt-models)
+    - [Unstructured Text Processing](#unstructured-text-processing)
+    - [Image Processing](#image-processing)
+  - [4. Streamlit Integration](#4-streamlit-integration)
+  - [5. End-to-End Workflow Example](#5-end-to-end-workflow-example)
+- [Data Models](#data-models)
+  - [Landing Zone](#landing-zone)
+  - [Curated Zone](#curated-zone)
+- [Project Structure](#project-structure)
+- [Setup](#setup)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+    - [Prerequisites](#prerequisites-1)
+    - [Installation Steps](#installation-steps)
+    - [Makefile Usage Reference](#makefile-usage-reference)
+- [General Usage](#general-usage)
+  - [Running the Dashboard](#running-the-dashboard)
+  - [Dashboard Features](#dashboard-features)
+  - [Managing Incidents via Slack](#managing-incidents-via-slack)
+- [Additional Resources](#additional-resources)
+- [Questions, Feedback, and Contribution](#questions-feedback-and-contribution)
 
 
 # An Unified Data Stack on Snowflake
@@ -238,7 +240,7 @@ Before starting the installation, ensure you have:
 - **Snowflake CLI** installed ([installation guide](https://docs.snowflake.com/en/developer-guide/snowflake-cli/installation/installation))
 - **Snowflake connection** configured in `~/.snowflake/config.toml`
 - **ACCOUNTADMIN privileges** in your Snowflake account
-- **Openflow SPCS** Use these installation instructions to setup Openflow SPCS deployment and a runtime on top within your Snowflake account
+- **Openflow SPCS** Use these installation [instructions](https://docs.snowflake.com/en/user-guide/data-integration/openflow/setup-openflow-spcs) to setup Openflow SPCS deployment and a runtime on top within your Snowflake account
 
 #### Installation Steps
 
