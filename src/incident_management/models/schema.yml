@@ -153,6 +153,39 @@ sources:
             description: "ETag header for the file"
           - name: file_url
             description: "Snowflake file URL to the file"
+
+      - name: users
+        description: "Materialized users table with enriched data"
+        columns:
+          - name: id
+            description: "User identifier (from Slack member ID)"
+            tests:
+              - not_null
+          - name: email
+            description: "Primary email address"
+            tests:
+              - not_null
+              - unique
+          - name: first_name
+            description: "User first name (derived from email local-part)"
+          - name: last_name
+            description: "User last name or email domain part"
+          - name: role
+            description: "Functional role for incident management"
+          - name: department
+            description: "Department name"
+          - name: team
+            description: "Team name"
+          - name: is_active
+            description: "Whether the user is active"
+          - name: created_at
+            description: "Record creation timestamp"
+            tests:
+              - not_null
+          - name: updated_at
+            description: "Record last update timestamp"
+
+
   
 models:
   - name: closed_incidents

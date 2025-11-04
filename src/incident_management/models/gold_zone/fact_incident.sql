@@ -1,4 +1,4 @@
-{{ config(materialized='table', description='Unified fact table for incidents across ServiceNow and Slack') }}
+{{ config(materialized='table', description='Unified fact table for incidents across ServiceNow and Slack', enabled=false) }}
 
 with sn as (
   select

@@ -28,7 +28,7 @@ def model(dbt, session: Session):
         'question_extracts_json',
         F.call_builtin(
             'AI_EXTRACT',
-            F.call_builtin('TO_FILE', F.lit('{{ var("docs_stage_path") }}/qa'), F.col('relative_path')),
+            F.call_builtin('TO_FILE', F.lit(f'{dbt.config.get("docs_stage_path")}/qa'), F.col('relative_path')),
             get_response_format(F.col('relative_path'))
         )
     )
