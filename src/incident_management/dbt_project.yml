@@ -11,7 +11,8 @@ profile: 'incident_management'
 
 # Variables
 vars:
-  docs_stage_path: '@INCIDENT_MANAGEMENT.LANDING_ZONE.DOCUMENTS'
+  docs_stage_path: '@INCIDENT_MANAGEMENT.bronze_zone.DOCUMENTS'
+  supported_doc_formats: ['pdf', 'docx', 'doc', 'txt', 'text', 'html', 'md', 'pptx', 'ppt', 'png', 'eml', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff', 'tif', 'webp', 'htm']
 
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be
@@ -22,6 +23,7 @@ test-paths: ["tests"]
 seed-paths: ["seeds"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
+asset-paths: ["assets"]
 
 clean-targets:         # directories to be removed by `dbt clean`
   - "target"
@@ -37,8 +39,12 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   incident_management:
     # Config indicated by + and applies to all files under models/example/
-    landing_zone:
+    bronze_zone:
+      +schema: bronze_zone
       +materialized: table
-    curated_zone:
-      +schema: curated_zone
+    gold_zone:
+      +schema: gold_zone
+      +materialized: table
+    activation:
+      +schema: activation
       +materialized: table

@@ -8,8 +8,8 @@
 -- Only propagate messages from known reporters (users in channel)
 with slack_messages_from_known_reporters as (
     select sm.*, r.id as reporter_id
-    from {{ source('landing_zone', 'slack_messages') }} sm
-    inner join {{ source('landing_zone', 'users') }} r on sm.username = split(r.email, '@')[0]
+    from {{ source('bronze_zone', 'slack_messages') }} sm
+    inner join {{ source('bronze_zone', 'users') }} r on sm.username = split(r.email, '@')[0]
     where sm.clientmsgid is not null
     and to_date(sm.ingestts) >= to_date(current_timestamp())
 )
@@ -55,7 +55,7 @@ select
     end as incident_number
 
 from slack_messages_from_known_reporters sm
-inner join {{source('landing_zone', 'doc_metadata')}} dm 
+inner join {{source('bronze_zone', 'doc_metadata')}} dm 
 on (sm.hasfiles and (sm.channel = dm.channel_id) and (sm.ts = dm.event_ts))
 
 UNION ALL

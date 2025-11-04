@@ -22,7 +22,7 @@ def initialize_session_state():
         snowflake_connection = au.SnowflakeConnection()
         ## if you're running this locally, make sure you export env variables from the .env file
         st.session_state.snowpark_session, st.session_state.snowflake_root = snowflake_connection.connect()
-        st.session_state.snowpark_session.use_schema("landing_zone")
+        st.session_state.snowpark_session.use_schema("bronze_zone")
 
 
 def create_header():
@@ -67,7 +67,7 @@ def create_metrics_cards():
 
     try:
         database = st.session_state.snowpark_session.get_current_database()
-        schema = "curated_zone"
+        schema = "gold_zone"
         
         # Calculate current metrics
         total_active = au.execute_sql(f"SELECT COUNT(*) as count FROM {database}.{schema}.active_incidents", st.session_state.snowpark_session)
@@ -151,7 +151,7 @@ def create_charts():
     """Create dashboard charts using real data from the database"""
     
     database = st.session_state.snowpark_session.get_current_database()
-    schema = "curated_zone"
+    schema = "gold_zone"
     
     col1, col2, col3 = st.columns(3)
     
@@ -239,7 +239,7 @@ def create_charts():
                 SELECT 
                     category,
                     COUNT(*) as incident_count
-                FROM {database}.landing_zone.incidents
+                FROM {database}.bronze_zone.incidents
                 GROUP BY category
                 ORDER BY incident_count DESC
             """
@@ -281,7 +281,7 @@ def create_charts():
 def get_incident_attachments(incident_id):
     """Fetch attachments for a specific incident"""
     database = st.session_state.snowpark_session.get_current_database()
-    schema = "landing_zone"
+    schema = "bronze_zone"
     
     # Query to get attachments for the incident
     query = f"""
@@ -290,7 +290,7 @@ def get_incident_attachments(incident_id):
         '@{database}.{schema}.DOCUMENTS' as documents_stage,
         fl_get_relative_path(attachment_file) as attachment_file_path,
         uploaded_at
-    FROM {database}.landing_zone.incident_attachments 
+    FROM {database}.bronze_zone.incident_attachments 
     WHERE incident_number = '{incident_id}'
     ORDER BY uploaded_at DESC
     """
@@ -332,7 +332,7 @@ def create_active_incidents_table():
 
     try:
         database = st.session_state.snowpark_session.get_current_database()
-        schema = "curated_zone"
+        schema = "gold_zone"
             # Convert to DataFrame
         df = au.execute_sql(f"""
                 WITH latest_created_at AS (
@@ -340,7 +340,7 @@ def create_active_incidents_table():
                         incident_number,
                         MAX(created_at) AS latest_created_at
                     FROM
-                        landing_zone.incident_comment_history
+                        bronze_zone.incident_comment_history
                     GROUP BY
                         incident_number
                 ),
@@ -350,7 +350,7 @@ def create_active_incidents_table():
                         ich.created_at,
                         ich.content AS latest_comment
                     FROM
-                        landing_zone.incident_comment_history AS ich
+                        bronze_zone.incident_comment_history AS ich
                         INNER JOIN latest_created_at AS lc ON ich.incident_number = lc.incident_number
                     AND ich.created_at = lc.latest_created_at
                     ORDER BY
@@ -437,7 +437,7 @@ def create_recently_closed_incidents_table():
 
     try:
         database = st.session_state.snowpark_session.get_current_database()
-        schema = "curated_zone"
+        schema = "gold_zone"
 
         # Get last 5 closed incidents from the new closed_incidents model
         query = f"""

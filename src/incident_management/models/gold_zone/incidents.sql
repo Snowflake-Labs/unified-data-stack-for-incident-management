@@ -1,3 +1,5 @@
+-- Create only new incidents in this incremental mode; new incidents are detected by absence of an incident number from previous step in the pipeline or,
+-- they are not related to any existing incident by title and text.
 {{
     config(
         materialized='incremental',
@@ -8,29 +10,23 @@
     )
 }}
 
--- Create only new incidents in this incremental mode; new incidents are detected by absence of an incident number from previous step in the pipeline
--- with slack_reported_incidents as (
---     select * from {{ ref('v_qualify_slack_messages') }}
--- ),
-
 -- Get recent open incidents for lookback when incident_code is null
 with 
 
 recent_open_incidents as (
     select * from {{ this }}
-    where status = 'open' 
+    where lower(status) = 'open' 
     and reportee_id is not null
     and created_at > dateadd('day', -7, current_timestamp())
 )
 
 , new_slack_messages as (
     select lh.*
-    from landing_zone.v_qualify_slack_messages lh 
+    from bronze_zone.v_qualify_slack_messages lh 
     left join recent_open_incidents rh 
     on lh.slack_message_id = rh.slack_message_id
     where rh.slack_message_id is null
 )
-
 
 -- Split messages based on whether they have valid incident codes
 , messages_with_incident_code as (
@@ -86,7 +82,8 @@ recent_open_incidents as (
         
         -- Image or Text Classification
         case 
-            when sri.attachment_file is not null then ai_classify(sri.attachment_file, ['payment gateway error', 'login error', 'other']):labels[0]
+            when sri.attachment_file is not null then 
+                ai_classify(sri.attachment_file, ['payment gateway error', 'login error', 'other']):labels[0]
             else ai_classify(sri.text, ['payment gateway error', 'login error', 'other']):labels[0]
         end as category,
         ai_classify(sri.text, ['payment gateway error', 'login error', 'other']):labels[0] as title, 

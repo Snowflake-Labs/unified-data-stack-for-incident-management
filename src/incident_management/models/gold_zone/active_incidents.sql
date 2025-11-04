@@ -21,7 +21,7 @@ SELECT
     i.source_system,
     i.external_source_id,
     i.has_attachments
-FROM {{ source('landing_zone', 'incidents') }} i
-LEFT JOIN {{ source('landing_zone', 'users') }} assignee ON i.assignee_id = assignee.id
-LEFT JOIN {{ source('landing_zone', 'users') }} reportee ON i.reportee_id = reportee.id
+FROM {{ source('bronze_zone', 'incidents') }} i
+LEFT JOIN {{ source('bronze_zone', 'users') }} assignee ON i.assignee_id = assignee.id
+LEFT JOIN {{ source('bronze_zone', 'users') }} reportee ON i.reportee_id = reportee.id
 WHERE i.status = 'open'

@@ -19,4 +19,4 @@ select
     true as is_active,
     current_timestamp() as created_at,
     current_timestamp() as updated_at
-from {{ source('landing_zone', 'slack_members') }} sm 
+from {{ source('bronze_zone', 'slack_members') }} sm 

@@ -15,7 +15,7 @@ create or replace warehouse <% ctx.env.slack_connector_wh %>
 create or replace role <% ctx.env.slack_connector_role %>;
 
 grant usage on database <% ctx.env.dbt_project_database %> to role <% ctx.env.slack_connector_role %>;
-grant database role <% ctx.env.dbt_project_database %>.manage_landing_zone to role <% ctx.env.slack_connector_role %>;
+grant database role <% ctx.env.dbt_project_database %>.manage_bronze_zone to role <% ctx.env.slack_connector_role %>;
 grant usage on warehouse <% ctx.env.slack_connector_wh %> to role <% ctx.env.slack_connector_role %>;
 
 grant role <% ctx.env.slack_connector_role %> to role sysadmin;

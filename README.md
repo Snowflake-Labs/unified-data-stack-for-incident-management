@@ -97,9 +97,9 @@ This project demonstrates several key modern data platform capabilities through 
 - Demonstrates: Modern data engineering practices, data lineage
 
 **Key Models**:
-- [`landing_zone.incidents`](src/incident_management/models/landing_zone/incidents.sql): AI-enhanced incident processing with image analysis
-- [`curated_zone.active_incidents`](src/incident_management/models/curated_zone/active_incidents.sql): Business-ready incident tracking
-- [`curated_zone.monthly_incident_trends`](src/incident_management/models/curated_zone/monthly_incident_trends.sql): Aggregated analytics
+- [`bronze_zone.incidents`](src/incident_management/models/bronze_zone/incidents.sql): AI-enhanced incident processing with image analysis
+- [`gold_zone.active_incidents`](src/incident_management/models/gold_zone/active_incidents.sql): Business-ready incident tracking
+- [`gold_zone.monthly_incident_trends`](src/incident_management/models/gold_zone/monthly_incident_trends.sql): Aggregated analytics
 
 ### 3. AI/SQL Integration within dbt Models
 
@@ -129,7 +129,7 @@ end as category
 
 **Demonstrates**: AI-native data processing, multimodal analysis, intelligent data enrichment
 
-> See the complete implementation in [`incidents.sql`](src/incident_management/models/landing_zone/incidents.sql)
+> See the complete implementation in [`incidents.sql`](src/incident_management/models/bronze_zone/incidents.sql)
 
 ### 4. Streamlit Integration
 
@@ -162,16 +162,16 @@ This demonstrates a complete modern data stack handling real-world operational s
 ## Data Models
 
 ### Landing Zone
-- [`incidents`](src/incident_management/models/landing_zone/incidents.sql): Core incident records with AI-powered classification
-- [`incident_comment_history`](src/incident_management/models/landing_zone/incident_comment_history.sql): Chronological updates and comments
-- [`incident_attachments`](src/incident_management/models/landing_zone/incident_attachments.sql): File attachments with metadata (as ingested from Slack)
-- [`users`](src/incident_management/models/landing_zone/users.sql): User directory for assignees and reporters
+- [`incidents`](src/incident_management/models/bronze_zone/incidents.sql): Core incident records with AI-powered classification
+- [`incident_comment_history`](src/incident_management/models/bronze_zone/incident_comment_history.sql): Chronological updates and comments
+- [`incident_attachments`](src/incident_management/models/bronze_zone/incident_attachments.sql): File attachments with metadata (as ingested from Slack)
+- [`users`](src/incident_management/models/bronze_zone/users.sql): User directory for assignees and reporters
 
 ### Curated Zone
-- [`active_incidents`](src/incident_management/models/curated_zone/active_incidents.sql): Currently open incidents with enriched data
-- [`closed_incidents`](src/incident_management/models/curated_zone/closed_incidents.sql): Resolved incidents with resolution metrics
-- [`monthly_incident_trends`](src/incident_management/models/curated_zone/monthly_incident_trends.sql): Aggregated monthly statistics
-- [`weekly_incident_trends`](src/incident_management/models/curated_zone/weekly_incident_trends.sql): Weekly trend analysis
+- [`active_incidents`](src/incident_management/models/gold_zone/active_incidents.sql): Currently open incidents with enriched data
+- [`closed_incidents`](src/incident_management/models/gold_zone/closed_incidents.sql): Resolved incidents with resolution metrics
+- [`monthly_incident_trends`](src/incident_management/models/gold_zone/monthly_incident_trends.sql): Aggregated monthly statistics
+- [`weekly_incident_trends`](src/incident_management/models/gold_zone/weekly_incident_trends.sql): Weekly trend analysis
 
 
 ## Project Structure
@@ -189,12 +189,12 @@ incident-management/
 ├── src/
 │   ├── incident_management/      # dbt project
 │   │   ├── models/
-│   │   │   ├── landing_zone/     # Raw data models
+│   │   │   ├── bronze_zone/     # Raw data models
 │   │   │   │   ├── incidents.sql        # Core incident processing
 │   │   │   │   ├── incident_attachments.sql
 │   │   │   │   ├── users.sql
 │   │   │   │   └── v_*.sql              # Slack message views
-│   │   │   ├── curated_zone/            # Analytics-ready models
+│   │   │   ├── gold_zone/            # Analytics-ready models
 │   │   │   │   ├── active_incidents.sql
 │   │   │   │   ├── closed_incidents.sql
 │   │   │   │   ├── monthly_incident_trends.sql
@@ -265,7 +265,7 @@ Before starting the installation, ensure you have:
    > **Note:** If you change any of the below parameters, be sure to change the profiles.yml as well
       - `DBT_PROJECT_DATABASE=incident_management`
       - `DBT_PROJECT_SCHEMA=dbt_project_deployments`
-      - `MODEL_SCHEMA=landing_zone`
+      - `MODEL_SCHEMA=bronze_zone`
       - `DBT_SNOWFLAKE_WAREHOUSE=incident_management_dbt_wh`
       - `DBT_PROJECT_ADMIN_ROLE=dbt_projects_engineer`
 
