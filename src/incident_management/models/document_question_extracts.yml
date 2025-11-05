@@ -1,0 +1,259 @@
+version: 2
+
+models:
+  - name: document_question_extracts
+    description: "Question extracts from documents using AI_EXTRACT"
+    config:
+      meta:
+        global_inm_policy_schema:
+          schema:
+            type: "object"
+            properties:
+              document_metadata:
+                description: "Core metadata about the policy document"
+                type: "object"
+                properties:
+                  document_title: { description: "Title of the document", type: "string" }
+                  document_id: { description: "Unique identifier or reference number", type: "string" }
+                  version: { description: "Document version string", type: "string" }
+                  effective_date: { description: "Date the policy becomes effective", type: "string" }
+                  last_reviewed_date: { description: "Most recent review date", type: "string" }
+                  next_review_date: { description: "Next scheduled review date", type: "string" }
+                  document_owner: { description: "Named owner of the document", type: "string" }
+                  approver: { description: "Final approver of the document", type: "string" }
+                  approval_date: { description: "Date of final approval", type: "string" }
+                  confidentiality_classification: { description: "Confidentiality / information classification", type: "string" }
+                  distribution_list: { description: "Audience allowed to access the document", type: "array" }
+                  change_log: { description: "Summary of changes across versions", type: "array" }
+              policy_overview:
+                description: "High-level policy overview and intent"
+                type: "object"
+                properties:
+                  purpose: { description: "Purpose of this policy", type: "string" }
+                  objectives: { description: "Objectives achieved by this policy", type: "array" }
+                  policy_statement: { description: "Primary policy statement", type: "string" }
+                  guiding_principles: { description: "Principles guiding decisions and behavior", type: "array" }
+              scope_and_applicability:
+                description: "Scope of services, units, and applicability conditions"
+                type: "object"
+                properties:
+                  in_scope_services: { description: "Services explicitly in scope", type: "array" }
+                  out_of_scope_services: { description: "Services explicitly out of scope", type: "array" }
+                  geographical_coverage: { description: "Countries/regions covered", type: "array" }
+                  business_units_in_scope: { description: "Business units covered by the policy", type: "array" }
+                  applicability_conditions: { description: "Conditions determining when policy applies", type: "array" }
+                  exclusions: { description: "Explicit exceptions to scope", type: "array" }
+              definitions_and_glossary:
+                description: "Terms, acronyms, and reference standards"
+                type: "object"
+                properties:
+                  defined_terms: { description: "Key defined terms", type: "array" }
+                  acronyms: { description: "Acronyms used within the document", type: "array" }
+                  reference_standards: { description: "Referenced standards and frameworks", type: "array" }
+              roles_and_responsibilities:
+                description: "Roles and their responsibilities within incident management"
+                type: "object"
+                properties:
+                  role_list: { description: "List of roles involved", type: "array" }
+                  role_responsibilities: { description: "Responsibilities per role", type: "array" }
+                  service_owner: { description: "Service Owner role or name", type: "string" }
+                  process_owner: { description: "Process Owner role or name", type: "string" }
+                  process_manager: { description: "Process Manager role or name", type: "string" }
+                  major_incident_manager: { description: "Major Incident Manager role or name", type: "string" }
+                  duty_manager: { description: "Duty Manager role or name", type: "string" }
+                  incident_coordinator: { description: "Incident Coordinator role or name", type: "string" }
+                  assignment_group_lead: { description: "Assignment Group Lead role or name", type: "string" }
+                  stakeholders: { description: "Key stakeholders for communications", type: "array" }
+              process_overview_and_lifecycle:
+                description: "Process stages and end-to-end lifecycle"
+                type: "object"
+                properties:
+                  process_diagram_reference: { description: "Link or identifier to process diagram", type: "string" }
+                  process_phases: { description: "List of lifecycle phases", type: "array" }
+                  identification_criteria: { description: "How incidents are identified", type: "array" }
+                  logging_requirements: { description: "Logging and recording requirements", type: "array" }
+                  categorization_rules: { description: "Rules for categorizing incidents", type: "array" }
+                  prioritization_rules: { description: "Rules for prioritizing incidents", type: "array" }
+                  assignment_rules: { description: "Assignment and routing rules", type: "array" }
+                  investigation_guidelines: { description: "Investigation and troubleshooting guidance", type: "array" }
+                  resolution_criteria: { description: "Conditions to consider incident resolved", type: "array" }
+                  closure_criteria: { description: "Conditions to close incident records", type: "array" }
+                  reopen_conditions: { description: "When incidents can be reopened", type: "array" }
+                  knowledge_creation_rules: { description: "Rules to create/update knowledge articles", type: "array" }
+              incident_classification:
+                description: "Taxonomies and classification definitions"
+                type: "object"
+                properties:
+                  category_taxonomy: { description: "Incident categories", type: "array" }
+                  subcategory_taxonomy: { description: "Incident subcategories", type: "array" }
+                  service_taxonomy: { description: "Service taxonomy for incidents", type: "array" }
+                  configuration_item_classification: { description: "CI classification guidance", type: "array" }
+                  impact_definitions: { description: "Definitions of impact levels", type: "array" }
+                  urgency_definitions: { description: "Definitions of urgency levels", type: "array" }
+                  priority_mapping_matrix: { description: "Mapping between impact, urgency, and priority", type: "array" }
+              priority_and_severity:
+                description: "Severity levels and priority logic"
+                type: "object"
+                properties:
+                  severity_levels: { description: "List of severity levels", type: "array" }
+                  major_incident_criteria: { description: "Criteria that define a Major Incident", type: "array" }
+                  priority_derivation_logic: { description: "How priority is derived from impact and urgency", type: "array" }
+                  downgrade_upgrade_rules: { description: "Rules to adjust severity/priority", type: "array" }
+              slas_and_olas:
+                description: "Targets, measurement, and breach rules"
+                type: "object"
+                properties:
+                  response_time_targets_by_priority: { description: "Response time targets per priority", type: "array" }
+                  resolution_time_targets_by_priority: { description: "Resolution time targets per priority", type: "array" }
+                  restore_time_targets_by_priority: { description: "Service restoration targets per priority", type: "array" }
+                  workaround_time_targets: { description: "Time targets to establish workarounds", type: "array" }
+                  measurement_rule: { description: "Measurement basis (business hours vs 24x7)", type: "string" }
+                  clock_start_stop_rules: { description: "When SLA clocks start/stop/pauses", type: "array" }
+                  sla_breach_definition: { description: "Definition and handling of SLA breach", type: "string" }
+                  ola_interfaces_and_dependencies: { description: "OLAs and dependencies between teams", type: "array" }
+              escalation_and_governance:
+                description: "Escalation paths and governance rules"
+                type: "object"
+                properties:
+                  functional_escalation_rules: { description: "Escalation to specialist/alternate groups", type: "array" }
+                  hierarchical_escalation_matrix: { description: "Escalation to leadership and management", type: "array" }
+                  time_based_escalations: { description: "Time-based escalation triggers", type: "array" }
+                  approval_requirements: { description: "Required approvals for specific actions", type: "array" }
+                  risk_acceptance_rules: { description: "Rules for accepting risk and exceptions", type: "array" }
+              major_incident_management:
+                description: "Major Incident processes and communications"
+                type: "object"
+                properties:
+                  major_incident_trigger: { description: "Triggers for declaring a Major Incident", type: "array" }
+                  bridge_activation_procedure: { description: "How and when to activate a bridge/war room", type: "array" }
+                  war_room_guidelines: { description: "Guidance for running an incident bridge/war room", type: "array" }
+                  roles_during_major_incident: { description: "Roles and responsibilities during a Major Incident", type: "array" }
+                  comms_cadence_major_incident: { description: "Communication cadence during Major Incidents", type: "array" }
+                  executive_update_template: { description: "Template for executive updates", type: "string" }
+                  service_restoration_criteria: { description: "When service is considered restored", type: "array" }
+                  post_incident_review_requirement: { description: "Requirement and scope of PIR/Postmortem", type: "string" }
+              communication_and_notifications:
+                description: "Notification channels, templates, and cadence"
+                type: "object"
+                properties:
+                  notification_channels: { description: "Channels used to notify stakeholders", type: "array" }
+                  customer_communication_templates: { description: "Customer-facing templates", type: "array" }
+                  internal_communication_templates: { description: "Internal templates", type: "array" }
+                  status_page_rules: { description: "Rules for status page updates", type: "array" }
+                  stakeholder_map: { description: "Stakeholders and their information needs", type: "array" }
+                  communication_cadence: { description: "Regular communications timetable", type: "array" }
+              tooling_and_data_servicenow_mapping:
+                description: "ServiceNow fields and data mapping"
+                type: "object"
+                properties:
+                  tool_of_record: { description: "Primary system of record (e.g., ServiceNow)", type: "string" }
+                  mandatory_fields: { description: "Fields required on incident records", type: "array" }
+                  category: { description: "Category field values", type: "array" }
+                  subcategory: { description: "Subcategory field values", type: "array" }
+                  service: { description: "Business service field values", type: "array" }
+                  ci: { description: "Configuration Item field values", type: "array" }
+                  caller: { description: "Caller field value", type: "string" }
+                  opened_by: { description: "Opened by field value", type: "string" }
+                  assignment_group: { description: "Assignment group field values", type: "array" }
+                  impact: { description: "Impact field values", type: "array" }
+                  urgency: { description: "Urgency field values", type: "array" }
+                  priority: { description: "Priority field values", type: "array" }
+                  state: { description: "Incident state values", type: "array" }
+                  major_incident_flag: { description: "Whether incident is flagged as Major", type: "boolean" }
+                  related_problem: { description: "Problem record references", type: "array" }
+                  related_change: { description: "Change record references", type: "array" }
+                  knowledge_linked: { description: "Linked knowledge articles", type: "array" }
+                  resolution_code: { description: "Resolution code values", type: "array" }
+                  closure_notes: { description: "Free-text closure notes", type: "string" }
+                  business_hours_calendar: { description: "Calendar used for business hours", type: "string" }
+              raci:
+                description: "RACI details for key activities"
+                type: "object"
+                properties:
+                  activities: { description: "List of activities in scope of RACI", type: "array" }
+                  responsible: { description: "Roles responsible (R)", type: "array" }
+                  accountable: { description: "Roles accountable (A)", type: "array" }
+                  consulted: { description: "Roles consulted (C)", type: "array" }
+                  informed: { description: "Roles informed (I)", type: "array" }
+              kpis_and_reporting:
+                description: "Key performance indicators and reporting metadata"
+                type: "object"
+                properties:
+                  first_response_sla_compliance: { description: "% compliance for first response SLA", type: "number" }
+                  resolution_sla_compliance: { description: "% compliance for resolution SLA", type: "number" }
+                  mtta: { description: "Mean time to acknowledge (minutes)", type: "number" }
+                  mttr: { description: "Mean time to resolve/restore (minutes)", type: "number" }
+                  reopen_rate: { description: "Percentage of incidents reopened", type: "number" }
+                  major_incident_count: { description: "Count of Major Incidents in period", type: "number" }
+                  incident_volume_by_category: { description: "Volumes by incident category", type: "array" }
+                  backlog_aging: { description: "Open backlog aging buckets", type: "array" }
+                  customer_satisfaction_csat: { description: "CSAT score for incident handling", type: "number" }
+                  reporting_cadence: { description: "How often reports are produced", type: "string" }
+                  dashboard_owners: { description: "Owners of operational dashboards", type: "array" }
+              risk_compliance_and_security:
+                description: "Risk, compliance, and security requirements"
+                type: "object"
+                properties:
+                  regulatory_references: { description: "Applicable regulations and references", type: "array" }
+                  security_requirements: { description: "Security-related requirements", type: "array" }
+                  data_handling_rules: { description: "Data handling/storage requirements", type: "array" }
+                  privacy_considerations: { description: "Privacy and personal data considerations", type: "array" }
+                  audit_trail_requirements: { description: "Audit evidence and traceability requirements", type: "array" }
+                  evidence_retention_period: { description: "Retention period for evidence and records", type: "string" }
+              exceptions_and_deviations:
+                description: "Exception handling and temporary deviations"
+                type: "object"
+                properties:
+                  exception_process: { description: "How to request exceptions", type: "array" }
+                  approval_authority_for_exceptions: { description: "Authorities who can approve exceptions", type: "array" }
+                  temporary_deviation_rules: { description: "Conditions for temporary deviations", type: "array" }
+              review_and_maintenance:
+                description: "Document review cycle and maintenance"
+                type: "object"
+                properties:
+                  review_cadence: { description: "Frequency of document reviews", type: "string" }
+                  trigger_events_for_update: { description: "Events that trigger updates", type: "array" }
+                  training_requirements: { description: "Required training for relevant roles", type: "array" }
+                  awareness_plan: { description: "Plan to raise policy awareness", type: "array" }
+              appendices_and_references:
+                description: "Related materials and external references"
+                type: "object"
+                properties:
+                  related_policies: { description: "Policies related to this document", type: "array" }
+                  linked_procedures_runbooks: { description: "Linked procedures and runbooks", type: "array" }
+                  templates_and_forms: { description: "Templates and forms referenced", type: "array" }
+                  external_references: { description: "External documents and sources", type: "array" }
+
+    columns:
+      - name: relative_path
+        description: "Path to the file on the stage"
+        tests:
+          - not_null
+
+      - name: size
+        description: "Size of the file in bytes"
+
+      - name: last_modified
+        description: "Timestamp when the file was last updated in the stage"
+
+      - name: md5
+        description: "MD5 checksum for the file"
+
+      - name: etag
+        description: "ETag header for the file"
+
+      - name: file_url
+        description: "Snowflake file URL to the file"
+
+      - name: analysis_type
+        description: "Type of analysis requested for the file"
+        tests:
+          - accepted_values:
+              values: ['question']
+
+      - name: extension
+        description: "File extension parsed from the path"
+
+      - name: question_extracts_json
+        description: "JSON output from AI_EXTRACT following the `global_inm_policy_schema.json` format"
+  
