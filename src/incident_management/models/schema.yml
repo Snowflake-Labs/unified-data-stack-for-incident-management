@@ -210,3 +210,4 @@ models:
       - name: closed_quarter
         description: "Quarter when the incident was closed (for trending)"
 
+ 

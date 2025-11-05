@@ -1,4 +1,8 @@
-{{ config(materialized='view', description='Staging ServiceNow incidents normalized to warehouse conventions') }}
+{{ config(
+  materialized='view', 
+  description='Staging ServiceNow incidents normalized to warehouse conventions', 
+  enabled=false) 
+}}
 
 select
   inc.number                               as incident_number,
