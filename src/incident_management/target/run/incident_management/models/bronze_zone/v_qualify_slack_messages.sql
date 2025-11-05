@@ -1,16 +1,14 @@
-{{
-    config(
-        materialized='view',
-        description=''
-        ,enable=false
-    )
-}}
+
+  create or replace   view incident_management.bronze_zone.v_qualify_slack_messages
+  
+   as (
+    
 
 -- Only propagate messages from known reporters (users in channel)
 with slack_messages_from_known_reporters as (
     select sm.*, r.id as reporter_id
-    from {{ source('bronze_zone', 'slack_messages') }} sm
-    inner join {{ source('bronze_zone', 'users') }} r on sm.username = split(r.email, '@')[0]
+    from incident_management.bronze_zone.slack_messages sm
+    inner join incident_management.bronze_zone.users r on sm.username = split(r.email, '@')[0]
     where sm.clientmsgid is not null
     and to_date(sm.ingestts) >= to_date(current_timestamp())
 )
@@ -35,10 +33,10 @@ select
     dm.file_mimetype, 
     dm.file_size, 
     dm.staged_file_path,
-    to_file('{{ var("docs_stage_path") }}', dm.staged_file_path) as attachment_file,
+    to_file('@INCIDENT_MANAGEMENT.bronze_zone.DOCUMENTS', dm.staged_file_path) as attachment_file,
     case 
         -- When there is an attachment file and it is an image, use the image to extract the incident code
-        when dm.staged_file_path is not null and fl_is_image(to_file('{{ var("docs_stage_path") }}', dm.staged_file_path)) then 
+        when dm.staged_file_path is not null and fl_is_image(to_file('@INCIDENT_MANAGEMENT.bronze_zone.DOCUMENTS', dm.staged_file_path)) then 
         ai_complete('claude-3-5-sonnet',
             prompt(
             $$
@@ -56,7 +54,7 @@ select
     end as incident_number
 
 from slack_messages_from_known_reporters sm
-inner join {{source('bronze_zone', 'doc_metadata')}} dm 
+inner join incident_management.bronze_zone.doc_metadata dm 
 on (sm.hasfiles and (sm.channel = dm.channel_id) and (sm.ts = dm.event_ts))
 
 UNION ALL
@@ -101,3 +99,5 @@ select
 
 from slack_messages_from_known_reporters sm
 where not sm.hasfiles or sm.hasfiles is null
+  );
+

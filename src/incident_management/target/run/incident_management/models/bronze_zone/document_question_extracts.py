@@ -1,3 +1,7 @@
+
+  
+    
+    
 import snowflake.snowpark.functions as F
 from snowflake.snowpark import Session
 import json
@@ -91,3 +95,25 @@ class dbtObj:
 # COMMAND ----------
 
 
+
+def materialize(session, df, target_relation):
+    # make sure pandas exists
+    import importlib.util
+    package_name = 'pandas'
+    if importlib.util.find_spec(package_name):
+        import pandas
+        if isinstance(df, pandas.core.frame.DataFrame):
+          session.use_database(target_relation.database)
+          session.use_schema(target_relation.schema)
+          # session.write_pandas does not have overwrite function
+          df = session.createDataFrame(df)
+    
+    df.write.mode("overwrite").save_as_table('incident_management.bronze_zone.document_question_extracts', table_type='transient')
+
+def main(session):
+    dbt = dbtObj(session.table)
+    df = model(dbt, session)
+    materialize(session, df, dbt.this)
+    return "OK"
+
+  

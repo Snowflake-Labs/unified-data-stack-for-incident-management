@@ -6,7 +6,7 @@ incident_management:
       database: "incident_management"
       role: "dbt_projects_engineer"
       schema: "bronze_zone"
-      user: ""
+      user: "clakkad"
       warehouse: "demo_wh"
   target: "dev"
 

@@ -1,4 +1,8 @@
 
+  create or replace   view incident_management.bronze_zone.v_qualify_new_documents
+  
+   as (
+    
 
 select
    *,
@@ -12,3 +16,5 @@ from incident_management.bronze_zone.documents_stream
 WHERE relative_path is not null
 and array_contains(extension::VARIANT, ['pdf', 'docx', 'doc', 'txt', 'text', 'html', 'md', 'pptx', 'ppt', 'png', 'eml', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff', 'tif', 'webp', 'htm'] )
 and size > 0
+  );
+

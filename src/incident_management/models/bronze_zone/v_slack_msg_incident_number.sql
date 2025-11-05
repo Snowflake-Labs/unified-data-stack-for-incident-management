@@ -2,6 +2,7 @@
     config(
         materialized='view',
         description=''
+        ,enable=false
     )
 }}
 
