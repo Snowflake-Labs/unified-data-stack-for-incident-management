@@ -22,7 +22,7 @@ recent_open_incidents as (
 
 , new_slack_messages as (
     select lh.*
-    from bronze_zone.v_qualify_slack_messages lh 
+    from {{ref('v_qualify_slack_messages')}} lh 
     left join recent_open_incidents rh 
     on lh.slack_message_id = rh.slack_message_id
     where rh.slack_message_id is null

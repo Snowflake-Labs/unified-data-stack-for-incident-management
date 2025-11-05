@@ -32,5 +32,5 @@ SELECT
     EXTRACT(year FROM i.closed_at) AS closed_year,
     EXTRACT(quarter FROM i.closed_at) AS closed_quarter
 
-FROM {{ source('bronze_zone', 'incidents') }} i
+FROM {{ ref('incidents') }} i
 WHERE LOWER(i.status) IN ('closed', 'resolved') AND i.closed_at IS NOT NULL

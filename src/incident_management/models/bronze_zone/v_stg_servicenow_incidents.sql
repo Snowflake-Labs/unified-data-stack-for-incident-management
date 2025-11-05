@@ -1,7 +1,7 @@
 {{ config(
-  materialized='view', 
-  description='Staging ServiceNow incidents normalized to warehouse conventions', 
-  enabled=false) 
+    materialized='view', 
+    description='Staging ServiceNow incidents normalized to warehouse conventions',
+    enabled=false) 
 }}
 
 select

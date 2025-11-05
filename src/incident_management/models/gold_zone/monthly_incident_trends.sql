@@ -43,6 +43,6 @@ SELECT
         (COUNT(CASE WHEN status IN ('resolved', 'closed') THEN 1 END)::DECIMAL / COUNT(*)) * 100, 2
     ) AS resolution_rate_percentage
     
-FROM {{ source('bronze_zone', 'incidents') }}
+FROM {{ ref('incidents') }}
 GROUP BY DATE_TRUNC('month', created_at)
 ORDER BY month DESC

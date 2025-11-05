@@ -2,6 +2,7 @@
     config(
         materialized='table',
         description='Dummy table for document extracts (schema placeholder)'
+        ,enable=false
     )
 }}
 

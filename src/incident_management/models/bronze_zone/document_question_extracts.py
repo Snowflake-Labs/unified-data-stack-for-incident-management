@@ -2,9 +2,8 @@ import snowflake.snowpark.functions as F
 from snowflake.snowpark import Session
 import json
 
-def get_response_format(relative_path: str):
-    asset_path = dbt.config.get("asset_path")
-    with open(f'{asset_path}/{relative_path}.json', 'r') as f:
+def get_response_format(asset_path: str, relative_path: str):
+    with open(f'global_inm_policy_schema.json', 'r') as f:
         response_format = json.load(f)
     return response_format
 
@@ -13,6 +12,9 @@ def model(dbt, session: Session):
         materialized='table',
         description='Table to store question extracts from documents'
     )
+    
+    asset_path = dbt.config.get("asset-paths")
+    docs_stage = dbt.config.get("docs_stage_path")
     
     # Get the upstream model
     v_qualify_new_documents = dbt.ref('v_qualify_new_documents')
@@ -28,8 +30,8 @@ def model(dbt, session: Session):
         'question_extracts_json',
         F.call_builtin(
             'AI_EXTRACT',
-            F.call_builtin('TO_FILE', F.lit('{{ var("docs_stage_path") }}/qa'), F.col('relative_path')),
-            get_response_format(F.col('relative_path'))
+            F.call_builtin('TO_FILE', F.lit(f'{docs_stage}'), F.col('relative_path')),
+            get_response_format(asset_path, F.col('relative_path'))
         )
     )
     
