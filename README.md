@@ -112,7 +112,7 @@ ai_classify(sri.text, ['payment gateway error', 'login error', 'other']):labels[
 
 -- Smart incident matching using natural language
 ai_filter(
-  prompt('The text category {0} is logically relatable to this record\'s category {1}', 
+  prompt('The text category {0} is logically relatable to this record\'s categoßry {1}', 
          text_category, roi.category)
 )
 ```
@@ -247,7 +247,7 @@ Before starting the installation, ensure you have:
 1. **Clone this repo**
 
    ```bash
-   git clone https://github.com/Snowflake-Labs/unified-data-stack-for-incident-management.git
+   git clone --branch v1.0.0 https://github.com/Snowflake-Labs/unified-data-stack-for-incident-management.git
    cd unified-data-stack-for-incident-management
    ```
 
