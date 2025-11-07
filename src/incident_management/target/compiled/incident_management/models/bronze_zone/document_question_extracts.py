@@ -2,20 +2,16 @@ import snowflake.snowpark.functions as F
 from snowflake.snowpark import Session
 import json
 
-def get_response_format(asset_path: str, relative_path: str):
-    with open(f'global_inm_policy_schema.json', 'r') as f:
-        response_format = json.load(f)
-    return response_format
-
+    
 def model(dbt, session: Session):
     dbt.config(
         materialized='table',
         description='Table to store question extracts from documents'
     )
     
-    asset_path = dbt.config.get("asset-paths")
     docs_stage = dbt.config.get("docs_stage_path")
-    
+    global_inm_policy_schema = dbt.config.get("meta")['global_inm_policy_schema']
+
     # Get the upstream model
     v_qualify_new_documents = dbt.ref('v_qualify_new_documents')
     
@@ -30,11 +26,10 @@ def model(dbt, session: Session):
         'question_extracts_json',
         F.call_builtin(
             'AI_EXTRACT',
-            F.call_builtin('TO_FILE', F.lit(f'{docs_stage}/qa'), F.col('relative_path')),
-            get_response_format(asset_path, F.col('relative_path'))
+            F.call_builtin('TO_FILE', F.lit('@INCIDENT_MANAGEMENT.bronze_zone.DOCUMENTS'), F.col('relative_path')),
+            global_inm_policy_schema
         )
-    )
-    
+    )    
     return document_all_pages
 
 
@@ -59,7 +54,7 @@ def source(*args, dbt_load_df_function):
     return dbt_load_df_function(sources[key])
 
 
-config_dict = {'asset-paths': None, 'docs_stage_path': None}
+config_dict = {'docs_stage_path': None, 'meta': {'global_inm_policy_schema': {'schema': {'type': 'object', 'properties': {'purpose': {'description': 'Purpose of this policy', 'type': 'string'}, 'objectives': {'description': 'Objectives achieved by this policy', 'type': 'string'}, 'policy_statement': {'description': 'Primary policy statement', 'type': 'string'}, 'in_scope_services': {'description': 'Services explicitly in scope', 'type': 'array'}, 'out_of_scope_services': {'description': 'Services explicitly out of scope', 'type': 'array'}, 'geographical_coverage': {'description': 'Countries/regions covered', 'type': 'array'}, 'business_units_in_scope': {'description': 'Business units covered by the policy', 'type': 'array'}, 'applicability_conditions': {'description': 'Conditions determining when policy applies', 'type': 'array'}, 'exclusions': {'description': 'Explicit exceptions to scope', 'type': 'array'}, 'definitions_and_glossary': {'description': 'Terms, acronyms, and reference standards', 'type': 'object', 'properties': {'defined_terms': {'description': 'Key defined terms', 'type': 'array'}, 'acronyms': {'description': 'Acronyms used within the document', 'type': 'array'}, 'reference_standards': {'description': 'Referenced standards and frameworks', 'type': 'array'}}}}}}}}
 
 
 class config:

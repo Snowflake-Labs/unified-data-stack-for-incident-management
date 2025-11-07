@@ -72,7 +72,8 @@ grant all privileges on schema <% ctx.env.dbt_project_database %>.bronze_zone to
 create or replace stage <% ctx.env.dbt_project_database %>.bronze_zone.csv_stage;
 
 create stage if not exists <% ctx.env.dbt_project_database %>.bronze_zone.documents
-DIRECTORY=(ENABLE=true);
+DIRECTORY=(ENABLE=true)
+ENCRYPTION = (TYPE = 'SNOWFLAKE_SSE');
 
 create or replace stream <% ctx.env.dbt_project_database %>.bronze_zone.documents_stream
 on stage <% ctx.env.dbt_project_database %>.bronze_zone.documents;

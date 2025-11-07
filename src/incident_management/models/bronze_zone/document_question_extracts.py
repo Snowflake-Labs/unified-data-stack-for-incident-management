@@ -2,7 +2,7 @@ import snowflake.snowpark.functions as F
 from snowflake.snowpark import Session
 import json
 
-
+    
 def model(dbt, session: Session):
     dbt.config(
         materialized='table',
@@ -10,7 +10,7 @@ def model(dbt, session: Session):
     )
     
     docs_stage = dbt.config.get("docs_stage_path")
-    global_inm_policy_schema = dbt.config.get("global_inm_policy_schema") 
+    global_inm_policy_schema = dbt.config.get("meta")['global_inm_policy_schema']
 
     # Get the upstream model
     v_qualify_new_documents = dbt.ref('v_qualify_new_documents')
@@ -26,9 +26,8 @@ def model(dbt, session: Session):
         'question_extracts_json',
         F.call_builtin(
             'AI_EXTRACT',
-            F.call_builtin('TO_FILE', F.lit(f'{docs_stage}'), F.col('relative_path')),
-            json.dumps(global_inm_policy_schema)
+            F.call_builtin('TO_FILE', F.lit('@INCIDENT_MANAGEMENT.bronze_zone.DOCUMENTS'), F.col('relative_path')),
+            global_inm_policy_schema
         )
-    )
-    
+    )    
     return document_all_pages
