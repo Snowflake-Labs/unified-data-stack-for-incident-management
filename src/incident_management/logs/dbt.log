@@ -15557,3 +15557,367 @@ CREATE OR REPLACE CORTEX SEARCH SERVICE INCIDENT_MANAGEMENT.BRONZE_ZONE.incm_doc
 [0m12:32:26.217515 [debug] [Dummy-1   ]: Command `cli run-operation` succeeded at 12:32:26.217224 after 12.05 seconds
 [0m12:32:26.218072 [debug] [Dummy-1   ]: Connection 'macro_create_document_search_service' was properly closed.
 [0m12:32:26.218661 [debug] [Dummy-1   ]: Flushing usage events
+
+
+============================== 12:39:02.488775 | e9f622fc-65dc-4a16-a2fd-3750ad8db627 ==============================
+[0m12:39:02.488775 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m12:39:02.489983 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'fail_fast': 'False', 'profiles_dir': '/tmp/dbt/', 'log_path': '/tmp/dbt/logs', 'version_check': 'True', 'debug': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'False', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'static_parser': 'True', 'introspect': 'True', 'invocation_command': 'dbt ', 'target_path': '/tmp/dbt/target/', 'log_format': 'default', 'send_anonymous_usage_stats': 'False'}
+[0m12:39:02.884307 [info ] [Dummy-1   ]: Registered adapter: snowflake=1.9.2
+[0m12:39:03.630581 [debug] [Dummy-1   ]: checksum: 53ed91fada2233efb98368d1716b44ab532c83a9c293cf1890b7905d5b45fb25, vars: {}, profile: , target: dev, version: 1.9.4
+[0m12:39:04.043485 [debug] [Dummy-1   ]: Partial parsing enabled: 1 files deleted, 1 files added, 1 files changed.
+[0m12:39:04.044554 [debug] [Dummy-1   ]: Partial parsing: added file: incident_management://models/semantic_views/incm_semantic_view_1.sql
+[0m12:39:04.045156 [debug] [Dummy-1   ]: Partial parsing: deleted file: incident_management://models/semantic_views/build_semantic_view.sql
+[0m12:39:04.045878 [debug] [Dummy-1   ]: Partial parsing: updated file: incident_management://macros/create_document_search_sevice.sql
+[0m12:39:04.722587 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m12:39:04.725882 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m12:39:04.785757 [info ] [Dummy-1   ]: Found 14 models, 24 data tests, 6 sources, 483 macros
+[0m12:39:04.789655 [info ] [Dummy-1   ]: 
+[0m12:39:04.790393 [info ] [Dummy-1   ]: Concurrency: 1 threads (target='dev')
+[0m12:39:04.790988 [info ] [Dummy-1   ]: 
+[0m12:39:04.791962 [debug] [Dummy-1   ]: Acquiring new snowflake connection 'master'
+[0m12:39:04.799605 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_incident_management'
+[0m12:39:04.932407 [debug] [ThreadPool]: Using snowflake connection "list_incident_management"
+[0m12:39:04.933145 [debug] [ThreadPool]: On list_incident_management: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management"} */
+show terse schemas in database incident_management
+    limit 10000
+[0m12:39:04.933674 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m12:39:05.768690 [debug] [ThreadPool]: SQL status: SUCCESS 5 in 0.835 seconds
+[0m12:39:05.783008 [debug] [ThreadPool]: Using snowflake connection "list_incident_management"
+[0m12:39:05.783707 [debug] [ThreadPool]: On list_incident_management: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management"} */
+show terse schemas in database incident_management
+    limit 10000
+[0m12:39:05.784225 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m12:39:06.702004 [debug] [ThreadPool]: SQL status: SUCCESS 5 in 0.918 seconds
+[0m12:39:06.704949 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management, now create_incident_management_semantic_views)
+[0m12:39:06.705826 [debug] [ThreadPool]: Creating schema "database: "incident_management"
+schema: "semantic_views"
+"
+[0m12:39:06.719743 [debug] [ThreadPool]: Using snowflake connection "create_incident_management_semantic_views"
+[0m12:39:06.720385 [debug] [ThreadPool]: On create_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "create_incident_management_semantic_views"} */
+create schema if not exists incident_management.semantic_views
+[0m12:39:06.720888 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m12:39:07.530657 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.810 seconds
+[0m12:39:07.535039 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly create_incident_management_semantic_views, now list_incident_management_gold_zone)
+[0m12:39:07.559064 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m12:39:07.559789 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m12:39:07.560321 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m12:39:08.310560 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.750 seconds
+[0m12:39:08.316538 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m12:39:08.317174 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+show objects in incident_management.gold_zone
+    limit 10000
+    
+;
+[0m12:39:08.428774 [debug] [ThreadPool]: SQL status: SUCCESS 0 in 0.111 seconds
+[0m12:39:08.431331 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m12:39:08.431957 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m12:39:08.557347 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.125 seconds
+[0m12:39:08.559902 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management_gold_zone, now list_incident_management_semantic_views)
+[0m12:39:08.570708 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m12:39:08.571373 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m12:39:08.571878 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m12:39:09.348086 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.776 seconds
+[0m12:39:09.350827 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m12:39:09.351487 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+show objects in incident_management.semantic_views
+    limit 10000
+    
+;
+[0m12:39:09.442789 [debug] [ThreadPool]: SQL status: SUCCESS 0 in 0.091 seconds
+[0m12:39:09.445250 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m12:39:09.445854 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m12:39:09.536216 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.090 seconds
+[0m12:39:09.538655 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management_semantic_views, now list_incident_management_bronze_zone)
+[0m12:39:09.551076 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m12:39:09.551727 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m12:39:09.552285 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m12:39:10.492149 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.940 seconds
+[0m12:39:10.494608 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m12:39:10.495234 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+show objects in incident_management.bronze_zone
+    limit 10000
+    
+;
+[0m12:39:10.630939 [debug] [ThreadPool]: SQL status: SUCCESS 7 in 0.135 seconds
+[0m12:39:10.633809 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m12:39:10.634438 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m12:39:10.713104 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.078 seconds
+[0m12:39:10.723355 [debug] [Thread-2 (]: Began running node model.incident_management.users
+[0m12:39:10.724296 [info ] [Thread-2 (]: 1 of 2 START sql incremental model bronze_zone.users ........................... [RUN]
+[0m12:39:10.725583 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly list_incident_management_bronze_zone, now model.incident_management.users)
+[0m12:39:10.726229 [debug] [Thread-2 (]: Began compiling node model.incident_management.users
+[0m12:39:10.744215 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.users"
+[0m12:39:10.745184 [debug] [Thread-2 (]: Began executing node model.incident_management.users
+[0m12:39:10.968490 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.users"
+[0m12:39:10.969331 [debug] [Thread-2 (]: On model.incident_management.users: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.users"} */
+create or replace  temporary view incident_management.bronze_zone.users__dbt_tmp
+  
+   as (
+    
+
+select 
+    sm.MEMBERIDS[0] as id,
+    sm.memberemails[0] as email,
+    split(sm.memberemails[0], '@')[0] as first_name,
+    split(sm.memberemails[0], '@')[1] as last_name,
+    'reporter' as role,
+    '' as department,
+    '' as team,
+    true as is_active,
+    current_timestamp() as created_at,
+    current_timestamp() as updated_at
+from incident_management.bronze_zone.slack_members sm
+  );
+[0m12:39:10.969930 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m12:39:12.174529 [debug] [Thread-2 (]: Snowflake adapter: Snowflake query id: 01c04877-0106-e9ca-0032-31870541791e
+[0m12:39:12.175284 [debug] [Thread-2 (]: Snowflake adapter: Snowflake error: 002003 (42S02): SQL compilation error:
+Object 'INCIDENT_MANAGEMENT.BRONZE_ZONE.SLACK_MEMBERS' does not exist or not authorized.
+[0m12:39:12.180856 [debug] [Thread-2 (]: Database Error in model users (models/bronze_zone/users.sql)
+  002003 (42S02): SQL compilation error:
+  Object 'INCIDENT_MANAGEMENT.BRONZE_ZONE.SLACK_MEMBERS' does not exist or not authorized.
+[0m12:39:12.184429 [error] [Thread-2 (]: 1 of 2 ERROR creating sql incremental model bronze_zone.users .................. [[31mERROR[0m in 1.46s]
+[0m12:39:12.185431 [debug] [Thread-2 (]: Finished running node model.incident_management.users
+[0m12:39:12.186721 [debug] [Thread-5 (]: Marking all children of 'model.incident_management.users' to be skipped because of status 'error'.  Reason: Database Error in model users (models/bronze_zone/users.sql)
+  002003 (42S02): SQL compilation error:
+  Object 'INCIDENT_MANAGEMENT.BRONZE_ZONE.SLACK_MEMBERS' does not exist or not authorized..
+[0m12:39:12.188753 [debug] [Thread-2 (]: Began running node model.incident_management.incm_semantic_view_1
+[0m12:39:12.189636 [info ] [Thread-2 (]: 2 of 2 SKIP relation semantic_views.incm_semantic_view_1 ....................... [[33mSKIP[0m]
+[0m12:39:12.190327 [debug] [Thread-2 (]: Finished running node model.incident_management.incm_semantic_view_1
+[0m12:39:12.192929 [debug] [Dummy-1   ]: Connection 'master' was properly closed.
+[0m12:39:12.193509 [debug] [Dummy-1   ]: Connection 'model.incident_management.users' was properly closed.
+[0m12:39:12.194049 [info ] [Dummy-1   ]: 
+[0m12:39:12.194589 [info ] [Dummy-1   ]: Finished running 1 incremental model, 1 semantic view model in 0 hours 0 minutes and 7.40 seconds (7.40s).
+[0m12:39:12.195668 [debug] [Dummy-1   ]: Command end result
+[0m12:39:12.242950 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m12:39:12.246004 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m12:39:12.254437 [debug] [Dummy-1   ]: Wrote artifact RunExecutionResult to /tmp/dbt/target/run_results.json
+[0m12:39:12.255049 [info ] [Dummy-1   ]: 
+[0m12:39:12.255754 [info ] [Dummy-1   ]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
+[0m12:39:12.256283 [info ] [Dummy-1   ]: 
+[0m12:39:12.257032 [error] [Dummy-1   ]:   Database Error in model users (models/bronze_zone/users.sql)
+  002003 (42S02): SQL compilation error:
+  Object 'INCIDENT_MANAGEMENT.BRONZE_ZONE.SLACK_MEMBERS' does not exist or not authorized.
+[0m12:39:12.257568 [info ] [Dummy-1   ]: 
+[0m12:39:12.258093 [info ] [Dummy-1   ]: Done. PASS=0 WARN=0 ERROR=1 SKIP=1 TOTAL=2
+[0m12:39:12.260120 [debug] [Dummy-1   ]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 9.872699, "process_in_blocks": "0", "process_kernel_time": 1.54, "process_mem_max_rss": "487108", "process_out_blocks": "0", "process_user_time": 6.44}
+[0m12:39:12.260836 [debug] [Dummy-1   ]: Command `cli run` failed at 12:39:12.260558 after 9.87 seconds
+[0m12:39:12.261414 [debug] [Dummy-1   ]: Flushing usage events
+
+
+============================== 12:39:46.414098 | 3c4974be-ed8f-4e14-8c54-dcbe203cb8ec ==============================
+[0m12:39:46.414098 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m12:39:46.415329 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': '/tmp/dbt/', 'debug': 'False', 'warn_error': 'None', 'log_path': '/tmp/dbt/logs', 'version_check': 'True', 'fail_fast': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'empty': 'False', 'quiet': 'False', 'no_print': 'None', 'log_format': 'default', 'invocation_command': 'dbt ', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'target_path': '/tmp/dbt/target/', 'introspect': 'True', 'send_anonymous_usage_stats': 'False'}
+[0m12:39:46.812079 [info ] [Dummy-1   ]: Registered adapter: snowflake=1.9.2
+[0m12:39:47.621023 [debug] [Dummy-1   ]: checksum: 53ed91fada2233efb98368d1716b44ab532c83a9c293cf1890b7905d5b45fb25, vars: {}, profile: , target: dev, version: 1.9.4
+[0m12:39:48.068683 [debug] [Dummy-1   ]: Partial parsing enabled: 0 files deleted, 0 files added, 1 files changed.
+[0m12:39:48.069892 [debug] [Dummy-1   ]: Partial parsing: updated file: incident_management://models/semantic_views/incm_semantic_view_1.sql
+[0m12:39:48.770497 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m12:39:48.773808 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m12:39:48.839848 [info ] [Dummy-1   ]: Found 14 models, 24 data tests, 6 sources, 483 macros
+[0m12:39:48.854262 [info ] [Dummy-1   ]: 
+[0m12:39:48.855033 [info ] [Dummy-1   ]: Concurrency: 1 threads (target='dev')
+[0m12:39:48.855607 [info ] [Dummy-1   ]: 
+[0m12:39:48.856604 [debug] [Dummy-1   ]: Acquiring new snowflake connection 'master'
+[0m12:39:48.864587 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_incident_management'
+[0m12:39:49.002408 [debug] [ThreadPool]: Using snowflake connection "list_incident_management"
+[0m12:39:49.003271 [debug] [ThreadPool]: On list_incident_management: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management"} */
+show terse schemas in database incident_management
+    limit 10000
+[0m12:39:49.003896 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m12:39:49.826526 [debug] [ThreadPool]: SQL status: SUCCESS 6 in 0.822 seconds
+[0m12:39:49.842256 [debug] [ThreadPool]: Using snowflake connection "list_incident_management"
+[0m12:39:49.843002 [debug] [ThreadPool]: On list_incident_management: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management"} */
+show terse schemas in database incident_management
+    limit 10000
+[0m12:39:49.843576 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m12:39:50.554756 [debug] [ThreadPool]: SQL status: SUCCESS 6 in 0.711 seconds
+[0m12:39:50.560000 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management, now list_incident_management_gold_zone)
+[0m12:39:50.583459 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m12:39:50.584139 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m12:39:50.584646 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m12:39:51.291875 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.707 seconds
+[0m12:39:51.297847 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m12:39:51.298649 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+show objects in incident_management.gold_zone
+    limit 10000
+    
+;
+[0m12:39:51.377889 [debug] [ThreadPool]: SQL status: SUCCESS 0 in 0.078 seconds
+[0m12:39:51.380629 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m12:39:51.381266 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m12:39:51.462243 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.080 seconds
+[0m12:39:51.464742 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management_gold_zone, now list_incident_management_bronze_zone)
+[0m12:39:51.477582 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m12:39:51.478241 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m12:39:51.478865 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m12:39:52.221463 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.742 seconds
+[0m12:39:52.224032 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m12:39:52.224630 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+show objects in incident_management.bronze_zone
+    limit 10000
+    
+;
+[0m12:39:52.326227 [debug] [ThreadPool]: SQL status: SUCCESS 7 in 0.101 seconds
+[0m12:39:52.329500 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m12:39:52.330118 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m12:39:52.437395 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.107 seconds
+[0m12:39:52.440186 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management_bronze_zone, now list_incident_management_semantic_views)
+[0m12:39:52.453512 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m12:39:52.454180 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m12:39:52.454690 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m12:39:53.470891 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 1.016 seconds
+[0m12:39:53.473462 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m12:39:53.474083 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+show objects in incident_management.semantic_views
+    limit 10000
+    
+;
+[0m12:39:53.560063 [debug] [ThreadPool]: SQL status: SUCCESS 0 in 0.085 seconds
+[0m12:39:53.562552 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m12:39:53.563208 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m12:39:53.650441 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.086 seconds
+[0m12:39:53.657981 [debug] [Thread-2 (]: Began running node model.incident_management.v_qualify_new_documents
+[0m12:39:53.659066 [info ] [Thread-2 (]: 1 of 3 START sql view model bronze_zone.v_qualify_new_documents ................ [RUN]
+[0m12:39:53.659885 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly list_incident_management_semantic_views, now model.incident_management.v_qualify_new_documents)
+[0m12:39:53.660524 [debug] [Thread-2 (]: Began compiling node model.incident_management.v_qualify_new_documents
+[0m12:39:53.681146 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.v_qualify_new_documents"
+[0m12:39:53.682165 [debug] [Thread-2 (]: Began executing node model.incident_management.v_qualify_new_documents
+[0m12:39:53.742703 [debug] [Thread-2 (]: Writing runtime sql for node "model.incident_management.v_qualify_new_documents"
+[0m12:39:53.744678 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.v_qualify_new_documents"
+[0m12:39:53.745433 [debug] [Thread-2 (]: On model.incident_management.v_qualify_new_documents: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.v_qualify_new_documents"} */
+create or replace   view incident_management.bronze_zone.v_qualify_new_documents
+  
+   as (
+    
+
+select
+   *,
+    case 
+        when contains(relative_path, 'qa') then 'question'
+        when contains(relative_path, 'full') then 'full'
+        else 'slack'
+    end as doc_type,
+    split_part(relative_path, '.', 2) as extension
+from incident_management.bronze_zone.documents_stream
+WHERE relative_path is not null
+and array_contains(extension::VARIANT, ['pdf', 'docx', 'doc', 'txt', 'text', 'html', 'md', 'pptx', 'ppt', 'png', 'eml', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff', 'tif', 'webp', 'htm'] )
+and size > 0
+  );
+[0m12:39:53.746073 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m12:39:54.806789 [debug] [Thread-2 (]: SQL status: SUCCESS 1 in 1.060 seconds
+[0m12:39:54.845667 [info ] [Thread-2 (]: 1 of 3 OK created sql view model bronze_zone.v_qualify_new_documents ........... [[32mSUCCESS 1[0m in 1.18s]
+[0m12:39:54.846734 [debug] [Thread-2 (]: Finished running node model.incident_management.v_qualify_new_documents
+[0m12:39:54.848861 [debug] [Thread-2 (]: Began running node model.incident_management.document_full_extracts
+[0m12:39:54.849973 [info ] [Thread-2 (]: 2 of 3 START sql table model bronze_zone.document_full_extracts ................ [RUN]
+[0m12:39:54.850792 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly model.incident_management.v_qualify_new_documents, now model.incident_management.document_full_extracts)
+[0m12:39:54.851433 [debug] [Thread-2 (]: Began compiling node model.incident_management.document_full_extracts
+[0m12:39:55.031255 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.document_full_extracts"
+[0m12:39:55.032296 [debug] [Thread-2 (]: Began executing node model.incident_management.document_full_extracts
+[0m12:39:55.073403 [debug] [Thread-2 (]: Writing runtime sql for node "model.incident_management.document_full_extracts"
+[0m12:39:55.075988 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.document_full_extracts"
+[0m12:39:55.076800 [debug] [Thread-2 (]: On model.incident_management.document_full_extracts: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.document_full_extracts"} */
+create or replace transient table incident_management.bronze_zone.document_full_extracts
+         as
+        (
+
+with 
+documents_raw_extracts as(
+    select
+        *,
+        AI_PARSE_DOCUMENT (
+            TO_FILE('@INCIDENT_MANAGEMENT.bronze_zone.DOCUMENTS',relative_path),
+             {
+                'mode': 'LAYOUT'
+                ,'page_split': True
+             }
+        ) as raw_extracts
+        FROM incident_management.bronze_zone.v_qualify_new_documents
+        WHERE lower(doc_type) = 'full'
+),
+documents_chunked_extracts as
+(
+    select 
+    og1.* exclude (raw_extracts),
+    SNOWFLAKE.CORTEX.SPLIT_TEXT_MARKDOWN_HEADER(
+        lf1.value:content::STRING,
+        OBJECT_CONSTRUCT('#', 'header_1', '##', 'header_2'),
+        500,
+        5
+    ) as page_chunks,
+    lf1.index::int as page_num
+    from documents_raw_extracts og1,
+    LATERAL FLATTEN(input => raw_extracts:pages) lf1
+)
+
+select 
+    og2.* exclude (page_chunks),
+    lf2.value['chunk']::varchar as chunk,
+    lf2.value['headers']::object as headers
+from documents_chunked_extracts og2,
+lateral flatten(input => page_chunks) lf2
+        );
+[0m12:39:55.077460 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m12:39:56.799660 [debug] [Thread-2 (]: SQL status: SUCCESS 1 in 1.722 seconds
+[0m12:39:56.803469 [info ] [Thread-2 (]: 2 of 3 OK created sql table model bronze_zone.document_full_extracts ........... [[32mSUCCESS 1[0m in 1.95s]
+[0m12:39:56.804514 [debug] [Thread-2 (]: Finished running node model.incident_management.document_full_extracts
+[0m12:39:56.806365 [debug] [Thread-2 (]: Began running node model.incident_management.incm_semantic_view_1
+[0m12:39:56.807478 [info ] [Thread-2 (]: 3 of 3 START sql semantic_view model semantic_views.incm_semantic_view_1 ....... [RUN]
+[0m12:39:56.808261 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly model.incident_management.document_full_extracts, now model.incident_management.incm_semantic_view_1)
+[0m12:39:56.808999 [debug] [Thread-2 (]: Began compiling node model.incident_management.incm_semantic_view_1
+[0m12:39:56.821199 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.incm_semantic_view_1"
+[0m12:39:56.822220 [debug] [Thread-2 (]: Began executing node model.incident_management.incm_semantic_view_1
+[0m12:39:56.843367 [debug] [Thread-2 (]: Writing runtime sql for node "model.incident_management.incm_semantic_view_1"
+[0m12:39:56.844783 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.incm_semantic_view_1"
+[0m12:39:56.845435 [debug] [Thread-2 (]: On model.incident_management.incm_semantic_view_1: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.incm_semantic_view_1"} */
+create or replace semantic view incident_management.semantic_views.incm_semantic_view_1
+  
+
+TABLES(
+  incident_management.bronze_zone.document_full_extracts
+)
+[0m12:39:56.846007 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m12:39:57.507061 [debug] [Thread-2 (]: Snowflake adapter: Snowflake query id: 01c04877-0106-f4e2-0032-318705415f0e
+[0m12:39:57.507806 [debug] [Thread-2 (]: Snowflake adapter: Snowflake error: 010226 (42601): SQL compilation error:
+No queryable expression is defined in the semantic view.
+[0m12:39:57.513704 [debug] [Thread-2 (]: Database Error in model incm_semantic_view_1 (models/semantic_views/incm_semantic_view_1.sql)
+  010226 (42601): SQL compilation error:
+  No queryable expression is defined in the semantic view.
+  compiled code at /tmp/dbt/target/run/incident_management/models/semantic_views/incm_semantic_view_1.sql
+[0m12:39:57.515302 [error] [Thread-2 (]: 3 of 3 ERROR creating sql semantic_view model semantic_views.incm_semantic_view_1  [[31mERROR[0m in 0.71s]
+[0m12:39:57.516298 [debug] [Thread-2 (]: Finished running node model.incident_management.incm_semantic_view_1
+[0m12:39:57.517624 [debug] [Thread-5 (]: Marking all children of 'model.incident_management.incm_semantic_view_1' to be skipped because of status 'error'.  Reason: Database Error in model incm_semantic_view_1 (models/semantic_views/incm_semantic_view_1.sql)
+  010226 (42601): SQL compilation error:
+  No queryable expression is defined in the semantic view.
+  compiled code at /tmp/dbt/target/run/incident_management/models/semantic_views/incm_semantic_view_1.sql.
+[0m12:39:57.520746 [debug] [Dummy-1   ]: Connection 'master' was properly closed.
+[0m12:39:57.521320 [debug] [Dummy-1   ]: Connection 'model.incident_management.incm_semantic_view_1' was properly closed.
+[0m12:39:57.521866 [info ] [Dummy-1   ]: 
+[0m12:39:57.522404 [info ] [Dummy-1   ]: Finished running 1 semantic view model, 1 table model, 1 view model in 0 hours 0 minutes and 8.67 seconds (8.67s).
+[0m12:39:57.523802 [debug] [Dummy-1   ]: Command end result
+[0m12:39:57.573894 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m12:39:57.577097 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m12:39:57.585825 [debug] [Dummy-1   ]: Wrote artifact RunExecutionResult to /tmp/dbt/target/run_results.json
+[0m12:39:57.586417 [info ] [Dummy-1   ]: 
+[0m12:39:57.587119 [info ] [Dummy-1   ]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
+[0m12:39:57.587657 [info ] [Dummy-1   ]: 
+[0m12:39:57.588470 [error] [Dummy-1   ]:   Database Error in model incm_semantic_view_1 (models/semantic_views/incm_semantic_view_1.sql)
+  010226 (42601): SQL compilation error:
+  No queryable expression is defined in the semantic view.
+  compiled code at /tmp/dbt/target/run/incident_management/models/semantic_views/incm_semantic_view_1.sql
+[0m12:39:57.589044 [info ] [Dummy-1   ]: 
+[0m12:39:57.589573 [info ] [Dummy-1   ]: Done. PASS=2 WARN=0 ERROR=1 SKIP=0 TOTAL=3
+[0m12:39:57.591484 [debug] [Dummy-1   ]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 11.28053, "process_in_blocks": "0", "process_kernel_time": 1.55, "process_mem_max_rss": "479536", "process_out_blocks": "0", "process_user_time": 6.83}
+[0m12:39:57.592189 [debug] [Dummy-1   ]: Command `cli run` failed at 12:39:57.591914 after 11.28 seconds
+[0m12:39:57.592764 [debug] [Dummy-1   ]: Flushing usage events
