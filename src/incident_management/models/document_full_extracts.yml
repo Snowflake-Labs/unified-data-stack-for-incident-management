@@ -3,16 +3,9 @@ version: 2
 models:
   - name: document_full_extracts
     description: "Full document extracts split into header-aware chunks"
-    config:
-      post-hook:
-        - "select 'post_hook: document_full_extracts' as msg"
-      meta:
-        extract:
-          parse_mode: "LAYOUT"
-          page_split: true
-        chunking:
-          max_chunk_size: 50
-          max_chunk_depth: 5
+    # config:
+      # post-hook:
+      #   - "select 'post_hook: document_full_extracts' as msg"
         
     columns:
       - name: relative_path

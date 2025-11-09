@@ -13,6 +13,11 @@ profile: 'incident_management'
 vars:
   docs_stage_path: '@INCIDENT_MANAGEMENT.bronze_zone.DOCUMENTS'
   supported_doc_formats: ['pdf', 'docx', 'doc', 'txt', 'text', 'html', 'md', 'pptx', 'ppt', 'png', 'eml', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff', 'tif', 'webp', 'htm']
+  parse_mode: "LAYOUT"
+  page_split: true
+  max_chunk_size: 500
+  max_chunk_depth: 5
+
 
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be

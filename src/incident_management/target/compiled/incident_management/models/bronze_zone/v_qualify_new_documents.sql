@@ -5,8 +5,8 @@ select
     case 
         when contains(relative_path, 'qa') then 'question'
         when contains(relative_path, 'full') then 'full'
-        else 'full'
-    end as analysis_type,
+        else 'slack'
+    end as doc_type,
     split_part(relative_path, '.', 2) as extension
 from incident_management.bronze_zone.documents_stream
 WHERE relative_path is not null

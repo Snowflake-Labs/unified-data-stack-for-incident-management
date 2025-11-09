@@ -16,7 +16,7 @@ def model(dbt, session: Session):
     
     # Filter for question analysis type
     document_all_pages = v_qualify_new_documents.filter(
-        F.col('doc_type') == 'question'
+        F.lower(F.col('doc_type')) == 'question'
     )
     
     # Add AI_EXTRACT column
