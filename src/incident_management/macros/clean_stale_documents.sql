@@ -1,5 +1,9 @@
-{% macro clean_stale_documents(stage_name: string) -%}
+{% macro clean_stale_documents(stage_name) -%}
 
-remove {{ stage_name | replace("'", "") }} pattern='.*';
+{% set sql %}
+    remove {{ stage_name | replace("'", "") }} pattern='.*';
+{% endset %}
+
+{% do run_query(sql) %}
 
 {% endmacro %}
