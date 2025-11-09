@@ -1,7 +1,7 @@
 {{
     config(
         materialized='view',
-        description='Dummy table for document extracts (schema placeholder)'
+        description='View to qualify new documents that could be staged under the designated location'
     )
 }}
 

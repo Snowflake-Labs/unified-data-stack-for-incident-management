@@ -99,7 +99,6 @@ This project demonstrates several key modern data platform capabilities through 
 **Key Models**:
 - [`bronze_zone.incidents`](src/incident_management/models/bronze_zone/incidents.sql): AI-enhanced incident processing with image analysis
 - [`gold_zone.active_incidents`](src/incident_management/models/gold_zone/active_incidents.sql): Business-ready incident tracking
-- [`gold_zone.monthly_incident_trends`](src/incident_management/models/gold_zone/monthly_incident_trends.sql): Aggregated analytics
 
 ### 3. AI/SQL Integration within dbt Models
 
@@ -170,7 +169,6 @@ This demonstrates a complete modern data stack handling real-world operational s
 ### Curated Zone
 - [`active_incidents`](src/incident_management/models/gold_zone/active_incidents.sql): Currently open incidents with enriched data
 - [`closed_incidents`](src/incident_management/models/gold_zone/closed_incidents.sql): Resolved incidents with resolution metrics
-- [`monthly_incident_trends`](src/incident_management/models/gold_zone/monthly_incident_trends.sql): Aggregated monthly statistics
 - [`weekly_incident_trends`](src/incident_management/models/gold_zone/weekly_incident_trends.sql): Weekly trend analysis
 
 
@@ -197,7 +195,6 @@ incident-management/
 │   │   │   ├── gold_zone/            # Analytics-ready models
 │   │   │   │   ├── active_incidents.sql
 │   │   │   │   ├── closed_incidents.sql
-│   │   │   │   ├── monthly_incident_trends.sql
 │   │   │   │   └── weekly_incident_trends.sql
 │   │   │   └── schema.yml        # Model documentation
 │   │   ├── macros/               # Custom dbt macros

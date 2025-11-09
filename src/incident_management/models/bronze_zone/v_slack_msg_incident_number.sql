@@ -1,8 +1,8 @@
 {{
     config(
         materialized='view',
-        description=''
-        ,enable=false
+        description='View to qualify Slack messages that could be related to incidents'
+        ,enabled=false
     )
 }}
 

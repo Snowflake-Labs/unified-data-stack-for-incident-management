@@ -1,0 +1,44 @@
+version: 2
+
+models:
+  - name: weekly_incident_trends
+    description: "Weekly incident trends for the last 12 weeks showing resolution patterns"
+    columns:
+      - name: WEEK
+        description: "Week bucket (date truncated to week)"
+        tests:
+          - not_null
+      - name: TOTAL_INCIDENTS
+        description: "Total incidents created in the week"
+      - name: RESOLVED_INCIDENTS
+        description: "Incidents resolved in the week"
+      - name: CLOSED_INCIDENTS
+        description: "Incidents closed in the week"
+      - name: OPEN_INCIDENTS
+        description: "Incidents open in the week"
+      - name: CRITICAL_INCIDENTS
+        description: "Incidents with critical priority"
+      - name: HIGH_INCIDENTS
+        description: "Incidents with high priority"
+      - name: HIGH_SEVERITY_INCIDENTS
+        description: "Incidents with critical or high priority"
+      - name: PAYMENT_INCIDENTS
+        description: "Payment category incidents"
+      - name: AUTHENTICATION_INCIDENTS
+        description: "Authentication category incidents"
+      - name: PERFORMANCE_INCIDENTS
+        description: "Performance category incidents"
+      - name: SECURITY_INCIDENTS
+        description: "Security category incidents"
+      - name: MONITORING_INCIDENTS
+        description: "Incidents from monitoring source system"
+      - name: CUSTOMER_PORTAL_INCIDENTS
+        description: "Incidents from customer portal source system"
+      - name: AVG_RESOLUTION_TIME_HOURS
+        description: "Average resolution time in hours"
+      - name: INCIDENTS_WITH_ATTACHMENTS
+        description: "Incidents that had attachments"
+      - name: RESOLUTION_RATE_PERCENTAGE
+        description: "Share of resolved/closed incidents as a percentage"
+
+

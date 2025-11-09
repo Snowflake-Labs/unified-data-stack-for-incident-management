@@ -2,6 +2,49 @@ version: 2
 
 models:
   - name: closed_incidents
+    description: "Closed incidents with resolution metrics, SLA compliance analysis, and performance insights"
+    columns:
+      - name: INCIDENT_NUMBER
+        description: "Incident identifier"
+        tests:
+          - not_null
+      - name: TITLE
+        description: "Incident title"
+      - name: CATEGORY
+        description: "Incident category"
+      - name: PRIORITY
+        description: "Incident priority"
+      - name: STATUS
+        description: "Incident status"
+      - name: ASSIGNEE_ID
+        description: "Assignee user id"
+      - name: REPORTEE_ID
+        description: "Reportee user id"
+      - name: CREATED_AT
+        description: "Creation timestamp"
+      - name: CLOSED_AT
+        description: "Close timestamp"
+      - name: UPDATED_AT
+        description: "Last update timestamp"
+      - name: SOURCE_SYSTEM
+        description: "Source system for the incident"
+      - name: EXTERNAL_SOURCE_ID
+        description: "External source identifier"
+      - name: HAS_ATTACHMENTS
+        description: "Whether the incident has attachments"
+      - name: TOTAL_RESOLUTION_HOURS
+        description: "Total time from creation to closure in hours"
+      - name: CLOSED_MONTH
+        description: "Month when incident was closed"
+      - name: CLOSED_YEAR
+        description: "Year when incident was closed"
+      - name: CLOSED_QUARTER
+        description: "Quarter when incident was closed"
+
+version: 2
+
+models:
+  - name: closed_incidents
     description: "Closed incidents with basic metrics and analysis"
     columns:
       - name: incident_number

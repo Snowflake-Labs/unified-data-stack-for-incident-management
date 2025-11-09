@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: users
+    description: "Materialized users table with enriched data"
+    columns:
+      - name: ID
+        description: "Unique user identifier"
+        tests:
+          - not_null
+      - name: EMAIL
+        description: "Primary email address"
+        tests:
+          - not_null
+      - name: FIRST_NAME
+        description: "First name parsed from email user part"
+      - name: LAST_NAME
+        description: "Last name parsed from email domain part"
+      - name: ROLE
+        description: "User role"
+      - name: DEPARTMENT
+        description: "User department"
+      - name: TEAM
+        description: "User team"
+      - name: IS_ACTIVE
+        description: "Active flag"
+      - name: CREATED_AT
+        description: "Creation timestamp"
+      - name: UPDATED_AT
+        description: "Last update timestamp"
+
+

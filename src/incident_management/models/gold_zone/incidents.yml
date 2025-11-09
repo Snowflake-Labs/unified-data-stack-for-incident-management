@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: incidents
+    description: "Materialized incidents table with enriched data and calculated fields"
+    columns:
+      - name: INCIDENT_NUMBER
+        description: "Incident identifier"
+        tests:
+          - not_null
+      - name: CATEGORY
+        description: "Incident category"
+      - name: TITLE
+        description: "Incident title"
+      - name: PRIORITY
+        description: "Incident priority"
+      - name: STATUS
+        description: "Incident status"
+      - name: ASSIGNEE_ID
+        description: "Assignee user id"
+      - name: REPORTEE_ID
+        description: "Reportee user id"
+      - name: CREATED_AT
+        description: "Creation timestamp"
+      - name: CLOSED_AT
+        description: "Close timestamp"
+      - name: UPDATED_AT
+        description: "Last update timestamp"
+      - name: SOURCE_SYSTEM
+        description: "Source system for the incident"
+      - name: EXTERNAL_SOURCE_ID
+        description: "External source identifier"
+      - name: HAS_ATTACHMENTS
+        description: "Whether the incident has attachments"
+      - name: SLACK_MESSAGE_ID
+        description: "Associated Slack message id"
+      - name: LAST_COMMENT
+        description: "Latest comment content"
+
+

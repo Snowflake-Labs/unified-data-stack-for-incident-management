@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: incident_comment_history
+    description: "Simplified incident comment history for tracking communication"
+    columns:
+      - name: ID
+        description: "Comment id"
+        tests:
+          - not_null
+      - name: INCIDENT_NUMBER
+        description: "Incident identifier"
+      - name: AUTHOR_ID
+        description: "Comment author user id"
+      - name: CONTENT
+        description: "Comment content"
+      - name: CREATED_AT
+        description: "Comment creation timestamp"
+
+
