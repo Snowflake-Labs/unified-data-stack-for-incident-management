@@ -44,6 +44,6 @@ models:
     gold_zone:
       +schema: gold_zone
       +materialized: table
-    activation:
-      +schema: activation
-      +materialized: table
+    semantic_views:
+      +schema: semantic_views
+      +materialized: semantic_view

@@ -1,0 +1,54 @@
+version: 2
+
+models:
+  - name: document_full_extracts
+    description: "Full document extracts split into header-aware chunks"
+    config:
+      post-hook:
+        - "select 'post_hook: document_full_extracts' as msg"
+      meta:
+        extract:
+          parse_mode: "LAYOUT"
+          page_split: true
+        chunking:
+          max_chunk_size: 50
+          max_chunk_depth: 5
+        
+    columns:
+      - name: relative_path
+        description: "Path to the file on the stage"
+        tests:
+          - not_null
+
+      - name: size
+        description: "Size of the file in bytes"
+
+      - name: last_modified
+        description: "Timestamp when the file was last updated in the stage"
+
+      - name: md5
+        description: "MD5 checksum for the file"
+
+      - name: etag
+        description: "ETag header for the file"
+
+      - name: file_url
+        description: "Snowflake file URL to the file"
+
+      - name: analysis_type
+        description: "Type of analysis requested for the file"
+        tests:
+          - accepted_values:
+              values: ['full']
+
+      - name: extension
+        description: "File extension parsed from the path"
+
+      - name: chunk
+        description: "Markdown/text chunk content extracted from the document pages"
+        tests:
+          - not_null
+          
+      - name: headers
+        description: "Object of detected headers for the chunk (e.g., header_1, header_2)"
+  
