@@ -29,10 +29,10 @@ FACTS (
     , full_doc_extracts.page_num AS page_num
       COMMENT = 'Source page number for the extracted content'
       
-    , v_slack_msgs.file_size AS slack_file_size
+    , v_slack_msgs.file_size AS file_size
       COMMENT = 'Attachment file size'
 
-    , active_incidents.age_hours AS active_incident_age_hours
+    , active_incidents.age_hours AS age_hours
       COMMENT = 'Age of incident in hours'
 
     , closed_incidents.total_resolution_hours AS total_resolution_hours
@@ -46,7 +46,7 @@ FACTS (
       COMMENT = 'Total incidents created in the week'
     , weekly_incident_trends.resolved_incidents AS resolved_incidents
       COMMENT = 'Incidents resolved in the week'
-    , weekly_incident_trends.closed_incidents AS closed_incidents_count
+    , weekly_incident_trends.closed_incidents AS closed_incidents
       COMMENT = 'Incidents closed in the week'
     , weekly_incident_trends.open_incidents AS open_incidents
       COMMENT = 'Incidents open in the week'
