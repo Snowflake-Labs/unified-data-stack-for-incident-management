@@ -1,37 +1,32 @@
 {{ config(materialized='semantic_view') }}
 
 TABLES(
-  full_doc_extracts as {{ ref('document_full_extracts') }}
-    COMMENT = 'All policy documents'
-  , users as {{ ref('users') }}
-    COMMENT = 'Materialized users table with enriched data'
-  , v_slack_msgs as {{ ref('v_qualify_slack_messages') }}
-    COMMENT = 'Qualified Slack messages from known reporters with optional attachment metadata and extracted incident number'
-  , incidents as {{ ref('incidents') }}
+  incidents as {{ ref('incidents') }}
     COMMENT = 'Materialized incidents table with enriched data and calculated fields'
+
   , active_incidents as {{ ref('active_incidents') }}
     COMMENT = 'Active incidents requiring attention with SLA status and priority ordering'
+
   , closed_incidents as {{ ref('closed_incidents') }}
     COMMENT = 'Closed incidents with resolution metrics and performance insights'
+
   , incident_attachments as {{ ref('incident_attachments') }}
     COMMENT = 'Materialized incident attachments table'
+
   , incident_comment_history as {{ ref('incident_comment_history') }}
     COMMENT = 'Simplified incident comment history for tracking communication'
+
   , weekly_incident_trends as {{ ref('weekly_incident_trends') }}
     COMMENT = 'Weekly incident trends for the last 12 weeks'
+
+  , quaterly_review_metrics as {{ ref('quaterly_review_metrics') }}
+    COMMENT = 'Quarterly review metrics'
 
 )
 
 FACTS (
-    full_doc_extracts.size AS size
-      COMMENT = 'Size of the file in bytes'
-      
-    , full_doc_extracts.page_num AS page_num
-      COMMENT = 'Source page number for the extracted content'
-      
-    , active_incidents.age_hours AS age_hours
+    active_incidents.age_hours AS age_hours
       COMMENT = 'Age of incident in hours'
-
     , closed_incidents.total_resolution_hours AS total_resolution_hours
       COMMENT = 'Total time from creation to closure in hours'
     , closed_incidents.closed_year AS closed_year
@@ -71,54 +66,83 @@ FACTS (
       COMMENT = 'Incidents that had attachments'
     , weekly_incident_trends.resolution_rate_percentage AS resolution_rate_percentage
       COMMENT = 'Share of resolved/closed incidents as a percentage'
+
+    , quaterly_review_metrics.soh_overall_uptime AS service_operational_health_overall_uptime
+      COMMENT = 'Actual recorded overall uptime of all services'
+    , quaterly_review_metrics.soh_critical_uptime AS service_operational_health_critical_services_uptime
+      COMMENT = 'Actual recorded uptime of critical services'
+    , quaterly_review_metrics.soh_sev1_incidents AS service_operational_health_sev_1_incidents
+      COMMENT = 'Recorded number of Sev-1 incidents'
+    , quaterly_review_metrics.soh_sev2_incidents AS service_operational_health_sev_2_incidents
+      COMMENT = 'Recorded number of Sev-2 incidents'
+    , quaterly_review_metrics.soh_mtta AS service_operational_health_mtta
+      COMMENT = 'Mean time to acknowledge an incident'
+    , quaterly_review_metrics.soh_mttr AS service_operational_health_mttr
+      COMMENT = 'Mean time to recover from an incident'
+    , quaterly_review_metrics.soh_cfr AS service_operational_health_change_failure_rate
+      COMMENT = 'Change failure rate'
+    , quaterly_review_metrics.soh_slo_breaches AS service_operational_health_slo_breaches
+      COMMENT = 'Number of SLO breaches'
+    , quaterly_review_metrics.soh_error_budget AS service_operational_health_error_budget_consumed
+      COMMENT = 'Error budget consumed'
+    , quaterly_review_metrics.soh_downtime AS service_operational_health_service_downtime
+      COMMENT = 'Service downtime'
+    , quaterly_review_metrics.soh_unplanned_outage_hours AS service_operational_health_unplanned_outage_hours
+      COMMENT = 'Unplanned outage hours'
+    , quaterly_review_metrics.soh_planned_maintenance_hours AS service_operational_health_planned_maintenance_hours
+      COMMENT = 'Planned maintenance hours'
+    , quaterly_review_metrics.soh_sev1_outage_minutes AS service_operational_health_sev_1_outage_minutes
+      COMMENT = 'Sev-1 outage minutes'
+    , quaterly_review_metrics.soh_sev2_outage_minutes AS service_operational_health_sev_2_outage_minutes
+      COMMENT = 'Sev-2 outage minutes'
+    , quaterly_review_metrics.soh_longest_outage AS service_operational_health_longest_single_outage
+      COMMENT = 'Longest single outage'
+    , quaterly_review_metrics.soh_mtbft AS service_operational_health_mtbft
+      COMMENT = 'Mean time between failures'
+
+    , quaterly_review_metrics.tu_eoq_it_headcount AS team_utilisation_end_of_quarter_it_headcount
+      COMMENT = 'End of quarter IT headcount'
+    , quaterly_review_metrics.tu_eng_headcount AS team_utilisation_engineering_headcount
+      COMMENT = 'Engineering headcount'
+    , quaterly_review_metrics.tu_on_call_coverage AS team_utilisation_on_call_coverage
+      COMMENT = 'On call coverage'
+    , quaterly_review_metrics.tu_project_work_alloc AS team_utilisation_project_work_allocation
+      COMMENT = 'Project work allocation'
+    , quaterly_review_metrics.tu_bau_ops_alloc AS team_utilisation_bau_operations_allocation
+      COMMENT = 'BAU/Operations allocation'
+    , quaterly_review_metrics.tu_on_call_hours_per_eng AS team_utilisation_on_call_hours_per_engineer
+      COMMENT = 'On call hours per engineer'
+    , quaterly_review_metrics.tu_after_hours_incidents AS team_utilisation_after_hours_incidents_handled
+      COMMENT = 'After hours incidents handled'
+    , quaterly_review_metrics.tu_training_hours_per_fte AS team_utilisation_training_hours_per_fte
+      COMMENT = 'Training hours per FTE'
+    , quaterly_review_metrics.tu_certifications AS team_utilisation_certifications_earned
+      COMMENT = 'Certifications earned'
+    , quaterly_review_metrics.tu_attrition AS team_utilisation_attrition
+      COMMENT = 'Attrition'
+
+    , quaterly_review_metrics.tls_atlassian AS tool_licensing_spend_atlassian_spend
+      COMMENT = 'Spend on Atlassian licenses'
+    , quaterly_review_metrics.tls_github AS tool_licensing_spend_github_spend
+      COMMENT = 'Spend on GitHub licenses'
+    , quaterly_review_metrics.tls_slack AS tool_licensing_spend_slack_spend
+      COMMENT = 'Spend on Slack licenses'
+    , quaterly_review_metrics.tls_pagerduty AS tool_licensing_spend_pagerduty_spend
+      COMMENT = 'Spend on PagerDuty licenses'
+    , quaterly_review_metrics.tls_datadog AS tool_licensing_spend_datadog_spend
+      COMMENT = 'Spend on Datadog licenses'
+    , quaterly_review_metrics.tls_sentry AS tool_licensing_spend_sentry_spend
+      COMMENT = 'Spend on Sentry licenses'
+    , quaterly_review_metrics.tls_okta AS tool_licensing_spend_okta_spend
+      COMMENT = 'Spend on Okta licenses'
+    , quaterly_review_metrics.tls_aws AS tool_licensing_spend_aws_spend
+      COMMENT = 'Spend on AWS licenses'
+    , quaterly_review_metrics.tls_total AS tool_licensing_spend_total_spend
+      COMMENT = 'Total spend on licenses'
  )
 
  DIMENSIONS (
-    full_doc_extracts.relative_path as relative_path
-      COMMENT = 'Path to the file on the stage'
-    , full_doc_extracts.last_modified AS last_modified
-      COMMENT = 'Timestamp when the file was last updated in the stage'
-    , full_doc_extracts.md5 AS md5
-      COMMENT = 'MD5 checksum for the file'
-    ,full_doc_extracts.etag AS etag
-      COMMENT = 'ETag header for the file'
-    , full_doc_extracts.file_url AS file_url
-      WITH SYNONYMS = ('file url', 'snowflake file url')
-      COMMENT = 'Snowflake file URL to the file'
-    ,full_doc_extracts.doc_type AS doc_type
-      WITH SYNONYMS = ('document type', 'doc type', 'analysis type')
-      COMMENT = 'Type of document classification (e.g., ''full'', ''question'', ''slack'')'
-    ,full_doc_extracts.extension AS extension
-      WITH SYNONYMS = ('extension', 'file extension')
-      COMMENT = 'File extension parsed from the path'
-    ,full_doc_extracts.chunk AS chunk
-      WITH SYNONYMS = ('chunk', 'text')
-      COMMENT = 'Markdown/text chunk content extracted from the document pages'
-    ,full_doc_extracts.headers AS headers
-      WITH SYNONYMS = ('headers', 'detected headers')
-      COMMENT = 'Object of detected headers for the chunk (e.g., header_1, header_2)'
-
-    , users.id AS id
-      COMMENT = 'Unique user identifier'
-    , users.email AS email
-      COMMENT = 'Primary email address'
-    ,users.first_name AS first_name
-      COMMENT = 'First name parsed from email user part'
-    ,users.last_name AS last_name
-      COMMENT = 'Last name parsed from email domain part'
-    ,users.role AS role
-      COMMENT = 'User role'
-    ,users.team AS team
-      COMMENT = 'User team'
-    , users.is_active AS is_active
-      COMMENT = 'Active flag'
-    , users.created_at AS created_at
-      COMMENT = 'Creation timestamp'
-    , users.updated_at AS updated_at
-      COMMENT = 'Last update timestamp'
-
-
-    , incidents.incident_number AS incident_number
+    incidents.incident_number AS incident_number
       COMMENT = 'Incident identifier'
     , incidents.category AS incident_category
       COMMENT = 'Incident category'
@@ -228,6 +252,11 @@ FACTS (
       COMMENT = 'Comment creation timestamp'
     , weekly_incident_trends.week AS trend_week
       COMMENT = 'Week bucket (date truncated to week)'
+
+    , quaterly_review_metrics.relative_path AS qrm_relative_path
+      COMMENT = 'Path to the file on the stage'
+    , quaterly_review_metrics.quarter AS review_quarter
+      COMMENT = 'Year and quarter of the review metrics'
   )
 
  
