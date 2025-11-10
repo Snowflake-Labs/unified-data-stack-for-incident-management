@@ -5,7 +5,7 @@ incident_management:
       account: ""
       database: "v1_incident_management"
       role: "v1_dbt_projects_engineer"
-      schema: "landing_zone"
+      schema: "bronze_zone"
       user: ""
       warehouse: "v1_demo_wh"
   target: "dev"
