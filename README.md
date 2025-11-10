@@ -181,16 +181,7 @@ unified-data-stack-for-incident-management/
 │   │   ├── incident_comment_history.csv
 │   │   ├── incidents.csv
 │   │   ├── slack_conversation_history.csv
-│   │   └── users.csv              # User directory
-│   ├── docs/
-│   │   └── Global INM Policy.docx
-│   ├── exports/
-│   │   ├── incm_quaterly_review_metrics_2024_Q1.pptx
-│   │   ├── incm_quaterly_review_metrics_2024_Q2.pptx
-│   │   ├── incm_quaterly_review_metrics_2024_Q3.pptx
-│   │   ├── incm_quaterly_review_metrics_2024_Q4.pptx
-│   │   ├── incm_quaterly_review_metrics_2025_Q1.pptx
-│   │   └── incm_quaterly_review_metrics_2025_Q2.pptx
+│   │   └── users.csv
 │   └── images/                    # Sample incident attachments
 │       ├── invalid_credentials.jpeg
 │       └── payment_gateway_outage.jpeg
@@ -198,42 +189,53 @@ unified-data-stack-for-incident-management/
 │   ├── destination_params.png
 │   └── snowflake_role_params.png
 ├── src/
-│   ├── incident_management/      # dbt project
-│   │   ├── models/
-│   │   │   ├── bronze_zone/      # Raw staging/views
-│   │   │   │   ├── users.sql
-│   │   │   │   ├── v_qualify_new_documents.sql
-│   │   │   │   └── v_qualify_slack_messages.sql
-│   │   │   ├── gold_zone/        # Analytics-ready models
-│   │   │   │   ├── active_incidents.sql
-│   │   │   │   ├── closed_incidents.sql
-│   │   │   │   ├── incident_attachments.sql
-│   │   │   │   ├── incident_comment_history.sql
-│   │   │   │   ├── incidents.sql
-│   │   │   │   └── weekly_incident_trends.sql
-│   │   │   └── sources.yml       # Source definitions and tests
-│   │   ├── macros/               # Custom dbt macros
+│   ├── incident_management/       # dbt project
+│   │   ├── analyses/
+│   │   ├── dbt_packages/
+│   │   │   └── dbt_semantic_view/ # Installed package
+│   │   ├── macros/                # Custom dbt macros
 │   │   │   ├── clean_stale_documents.sql
 │   │   │   └── generate_schema_name.sql
-│   │   ├── dbt_project.yml       # dbt configuration
+│   │   ├── models/
+│   │   │   ├── bronze_zone/       # Raw staging/views
+│   │   │   │   ├── users.sql
+│   │   │   │   ├── users.yml
+│   │   │   │   ├── v_qualify_slack_messages.sql
+│   │   │   │   └── v_qualify_slack_messages.yml
+│   │   │   ├── gold_zone/         # Analytics-ready models
+│   │   │   │   ├── active_incidents.sql
+│   │   │   │   ├── active_incidents.yml
+│   │   │   │   ├── closed_incidents.sql
+│   │   │   │   ├── closed_incidents.yml
+│   │   │   │   ├── incident_attachments.sql
+│   │   │   │   ├── incident_attachments.yml
+│   │   │   │   ├── incident_comment_history.sql
+│   │   │   │   ├── incident_comment_history.yml
+│   │   │   │   ├── incidents.sql
+│   │   │   │   ├── incidents.yml
+│   │   │   │   ├── weekly_incident_trends.sql
+│   │   │   │   └── weekly_incident_trends.yml
+│   │   │   └── sources.yml        # Source definitions and tests
+│   │   ├── seeds/
+│   │   ├── snapshots/
+│   │   ├── dbt_project.yml        # dbt configuration
 │   │   ├── packages.yml
-│   │   └── profiles.yml          # Database connections
-│   ├── scripts/                  # Deployment and setup scripts
-│   │   ├── create_snowflake_yaml.sh # Generate snowflake.yml from template
-│   │   ├── dbtdeploy.sh         # dbt deployment automation
-│   │   ├── dbtexec.sh           # dbt execution wrapper
+│   │   └── profiles.yml           # Database connections
+│   ├── scripts/                   # Deployment and setup scripts
+│   │   ├── create_snowflake_yaml.sh
+│   │   ├── dbtdeploy.sh
+│   │   ├── dbtexec.sh
 │   │   └── snowflake.yml.template
-│   ├── sql/                      # Raw SQL scripts
-│   │   ├── 01_dbt_projects_stack.sql # dbt Projects infrastructure setup
-│   │   ├── 02_slack_connector.sql    # Slack connector setup
-│   │   └──                     
-│   └── streamlit/               # Dashboard application
-│       ├── main.py              # Main dashboard
-│       ├── app_utils.py         # Utility functions
-│       └── snowflake.png        # Assets
+│   ├── sql/                       # Raw SQL scripts
+│   │   ├── 01_dbt_projects_stack.sql
+│   │   └── 02_slack_connector.sql
+│   └── streamlit/                # Dashboard application
+│       ├── main.py               # Main dashboard
+│       ├── app_utils.py          # Utility functions
+│       └── snowflake.png         # Assets
 ├── Makefile
-├── requirements.txt             # Python dependencies
-└── README.md                    # This file
+├── requirements.txt              # Python dependencies
+└── README.md                     # This file
 ```
 
 ## Setup
