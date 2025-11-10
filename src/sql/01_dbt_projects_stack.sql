@@ -33,28 +33,12 @@ with login access to Snowsight by granting the dbt_project_admin_role to the use
 -- default_role=<% ctx.env.dbt_project_admin_role %>
 -- comment='service user for dbt projects';
 
--- Create database roles for managing landing, curated zones, and dbt deployments
-create or replace database role <% ctx.env.dbt_project_database %>.manage_bronze_zone;
-create or replace database role <% ctx.env.dbt_project_database %>.manage_gold_zone;
-create or replace database role <% ctx.env.dbt_project_database %>.manage_dbt_deployments;
-
-grant usage on database <% ctx.env.dbt_project_database %> to database role <% ctx.env.dbt_project_database %>.manage_bronze_zone;
-grant create schema on database <% ctx.env.dbt_project_database %> to database role <% ctx.env.dbt_project_database %>.manage_bronze_zone;
-
-grant usage on database <% ctx.env.dbt_project_database %> to database role <% ctx.env.dbt_project_database %>.manage_gold_zone;
-grant create schema on database <% ctx.env.dbt_project_database %> to database role <% ctx.env.dbt_project_database %>.manage_gold_zone;
-
-
-grant usage on database <% ctx.env.dbt_project_database %> to database role <% ctx.env.dbt_project_database %>.manage_dbt_deployments;
-grant create schema on database <% ctx.env.dbt_project_database %> to database role <% ctx.env.dbt_project_database %>.manage_dbt_deployments;
-
-
+-- Create  roles for managing landing, curated zones, and dbt deployments
 create or replace role <% ctx.env.dbt_project_admin_role %>;
-
+grant usage on database <% ctx.env.dbt_project_database %> to role <% ctx.env.dbt_project_admin_role %>;
+grant create schema on database <% ctx.env.dbt_project_database %> to role <% ctx.env.dbt_project_admin_role %>; 
+grant all privileges on future schemas in database <% ctx.env.dbt_project_database %> to role <% ctx.env.dbt_project_admin_role %>;
 grant database role snowflake.cortex_user to role <% ctx.env.dbt_project_admin_role %>; 
-grant database role manage_bronze_zone to role <% ctx.env.dbt_project_admin_role %>;
-grant database role manage_gold_zone to role <% ctx.env.dbt_project_admin_role %>;
-grant database role manage_dbt_deployments to role <% ctx.env.dbt_project_admin_role %>;
 
 grant usage on integration <% ctx.env.snowflake_git_api_int %> to role <% ctx.env.dbt_project_admin_role %>;
 grant usage on warehouse <% ctx.env.dbt_snowflake_warehouse %> to role <% ctx.env.dbt_project_admin_role %>;
@@ -62,13 +46,10 @@ grant execute task on account to role <% ctx.env.dbt_project_admin_role %>;
 grant role <% ctx.env.dbt_project_admin_role %> to role sysadmin;
 grant role <% ctx.env.dbt_project_admin_role %> to user <% ctx.env.snowflake_user %>;
 
-
 use role <% ctx.env.dbt_project_admin_role %>;
 use database <% ctx.env.dbt_project_database %>;
 
 create or replace schema <% ctx.env.dbt_project_database %>.bronze_zone;
-
-grant all privileges on schema <% ctx.env.dbt_project_database %>.bronze_zone to database role <% ctx.env.dbt_project_database %>.manage_bronze_zone;
 
 create or replace stage <% ctx.env.dbt_project_database %>.bronze_zone.csv_stage;
 
@@ -77,7 +58,6 @@ DIRECTORY=(ENABLE=true)
 ENCRYPTION = (TYPE = 'SNOWFLAKE_SSE');
 
 create or replace schema <% ctx.env.dbt_project_database %>.gold_zone;
-grant all privileges on schema <% ctx.env.dbt_project_database %>.gold_zone to database role <% ctx.env.dbt_project_database %>.manage_gold_zone;
 
 -- Users table (employees, customers, system users)
 CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.bronze_zone.users (
