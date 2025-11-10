@@ -239,7 +239,7 @@ def create_charts():
                 SELECT 
                     category,
                     COUNT(*) as incident_count
-                FROM {database}.bronze_zone.incidents
+                FROM {database}.gold_zone.incidents
                 GROUP BY category
                 ORDER BY incident_count DESC
             """
@@ -281,16 +281,14 @@ def create_charts():
 def get_incident_attachments(incident_id):
     """Fetch attachments for a specific incident"""
     database = st.session_state.snowpark_session.get_current_database()
-    schema = "bronze_zone"
+    schema = "gold_zone"
     
     # Query to get attachments for the incident
     query = f"""
     SELECT 
         attachment_file,
-        '@{database}.{schema}.DOCUMENTS' as documents_stage,
-        fl_get_relative_path(attachment_file) as attachment_file_path,
         uploaded_at
-    FROM {database}.bronze_zone.incident_attachments 
+    FROM {database}.{schema}.incident_attachments 
     WHERE incident_number = '{incident_id}'
     ORDER BY uploaded_at DESC
     """
@@ -314,7 +312,7 @@ def create_attachments_popover(incident_id, title):
             
             for idx, attachment in attachments.iterrows():
                 with st.container():
-                    img=st.session_state.snowpark_session.file.get_stream(f'{attachment["DOCUMENTS_STAGE"]}/{attachment["ATTACHMENT_FILE_PATH"]}', decompress=False).read()
+                    img=st.session_state.snowpark_session.file.get_stream(attachment["ATTACHMENT_FILE"], decompress=False).read()
 
                     st.image(img, width=300, use_container_width="never")
 
@@ -340,7 +338,7 @@ def create_active_incidents_table():
                         incident_number,
                         MAX(created_at) AS latest_created_at
                     FROM
-                        bronze_zone.incident_comment_history
+                        gold_zone.incident_comment_history
                     GROUP BY
                         incident_number
                 ),
@@ -350,7 +348,7 @@ def create_active_incidents_table():
                         ich.created_at,
                         ich.content AS latest_comment
                     FROM
-                        bronze_zone.incident_comment_history AS ich
+                        gold_zone.incident_comment_history AS ich
                         INNER JOIN latest_created_at AS lc ON ich.incident_number = lc.incident_number
                     AND ich.created_at = lc.latest_created_at
                     ORDER BY

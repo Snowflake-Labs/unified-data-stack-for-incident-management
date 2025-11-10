@@ -67,77 +67,77 @@ FACTS (
     , weekly_incident_trends.resolution_rate_percentage AS resolution_rate_percentage
       COMMENT = 'Share of resolved/closed incidents as a percentage'
 
-    , quaterly_review_metrics.soh_overall_uptime AS service_operational_health_overall_uptime
+    , quaterly_review_metrics.soh_overall_uptime AS soh_overall_uptime
       COMMENT = 'Actual recorded overall uptime of all services'
-    , quaterly_review_metrics.soh_critical_uptime AS service_operational_health_critical_services_uptime
+    , quaterly_review_metrics.soh_critical_uptime AS soh_critical_uptime
       COMMENT = 'Actual recorded uptime of critical services'
-    , quaterly_review_metrics.soh_sev1_incidents AS service_operational_health_sev_1_incidents
+    , quaterly_review_metrics.soh_sev1_incidents AS soh_sev1_incidents
       COMMENT = 'Recorded number of Sev-1 incidents'
-    , quaterly_review_metrics.soh_sev2_incidents AS service_operational_health_sev_2_incidents
+    , quaterly_review_metrics.soh_sev2_incidents AS soh_sev2_incidents
       COMMENT = 'Recorded number of Sev-2 incidents'
-    , quaterly_review_metrics.soh_mtta AS service_operational_health_mtta
+    , quaterly_review_metrics.soh_mtta AS soh_mtta
       COMMENT = 'Mean time to acknowledge an incident'
-    , quaterly_review_metrics.soh_mttr AS service_operational_health_mttr
+    , quaterly_review_metrics.soh_mttr AS soh_mttr
       COMMENT = 'Mean time to recover from an incident'
-    , quaterly_review_metrics.soh_cfr AS service_operational_health_change_failure_rate
+    , quaterly_review_metrics.soh_cfr AS soh_cfr
       COMMENT = 'Change failure rate'
-    , quaterly_review_metrics.soh_slo_breaches AS service_operational_health_slo_breaches
+    , quaterly_review_metrics.soh_slo_breaches AS soh_slo_breaches
       COMMENT = 'Number of SLO breaches'
-    , quaterly_review_metrics.soh_error_budget AS service_operational_health_error_budget_consumed
+    , quaterly_review_metrics.soh_error_budget AS soh_error_budget
       COMMENT = 'Error budget consumed'
-    , quaterly_review_metrics.soh_downtime AS service_operational_health_service_downtime
+    , quaterly_review_metrics.soh_downtime AS soh_downtime
       COMMENT = 'Service downtime'
-    , quaterly_review_metrics.soh_unplanned_outage_hours AS service_operational_health_unplanned_outage_hours
+    , quaterly_review_metrics.soh_unplanned_outage_hours AS soh_unplanned_outage_hours
       COMMENT = 'Unplanned outage hours'
-    , quaterly_review_metrics.soh_planned_maintenance_hours AS service_operational_health_planned_maintenance_hours
+    , quaterly_review_metrics.soh_planned_maintenance_hours AS soh_planned_maintenance_hours
       COMMENT = 'Planned maintenance hours'
-    , quaterly_review_metrics.soh_sev1_outage_minutes AS service_operational_health_sev_1_outage_minutes
+    , quaterly_review_metrics.soh_sev1_outage_minutes AS soh_sev1_outage_minutes
       COMMENT = 'Sev-1 outage minutes'
-    , quaterly_review_metrics.soh_sev2_outage_minutes AS service_operational_health_sev_2_outage_minutes
+    , quaterly_review_metrics.soh_sev2_outage_minutes AS soh_sev2_outage_minutes
       COMMENT = 'Sev-2 outage minutes'
-    , quaterly_review_metrics.soh_longest_outage AS service_operational_health_longest_single_outage
+    , quaterly_review_metrics.soh_longest_outage AS soh_longest_outage
       COMMENT = 'Longest single outage'
-    , quaterly_review_metrics.soh_mtbft AS service_operational_health_mtbft
+    , quaterly_review_metrics.soh_mtbft AS soh_mtbft
       COMMENT = 'Mean time between failures'
 
-    , quaterly_review_metrics.tu_eoq_it_headcount AS team_utilisation_end_of_quarter_it_headcount
+    , quaterly_review_metrics.tu_eoq_it_headcount AS tu_eoq_it_headcount
       COMMENT = 'End of quarter IT headcount'
-    , quaterly_review_metrics.tu_eng_headcount AS team_utilisation_engineering_headcount
+    , quaterly_review_metrics.tu_eng_headcount AS tu_eng_headcount
       COMMENT = 'Engineering headcount'
-    , quaterly_review_metrics.tu_on_call_coverage AS team_utilisation_on_call_coverage
+    , quaterly_review_metrics.tu_on_call_coverage AS tu_on_call_coverage
       COMMENT = 'On call coverage'
-    , quaterly_review_metrics.tu_project_work_alloc AS team_utilisation_project_work_allocation
+    , quaterly_review_metrics.tu_project_work_alloc AS tu_project_work_alloc
       COMMENT = 'Project work allocation'
-    , quaterly_review_metrics.tu_bau_ops_alloc AS team_utilisation_bau_operations_allocation
+    , quaterly_review_metrics.tu_bau_ops_alloc AS tu_bau_ops_alloc
       COMMENT = 'BAU/Operations allocation'
-    , quaterly_review_metrics.tu_on_call_hours_per_eng AS team_utilisation_on_call_hours_per_engineer
+    , quaterly_review_metrics.tu_on_call_hours_per_eng AS tu_on_call_hours_per_eng
       COMMENT = 'On call hours per engineer'
-    , quaterly_review_metrics.tu_after_hours_incidents AS team_utilisation_after_hours_incidents_handled
+    , quaterly_review_metrics.tu_after_hours_incidents AS tu_after_hours_incidents
       COMMENT = 'After hours incidents handled'
-    , quaterly_review_metrics.tu_training_hours_per_fte AS team_utilisation_training_hours_per_fte
+    , quaterly_review_metrics.tu_training_hours_per_fte AS tu_training_hours_per_fte
       COMMENT = 'Training hours per FTE'
-    , quaterly_review_metrics.tu_certifications AS team_utilisation_certifications_earned
+    , quaterly_review_metrics.tu_certifications AS tu_certifications
       COMMENT = 'Certifications earned'
-    , quaterly_review_metrics.tu_attrition AS team_utilisation_attrition
+    , quaterly_review_metrics.tu_attrition AS tu_attrition
       COMMENT = 'Attrition'
 
-    , quaterly_review_metrics.tls_atlassian AS tool_licensing_spend_atlassian_spend
+    , quaterly_review_metrics.tls_atlassian AS tls_atlassian
       COMMENT = 'Spend on Atlassian licenses'
-    , quaterly_review_metrics.tls_github AS tool_licensing_spend_github_spend
+    , quaterly_review_metrics.tls_github AS tls_github
       COMMENT = 'Spend on GitHub licenses'
-    , quaterly_review_metrics.tls_slack AS tool_licensing_spend_slack_spend
+    , quaterly_review_metrics.tls_slack AS tls_slack
       COMMENT = 'Spend on Slack licenses'
-    , quaterly_review_metrics.tls_pagerduty AS tool_licensing_spend_pagerduty_spend
+    , quaterly_review_metrics.tls_pagerduty AS tls_pagerduty
       COMMENT = 'Spend on PagerDuty licenses'
-    , quaterly_review_metrics.tls_datadog AS tool_licensing_spend_datadog_spend
+    , quaterly_review_metrics.tls_datadog AS tls_datadog
       COMMENT = 'Spend on Datadog licenses'
-    , quaterly_review_metrics.tls_sentry AS tool_licensing_spend_sentry_spend
+    , quaterly_review_metrics.tls_sentry AS tls_sentry
       COMMENT = 'Spend on Sentry licenses'
-    , quaterly_review_metrics.tls_okta AS tool_licensing_spend_okta_spend
+    , quaterly_review_metrics.tls_okta AS tls_okta
       COMMENT = 'Spend on Okta licenses'
-    , quaterly_review_metrics.tls_aws AS tool_licensing_spend_aws_spend
+    , quaterly_review_metrics.tls_aws AS tls_aws
       COMMENT = 'Spend on AWS licenses'
-    , quaterly_review_metrics.tls_total AS tool_licensing_spend_total_spend
+    , quaterly_review_metrics.tls_total AS tls_total
       COMMENT = 'Total spend on licenses'
  )
 
