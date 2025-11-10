@@ -5,7 +5,8 @@ from snowflake.snowpark import Session
 def model(dbt, session: Session):
 
     dbt.config(
-        materialized='table',
+        materialized='incremental',
+        incremental_strategy='append',
         description='Table to store question extracts from documents'
     )
     
@@ -96,7 +97,7 @@ class dbtObj:
         self.ref = lambda *args, **kwargs: ref(*args, **kwargs, dbt_load_df_function=load_df_function)
         self.config = config
         self.this = this()
-        self.is_incremental = False
+        self.is_incremental = True
 
 # COMMAND ----------
 

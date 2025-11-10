@@ -1,0 +1,83 @@
+version: 2
+
+models:
+  - name: document_question_extracts
+    description: "Question extracts from documents using AI_EXTRACT"
+    config:
+      docs_stage_path: "@INCIDENT_MANAGEMENT.bronze_zone.DOCUMENTS"
+      meta:
+        quaterly_review_metrics:
+          enabled: true
+          schema:
+            type: "object"
+            properties:
+              'quarter': { description: "The year and quarter of the review metrics", type: "string" }
+              'overall_uptime': { description: "The actual recorded overall uptime of all services", type: "string" }
+              'critical_services_uptime': { description: "What was the actual recorded  uptime of critical services", type: "string" }
+              'sev_1_incidents': { description: "What were the actual recorded string of Sev-1 incidents", type: "string" }
+              'sev_2_incidents': { description: "What were the actual recorded string of Sev-2 incidents", type: "string" }
+              'mtta': { description: "What was the actual recorded mean time to acknowledge an incident", type: "string" }
+              'mttr': { description: "What was the actual recorded mean time to recover from an incident", type: "string" }
+              'change_failure_rate': { description: "What was the actual recorded change failure rate", type: "string" }
+              'slo_breaches': { description: "What was the actual recorded string of SLO breaches", type: "string" }
+              'error_budget_consumed': { description: "What was the actual recorded error budget consumed", type: "string" }
+              'service_downtime': { description: "What was the actual recorded service downtime", type: "string" } 
+              'unplanned_outage_hours': { description: "What was the actual recorded unplanned outage hours", type: "string" }
+              'planned_maintenance_hours': { description: "What was the actual recorded planned maintenance hours", type: "string" }
+              'sev_1_outage_minutes': { description: "What was the actual recorded Sev-1 outage minutes", type: "string" }
+              'sev_2_outage_minutes': { description: "What was the actual recorded Sev-2 outage minutes", type: "string" }
+              'longest_single_outage': { description: "What was the actual recorded longest single outage", type: "string" }
+              'mtbft': { description: "What was the actual recorded mean time between failures", type: "string" }
+              'end_of_quarter_it_headcount': { description: "What was the actual recorded end of quarter IT headcount", type: "string" }
+              'engineering_headcount': { description: "What was the actual recorded engineering headcount", type: "string" }
+              'on_call_coverage': { description: "What was the actual recorded on call coverage", type: "string" }
+              'project_work_allocation': { description: "What was the actual recorded project work allocation", type: "string" }
+              'bau_operations_allocation': { description: "What was the actual recorded BAU/Operations allocation", type: "string" }
+              'on_call_hours_per_engineer': { description: "What was the actual recorded on call hours per engineer", type: "string" }
+              'after_hours_incidents_handled': { description: "What was the actual recorded after hours incidents handled", type: "string" }
+              'training_hours_per_fte': { description: "What was the actual recorded training hours per FTE", type: "string" }                  
+              'certifications_earned': { description: "What was the actual recorded certifications earned", type: "string" }
+              'attrition': { description: "What was the actual recorded attrition", type: "string" }
+              'atlassian_spend': { description: "What was the actual spend on Atlassian licenses", type: "string" }
+              'github_spend': { description: "What was the actual spend on GitHub licenses", type: "string" }
+              'slack_spend': { description: "What was the actual spend on Slack licenses", type: "string" }
+              'pagerduty_spend': { description: "What was the actual spend on PagerDuty licenses", type: "string" }
+              'datadog_spend': { description: "What was the actual spend on Datadog licenses", type: "string" }
+              'sentry_spend': { description: "What was the actual spend on Sentry licenses", type: "string" }
+              'okta_spend': { description: "What was the actual spend on Okta licenses", type: "string" }
+              'aws_spend': { description: "What was the actual spend on AWS licenses", type: "string" }
+              'total_spend': { description: "What was the actual spend on total licenses", type: "string" }
+              
+    columns:
+      - name: relative_path
+        description: "Path to the file on the stage"
+        tests:
+          - not_null
+
+      - name: size
+        description: "Size of the file in bytes"
+
+      - name: last_modified
+        description: "Timestamp when the file was last updated in the stage"
+
+      - name: md5
+        description: "MD5 checksum for the file"
+
+      - name: etag
+        description: "ETag header for the file"
+
+      - name: file_url
+        description: "Snowflake file URL to the file"
+
+      - name: analysis_type
+        description: "Type of analysis requested for the file"
+        tests:
+          - accepted_values:
+              values: ['question']
+
+      - name: extension
+        description: "File extension parsed from the path"
+
+      - name: question_extracts_json
+        description: "JSON output from AI_EXTRACT following the `global_inm_policy_schema.json` format"
+  

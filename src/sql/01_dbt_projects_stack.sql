@@ -67,6 +67,10 @@ use role <% ctx.env.dbt_project_admin_role %>;
 use database <% ctx.env.dbt_project_database %>;
 
 create or replace schema <% ctx.env.dbt_project_database %>.bronze_zone;
+
+create or replace schema <% ctx.env.dbt_project_database %>.silver_zone;
+
+
 grant all privileges on schema <% ctx.env.dbt_project_database %>.bronze_zone to database role <% ctx.env.dbt_project_database %>.manage_bronze_zone;
 
 create or replace stage <% ctx.env.dbt_project_database %>.bronze_zone.csv_stage;
