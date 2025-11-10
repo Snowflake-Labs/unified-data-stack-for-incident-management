@@ -5,7 +5,8 @@ from snowflake.snowpark import Session
 def model(dbt, session: Session):
 
     dbt.config(
-        materialized='table',
+        materialized='incremental',
+        incremental_strategy='append',
         description='Table to store question extracts from documents'
     )
     

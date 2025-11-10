@@ -1,6 +1,7 @@
 {{
     config(
-        materialized='table',
+        materialized='incremental',
+        incremental_strategy='append',
         description='Table that contains the full extracts from the documents'
     )
 }}

@@ -1,6 +1,6 @@
 {{
   config(
-    materialized='table',
+    materialized='incremental',
     description='Flattened question extracts from documents with quarterly review metrics'
   )
 }}

@@ -23,3 +23,5 @@ grant role <% ctx.env.slack_connector_role %> to role sysadmin;
 
 grant role <% ctx.env.slack_connector_role %> to role <% ctx.env.openflow_runtime_usage_role %>;
 grant role <% ctx.env.slack_connector_role %> to user <% ctx.env.snowflake_user %>;
+
+grant role <% ctx.env.slack_connector_role %> to user <% ctx.env.openflow_user %>;
