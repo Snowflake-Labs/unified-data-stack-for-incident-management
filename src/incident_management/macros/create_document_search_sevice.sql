@@ -12,7 +12,7 @@
         CHUNK,
         RELATIVE_PATH,
         EXTENSION
-      FROM {{ target.database }}.BRONZE_ZONE.DOCUMENT_FULL_EXTRACTS
+      FROM {{ ref('document_full_extracts') }}
     );
 {% endset %}
 

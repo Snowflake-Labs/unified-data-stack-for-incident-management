@@ -46,6 +46,9 @@ models:
     bronze_zone:
       +schema: bronze_zone
       +materialized: table
+    silver_zone:
+      +schema: silver_zone
+      +materialized: incremental
     gold_zone:
       +schema: gold_zone
       +materialized: table

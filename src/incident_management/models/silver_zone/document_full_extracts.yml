@@ -3,10 +3,6 @@ version: 2
 models:
   - name: document_full_extracts
     description: "Full document extracts split into header-aware chunks"
-    # config:
-      # post-hook:
-      #   - "select 'post_hook: document_full_extracts' as msg"
-        
     columns:
       - name: RELATIVE_PATH
         description: "Path to the file on the stage"

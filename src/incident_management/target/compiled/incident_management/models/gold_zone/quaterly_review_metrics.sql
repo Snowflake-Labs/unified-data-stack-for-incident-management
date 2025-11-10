@@ -41,4 +41,4 @@ select
   dq.question_extracts_json:quaterly_review_metrics:tool_licensing_spend:okta_spend::number as tls_okta,
   dq.question_extracts_json:quaterly_review_metrics:tool_licensing_spend:aws_spend::number as tls_aws,
   dq.question_extracts_json:quaterly_review_metrics:tool_licensing_spend:total_spend::number as tls_total
-from incident_management.bronze_zone.document_question_extracts dq
+from incident_management.silver_zone.document_question_extracts dq
