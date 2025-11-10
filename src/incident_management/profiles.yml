@@ -3,11 +3,11 @@ incident_management:
     dev:
       type: snowflake
       account: ""
-      database: "incident_management"
-      role: "dbt_projects_engineer"
-      schema: "bronze_zone"
-      user: "clakkad"
-      warehouse: "demo_wh"
+      database: "v1_incident_management"
+      role: "v1_dbt_projects_engineer"
+      schema: "landing_zone"
+      user: ""
+      warehouse: "v1_demo_wh"
   target: "dev"
 
 

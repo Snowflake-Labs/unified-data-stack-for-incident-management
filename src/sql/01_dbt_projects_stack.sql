@@ -182,7 +182,7 @@ GIT_CREDENTIALS = <% ctx.env.dbt_project_database %>.dbt_project_deployments.inc
 
 
 CREATE DBT PROJECT <% ctx.env.dbt_project_database %>.dbt_project_deployments.<% ctx.env.dbt_project_name %>
-  FROM '@<% ctx.env.dbt_project_database %>.dbt_project_deployments.incident_management_dbt_project_repo/branches/main/src/incident_management'
+  FROM '@<% ctx.env.dbt_project_database %>.dbt_project_deployments.incident_management_dbt_project_repo/tags/v1.0.0/src/incident_management'
   COMMENT = 'generates incident management data models';
 
 alter task if exists dbt_project_deployments.im_root_task_scheduler suspend;
