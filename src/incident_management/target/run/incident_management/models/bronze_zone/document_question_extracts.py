@@ -4,7 +4,6 @@
     
 import snowflake.snowpark.functions as F
 from snowflake.snowpark import Session
-import json
 
     
 def model(dbt, session: Session):
@@ -21,7 +20,7 @@ def model(dbt, session: Session):
     
     # Filter for question analysis type
     document_all_pages = v_qualify_new_documents.filter(
-        F.col('analysis_type') == 'question'
+        F.lower(F.col('doc_type')) == 'question'
     )
     
     # Add AI_EXTRACT column
@@ -30,7 +29,7 @@ def model(dbt, session: Session):
         'question_extracts_json',
         F.call_builtin(
             'AI_EXTRACT',
-            F.call_builtin('TO_FILE', F.lit('@INCIDENT_MANAGEMENT.bronze_zone.DOCUMENTS'), F.col('relative_path')),
+            F.call_builtin('TO_FILE', F.lit(f'{docs_stage}'), F.col('relative_path')),
             global_inm_policy_schema
         )
     )    
