@@ -3,7 +3,7 @@
 with 
 documents_raw_extracts as(
     select
-        *,
+        * exclude (METADATA$ACTION, METADATA$ISUPDATE, METADATA$ROW_ID) ,
         AI_PARSE_DOCUMENT (
             TO_FILE('@INCIDENT_MANAGEMENT.bronze_zone.DOCUMENTS',relative_path),
              {
@@ -30,7 +30,7 @@ documents_chunked_extracts as
 )
 
 select 
-    og2.* exclude (page_chunks),
+    og2.* exclude (page_chunks), 
     lf2.value['chunk']::varchar as chunk,
     lf2.value['headers']::object as headers
 from documents_chunked_extracts og2,

@@ -78,6 +78,8 @@ ENCRYPTION = (TYPE = 'SNOWFLAKE_SSE');
 create or replace stream <% ctx.env.dbt_project_database %>.bronze_zone.documents_stream
 on stage <% ctx.env.dbt_project_database %>.bronze_zone.documents;
 
+create or replace schema <% ctx.env.dbt_project_database %>.gold_zone;
+grant all privileges on schema <% ctx.env.dbt_project_database %>.gold_zone to database role <% ctx.env.dbt_project_database %>.manage_gold_zone;
 
 -- Users table (employees, customers, system users)
 CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.bronze_zone.users (
@@ -94,7 +96,7 @@ CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.bronze_zone.users (
 );
 
 -- Main incidents table
-CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.bronze_zone.incidents (
+CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.gold_zone.incidents (
     incident_number VARCHAR(50) PRIMARY KEY, -- Human-readable incident ID (e.g., INC-2024-001)
     title VARCHAR(255) NOT NULL,
     
@@ -125,24 +127,24 @@ CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.bronze_zone.incidents
 );
 
 -- Simplified comments table for incident communication
-CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.bronze_zone.incident_comment_history (
+CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.gold_zone.incident_comment_history (
     id STRING PRIMARY KEY DEFAULT UUID_STRING(),
     incident_number VARCHAR(50) NOT NULL,
     author_id STRING NOT NULL,
     content STRING NOT NULL,
     created_at TIMESTAMP_TZ DEFAULT CURRENT_TIMESTAMP(),
     
-    CONSTRAINT fk_comment_history_incident FOREIGN KEY (incident_number) REFERENCES <% ctx.env.dbt_project_database %>.bronze_zone.incidents(incident_number),
+    CONSTRAINT fk_comment_history_incident FOREIGN KEY (incident_number) REFERENCES <% ctx.env.dbt_project_database %>.gold_zone.incidents(incident_number),
     CONSTRAINT fk_comment_history_author FOREIGN KEY (author_id) REFERENCES <% ctx.env.dbt_project_database %>.bronze_zone.users(id)
 );
 
 -- File attachments
-CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.bronze_zone.incident_attachments (
+CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.gold_zone.incident_attachments (
     id STRING PRIMARY KEY DEFAULT UUID_STRING(),
     incident_number VARCHAR(50) NOT NULL,
     attachment_file FILE,
     uploaded_at TIMESTAMP_TZ DEFAULT CURRENT_TIMESTAMP(),
-    CONSTRAINT fk_attachments_incident FOREIGN KEY (incident_number) REFERENCES <% ctx.env.dbt_project_database %>.bronze_zone.incidents(incident_number)
+    CONSTRAINT fk_attachments_incident FOREIGN KEY (incident_number) REFERENCES <% ctx.env.dbt_project_database %>.gold_zone.incidents(incident_number)
 );
 
 put file://../../data/csv/users.csv  @<% ctx.env.dbt_project_database %>.bronze_zone.csv_stage overwrite=true;
@@ -152,10 +154,10 @@ put file://../../data/csv/incident_comment_history.csv @<% ctx.env.dbt_project_d
 copy into <% ctx.env.dbt_project_database %>.bronze_zone.users from 
     @<% ctx.env.dbt_project_database %>.bronze_zone.csv_stage/users.csv 
     file_format = (type = csv field_delimiter = ',' skip_header = 1);
-copy into <% ctx.env.dbt_project_database %>.bronze_zone.incidents from 
+copy into <% ctx.env.dbt_project_database %>.gold_zone.incidents from 
     @<% ctx.env.dbt_project_database %>.bronze_zone.csv_stage/incidents.csv 
     file_format = (type = csv field_delimiter = ',' skip_header = 1);
-copy into <% ctx.env.dbt_project_database %>.bronze_zone.incident_comment_history from 
+copy into <% ctx.env.dbt_project_database %>.gold_zone.incident_comment_history from 
     @<% ctx.env.dbt_project_database %>.bronze_zone.csv_stage/incident_comment_history.csv 
     file_format = (type = csv field_delimiter = ',' skip_header = 1);
 
@@ -256,6 +258,4 @@ create or replace task dbt_project_deployments.im_project_run_select_gold_zone
 --     END;
 --   $$;
 
-create or replace schema <% ctx.env.dbt_project_database %>.gold_zone;
-grant all privileges on schema <% ctx.env.dbt_project_database %>.gold_zone to database role <% ctx.env.dbt_project_database %>.manage_gold_zone;
 

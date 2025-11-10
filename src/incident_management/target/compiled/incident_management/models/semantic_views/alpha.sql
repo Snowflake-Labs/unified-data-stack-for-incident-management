@@ -1,23 +1,23 @@
-{{ config(materialized='semantic_view') }}
+
 
 TABLES(
-  full_doc_extracts as {{ ref('document_full_extracts') }}
+  full_doc_extracts as incident_management.bronze_zone.document_full_extracts
     COMMENT = 'All policy documents'
-  , users as {{ ref('users') }}
+  , users as incident_management.bronze_zone.users
     COMMENT = 'Materialized users table with enriched data'
-  , v_slack_msgs as {{ ref('v_qualify_slack_messages') }}
+  , v_slack_msgs as incident_management.bronze_zone.v_qualify_slack_messages
     COMMENT = 'Qualified Slack messages from known reporters with optional attachment metadata and extracted incident number'
-  , incidents as {{ ref('incidents') }}
+  , incidents as incident_management.gold_zone.incidents
     COMMENT = 'Materialized incidents table with enriched data and calculated fields'
-  , active_incidents as {{ ref('active_incidents') }}
+  , active_incidents as incident_management.gold_zone.active_incidents
     COMMENT = 'Active incidents requiring attention with SLA status and priority ordering'
-  , closed_incidents as {{ ref('closed_incidents') }}
+  , closed_incidents as incident_management.gold_zone.closed_incidents
     COMMENT = 'Closed incidents with resolution metrics and performance insights'
-  , incident_attachments as {{ ref('incident_attachments') }}
+  , incident_attachments as incident_management.gold_zone.incident_attachments
     COMMENT = 'Materialized incident attachments table'
-  , incident_comment_history as {{ ref('incident_comment_history') }}
+  , incident_comment_history as incident_management.gold_zone.incident_comment_history
     COMMENT = 'Simplified incident comment history for tracking communication'
-  , weekly_incident_trends as {{ ref('weekly_incident_trends') }}
+  , weekly_incident_trends as incident_management.gold_zone.weekly_incident_trends
     COMMENT = 'Weekly incident trends for the last 12 weeks'
 
 )
@@ -101,28 +101,28 @@ FACTS (
       WITH SYNONYMS = ('headers', 'detected headers')
       COMMENT = 'Object of detected headers for the chunk (e.g., header_1, header_2)'
 
-    , users.id AS id
+    , users.id AS user_id
       COMMENT = 'Unique user identifier'
-    , users.email AS email
+    , users.email AS user_email
       COMMENT = 'Primary email address'
-    ,users.first_name AS first_name
+    ,users.first_name AS user_first_name
       COMMENT = 'First name parsed from email user part'
-    ,users.last_name AS last_name
+    ,users.last_name AS user_last_name
       COMMENT = 'Last name parsed from email domain part'
-    ,users.role AS role
+    ,users.role AS user_role
       COMMENT = 'User role'
     ,users.department AS user_department
       COMMENT = 'User department'
-    ,users.team AS team
+    ,users.team AS user_team
       COMMENT = 'User team'
-    , users.is_active AS is_active
+    , users.is_active AS user_is_active
       COMMENT = 'Active flag'
-    , users.created_at AS created_at
+    , users.created_at AS user_created_at
       COMMENT = 'Creation timestamp'
-    , users.updated_at AS updated_at
+    , users.updated_at AS user_updated_at
       COMMENT = 'Last update timestamp'
 
-    , v_slack_msgs.hasfiles AS hasfiles
+    , v_slack_msgs.hasfiles AS slack_hasfiles
       COMMENT = 'Whether the message has attachments'
     , v_slack_msgs.type AS slack_type
       COMMENT = 'Slack message type'
@@ -269,5 +269,3 @@ FACTS (
     , weekly_incident_trends.week AS trend_week
       COMMENT = 'Week bucket (date truncated to week)'
   )
-
- 
