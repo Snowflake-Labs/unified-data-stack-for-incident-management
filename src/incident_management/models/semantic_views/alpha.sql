@@ -144,118 +144,118 @@ FACTS (
  DIMENSIONS (
     incidents.incident_number AS incident_number
       COMMENT = 'Incident identifier'
-    , incidents.category AS incident_category
+   , incidents.category AS category
       COMMENT = 'Incident category'
-    , incidents.title AS incident_title
+   , incidents.title AS title
       COMMENT = 'Incident title'
-    , incidents.priority AS incident_priority
+   , incidents.priority AS priority
       COMMENT = 'Incident priority'
-    , incidents.status AS incident_status
+   , incidents.status AS status
       COMMENT = 'Incident status'
-    , incidents.assignee_id AS incident_assignee_id
+   , incidents.assignee_id AS assignee_id
       COMMENT = 'Assignee user id'
-    , incidents.reportee_id AS incident_reportee_id
+   , incidents.reportee_id AS reportee_id
       COMMENT = 'Reportee user id'
-    , incidents.created_at AS incident_created_at
+   , incidents.created_at AS created_at
       COMMENT = 'Creation timestamp'
-    , incidents.closed_at AS incident_closed_at
+   , incidents.closed_at AS closed_at
       COMMENT = 'Close timestamp'
-    , incidents.updated_at AS incident_updated_at
+   , incidents.updated_at AS updated_at
       COMMENT = 'Last update timestamp'
-    , incidents.source_system AS incident_source_system
+   , incidents.source_system AS source_system
       COMMENT = 'Source system for the incident'
-    ,incidents.external_source_id AS incident_external_source_id
+   ,incidents.external_source_id AS external_source_id
       COMMENT = 'External source identifier'
-    , incidents.has_attachments AS incident_has_attachments
+   , incidents.has_attachments AS has_attachments
       COMMENT = 'Whether the incident has attachments'
-    , incidents.slack_message_id AS incident_slack_message_id
+   , incidents.slack_message_id AS slack_message_id
       COMMENT = 'Associated Slack message id'
-    , incidents.last_comment AS incident_last_comment
+   , incidents.last_comment AS last_comment
       COMMENT = 'Latest comment content'
 
-    , active_incidents.incident_number AS active_incident_number
+   , active_incidents.incident_number AS incident_number
       COMMENT = 'Incident identifier'
-    , active_incidents.title AS active_incident_title
+   , active_incidents.title AS title
       COMMENT = 'Incident title'
-    , active_incidents.category AS active_incident_category
+   , active_incidents.category AS category
       COMMENT = 'Incident category'
-    , active_incidents.priority AS active_incident_priority
+   , active_incidents.priority AS priority
       COMMENT = 'Incident priority'
-    , active_incidents.status AS active_incident_status
+   , active_incidents.status AS status
       COMMENT = 'Incident status'
-    , active_incidents.assignee_id AS active_incident_assignee_id
+   , active_incidents.assignee_id AS assignee_id
       COMMENT = 'Assignee user id'
-    , active_incidents.assignee_name AS active_incident_assignee_name
+   , active_incidents.assignee_name AS assignee_name
       COMMENT = 'Assignee full name'
-    , active_incidents.reportee_id AS active_incident_reportee_id
+   , active_incidents.reportee_id AS reportee_id
       COMMENT = 'Reportee user id'
-    , active_incidents.reportee_name AS active_incident_reportee_name
+   , active_incidents.reportee_name AS reportee_name
       COMMENT = 'Reportee full name'
-    , active_incidents.created_at AS active_incident_created_at
+   , active_incidents.created_at AS created_at
       COMMENT = 'Creation timestamp'
-    , active_incidents.updated_at AS active_incident_updated_at
+   , active_incidents.updated_at AS updated_at
       COMMENT = 'Last update timestamp'
-    , active_incidents.source_system AS active_incident_source_system
+   , active_incidents.source_system AS source_system
       COMMENT = 'Source system for the incident'
-    , active_incidents.external_source_id AS active_incident_external_source_id
+   , active_incidents.external_source_id AS external_source_id
       COMMENT = 'External source identifier'
-    , active_incidents.has_attachments AS active_incident_has_attachments
+   , active_incidents.has_attachments AS has_attachments
       COMMENT = 'Whether the incident has attachments'
 
-    , closed_incidents.incident_number AS closed_incident_number
+   , closed_incidents.incident_number AS incident_number
       COMMENT = 'Incident identifier'
-    , closed_incidents.title AS closed_incident_title
+   , closed_incidents.title AS title
       COMMENT = 'Incident title'
-    , closed_incidents.category AS closed_incident_category
+   , closed_incidents.category AS category
       COMMENT = 'Incident category'
-    , closed_incidents.priority AS closed_incident_priority
+   , closed_incidents.priority AS priority
       COMMENT = 'Incident priority'
-    , closed_incidents.status AS closed_incident_status
+   , closed_incidents.status AS status
       COMMENT = 'Incident status'
-    , closed_incidents.assignee_id AS closed_incident_assignee_id
+   , closed_incidents.assignee_id AS assignee_id
       COMMENT = 'Assignee user id'
-    , closed_incidents.reportee_id AS closed_incident_reportee_id
+   , closed_incidents.reportee_id AS reportee_id
       COMMENT = 'Reportee user id'
-    , closed_incidents.created_at AS closed_incident_created_at
+   , closed_incidents.created_at AS created_at
       COMMENT = 'Creation timestamp'
-    , closed_incidents.closed_at AS closed_incident_closed_at
+   , closed_incidents.closed_at AS closed_at
       COMMENT = 'Close timestamp'
-    , closed_incidents.updated_at AS closed_incident_updated_at
+   , closed_incidents.updated_at AS updated_at
       COMMENT = 'Last update timestamp'
-    , closed_incidents.source_system AS closed_incident_source_system
+   , closed_incidents.source_system AS source_system
       COMMENT = 'Source system for the incident'
-    , closed_incidents.external_source_id AS closed_incident_external_source_id
+   , closed_incidents.external_source_id AS external_source_id
       COMMENT = 'External source identifier'
-    , closed_incidents.has_attachments AS closed_incident_has_attachments
+   , closed_incidents.has_attachments AS has_attachments
       COMMENT = 'Whether the incident had attachments'
-    , closed_incidents.closed_month AS closed_incident_month
+   , closed_incidents.closed_month AS closed_month
       COMMENT = 'Month when incident was closed'
 
-    , incident_attachments.id AS attachment_id
+   , incident_attachments.id AS id
       COMMENT = 'Attachment id'
-    , incident_attachments.incident_number AS attachment_incident_number
+   , incident_attachments.incident_number AS incident_number
       COMMENT = 'Incident identifier'
     , incident_attachments.attachment_file AS attachment_file
       COMMENT = 'Stage file reference for the attachment'
     , incident_attachments.uploaded_at AS attachment_uploaded_at
       COMMENT = 'Attachment upload timestamp'
 
-    , incident_comment_history.id AS comment_id
+   , incident_comment_history.id AS id
       COMMENT = 'Comment id'
-    , incident_comment_history.incident_number AS comment_incident_number
+   , incident_comment_history.incident_number AS incident_number
       COMMENT = 'Incident identifier'
-    , incident_comment_history.author_id AS comment_author_id
+   , incident_comment_history.author_id AS author_id
       COMMENT = 'Comment author user id'
-    ,  incident_comment_history.content AS comment_content
+   ,  incident_comment_history.content AS content
       COMMENT = 'Comment content'
-    , incident_comment_history.created_at AS comment_created_at
+   , incident_comment_history.created_at AS created_at
       COMMENT = 'Comment creation timestamp'
-    , weekly_incident_trends.week AS trend_week
+   , weekly_incident_trends.week AS week
       COMMENT = 'Week bucket (date truncated to week)'
 
-    , quaterly_review_metrics.relative_path AS qrm_relative_path
+   , quaterly_review_metrics.relative_path AS relative_path
       COMMENT = 'Path to the file on the stage'
-    , quaterly_review_metrics.quarter AS review_quarter
+   , quaterly_review_metrics.quarter AS quarter
       COMMENT = 'Year and quarter of the review metrics'
   )
 
