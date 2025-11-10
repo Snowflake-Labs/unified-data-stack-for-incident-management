@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: v_qualify_new_documents
+    description: "Qualified new documents with derived type and extension"
+    columns:
+      - name: RELATIVE_PATH
+        description: "Path to the file on the stage"
+      - name: SIZE
+        description: "Size of the file in bytes"
+      - name: LAST_MODIFIED
+        description: "Timestamp when the file was last updated in the stage"
+      - name: MD5
+        description: "MD5 checksum for the file"
+      - name: ETAG
+        description: "ETag header for the file"
+      - name: FILE_URL
+        description: "Snowflake file URL to the file"
+      - name: DOC_TYPE
+        description: "Derived document type based on the path"
+      - name: EXTENSION
+        description: "Derived file extension parsed from the path"
+
+

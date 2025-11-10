@@ -1,0 +1,46 @@
+version: 2
+
+models:
+  - name: v_qualify_slack_messages
+    description: "Qualified Slack messages from known reporters with optional attachment metadata and extracted incident number"
+    columns:
+      - name: HASFILES
+        description: "Whether the message has attachments"
+      - name: TYPE
+        description: "Slack message type"
+      - name: SUBTYPE
+        description: "Slack message subtype"
+      - name: TEAM
+        description: "Slack team identifier"
+      - name: CHANNEL
+        description: "Slack channel identifier"
+      - name: USER
+        description: "Slack user identifier"
+      - name: USERNAME
+        description: "Slack username"
+      - name: REPORTER_ID
+        description: "Matched reporter id from users"
+      - name: TEXT
+        description: "Slack message text"
+      - name: TS
+        description: "Slack message timestamp"
+      - name: SLACK_MESSAGE_ID
+        description: "Unique Slack message id"
+        tests:
+          - not_null
+      - name: FILE_ID
+        description: "Attachment file id"
+      - name: FILE_NAME
+        description: "Attachment file name"
+      - name: FILE_MIMETYPE
+        description: "Attachment file mimetype"
+      - name: FILE_SIZE
+        description: "Attachment file size"
+      - name: STAGED_FILE_PATH
+        description: "Path to staged file"
+      - name: ATTACHMENT_FILE
+        description: "Stage file reference"
+      - name: INCIDENT_NUMBER
+        description: "Extracted incident number from image or text"
+
+

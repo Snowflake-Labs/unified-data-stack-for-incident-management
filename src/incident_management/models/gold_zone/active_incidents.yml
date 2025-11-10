@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: active_incidents
+    description: "Active incidents requiring attention with SLA status and priority ordering"
+    columns:
+      - name: INCIDENT_NUMBER
+        description: "Incident identifier"
+        tests:
+          - not_null
+      - name: TITLE
+        description: "Incident title"
+      - name: CATEGORY
+        description: "Incident category"
+      - name: PRIORITY
+        description: "Incident priority"
+      - name: STATUS
+        description: "Incident status"
+      - name: ASSIGNEE_ID
+        description: "Assignee user id"
+      - name: ASSIGNEE_NAME
+        description: "Assignee full name"
+      - name: REPORTEE_ID
+        description: "Reportee user id"
+      - name: REPORTEE_NAME
+        description: "Reportee full name"
+      - name: CREATED_AT
+        description: "Creation timestamp"
+      - name: UPDATED_AT
+        description: "Last update timestamp"
+      - name: AGE_HOURS
+        description: "Age of incident in hours"
+      - name: SOURCE_SYSTEM
+        description: "Source system for the incident"
+      - name: EXTERNAL_SOURCE_ID
+        description: "External source identifier"
+      - name: HAS_ATTACHMENTS
+        description: "Whether the incident has attachments"
+
+

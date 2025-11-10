@@ -11,7 +11,13 @@ profile: 'incident_management'
 
 # Variables
 vars:
-  docs_stage_path: '@INCIDENT_MANAGEMENT.LANDING_ZONE.DOCUMENTS'
+  docs_stage_path: '@INCIDENT_MANAGEMENT.bronze_zone.DOCUMENTS'
+  supported_doc_formats: ['pdf', 'docx', 'doc', 'txt', 'text', 'html', 'md', 'pptx', 'ppt', 'png', 'eml', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff', 'tif', 'webp', 'htm']
+  parse_mode: "LAYOUT"
+  page_split: true
+  max_chunk_size: 500
+  max_chunk_depth: 5
+
 
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be
@@ -37,8 +43,15 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   incident_management:
     # Config indicated by + and applies to all files under models/example/
-    landing_zone:
+    bronze_zone:
+      +schema: bronze_zone
       +materialized: table
-    curated_zone:
-      +schema: curated_zone
+    silver_zone:
+      +schema: silver_zone
+      +materialized: incremental
+    gold_zone:
+      +schema: gold_zone
       +materialized: table
+    semantic_views:
+      +schema: semantic_views
+      +materialized: semantic_view

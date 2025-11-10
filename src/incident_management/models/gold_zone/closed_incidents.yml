@@ -1,0 +1,102 @@
+version: 2
+
+models:
+  - name: closed_incidents
+    description: "Closed incidents with resolution metrics, SLA compliance analysis, and performance insights"
+    columns:
+      - name: INCIDENT_NUMBER
+        description: "Incident identifier"
+        tests:
+          - not_null
+      - name: TITLE
+        description: "Incident title"
+      - name: CATEGORY
+        description: "Incident category"
+      - name: PRIORITY
+        description: "Incident priority"
+      - name: STATUS
+        description: "Incident status"
+      - name: ASSIGNEE_ID
+        description: "Assignee user id"
+      - name: REPORTEE_ID
+        description: "Reportee user id"
+      - name: CREATED_AT
+        description: "Creation timestamp"
+      - name: CLOSED_AT
+        description: "Close timestamp"
+      - name: UPDATED_AT
+        description: "Last update timestamp"
+      - name: SOURCE_SYSTEM
+        description: "Source system for the incident"
+      - name: EXTERNAL_SOURCE_ID
+        description: "External source identifier"
+      - name: HAS_ATTACHMENTS
+        description: "Whether the incident has attachments"
+      - name: TOTAL_RESOLUTION_HOURS
+        description: "Total time from creation to closure in hours"
+      - name: CLOSED_MONTH
+        description: "Month when incident was closed"
+      - name: CLOSED_YEAR
+        description: "Year when incident was closed"
+      - name: CLOSED_QUARTER
+        description: "Quarter when incident was closed"
+
+version: 2
+
+models:
+  - name: closed_incidents
+    description: "Closed incidents with basic metrics and analysis"
+    columns:
+      - name: incident_number
+        description: "Human-readable incident number and primary key"
+        tests:
+          - unique
+          - not_null
+      - name: title
+        description: "Brief incident title"
+        tests:
+          - not_null
+      - name: category
+        description: "Incident category classification"
+      - name: priority
+        description: "Incident priority level"
+        tests:
+          - accepted_values:
+              values: ['low', 'medium', 'high', 'critical']
+      - name: status
+        description: "Current incident status (closed or resolved)"
+        tests:
+          - accepted_values:
+              values: ['closed', 'resolved']
+      - name: assignee_id
+        description: "ID of user assigned to the incident"
+      - name: reportee_id
+        description: "ID of user who reported the incident"
+      - name: created_at
+        description: "Timestamp when the incident was created"
+        tests:
+          - not_null
+      - name: closed_at
+        description: "Timestamp when the incident was closed"
+        tests:
+          - not_null
+      - name: updated_at
+        description: "Timestamp when the incident was last updated"
+      - name: source_system
+        description: "Where the incident originated"
+      - name: external_source_id
+        description: "Reference to external source systems"
+      - name: has_attachments
+        description: "Indicates if incident has any attachments"
+      - name: total_resolution_hours
+        description: "Total time from creation to closure in hours"
+        tests:
+          - not_null
+      - name: closed_month
+        description: "Month when the incident was closed (for trending)"
+      - name: closed_year
+        description: "Year when the incident was closed (for trending)"
+      - name: closed_quarter
+        description: "Quarter when the incident was closed (for trending)"
+
+

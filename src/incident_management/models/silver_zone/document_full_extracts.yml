@@ -1,0 +1,54 @@
+version: 2
+
+models:
+  - name: document_full_extracts
+    description: "Full document extracts split into header-aware chunks"
+    columns:
+      - name: RELATIVE_PATH
+        description: "Path to the file on the stage"
+        data_type: VARCHAR(16777216)
+        tests:
+          - not_null
+      
+      - name: SIZE
+        description: "Size of the file in bytes"
+        data_type: NUMBER(38,0)
+      
+      - name: LAST_MODIFIED
+        description: "Timestamp when the file was last updated in the stage"
+        data_type: TIMESTAMP_TZ(3)
+      
+      - name: MD5
+        description: "MD5 checksum for the file"
+        data_type: VARCHAR(16777216)
+      
+      - name: ETAG
+        description: "ETag header for the file"
+        data_type: VARCHAR(16777216)
+      
+      - name: FILE_URL
+        description: "Snowflake file URL to the file"
+        data_type: VARCHAR(16777216)
+            
+      - name: DOC_TYPE
+        description: "Type of document classification (e.g., 'full', 'question', 'slack')"
+        data_type: VARCHAR(8)
+      
+      - name: EXTENSION
+        description: "File extension parsed from the path"
+        data_type: VARCHAR(16777216)
+      
+      - name: PAGE_NUM
+        description: "Source page number for the extracted content"
+        data_type: NUMBER(38,0)
+      
+      - name: CHUNK
+        description: "Markdown/text chunk content extracted from the document pages"
+        data_type: VARCHAR(16777216)
+        tests:
+          - not_null
+          
+      - name: HEADERS
+        description: "Object of detected headers for the chunk (e.g., header_1, header_2)"
+        data_type: OBJECT
+  

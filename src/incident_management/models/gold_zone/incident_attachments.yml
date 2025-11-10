@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: incident_attachments
+    description: "Materialized incident attachments table"
+    columns:
+      - name: ID
+        description: "Attachment id"
+        tests:
+          - not_null
+      - name: INCIDENT_NUMBER
+        description: "Incident identifier"
+      - name: ATTACHMENT_FILE
+        description: "Stage file reference for the attachment"
+      - name: UPLOADED_AT
+        description: "Attachment upload timestamp"
+
+

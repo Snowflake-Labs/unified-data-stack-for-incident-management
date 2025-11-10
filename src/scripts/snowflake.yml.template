@@ -14,4 +14,4 @@ env:
   slack_connector_role: "${SLACK_CONNECTOR_ROLE}"
   slack_connector_wh: "${SLACK_CONNECTOR_WH}"
   openflow_runtime_usage_role: "${OPENFLOW_RUNTIME_USAGE_ROLE}"
-  
+  openflow_user: "${OPENFLOW_USER}"

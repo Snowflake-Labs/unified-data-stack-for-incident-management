@@ -1,0 +1,190 @@
+version: 2
+
+sources:
+  - name: bronze_zone
+    description: "Raw incident management data"
+    schema: bronze_zone
+    tables:
+      - name: slack_messages
+        description: "Slack messages data from incident management channels"
+        columns:
+          - name: hasfile
+            description: "Whether the message has a file attachment"
+          - name: hasfiles
+            description: "Whether the message has multiple file attachments"
+          - name: type
+            description: "Type of Slack message"
+          - name: subtype
+            description: "Subtype of Slack message"
+          - name: team
+            description: "Slack team identifier"
+          - name: channel
+            description: "Slack channel identifier"
+          - name: user
+            description: "User identifier who sent the message"
+          - name: username
+            description: "Username of the message sender"
+          - name: text
+            description: "Message content text"
+          - name: ts
+            description: "Message timestamp"
+            tests:
+              - not_null
+          - name: threadts
+            description: "Thread timestamp if message is part of a thread"
+          - name: intro
+            description: "Whether this is an intro message"
+          - name: starred
+            description: "Whether the message is starred"
+          - name: wibblr
+            description: "Wibblr flag"
+          - name: appid
+            description: "Application identifier"
+          - name: botid
+            description: "Bot identifier if message is from a bot"
+          - name: botlink
+            description: "Bot link if message is from a bot"
+          - name: displayasbot
+            description: "Whether to display the message as from a bot"
+          - name: upload
+            description: "Whether the message contains an upload"
+          - name: parentuserid
+            description: "Parent user identifier"
+          - name: clientmsgid
+            description: "Client message identifier"
+          - name: unfurllinks
+            description: "Whether to unfurl links in the message"
+          - name: unfurlmedia
+            description: "Whether to unfurl media in the message"
+          - name: threadbroadcast
+            description: "Whether the thread message is broadcast to the channel"
+          - name: locked
+            description: "Whether the message is locked"
+          - name: subscribed
+            description: "Whether the user is subscribed to the thread"
+          - name: hidden
+            description: "Whether the message is hidden"
+          - name: nonotifications
+            description: "Whether notifications are disabled"
+          - name: chunkindex
+            description: "Index of the data chunk"
+          - name: chunkcount
+            description: "Total number of data chunks"
+          - name: ingestts
+            description: "Timestamp when the data was ingested"
+          - name: workspaceid
+            description: "Slack workspace identifier"
+
+      - name: slack_members
+        description: "Slack channel membership data"
+        columns:
+          - name: conversationid
+            description: "Unique identifier for the Slack conversation/channel"
+            tests:
+              - not_null
+          - name: conversationtype
+            description: "Type of conversation (channel, group, DM, etc.)"
+          - name: memberids
+            description: "Array of member user IDs in the conversation"
+          - name: memberemails
+            description: "Array of member email addresses in the conversation"
+          - name: isprivate
+            description: "Whether the conversation is private"
+          - name: lastupdated
+            description: "Timestamp when the membership data was last updated"
+            tests:
+              - not_null
+      - name: file_hashes
+        description: "File hash values for data integrity and deduplication"
+        columns:
+          - name: hash_value
+            description: "Computed hash value of the file"
+            tests:
+              - not_null
+          - name: source_system
+            description: "System or application that generated the file"
+          - name: doc_id
+            description: "Document identifier associated with the file"
+          - name: event_ts
+            description: "Timestamp when the hash event occurred"
+          - name: algorithm
+            description: "Hashing algorithm used (e.g., MD5, SHA-256)"
+
+      - name: doc_metadata
+        description: "Document metadata for files shared in incident management channels"
+        columns:
+          - name: event_ts
+            description: "Timestamp when the document event occurred"
+            tests:
+              - not_null
+          - name: channel_id
+            description: "Slack channel identifier where the document was shared"
+            tests:
+              - not_null
+          - name: user_id
+            description: "User identifier who shared the document"
+          - name: file_id
+            description: "Unique file identifier"
+            tests:
+              - not_null
+          - name: file_name
+            description: "Name of the file"
+          - name: file_mimetype
+            description: "MIME type of the file (e.g., application/pdf, image/png)"
+          - name: file_size
+            description: "Size of the file in bytes"
+          - name: content_sha256
+            description: "SHA-256 hash of the file content for integrity verification"
+          - name: staged_file_path
+            description: "Path where the file is staged for processing"
+  
+      - name: documents_stream
+        description: "Stream of new or updated documents for processing"
+        columns:
+          - name: relative_path
+            description: "Path to the file on the stage"
+          - name: size
+            description: "Size of the file in bytes"
+          - name: last_modified
+            description: "Timestamp when the file was last updated in the stage"
+          - name: md5
+            description: "MD5 checksum for the file"
+          - name: etag
+            description: "ETag header for the file"
+          - name: file_url
+            description: "Snowflake file URL to the file"
+
+      - name: users
+        description: "Materialized users table with enriched data"
+        columns:
+          - name: id
+            description: "User identifier (from Slack member ID)"
+            tests:
+              - not_null
+          - name: email
+            description: "Primary email address"
+            tests:
+              - not_null
+              - unique
+          - name: first_name
+            description: "User first name (derived from email local-part)"
+          - name: last_name
+            description: "User last name or email domain part"
+          - name: role
+            description: "Functional role for incident management"
+          - name: department
+            description: "Department name"
+          - name: team
+            description: "Team name"
+          - name: is_active
+            description: "Whether the user is active"
+          - name: created_at
+            description: "Record creation timestamp"
+            tests:
+              - not_null
+          - name: updated_at
+            description: "Record last update timestamp"
+
+
+  
+ 

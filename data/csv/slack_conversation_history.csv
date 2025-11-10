@@ -1,0 +1,102 @@
+message_id,channel_id,user_id,username,message_text,timestamp,thread_ts,reply_count,has_reactions,mentioned_users,mentioned_incidents
+msg_001,C01INCIDENT,usr_003,Mike Wilson,Hey team - getting reports of payment gateway timeouts. Anyone else seeing this?,2024-01-20 14:31:00,,,false,,
+msg_002,C01INCIDENT,usr_002,Sarah Johnson,@Mike Wilson Yeah I'm on it. Created INC-2024-001 to track this. Looking at the logs now.,2024-01-20 14:33:00,,,false,usr_003,INC-2024-001
+msg_003,C01INCIDENT,usr_001,John Smith,Thanks Sarah. What's the severity looking like? Should we page the payment team?,2024-01-20 14:35:00,,,false,usr_002,INC-2024-001
+msg_004,C01INCIDENT,usr_002,Sarah Johnson,Currently HIGH priority. About 15% of transactions failing. I think we can handle this without escalating yet.,2024-01-20 14:37:00,,,false,usr_001,INC-2024-001
+msg_005,C01INCIDENT,usr_002,Sarah Johnson,Found it! The timeout was set too low. Pushing config change now.,2024-01-20 15:32:00,,,false,,INC-2024-001
+msg_006,C01INCIDENT,usr_004,Lisa Chen,Nice work Sarah! Was this from the deployment last week?,2024-01-20 15:45:00,,,false,usr_002,INC-2024-001
+msg_007,C01INCIDENT,usr_002,Sarah Johnson,@Lisa Chen Yeah looks like someone set it to 5s when we moved to the new infra. Should have been 15s.,2024-01-20 15:48:00,,,false,usr_004,INC-2024-001
+msg_008,C01INCIDENT,usr_001,John Smith,All good now? Can we close INC-2024-001?,2024-01-20 16:10:00,,,false,usr_002,INC-2024-001
+msg_009,C01INCIDENT,usr_002,Sarah Johnson,Yes closing it now. Will add a follow-up task to audit other service timeouts.,2024-01-20 16:15:00,,,false,usr_001,INC-2024-001
+msg_010,C01INCIDENT,usr_009,Thomas Garcia,🚨 URGENT - Multiple users can't log in. Web and mobile both affected.,2024-01-22 09:16:00,,,true,,
+msg_011,C01INCIDENT,usr_005,David Brown,I'll take this. Creating incident now.,2024-01-22 09:18:00,,,false,usr_009,
+msg_012,C01INCIDENT,usr_005,David Brown,INC-2024-002 created - CRITICAL priority. Checking auth service health.,2024-01-22 09:20:00,,,false,,INC-2024-002
+msg_013,C01INCIDENT,usr_001,John Smith,@David Brown Do you need backup on this? I can pull Robert in if needed.,2024-01-22 09:22:00,,,false,usr_005,INC-2024-002
+msg_014,C01INCIDENT,usr_005,David Brown,Thanks John. Let me dig for 10 more mins. Seeing Redis errors in the logs.,2024-01-22 09:25:00,,,false,usr_001,INC-2024-002
+msg_015,C01INCIDENT,usr_004,Lisa Chen,@David Brown Redis cluster status looks normal from my end. Could be cache corruption?,2024-01-22 09:30:00,,,false,usr_005,INC-2024-002
+msg_016,C01INCIDENT,usr_005,David Brown,Good call @Lisa Chen! Cache is definitely corrupted. Flushing it now.,2024-01-22 09:35:00,,,false,usr_004,INC-2024-002
+msg_017,C01INCIDENT,usr_005,David Brown,Auth service restarted. @Thomas Garcia can you test login now?,2024-01-22 09:45:00,,,false,usr_009,INC-2024-002
+msg_018,C01INCIDENT,usr_009,Thomas Garcia,Testing now... ✅ Login working! Customers should be good.,2024-01-22 09:48:00,,,true,usr_005,INC-2024-002
+msg_019,C01INCIDENT,usr_005,David Brown,Great! Monitoring for 30 mins before I close this out.,2024-01-22 09:50:00,,,false,,INC-2024-002
+msg_020,C01INCIDENT,usr_001,John Smith,Nice recovery David 👍,2024-01-22 10:00:00,,,true,usr_005,INC-2024-002
+msg_021,C01INCIDENT,usr_010,Maria Rodriguez,FYI - website performance is degrading. Dashboard shows high response times.,2024-01-25 11:22:00,,,false,,
+msg_022,C01INCIDENT,usr_007,Robert Taylor,I see it. Creating INC-2024-003. Looking at the DB metrics now.,2024-01-25 11:24:00,,,false,usr_010,INC-2024-003
+msg_023,C01INCIDENT,usr_002,Sarah Johnson,@Robert Taylor Need a hand? I'm free if you want me to check the backend APIs.,2024-01-25 11:30:00,,,false,usr_007,INC-2024-003
+msg_024,C01INCIDENT,usr_007,Robert Taylor,Thanks Sarah. DB is the bottleneck. Some queries taking 5+ seconds 😬,2024-01-25 11:45:00,,,false,usr_002,INC-2024-003
+msg_025,C01INCIDENT,usr_007,Robert Taylor,Found the culprit - inefficient JOINs in the product catalog queries. Optimizing now.,2024-01-25 12:25:00,,,false,,INC-2024-003
+msg_026,C01INCIDENT,usr_006,Jennifer Davis,@Robert Taylor Is this affecting checkout? Getting questions from sales team.,2024-01-25 12:45:00,,,false,usr_007,INC-2024-003
+msg_027,C01INCIDENT,usr_007,Robert Taylor,@Jennifer Davis Checkout is slow but functional. Fix going out in 5 minutes.,2024-01-25 12:50:00,,,false,usr_006,INC-2024-003
+msg_028,C01INCIDENT,usr_007,Robert Taylor,✅ Query optimization deployed. Page load times back to normal.,2024-01-25 13:15:00,,,true,,INC-2024-003
+msg_029,C01INCIDENT,usr_008,Amanda White,Good catch Robert! I'll add some automated tests for query performance.,2024-01-25 13:20:00,,,false,usr_007,INC-2024-003
+msg_030,C01INCIDENT,usr_004,Lisa Chen,Morning team! PSA: Email notifications broke after maintenance last night. Looking into it.,2024-01-28 08:47:00,,,false,,
+msg_031,C01INCIDENT,usr_004,Lisa Chen,Created INC-2024-004. SMTP config got reset somehow.,2024-01-28 08:55:00,,,false,,INC-2024-004
+msg_032,C01INCIDENT,usr_002,Sarah Johnson,Ugh maintenance windows always surprise us with something. Need help @Lisa Chen?,2024-01-28 09:00:00,,,false,usr_004,INC-2024-004
+msg_033,C01INCIDENT,usr_004,Lisa Chen,Nah I got this. Just restoring the config from backup. Should be quick.,2024-01-28 09:05:00,,,false,usr_002,INC-2024-004
+msg_034,C01INCIDENT,usr_004,Lisa Chen,Email service is back up. Sending test notifications to verify.,2024-01-28 10:02:00,,,false,,INC-2024-004
+msg_035,C01INCIDENT,usr_003,Mike Wilson,Got the test email @Lisa Chen. Looks good!,2024-01-28 10:08:00,,,false,usr_004,INC-2024-004
+msg_036,C01INCIDENT,usr_004,Lisa Chen,Perfect. Closing INC-2024-004. Also adding email config to our pre-maintenance checklist.,2024-01-28 10:12:00,,,false,,INC-2024-004
+msg_037,C01INCIDENT,usr_006,Jennifer Davis,Hey team - getting user complaints about cart items not saving. This is a big one.,2024-02-01 13:27:00,,,false,,
+msg_038,C01INCIDENT,usr_007,Robert Taylor,Oh no. On it. Creating incident.,2024-02-01 13:29:00,,,false,usr_006,
+msg_039,C01INCIDENT,usr_007,Robert Taylor,INC-2024-005 created. @Jennifer Davis How widespread is this?,2024-02-01 13:31:00,,,false,usr_006,INC-2024-005
+msg_040,C01INCIDENT,usr_006,Jennifer Davis,Support has 12 tickets in the last hour. This is hurting conversions.,2024-02-01 13:35:00,,,false,usr_007,INC-2024-005
+msg_041,C01INCIDENT,usr_001,John Smith,@Robert Taylor Bumping this to HIGH priority. Let us know if you need more resources.,2024-02-01 13:40:00,,,false,usr_007,INC-2024-005
+msg_042,C01INCIDENT,usr_007,Robert Taylor,Thanks John. Digging into session management code now.,2024-02-01 13:45:00,,,false,usr_001,INC-2024-005
+msg_043,C01INCIDENT,usr_002,Sarah Johnson,@Robert Taylor I worked on session stuff last sprint. Want me to jump in?,2024-02-01 14:15:00,,,false,usr_007,INC-2024-005
+msg_044,C01INCIDENT,usr_007,Robert Taylor,That would be awesome Sarah! I'm looking at the session token validation. Something's off.,2024-02-01 14:20:00,,,false,usr_002,INC-2024-005
+msg_045,C01INCIDENT,usr_002,Sarah Johnson,Looking at it now. The token expiry logic changed in the last release.,2024-02-01 14:35:00,,,false,usr_007,INC-2024-005
+msg_046,C01INCIDENT,usr_007,Robert Taylor,Found it! Token validation is too strict. Working on a fix.,2024-02-01 14:58:00,,,false,,INC-2024-005
+msg_047,C01INCIDENT,usr_008,Amanda White,@Robert Taylor I can test this in staging if you push the fix.,2024-02-01 15:10:00,,,false,usr_007,INC-2024-005
+msg_048,C01INCIDENT,usr_007,Robert Taylor,@Amanda White Fix is in staging now. Test away!,2024-02-01 15:22:00,,,false,usr_008,INC-2024-005
+msg_049,C01INCIDENT,usr_008,Amanda White,Testing... cart persistence working in staging ✅ Ready to deploy?,2024-02-01 15:45:00,,,true,usr_007,INC-2024-005
+msg_050,C01INCIDENT,usr_001,John Smith,@Robert Taylor @Sarah Johnson Deploy when ready. I'll monitor the metrics.,2024-02-01 15:50:00,,,false,usr_007 usr_002,INC-2024-005
+msg_051,C01INCIDENT,usr_005,David Brown,Heads up - SSL cert expires in 7 days. Renewing it now to avoid any drama.,2024-02-07 12:02:00,,,false,,
+msg_052,C01INCIDENT,usr_004,Lisa Chen,Thanks for the heads up David! Are we still doing manual renewals or did we set up auto-renew?,2024-02-07 12:10:00,,,false,usr_005,
+msg_053,C01INCIDENT,usr_005,David Brown,Still manual unfortunately. That's on my Q1 roadmap though. Creating INC-2024-009 to track.,2024-02-07 12:15:00,,,false,usr_004,INC-2024-009
+msg_054,C01INCIDENT,usr_005,David Brown,New cert deployed. Verifying across all services now.,2024-02-07 13:20:00,,,false,,INC-2024-009
+msg_055,C01INCIDENT,usr_004,Lisa Chen,@David Brown Load balancers showing the new cert. All good here.,2024-02-07 13:28:00,,,false,usr_005,INC-2024-009
+msg_056,C01INCIDENT,usr_005,David Brown,✅ All verified. Closing INC-2024-009. Will work on automation next quarter.,2024-02-07 13:35:00,,,true,,INC-2024-009
+msg_057,C01INCIDENT,usr_001,John Smith,Great week team! Just a reminder - incident retrospective tomorrow at 2pm.,2024-02-09 16:45:00,,,false,,
+msg_058,C01INCIDENT,usr_002,Sarah Johnson,I'll have the INC-2024-001 post-mortem ready.,2024-02-09 16:50:00,,,false,usr_001,INC-2024-001
+msg_059,C01INCIDENT,usr_005,David Brown,Same for INC-2024-002. We should talk about Redis monitoring improvements.,2024-02-09 16:52:00,,,false,usr_001,INC-2024-002
+msg_060,C01INCIDENT,usr_007,Robert Taylor,And I'll cover INC-2024-003 and INC-2024-005. Got some good learnings from the cart issue.,2024-02-09 16:55:00,,,false,usr_001,INC-2024-003 INC-2024-005
+msg_061,C01INCIDENT,usr_004,Lisa Chen,Quick question - is anyone else's monitoring alerts going crazy or is it just me?,2024-02-10 10:15:00,,,false,,
+msg_062,C01INCIDENT,usr_002,Sarah Johnson,Mine too! Looks like we're getting false positives on disk space.,2024-02-10 10:17:00,,,false,usr_004,
+msg_063,C01INCIDENT,usr_004,Lisa Chen,OK good it's not just me. Probably need to tune those thresholds.,2024-02-10 10:19:00,,,false,usr_002,
+msg_064,C01INCIDENT,usr_003,Mike Wilson,New customer escalation - premium client reporting intermittent API failures.,2024-02-12 14:22:00,,,false,,
+msg_065,C01INCIDENT,usr_002,Sarah Johnson,Creating INC-2024-010 for this. Which API endpoint @Mike Wilson?,2024-02-12 14:25:00,,,false,usr_003,INC-2024-010
+msg_066,C01INCIDENT,usr_003,Mike Wilson,The /api/v2/inventory endpoint. They say it's timing out about 20% of the time.,2024-02-12 14:27:00,,,false,usr_002,INC-2024-010
+msg_067,C01INCIDENT,usr_002,Sarah Johnson,Checking the logs... seeing some timeouts but not 20%. @David Brown can you check from the security side?,2024-02-12 14:35:00,,,false,usr_005,INC-2024-010
+msg_068,C01INCIDENT,usr_005,David Brown,On it. Checking if rate limiting is kicking in.,2024-02-12 14:38:00,,,false,usr_002,INC-2024-010
+msg_069,C01INCIDENT,usr_005,David Brown,Yep - they're hitting rate limits. Their API key is at the default tier. @Jennifer Davis can we bump them up?,2024-02-12 14:45:00,,,false,usr_006,INC-2024-010
+msg_070,C01INCIDENT,usr_006,Jennifer Davis,They're on Enterprise plan so yes. Bumping their rate limit to 1000 req/min now.,2024-02-12 14:50:00,,,false,usr_005,INC-2024-010
+msg_071,C01INCIDENT,usr_003,Mike Wilson,Customer confirmed it's working now. Thanks everyone!,2024-02-12 15:10:00,,,false,,INC-2024-010
+msg_072,C01INCIDENT,usr_002,Sarah Johnson,Closing INC-2024-010. @Jennifer Davis we should probably audit other enterprise clients' rate limits.,2024-02-12 15:15:00,,,false,usr_006,INC-2024-010
+msg_073,C01INCIDENT,usr_001,John Smith,Good teamwork today. MTTR is looking much better this month.,2024-02-12 17:30:00,,,false,,
+msg_074,C01INCIDENT,usr_007,Robert Taylor,🎉 That automation we built is really paying off.,2024-02-12 17:32:00,,,true,usr_001,
+msg_075,C01INCIDENT,usr_004,Lisa Chen,Speaking of automation - the cert renewal script is done. Testing it next week.,2024-02-12 17:35:00,,,false,,
+msg_076,C01INCIDENT,usr_005,David Brown,Nice @Lisa Chen! That'll save us so much time.,2024-02-12 17:37:00,,,false,usr_004,
+msg_077,C01INCIDENT,usr_008,Amanda White,FYI - scheduled maintenance window this Saturday 2am-4am for database upgrades.,2024-02-13 11:00:00,,,false,,
+msg_078,C01INCIDENT,usr_001,John Smith,Thanks Amanda. Who's on-call Saturday in case something goes sideways?,2024-02-13 11:05:00,,,false,usr_008,
+msg_079,C01INCIDENT,usr_002,Sarah Johnson,I am. @Lisa Chen are you my backup?,2024-02-13 11:07:00,,,false,usr_004,
+msg_080,C01INCIDENT,usr_004,Lisa Chen,Yep I got you covered @Sarah Johnson.,2024-02-13 11:10:00,,,false,usr_002,
+msg_081,C01INCIDENT,usr_010,Maria Rodriguez,Random question - can someone point me to the incident tagging guidelines? Want to make sure I'm categorizing correctly.,2024-02-14 09:30:00,,,false,,
+msg_082,C01INCIDENT,usr_001,John Smith,@Maria Rodriguez They're in Confluence under 'Incident Management' > 'Tagging Guide'. I'll pin it in this channel.,2024-02-14 09:35:00,,,false,usr_010,
+msg_083,C01INCIDENT,usr_010,Maria Rodriguez,Perfect thanks @John Smith!,2024-02-14 09:37:00,,,false,usr_001,
+msg_084,C01INCIDENT,usr_002,Sarah Johnson,Maintenance update: DB upgrade completed successfully. No issues to report.,2024-02-15 04:15:00,,,false,,
+msg_085,C01INCIDENT,usr_004,Lisa Chen,Smooth sailing! Good job Sarah 💪,2024-02-15 07:20:00,,,true,usr_002,
+msg_086,C01INCIDENT,usr_001,John Smith,Excellent work @Sarah Johnson. Love when maintenance goes as planned.,2024-02-15 09:00:00,,,false,usr_002,
+msg_087,C01INCIDENT,usr_007,Robert Taylor,Heads up - seeing some weird behavior with the new DB version. Search queries are slower.,2024-02-15 10:30:00,,,false,,
+msg_088,C01INCIDENT,usr_002,Sarah Johnson,Oh no. Creating incident. @Robert Taylor What's the performance delta?,2024-02-15 10:35:00,,,false,usr_007,
+msg_089,C01INCIDENT,usr_007,Robert Taylor,About 2x slower on full-text search. Other queries are fine.,2024-02-15 10:37:00,,,false,usr_002,
+msg_090,C01INCIDENT,usr_002,Sarah Johnson,INC-2024-011 created. Checking if we need to rebuild search indexes.,2024-02-15 10:40:00,,,false,usr_007,INC-2024-011
+msg_091,C01INCIDENT,usr_002,Sarah Johnson,Yep that's it. Indexes need rebuilding after major version upgrades. Doing that now.,2024-02-15 11:00:00,,,false,,INC-2024-011
+msg_092,C01INCIDENT,usr_002,Sarah Johnson,Index rebuild complete. @Robert Taylor Can you test search again?,2024-02-15 11:45:00,,,false,usr_007,INC-2024-011
+msg_093,C01INCIDENT,usr_007,Robert Taylor,Testing... ✅ Back to normal speed. Actually maybe even faster than before!,2024-02-15 11:50:00,,,true,usr_002,INC-2024-011
+msg_094,C01INCIDENT,usr_002,Sarah Johnson,Sweet! The new version has better indexing. Closing INC-2024-011.,2024-02-15 11:55:00,,,false,,INC-2024-011
+msg_095,C01INCIDENT,usr_003,Mike Wilson,Anyone else getting Slack notifications for every. single. incident. update? 😅,2024-02-16 13:20:00,,,false,,
+msg_096,C01INCIDENT,usr_009,Thomas Garcia,YES. My phone is buzzing nonstop.,2024-02-16 13:22:00,,,false,usr_003,
+msg_097,C01INCIDENT,usr_001,John Smith,Ha! Yeah we probably need to tune the notification settings. I'll look into it.,2024-02-16 13:25:00,,,false,,
+msg_098,C01INCIDENT,usr_005,David Brown,Maybe only notify on critical/high priority incidents?,2024-02-16 13:27:00,,,false,usr_001,
+msg_099,C01INCIDENT,usr_001,John Smith,Good idea @David Brown. I'll update the integration settings.,2024-02-16 13:30:00,,,false,usr_005,
+msg_100,C01INCIDENT,usr_004,Lisa Chen,BTW anyone want to grab lunch and do a mini knowledge share on monitoring best practices?,2024-02-16 13:45:00,,,false,,
+
