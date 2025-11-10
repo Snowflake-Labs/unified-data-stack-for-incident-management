@@ -30,10 +30,10 @@ FACTS (
     , full_doc_extracts.page_num AS page_num
       COMMENT = 'Source page number for the extracted content'
       
-    , v_slack_msgs.file_size AS slack_file_size
+    , v_slack_msgs.file_size AS file_size
       COMMENT = 'Attachment file size'
 
-    , active_incidents.age_hours AS active_incident_age_hours
+    , active_incidents.age_hours AS age_hours
       COMMENT = 'Age of incident in hours'
 
     , closed_incidents.total_resolution_hours AS total_resolution_hours
@@ -47,7 +47,7 @@ FACTS (
       COMMENT = 'Total incidents created in the week'
     , weekly_incident_trends.resolved_incidents AS resolved_incidents
       COMMENT = 'Incidents resolved in the week'
-    , weekly_incident_trends.closed_incidents AS closed_incidents_count
+    , weekly_incident_trends.closed_incidents AS closed_incidents
       COMMENT = 'Incidents closed in the week'
     , weekly_incident_trends.open_incidents AS open_incidents
       COMMENT = 'Incidents open in the week'
@@ -102,28 +102,26 @@ FACTS (
       WITH SYNONYMS = ('headers', 'detected headers')
       COMMENT = 'Object of detected headers for the chunk (e.g., header_1, header_2)'
 
-    , users.id AS user_id
+    , users.id AS id
       COMMENT = 'Unique user identifier'
-    , users.email AS user_email
+    , users.email AS email
       COMMENT = 'Primary email address'
-    ,users.first_name AS user_first_name
+    ,users.first_name AS first_name
       COMMENT = 'First name parsed from email user part'
-    ,users.last_name AS user_last_name
+    ,users.last_name AS last_name
       COMMENT = 'Last name parsed from email domain part'
-    ,users.role AS user_role
+    ,users.role AS role
       COMMENT = 'User role'
-    ,users.department AS user_department
-      COMMENT = 'User department'
-    ,users.team AS user_team
+    ,users.team AS team
       COMMENT = 'User team'
-    , users.is_active AS user_is_active
+    , users.is_active AS is_active
       COMMENT = 'Active flag'
-    , users.created_at AS user_created_at
+    , users.created_at AS created_at
       COMMENT = 'Creation timestamp'
-    , users.updated_at AS user_updated_at
+    , users.updated_at AS updated_at
       COMMENT = 'Last update timestamp'
 
-    , v_slack_msgs.hasfiles AS slack_hasfiles
+    , v_slack_msgs.hasfiles AS hasfiles
       COMMENT = 'Whether the message has attachments'
     , v_slack_msgs.type AS slack_type
       COMMENT = 'Slack message type'

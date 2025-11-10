@@ -29,9 +29,6 @@ FACTS (
     , full_doc_extracts.page_num AS page_num
       COMMENT = 'Source page number for the extracted content'
       
-    , v_slack_msgs.file_size AS file_size
-      COMMENT = 'Attachment file size'
-
     , active_incidents.age_hours AS age_hours
       COMMENT = 'Age of incident in hours'
 
@@ -111,8 +108,6 @@ FACTS (
       COMMENT = 'Last name parsed from email domain part'
     ,users.role AS role
       COMMENT = 'User role'
-    ,users.department AS user_department
-      COMMENT = 'User department'
     ,users.team AS team
       COMMENT = 'User team'
     , users.is_active AS is_active
@@ -121,41 +116,6 @@ FACTS (
       COMMENT = 'Creation timestamp'
     , users.updated_at AS updated_at
       COMMENT = 'Last update timestamp'
-
-    , v_slack_msgs.hasfiles AS hasfiles
-      COMMENT = 'Whether the message has attachments'
-    , v_slack_msgs.type AS slack_type
-      COMMENT = 'Slack message type'
-    , v_slack_msgs.subtype AS slack_subtype
-      COMMENT = 'Slack message subtype'
-    , v_slack_msgs.team AS slack_team
-      COMMENT = 'Slack team identifier'
-    , v_slack_msgs.channel AS slack_channel
-      COMMENT = 'Slack channel identifier'
-    , v_slack_msgs.user AS slack_user
-      COMMENT = 'Slack user identifier'
-    , v_slack_msgs.username AS slack_username
-      COMMENT = 'Slack username'
-    , v_slack_msgs.reporter_id AS slack_reporter_id
-      COMMENT = 'Matched reporter id from users'
-    , v_slack_msgs.text AS slack_text
-      COMMENT = 'Slack message text'
-    , v_slack_msgs.ts AS slack_ts
-      COMMENT = 'Slack message timestamp'
-    , v_slack_msgs.slack_message_id AS slack_message_id
-      COMMENT = 'Unique Slack message id'
-    , v_slack_msgs.file_id AS slack_file_id
-      COMMENT = 'Attachment file id'
-    , v_slack_msgs.file_name AS slack_file_name
-      COMMENT = 'Attachment file name'
-    , v_slack_msgs.file_mimetype AS slack_file_mimetype
-      COMMENT = 'Attachment file mimetype'
-    , v_slack_msgs.staged_file_path AS slack_staged_file_path
-      COMMENT = 'Path to staged file'
-    , v_slack_msgs.attachment_file AS slack_attachment_file
-      COMMENT = 'Stage file reference'
-    , v_slack_msgs.incident_number AS slack_incident_number
-      COMMENT = 'Extracted incident number from image or text'
 
 
     , incidents.incident_number AS incident_number

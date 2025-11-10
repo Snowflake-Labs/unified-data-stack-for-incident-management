@@ -14,6 +14,7 @@ select
     end as doc_type,
     split_part(relative_path, '.', 2) as extension
 from {{ source('bronze_zone', 'documents_stream') }}
-WHERE relative_path is not null
+WHERE METADATA$ACTION != 'DELETE'
+and relative_path is not null
 and array_contains(extension::VARIANT, {{ var("supported_doc_formats") }} )
 and size > 0

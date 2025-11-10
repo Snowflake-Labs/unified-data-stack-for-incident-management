@@ -4,6 +4,7 @@ models:
   - name: document_question_extracts
     description: "Question extracts from documents using AI_EXTRACT"
     config:
+      docs_stage_path: "@INCIDENT_MANAGEMENT.bronze_zone.DOCUMENTS"
       meta:
         global_inm_policy_schema:
           enabled: false

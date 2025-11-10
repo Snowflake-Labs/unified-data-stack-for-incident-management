@@ -13,7 +13,8 @@ select
     end as doc_type,
     split_part(relative_path, '.', 2) as extension
 from incident_management.bronze_zone.documents_stream
-WHERE relative_path is not null
+WHERE METADATA$ACTION != 'DELETE'
+and relative_path is not null
 and array_contains(extension::VARIANT, ['pdf', 'docx', 'doc', 'txt', 'text', 'html', 'md', 'pptx', 'ppt', 'png', 'eml', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff', 'tif', 'webp', 'htm'] )
 and size > 0
   );
