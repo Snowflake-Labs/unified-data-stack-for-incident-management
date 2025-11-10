@@ -237,7 +237,7 @@ FACTS (
       COMMENT = 'Incident identifier'
     , incident_attachments.attachment_file AS attachment_file
       COMMENT = 'Stage file reference for the attachment'
-    , incident_attachments.uploaded_at AS attachment_uploaded_at
+    , incident_attachments.uploaded_at AS uploaded_at
       COMMENT = 'Attachment upload timestamp'
 
    , incident_comment_history.id AS id

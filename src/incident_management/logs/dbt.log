@@ -26651,3 +26651,1122 @@ invalid identifier 'SERVICE_OPERATIONAL_HEALTH_UNPLANNED_OUTAGE_HOURS'
 [0m18:54:12.356572 [debug] [Dummy-1   ]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 7.0855618, "process_in_blocks": "0", "process_kernel_time": 1.37, "process_mem_max_rss": "440840", "process_out_blocks": "0", "process_user_time": 5.96}
 [0m18:54:12.357295 [debug] [Dummy-1   ]: Command `cli run` failed at 18:54:12.357017 after 7.09 seconds
 [0m18:54:12.357889 [debug] [Dummy-1   ]: Flushing usage events
+
+
+============================== 19:03:20.234573 | 12c973a3-ea98-43e0-b984-3d388c4d849f ==============================
+[0m19:03:20.234573 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m19:03:20.235660 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'fail_fast': 'False', 'profiles_dir': '/tmp/dbt/', 'log_path': '/tmp/dbt/logs', 'version_check': 'True', 'debug': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'False', 'log_format': 'default', 'static_parser': 'True', 'invocation_command': 'dbt ', 'introspect': 'True', 'target_path': '/tmp/dbt/target/', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'send_anonymous_usage_stats': 'False'}
+[0m19:03:20.606922 [info ] [Dummy-1   ]: Registered adapter: snowflake=1.9.2
+[0m19:03:21.332297 [debug] [Dummy-1   ]: checksum: 53ed91fada2233efb98368d1716b44ab532c83a9c293cf1890b7905d5b45fb25, vars: {}, profile: , target: dev, version: 1.9.4
+[0m19:03:21.754538 [debug] [Dummy-1   ]: Partial parsing enabled: 0 files deleted, 0 files added, 1 files changed.
+[0m19:03:21.755599 [debug] [Dummy-1   ]: Partial parsing: updated file: incident_management://models/semantic_views/alpha.sql
+[0m19:03:22.415320 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m19:03:22.417813 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m19:03:22.482234 [info ] [Dummy-1   ]: Found 13 models, 32 data tests, 6 sources, 483 macros
+[0m19:03:22.485061 [info ] [Dummy-1   ]: 
+[0m19:03:22.485625 [info ] [Dummy-1   ]: Concurrency: 1 threads (target='dev')
+[0m19:03:22.486102 [info ] [Dummy-1   ]: 
+[0m19:03:22.486909 [debug] [Dummy-1   ]: Acquiring new snowflake connection 'master'
+[0m19:03:22.488907 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_incident_management'
+[0m19:03:22.643827 [debug] [ThreadPool]: Using snowflake connection "list_incident_management"
+[0m19:03:22.644531 [debug] [ThreadPool]: On list_incident_management: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management"} */
+show terse schemas in database incident_management
+    limit 10000
+[0m19:03:22.645155 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m19:03:23.463866 [debug] [ThreadPool]: SQL status: SUCCESS 6 in 0.819 seconds
+[0m19:03:23.473781 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management, now list_incident_management_gold_zone)
+[0m19:03:23.497049 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m19:03:23.497696 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m19:03:23.498257 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m19:03:24.301505 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.803 seconds
+[0m19:03:24.307226 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m19:03:24.307811 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+show objects in incident_management.gold_zone
+    limit 10000
+    
+;
+[0m19:03:24.421576 [debug] [ThreadPool]: SQL status: SUCCESS 7 in 0.113 seconds
+[0m19:03:24.424322 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m19:03:24.424929 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m19:03:24.516919 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.091 seconds
+[0m19:03:24.519528 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management_gold_zone, now list_incident_management_semantic_views)
+[0m19:03:24.532176 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m19:03:24.532834 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m19:03:24.533364 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m19:03:25.481305 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.948 seconds
+[0m19:03:25.483707 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m19:03:25.484264 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+show objects in incident_management.semantic_views
+    limit 10000
+    
+;
+[0m19:03:25.572112 [debug] [ThreadPool]: SQL status: SUCCESS 0 in 0.087 seconds
+[0m19:03:25.574365 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m19:03:25.574902 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m19:03:25.682484 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.107 seconds
+[0m19:03:25.684595 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management_semantic_views, now list_incident_management_bronze_zone)
+[0m19:03:25.695972 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m19:03:25.696518 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m19:03:25.697007 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m19:03:26.656680 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.959 seconds
+[0m19:03:26.659100 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m19:03:26.659696 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+show objects in incident_management.bronze_zone
+    limit 10000
+    
+;
+[0m19:03:26.789578 [debug] [ThreadPool]: SQL status: SUCCESS 10 in 0.129 seconds
+[0m19:03:26.792169 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m19:03:26.792705 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m19:03:26.899611 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.106 seconds
+[0m19:03:26.910010 [debug] [Thread-2 (]: Began running node model.incident_management.alpha
+[0m19:03:26.910916 [info ] [Thread-2 (]: 1 of 1 START sql semantic_view model semantic_views.alpha ...................... [RUN]
+[0m19:03:26.911629 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly list_incident_management_bronze_zone, now model.incident_management.alpha)
+[0m19:03:26.912191 [debug] [Thread-2 (]: Began compiling node model.incident_management.alpha
+[0m19:03:26.932609 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.alpha"
+[0m19:03:26.933453 [debug] [Thread-2 (]: Began executing node model.incident_management.alpha
+[0m19:03:27.080608 [debug] [Thread-2 (]: Writing runtime sql for node "model.incident_management.alpha"
+[0m19:03:27.095586 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.alpha"
+[0m19:03:27.097721 [debug] [Thread-2 (]: On model.incident_management.alpha: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.alpha"} */
+create or replace semantic view incident_management.semantic_views.alpha
+  
+
+TABLES(
+  incidents as incident_management.gold_zone.incidents
+    COMMENT = 'Materialized incidents table with enriched data and calculated fields'
+
+  , active_incidents as incident_management.gold_zone.active_incidents
+    COMMENT = 'Active incidents requiring attention with SLA status and priority ordering'
+
+  , closed_incidents as incident_management.gold_zone.closed_incidents
+    COMMENT = 'Closed incidents with resolution metrics and performance insights'
+
+  , incident_attachments as incident_management.gold_zone.incident_attachments
+    COMMENT = 'Materialized incident attachments table'
+
+  , incident_comment_history as incident_management.gold_zone.incident_comment_history
+    COMMENT = 'Simplified incident comment history for tracking communication'
+
+  , weekly_incident_trends as incident_management.gold_zone.weekly_incident_trends
+    COMMENT = 'Weekly incident trends for the last 12 weeks'
+
+  , quaterly_review_metrics as incident_management.gold_zone.quaterly_review_metrics
+    COMMENT = 'Quarterly review metrics'
+
+)
+
+FACTS (
+    active_incidents.age_hours AS age_hours
+      COMMENT = 'Age of incident in hours'
+    , closed_incidents.total_resolution_hours AS total_resolution_hours
+      COMMENT = 'Total time from creation to closure in hours'
+    , closed_incidents.closed_year AS closed_year
+      COMMENT = 'Year when the incident was closed'
+    , closed_incidents.closed_quarter AS closed_quarter
+      COMMENT = 'Quarter when the incident was closed'
+
+    , weekly_incident_trends.total_incidents AS total_incidents
+      COMMENT = 'Total incidents created in the week'
+    , weekly_incident_trends.resolved_incidents AS resolved_incidents
+      COMMENT = 'Incidents resolved in the week'
+    , weekly_incident_trends.closed_incidents AS closed_incidents
+      COMMENT = 'Incidents closed in the week'
+    , weekly_incident_trends.open_incidents AS open_incidents
+      COMMENT = 'Incidents open in the week'
+    , weekly_incident_trends.critical_incidents AS critical_incidents
+      COMMENT = 'Incidents with critical priority'
+    , weekly_incident_trends.high_incidents AS high_incidents
+      COMMENT = 'Incidents with high priority'
+    , weekly_incident_trends.high_severity_incidents AS high_severity_incidents
+      COMMENT = 'Incidents with critical or high priority'
+    , weekly_incident_trends.payment_incidents AS payment_incidents
+      COMMENT = 'Payment category incidents'
+    , weekly_incident_trends.authentication_incidents AS authentication_incidents
+      COMMENT = 'Authentication category incidents'
+    , weekly_incident_trends.performance_incidents AS performance_incidents
+      COMMENT = 'Performance category incidents'
+    , weekly_incident_trends.security_incidents AS security_incidents
+      COMMENT = 'Security category incidents'
+    , weekly_incident_trends.monitoring_incidents AS monitoring_incidents
+      COMMENT = 'Incidents from monitoring source system'
+    , weekly_incident_trends.customer_portal_incidents AS customer_portal_incidents
+      COMMENT = 'Incidents from customer portal source system'
+    , weekly_incident_trends.avg_resolution_time_hours AS avg_resolution_time_hours
+      COMMENT = 'Average resolution time in hours'
+    , weekly_incident_trends.incidents_with_attachments AS incidents_with_attachments
+      COMMENT = 'Incidents that had attachments'
+    , weekly_incident_trends.resolution_rate_percentage AS resolution_rate_percentage
+      COMMENT = 'Share of resolved/closed incidents as a percentage'
+
+    , quaterly_review_metrics.soh_overall_uptime AS soh_overall_uptime
+      COMMENT = 'Actual recorded overall uptime of all services'
+    , quaterly_review_metrics.soh_critical_uptime AS soh_critical_uptime
+      COMMENT = 'Actual recorded uptime of critical services'
+    , quaterly_review_metrics.soh_sev1_incidents AS soh_sev1_incidents
+      COMMENT = 'Recorded number of Sev-1 incidents'
+    , quaterly_review_metrics.soh_sev2_incidents AS soh_sev2_incidents
+      COMMENT = 'Recorded number of Sev-2 incidents'
+    , quaterly_review_metrics.soh_mtta AS soh_mtta
+      COMMENT = 'Mean time to acknowledge an incident'
+    , quaterly_review_metrics.soh_mttr AS soh_mttr
+      COMMENT = 'Mean time to recover from an incident'
+    , quaterly_review_metrics.soh_cfr AS soh_cfr
+      COMMENT = 'Change failure rate'
+    , quaterly_review_metrics.soh_slo_breaches AS soh_slo_breaches
+      COMMENT = 'Number of SLO breaches'
+    , quaterly_review_metrics.soh_error_budget AS soh_error_budget
+      COMMENT = 'Error budget consumed'
+    , quaterly_review_metrics.soh_downtime AS soh_downtime
+      COMMENT = 'Service downtime'
+    , quaterly_review_metrics.soh_unplanned_outage_hours AS soh_unplanned_outage_hours
+      COMMENT = 'Unplanned outage hours'
+    , quaterly_review_metrics.soh_planned_maintenance_hours AS soh_planned_maintenance_hours
+      COMMENT = 'Planned maintenance hours'
+    , quaterly_review_metrics.soh_sev1_outage_minutes AS soh_sev1_outage_minutes
+      COMMENT = 'Sev-1 outage minutes'
+    , quaterly_review_metrics.soh_sev2_outage_minutes AS soh_sev2_outage_minutes
+      COMMENT = 'Sev-2 outage minutes'
+    , quaterly_review_metrics.soh_longest_outage AS soh_longest_outage
+      COMMENT = 'Longest single outage'
+    , quaterly_review_metrics.soh_mtbft AS soh_mtbft
+      COMMENT = 'Mean time between failures'
+
+    , quaterly_review_metrics.tu_eoq_it_headcount AS tu_eoq_it_headcount
+      COMMENT = 'End of quarter IT headcount'
+    , quaterly_review_metrics.tu_eng_headcount AS tu_eng_headcount
+      COMMENT = 'Engineering headcount'
+    , quaterly_review_metrics.tu_on_call_coverage AS tu_on_call_coverage
+      COMMENT = 'On call coverage'
+    , quaterly_review_metrics.tu_project_work_alloc AS tu_project_work_alloc
+      COMMENT = 'Project work allocation'
+    , quaterly_review_metrics.tu_bau_ops_alloc AS tu_bau_ops_alloc
+      COMMENT = 'BAU/Operations allocation'
+    , quaterly_review_metrics.tu_on_call_hours_per_eng AS tu_on_call_hours_per_eng
+      COMMENT = 'On call hours per engineer'
+    , quaterly_review_metrics.tu_after_hours_incidents AS tu_after_hours_incidents
+      COMMENT = 'After hours incidents handled'
+    , quaterly_review_metrics.tu_training_hours_per_fte AS tu_training_hours_per_fte
+      COMMENT = 'Training hours per FTE'
+    , quaterly_review_metrics.tu_certifications AS tu_certifications
+      COMMENT = 'Certifications earned'
+    , quaterly_review_metrics.tu_attrition AS tu_attrition
+      COMMENT = 'Attrition'
+
+    , quaterly_review_metrics.tls_atlassian AS tls_atlassian
+      COMMENT = 'Spend on Atlassian licenses'
+    , quaterly_review_metrics.tls_github AS tls_github
+      COMMENT = 'Spend on GitHub licenses'
+    , quaterly_review_metrics.tls_slack AS tls_slack
+      COMMENT = 'Spend on Slack licenses'
+    , quaterly_review_metrics.tls_pagerduty AS tls_pagerduty
+      COMMENT = 'Spend on PagerDuty licenses'
+    , quaterly_review_metrics.tls_datadog AS tls_datadog
+      COMMENT = 'Spend on Datadog licenses'
+    , quaterly_review_metrics.tls_sentry AS tls_sentry
+      COMMENT = 'Spend on Sentry licenses'
+    , quaterly_review_metrics.tls_okta AS tls_okta
+      COMMENT = 'Spend on Okta licenses'
+    , quaterly_review_metrics.tls_aws AS tls_aws
+      COMMENT = 'Spend on AWS licenses'
+    , quaterly_review_metrics.tls_total AS tls_total
+      COMMENT = 'Total spend on licenses'
+ )
+
+ DIMENSIONS (
+    incidents.incident_number AS incident_number
+      COMMENT = 'Incident identifier'
+    , incidents.category AS incident_category
+      COMMENT = 'Incident category'
+    , incidents.title AS incident_title
+      COMMENT = 'Incident title'
+    , incidents.priority AS incident_priority
+      COMMENT = 'Incident priority'
+    , incidents.status AS incident_status
+      COMMENT = 'Incident status'
+    , incidents.assignee_id AS incident_assignee_id
+      COMMENT = 'Assignee user id'
+    , incidents.reportee_id AS incident_reportee_id
+      COMMENT = 'Reportee user id'
+    , incidents.created_at AS incident_created_at
+      COMMENT = 'Creation timestamp'
+    , incidents.closed_at AS incident_closed_at
+      COMMENT = 'Close timestamp'
+    , incidents.updated_at AS incident_updated_at
+      COMMENT = 'Last update timestamp'
+    , incidents.source_system AS incident_source_system
+      COMMENT = 'Source system for the incident'
+    ,incidents.external_source_id AS incident_external_source_id
+      COMMENT = 'External source identifier'
+    , incidents.has_attachments AS incident_has_attachments
+      COMMENT = 'Whether the incident has attachments'
+    , incidents.slack_message_id AS incident_slack_message_id
+      COMMENT = 'Associated Slack message id'
+    , incidents.last_comment AS incident_last_comment
+      COMMENT = 'Latest comment content'
+
+    , active_incidents.incident_number AS active_incident_number
+      COMMENT = 'Incident identifier'
+    , active_incidents.title AS active_incident_title
+      COMMENT = 'Incident title'
+    , active_incidents.category AS active_incident_category
+      COMMENT = 'Incident category'
+    , active_incidents.priority AS active_incident_priority
+      COMMENT = 'Incident priority'
+    , active_incidents.status AS active_incident_status
+      COMMENT = 'Incident status'
+    , active_incidents.assignee_id AS active_incident_assignee_id
+      COMMENT = 'Assignee user id'
+    , active_incidents.assignee_name AS active_incident_assignee_name
+      COMMENT = 'Assignee full name'
+    , active_incidents.reportee_id AS active_incident_reportee_id
+      COMMENT = 'Reportee user id'
+    , active_incidents.reportee_name AS active_incident_reportee_name
+      COMMENT = 'Reportee full name'
+    , active_incidents.created_at AS active_incident_created_at
+      COMMENT = 'Creation timestamp'
+    , active_incidents.updated_at AS active_incident_updated_at
+      COMMENT = 'Last update timestamp'
+    , active_incidents.source_system AS active_incident_source_system
+      COMMENT = 'Source system for the incident'
+    , active_incidents.external_source_id AS active_incident_external_source_id
+      COMMENT = 'External source identifier'
+    , active_incidents.has_attachments AS active_incident_has_attachments
+      COMMENT = 'Whether the incident has attachments'
+
+    , closed_incidents.incident_number AS closed_incident_number
+      COMMENT = 'Incident identifier'
+    , closed_incidents.title AS closed_incident_title
+      COMMENT = 'Incident title'
+    , closed_incidents.category AS closed_incident_category
+      COMMENT = 'Incident category'
+    , closed_incidents.priority AS closed_incident_priority
+      COMMENT = 'Incident priority'
+    , closed_incidents.status AS closed_incident_status
+      COMMENT = 'Incident status'
+    , closed_incidents.assignee_id AS closed_incident_assignee_id
+      COMMENT = 'Assignee user id'
+    , closed_incidents.reportee_id AS closed_incident_reportee_id
+      COMMENT = 'Reportee user id'
+    , closed_incidents.created_at AS closed_incident_created_at
+      COMMENT = 'Creation timestamp'
+    , closed_incidents.closed_at AS closed_incident_closed_at
+      COMMENT = 'Close timestamp'
+    , closed_incidents.updated_at AS closed_incident_updated_at
+      COMMENT = 'Last update timestamp'
+    , closed_incidents.source_system AS closed_incident_source_system
+      COMMENT = 'Source system for the incident'
+    , closed_incidents.external_source_id AS closed_incident_external_source_id
+      COMMENT = 'External source identifier'
+    , closed_incidents.has_attachments AS closed_incident_has_attachments
+      COMMENT = 'Whether the incident had attachments'
+    , closed_incidents.closed_month AS closed_incident_month
+      COMMENT = 'Month when incident was closed'
+
+    , incident_attachments.id AS attachment_id
+      COMMENT = 'Attachment id'
+    , incident_attachments.incident_number AS attachment_incident_number
+      COMMENT = 'Incident identifier'
+    , incident_attachments.attachment_file AS attachment_file
+      COMMENT = 'Stage file reference for the attachment'
+    , incident_attachments.uploaded_at AS attachment_uploaded_at
+      COMMENT = 'Attachment upload timestamp'
+
+    , incident_comment_history.id AS comment_id
+      COMMENT = 'Comment id'
+    , incident_comment_history.incident_number AS comment_incident_number
+      COMMENT = 'Incident identifier'
+    , incident_comment_history.author_id AS comment_author_id
+      COMMENT = 'Comment author user id'
+    ,  incident_comment_history.content AS comment_content
+      COMMENT = 'Comment content'
+    , incident_comment_history.created_at AS comment_created_at
+      COMMENT = 'Comment creation timestamp'
+    , weekly_incident_trends.week AS trend_week
+      COMMENT = 'Week bucket (date truncated to week)'
+
+    , quaterly_review_metrics.relative_path AS qrm_relative_path
+      COMMENT = 'Path to the file on the stage'
+    , quaterly_review_metrics.quarter AS review_quarter
+      COMMENT = 'Year and quarter of the review metrics'
+  )
+[0m19:03:27.099208 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m19:03:27.920431 [debug] [Thread-2 (]: Snowflake adapter: Snowflake query id: 01c049f7-0106-f145-0032-31870549629a
+[0m19:03:27.921103 [debug] [Thread-2 (]: Snowflake adapter: Snowflake error: 000904 (42000): SQL compilation error: error line 162 at position 29
+invalid identifier 'INCIDENT_CLOSED_AT'
+[0m19:03:27.926516 [debug] [Thread-2 (]: Database Error in model alpha (models/semantic_views/alpha.sql)
+  000904 (42000): SQL compilation error: error line 162 at position 29
+  invalid identifier 'INCIDENT_CLOSED_AT'
+  compiled code at /tmp/dbt/target/run/incident_management/models/semantic_views/alpha.sql
+[0m19:03:27.929704 [error] [Thread-2 (]: 1 of 1 ERROR creating sql semantic_view model semantic_views.alpha ............. [[31mERROR[0m in 1.02s]
+[0m19:03:27.930668 [debug] [Thread-2 (]: Finished running node model.incident_management.alpha
+[0m19:03:27.931877 [debug] [Thread-5 (]: Marking all children of 'model.incident_management.alpha' to be skipped because of status 'error'.  Reason: Database Error in model alpha (models/semantic_views/alpha.sql)
+  000904 (42000): SQL compilation error: error line 162 at position 29
+  invalid identifier 'INCIDENT_CLOSED_AT'
+  compiled code at /tmp/dbt/target/run/incident_management/models/semantic_views/alpha.sql.
+[0m19:03:27.935080 [debug] [Dummy-1   ]: Connection 'master' was properly closed.
+[0m19:03:27.935688 [debug] [Dummy-1   ]: Connection 'model.incident_management.alpha' was properly closed.
+[0m19:03:27.936206 [info ] [Dummy-1   ]: 
+[0m19:03:27.936779 [info ] [Dummy-1   ]: Finished running 1 semantic view model in 0 hours 0 minutes and 5.45 seconds (5.45s).
+[0m19:03:27.937743 [debug] [Dummy-1   ]: Command end result
+[0m19:03:27.987828 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m19:03:27.990345 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m19:03:27.998019 [debug] [Dummy-1   ]: Wrote artifact RunExecutionResult to /tmp/dbt/target/run_results.json
+[0m19:03:27.998628 [info ] [Dummy-1   ]: 
+[0m19:03:27.999296 [info ] [Dummy-1   ]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
+[0m19:03:27.999801 [info ] [Dummy-1   ]: 
+[0m19:03:28.000498 [error] [Dummy-1   ]:   Database Error in model alpha (models/semantic_views/alpha.sql)
+  000904 (42000): SQL compilation error: error line 162 at position 29
+  invalid identifier 'INCIDENT_CLOSED_AT'
+  compiled code at /tmp/dbt/target/run/incident_management/models/semantic_views/alpha.sql
+[0m19:03:28.001001 [info ] [Dummy-1   ]: 
+[0m19:03:28.001520 [info ] [Dummy-1   ]: Done. PASS=0 WARN=0 ERROR=1 SKIP=0 TOTAL=1
+[0m19:03:28.003274 [debug] [Dummy-1   ]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 7.864519, "process_in_blocks": "0", "process_kernel_time": 1.38, "process_mem_max_rss": "482296", "process_out_blocks": "0", "process_user_time": 5.92}
+[0m19:03:28.003937 [debug] [Dummy-1   ]: Command `cli run` failed at 19:03:28.003673 after 7.87 seconds
+[0m19:03:28.004480 [debug] [Dummy-1   ]: Flushing usage events
+
+
+============================== 19:15:14.354421 | d6df4875-a80f-45a1-948e-cea8126b2b0b ==============================
+[0m19:15:14.354421 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m19:15:14.355607 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'debug': 'False', 'version_check': 'True', 'log_path': '/tmp/dbt/logs', 'fail_fast': 'False', 'profiles_dir': '/tmp/dbt/', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'False', 'log_format': 'default', 'static_parser': 'True', 'introspect': 'True', 'invocation_command': 'dbt ', 'target_path': '/tmp/dbt/target/', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'send_anonymous_usage_stats': 'False'}
+[0m19:15:14.749211 [info ] [Dummy-1   ]: Registered adapter: snowflake=1.9.2
+[0m19:15:15.478476 [debug] [Dummy-1   ]: checksum: 53ed91fada2233efb98368d1716b44ab532c83a9c293cf1890b7905d5b45fb25, vars: {}, profile: , target: dev, version: 1.9.4
+[0m19:15:15.933442 [debug] [Dummy-1   ]: Partial parsing enabled: 0 files deleted, 0 files added, 1 files changed.
+[0m19:15:15.934754 [debug] [Dummy-1   ]: Partial parsing: updated file: incident_management://models/semantic_views/alpha.sql
+[0m19:15:16.628657 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m19:15:16.631804 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m19:15:16.696096 [info ] [Dummy-1   ]: Found 13 models, 32 data tests, 6 sources, 483 macros
+[0m19:15:16.699502 [info ] [Dummy-1   ]: 
+[0m19:15:16.700216 [info ] [Dummy-1   ]: Concurrency: 1 threads (target='dev')
+[0m19:15:16.700758 [info ] [Dummy-1   ]: 
+[0m19:15:16.701685 [debug] [Dummy-1   ]: Acquiring new snowflake connection 'master'
+[0m19:15:16.703874 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_incident_management'
+[0m19:15:16.846257 [debug] [ThreadPool]: Using snowflake connection "list_incident_management"
+[0m19:15:16.846970 [debug] [ThreadPool]: On list_incident_management: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management"} */
+show terse schemas in database incident_management
+    limit 10000
+[0m19:15:16.847588 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m19:15:17.821715 [debug] [ThreadPool]: SQL status: SUCCESS 6 in 0.974 seconds
+[0m19:15:17.832250 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management, now list_incident_management_bronze_zone)
+[0m19:15:17.857574 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m19:15:17.858331 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m19:15:17.859034 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m19:15:18.653744 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.795 seconds
+[0m19:15:18.659892 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m19:15:18.660539 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+show objects in incident_management.bronze_zone
+    limit 10000
+    
+;
+[0m19:15:18.790264 [debug] [ThreadPool]: SQL status: SUCCESS 10 in 0.129 seconds
+[0m19:15:18.793246 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m19:15:18.793949 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m19:15:18.880411 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.086 seconds
+[0m19:15:18.883238 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management_bronze_zone, now list_incident_management_semantic_views)
+[0m19:15:18.897416 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m19:15:18.898115 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m19:15:18.898744 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m19:15:19.628660 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.730 seconds
+[0m19:15:19.631304 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m19:15:19.631944 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+show objects in incident_management.semantic_views
+    limit 10000
+    
+;
+[0m19:15:19.735729 [debug] [ThreadPool]: SQL status: SUCCESS 0 in 0.103 seconds
+[0m19:15:19.738241 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m19:15:19.738989 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m19:15:19.823894 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.084 seconds
+[0m19:15:19.826368 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management_semantic_views, now list_incident_management_gold_zone)
+[0m19:15:19.838638 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m19:15:19.839291 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m19:15:19.839785 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m19:15:20.628109 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.788 seconds
+[0m19:15:20.630808 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m19:15:20.631421 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+show objects in incident_management.gold_zone
+    limit 10000
+    
+;
+[0m19:15:20.760078 [debug] [ThreadPool]: SQL status: SUCCESS 7 in 0.128 seconds
+[0m19:15:20.762916 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m19:15:20.763527 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m19:15:20.862212 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.098 seconds
+[0m19:15:20.872363 [debug] [Thread-2 (]: Began running node model.incident_management.alpha
+[0m19:15:20.873343 [info ] [Thread-2 (]: 1 of 1 START sql semantic_view model semantic_views.alpha ...................... [RUN]
+[0m19:15:20.874152 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly list_incident_management_gold_zone, now model.incident_management.alpha)
+[0m19:15:20.874752 [debug] [Thread-2 (]: Began compiling node model.incident_management.alpha
+[0m19:15:20.896220 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.alpha"
+[0m19:15:20.897213 [debug] [Thread-2 (]: Began executing node model.incident_management.alpha
+[0m19:15:21.069820 [debug] [Thread-2 (]: Writing runtime sql for node "model.incident_management.alpha"
+[0m19:15:21.084249 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.alpha"
+[0m19:15:21.086453 [debug] [Thread-2 (]: On model.incident_management.alpha: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.alpha"} */
+create or replace semantic view incident_management.semantic_views.alpha
+  
+
+TABLES(
+  incidents as incident_management.gold_zone.incidents
+    COMMENT = 'Materialized incidents table with enriched data and calculated fields'
+
+  , active_incidents as incident_management.gold_zone.active_incidents
+    COMMENT = 'Active incidents requiring attention with SLA status and priority ordering'
+
+  , closed_incidents as incident_management.gold_zone.closed_incidents
+    COMMENT = 'Closed incidents with resolution metrics and performance insights'
+
+  , incident_attachments as incident_management.gold_zone.incident_attachments
+    COMMENT = 'Materialized incident attachments table'
+
+  , incident_comment_history as incident_management.gold_zone.incident_comment_history
+    COMMENT = 'Simplified incident comment history for tracking communication'
+
+  , weekly_incident_trends as incident_management.gold_zone.weekly_incident_trends
+    COMMENT = 'Weekly incident trends for the last 12 weeks'
+
+  , quaterly_review_metrics as incident_management.gold_zone.quaterly_review_metrics
+    COMMENT = 'Quarterly review metrics'
+
+)
+
+FACTS (
+    active_incidents.age_hours AS age_hours
+      COMMENT = 'Age of incident in hours'
+    , closed_incidents.total_resolution_hours AS total_resolution_hours
+      COMMENT = 'Total time from creation to closure in hours'
+    , closed_incidents.closed_year AS closed_year
+      COMMENT = 'Year when the incident was closed'
+    , closed_incidents.closed_quarter AS closed_quarter
+      COMMENT = 'Quarter when the incident was closed'
+
+    , weekly_incident_trends.total_incidents AS total_incidents
+      COMMENT = 'Total incidents created in the week'
+    , weekly_incident_trends.resolved_incidents AS resolved_incidents
+      COMMENT = 'Incidents resolved in the week'
+    , weekly_incident_trends.closed_incidents AS closed_incidents
+      COMMENT = 'Incidents closed in the week'
+    , weekly_incident_trends.open_incidents AS open_incidents
+      COMMENT = 'Incidents open in the week'
+    , weekly_incident_trends.critical_incidents AS critical_incidents
+      COMMENT = 'Incidents with critical priority'
+    , weekly_incident_trends.high_incidents AS high_incidents
+      COMMENT = 'Incidents with high priority'
+    , weekly_incident_trends.high_severity_incidents AS high_severity_incidents
+      COMMENT = 'Incidents with critical or high priority'
+    , weekly_incident_trends.payment_incidents AS payment_incidents
+      COMMENT = 'Payment category incidents'
+    , weekly_incident_trends.authentication_incidents AS authentication_incidents
+      COMMENT = 'Authentication category incidents'
+    , weekly_incident_trends.performance_incidents AS performance_incidents
+      COMMENT = 'Performance category incidents'
+    , weekly_incident_trends.security_incidents AS security_incidents
+      COMMENT = 'Security category incidents'
+    , weekly_incident_trends.monitoring_incidents AS monitoring_incidents
+      COMMENT = 'Incidents from monitoring source system'
+    , weekly_incident_trends.customer_portal_incidents AS customer_portal_incidents
+      COMMENT = 'Incidents from customer portal source system'
+    , weekly_incident_trends.avg_resolution_time_hours AS avg_resolution_time_hours
+      COMMENT = 'Average resolution time in hours'
+    , weekly_incident_trends.incidents_with_attachments AS incidents_with_attachments
+      COMMENT = 'Incidents that had attachments'
+    , weekly_incident_trends.resolution_rate_percentage AS resolution_rate_percentage
+      COMMENT = 'Share of resolved/closed incidents as a percentage'
+
+    , quaterly_review_metrics.soh_overall_uptime AS soh_overall_uptime
+      COMMENT = 'Actual recorded overall uptime of all services'
+    , quaterly_review_metrics.soh_critical_uptime AS soh_critical_uptime
+      COMMENT = 'Actual recorded uptime of critical services'
+    , quaterly_review_metrics.soh_sev1_incidents AS soh_sev1_incidents
+      COMMENT = 'Recorded number of Sev-1 incidents'
+    , quaterly_review_metrics.soh_sev2_incidents AS soh_sev2_incidents
+      COMMENT = 'Recorded number of Sev-2 incidents'
+    , quaterly_review_metrics.soh_mtta AS soh_mtta
+      COMMENT = 'Mean time to acknowledge an incident'
+    , quaterly_review_metrics.soh_mttr AS soh_mttr
+      COMMENT = 'Mean time to recover from an incident'
+    , quaterly_review_metrics.soh_cfr AS soh_cfr
+      COMMENT = 'Change failure rate'
+    , quaterly_review_metrics.soh_slo_breaches AS soh_slo_breaches
+      COMMENT = 'Number of SLO breaches'
+    , quaterly_review_metrics.soh_error_budget AS soh_error_budget
+      COMMENT = 'Error budget consumed'
+    , quaterly_review_metrics.soh_downtime AS soh_downtime
+      COMMENT = 'Service downtime'
+    , quaterly_review_metrics.soh_unplanned_outage_hours AS soh_unplanned_outage_hours
+      COMMENT = 'Unplanned outage hours'
+    , quaterly_review_metrics.soh_planned_maintenance_hours AS soh_planned_maintenance_hours
+      COMMENT = 'Planned maintenance hours'
+    , quaterly_review_metrics.soh_sev1_outage_minutes AS soh_sev1_outage_minutes
+      COMMENT = 'Sev-1 outage minutes'
+    , quaterly_review_metrics.soh_sev2_outage_minutes AS soh_sev2_outage_minutes
+      COMMENT = 'Sev-2 outage minutes'
+    , quaterly_review_metrics.soh_longest_outage AS soh_longest_outage
+      COMMENT = 'Longest single outage'
+    , quaterly_review_metrics.soh_mtbft AS soh_mtbft
+      COMMENT = 'Mean time between failures'
+
+    , quaterly_review_metrics.tu_eoq_it_headcount AS tu_eoq_it_headcount
+      COMMENT = 'End of quarter IT headcount'
+    , quaterly_review_metrics.tu_eng_headcount AS tu_eng_headcount
+      COMMENT = 'Engineering headcount'
+    , quaterly_review_metrics.tu_on_call_coverage AS tu_on_call_coverage
+      COMMENT = 'On call coverage'
+    , quaterly_review_metrics.tu_project_work_alloc AS tu_project_work_alloc
+      COMMENT = 'Project work allocation'
+    , quaterly_review_metrics.tu_bau_ops_alloc AS tu_bau_ops_alloc
+      COMMENT = 'BAU/Operations allocation'
+    , quaterly_review_metrics.tu_on_call_hours_per_eng AS tu_on_call_hours_per_eng
+      COMMENT = 'On call hours per engineer'
+    , quaterly_review_metrics.tu_after_hours_incidents AS tu_after_hours_incidents
+      COMMENT = 'After hours incidents handled'
+    , quaterly_review_metrics.tu_training_hours_per_fte AS tu_training_hours_per_fte
+      COMMENT = 'Training hours per FTE'
+    , quaterly_review_metrics.tu_certifications AS tu_certifications
+      COMMENT = 'Certifications earned'
+    , quaterly_review_metrics.tu_attrition AS tu_attrition
+      COMMENT = 'Attrition'
+
+    , quaterly_review_metrics.tls_atlassian AS tls_atlassian
+      COMMENT = 'Spend on Atlassian licenses'
+    , quaterly_review_metrics.tls_github AS tls_github
+      COMMENT = 'Spend on GitHub licenses'
+    , quaterly_review_metrics.tls_slack AS tls_slack
+      COMMENT = 'Spend on Slack licenses'
+    , quaterly_review_metrics.tls_pagerduty AS tls_pagerduty
+      COMMENT = 'Spend on PagerDuty licenses'
+    , quaterly_review_metrics.tls_datadog AS tls_datadog
+      COMMENT = 'Spend on Datadog licenses'
+    , quaterly_review_metrics.tls_sentry AS tls_sentry
+      COMMENT = 'Spend on Sentry licenses'
+    , quaterly_review_metrics.tls_okta AS tls_okta
+      COMMENT = 'Spend on Okta licenses'
+    , quaterly_review_metrics.tls_aws AS tls_aws
+      COMMENT = 'Spend on AWS licenses'
+    , quaterly_review_metrics.tls_total AS tls_total
+      COMMENT = 'Total spend on licenses'
+ )
+
+ DIMENSIONS (
+    incidents.incident_number AS incident_number
+      COMMENT = 'Incident identifier'
+   , incidents.category AS category
+      COMMENT = 'Incident category'
+   , incidents.title AS title
+      COMMENT = 'Incident title'
+   , incidents.priority AS priority
+      COMMENT = 'Incident priority'
+   , incidents.status AS status
+      COMMENT = 'Incident status'
+   , incidents.assignee_id AS assignee_id
+      COMMENT = 'Assignee user id'
+   , incidents.reportee_id AS reportee_id
+      COMMENT = 'Reportee user id'
+   , incidents.created_at AS created_at
+      COMMENT = 'Creation timestamp'
+   , incidents.closed_at AS closed_at
+      COMMENT = 'Close timestamp'
+   , incidents.updated_at AS updated_at
+      COMMENT = 'Last update timestamp'
+   , incidents.source_system AS source_system
+      COMMENT = 'Source system for the incident'
+   ,incidents.external_source_id AS external_source_id
+      COMMENT = 'External source identifier'
+   , incidents.has_attachments AS has_attachments
+      COMMENT = 'Whether the incident has attachments'
+   , incidents.slack_message_id AS slack_message_id
+      COMMENT = 'Associated Slack message id'
+   , incidents.last_comment AS last_comment
+      COMMENT = 'Latest comment content'
+
+   , active_incidents.incident_number AS incident_number
+      COMMENT = 'Incident identifier'
+   , active_incidents.title AS title
+      COMMENT = 'Incident title'
+   , active_incidents.category AS category
+      COMMENT = 'Incident category'
+   , active_incidents.priority AS priority
+      COMMENT = 'Incident priority'
+   , active_incidents.status AS status
+      COMMENT = 'Incident status'
+   , active_incidents.assignee_id AS assignee_id
+      COMMENT = 'Assignee user id'
+   , active_incidents.assignee_name AS assignee_name
+      COMMENT = 'Assignee full name'
+   , active_incidents.reportee_id AS reportee_id
+      COMMENT = 'Reportee user id'
+   , active_incidents.reportee_name AS reportee_name
+      COMMENT = 'Reportee full name'
+   , active_incidents.created_at AS created_at
+      COMMENT = 'Creation timestamp'
+   , active_incidents.updated_at AS updated_at
+      COMMENT = 'Last update timestamp'
+   , active_incidents.source_system AS source_system
+      COMMENT = 'Source system for the incident'
+   , active_incidents.external_source_id AS external_source_id
+      COMMENT = 'External source identifier'
+   , active_incidents.has_attachments AS has_attachments
+      COMMENT = 'Whether the incident has attachments'
+
+   , closed_incidents.incident_number AS incident_number
+      COMMENT = 'Incident identifier'
+   , closed_incidents.title AS title
+      COMMENT = 'Incident title'
+   , closed_incidents.category AS category
+      COMMENT = 'Incident category'
+   , closed_incidents.priority AS priority
+      COMMENT = 'Incident priority'
+   , closed_incidents.status AS status
+      COMMENT = 'Incident status'
+   , closed_incidents.assignee_id AS assignee_id
+      COMMENT = 'Assignee user id'
+   , closed_incidents.reportee_id AS reportee_id
+      COMMENT = 'Reportee user id'
+   , closed_incidents.created_at AS created_at
+      COMMENT = 'Creation timestamp'
+   , closed_incidents.closed_at AS closed_at
+      COMMENT = 'Close timestamp'
+   , closed_incidents.updated_at AS updated_at
+      COMMENT = 'Last update timestamp'
+   , closed_incidents.source_system AS source_system
+      COMMENT = 'Source system for the incident'
+   , closed_incidents.external_source_id AS external_source_id
+      COMMENT = 'External source identifier'
+   , closed_incidents.has_attachments AS has_attachments
+      COMMENT = 'Whether the incident had attachments'
+   , closed_incidents.closed_month AS closed_month
+      COMMENT = 'Month when incident was closed'
+
+   , incident_attachments.id AS id
+      COMMENT = 'Attachment id'
+   , incident_attachments.incident_number AS incident_number
+      COMMENT = 'Incident identifier'
+    , incident_attachments.attachment_file AS attachment_file
+      COMMENT = 'Stage file reference for the attachment'
+    , incident_attachments.uploaded_at AS attachment_uploaded_at
+      COMMENT = 'Attachment upload timestamp'
+
+   , incident_comment_history.id AS id
+      COMMENT = 'Comment id'
+   , incident_comment_history.incident_number AS incident_number
+      COMMENT = 'Incident identifier'
+   , incident_comment_history.author_id AS author_id
+      COMMENT = 'Comment author user id'
+   ,  incident_comment_history.content AS content
+      COMMENT = 'Comment content'
+   , incident_comment_history.created_at AS created_at
+      COMMENT = 'Comment creation timestamp'
+   , weekly_incident_trends.week AS week
+      COMMENT = 'Week bucket (date truncated to week)'
+
+   , quaterly_review_metrics.relative_path AS relative_path
+      COMMENT = 'Path to the file on the stage'
+   , quaterly_review_metrics.quarter AS quarter
+      COMMENT = 'Year and quarter of the review metrics'
+  )
+[0m19:15:21.087969 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m19:15:21.918002 [debug] [Thread-2 (]: Snowflake adapter: Snowflake query id: 01c04a03-0106-f0ea-0032-3187054872b2
+[0m19:15:21.918845 [debug] [Thread-2 (]: Snowflake adapter: Snowflake error: 000904 (42000): SQL compilation error: error line 241 at position 42
+invalid identifier 'ATTACHMENT_UPLOADED_AT'
+[0m19:15:21.924632 [debug] [Thread-2 (]: Database Error in model alpha (models/semantic_views/alpha.sql)
+  000904 (42000): SQL compilation error: error line 241 at position 42
+  invalid identifier 'ATTACHMENT_UPLOADED_AT'
+  compiled code at /tmp/dbt/target/run/incident_management/models/semantic_views/alpha.sql
+[0m19:15:21.928264 [error] [Thread-2 (]: 1 of 1 ERROR creating sql semantic_view model semantic_views.alpha ............. [[31mERROR[0m in 1.05s]
+[0m19:15:21.929424 [debug] [Thread-2 (]: Finished running node model.incident_management.alpha
+[0m19:15:21.930870 [debug] [Thread-5 (]: Marking all children of 'model.incident_management.alpha' to be skipped because of status 'error'.  Reason: Database Error in model alpha (models/semantic_views/alpha.sql)
+  000904 (42000): SQL compilation error: error line 241 at position 42
+  invalid identifier 'ATTACHMENT_UPLOADED_AT'
+  compiled code at /tmp/dbt/target/run/incident_management/models/semantic_views/alpha.sql.
+[0m19:15:21.934434 [debug] [Dummy-1   ]: Connection 'master' was properly closed.
+[0m19:15:21.935005 [debug] [Dummy-1   ]: Connection 'model.incident_management.alpha' was properly closed.
+[0m19:15:21.935527 [info ] [Dummy-1   ]: 
+[0m19:15:21.936058 [info ] [Dummy-1   ]: Finished running 1 semantic view model in 0 hours 0 minutes and 5.23 seconds (5.23s).
+[0m19:15:21.937078 [debug] [Dummy-1   ]: Command end result
+[0m19:15:21.991715 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m19:15:21.994924 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m19:15:22.003376 [debug] [Dummy-1   ]: Wrote artifact RunExecutionResult to /tmp/dbt/target/run_results.json
+[0m19:15:22.003956 [info ] [Dummy-1   ]: 
+[0m19:15:22.004628 [info ] [Dummy-1   ]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
+[0m19:15:22.005140 [info ] [Dummy-1   ]: 
+[0m19:15:22.005926 [error] [Dummy-1   ]:   Database Error in model alpha (models/semantic_views/alpha.sql)
+  000904 (42000): SQL compilation error: error line 241 at position 42
+  invalid identifier 'ATTACHMENT_UPLOADED_AT'
+  compiled code at /tmp/dbt/target/run/incident_management/models/semantic_views/alpha.sql
+[0m19:15:22.006442 [info ] [Dummy-1   ]: 
+[0m19:15:22.006958 [info ] [Dummy-1   ]: Done. PASS=0 WARN=0 ERROR=1 SKIP=0 TOTAL=1
+[0m19:15:22.008878 [debug] [Dummy-1   ]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 7.756493, "process_in_blocks": "0", "process_kernel_time": 1.46, "process_mem_max_rss": "488132", "process_out_blocks": "0", "process_user_time": 6.49}
+[0m19:15:22.009595 [debug] [Dummy-1   ]: Command `cli run` failed at 19:15:22.009316 after 7.76 seconds
+[0m19:15:22.010167 [debug] [Dummy-1   ]: Flushing usage events
+
+
+============================== 19:15:57.851297 | 6fe9ed81-dbf9-41c3-b4dd-6135ca5747b9 ==============================
+[0m19:15:57.851297 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m19:15:57.852432 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'version_check': 'True', 'profiles_dir': '/tmp/dbt/', 'log_path': '/tmp/dbt/logs', 'fail_fast': 'False', 'debug': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'False', 'log_format': 'default', 'invocation_command': 'dbt ', 'introspect': 'True', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'target_path': '/tmp/dbt/target/', 'static_parser': 'True', 'send_anonymous_usage_stats': 'False'}
+[0m19:15:58.237951 [info ] [Dummy-1   ]: Registered adapter: snowflake=1.9.2
+[0m19:15:59.029621 [debug] [Dummy-1   ]: checksum: 53ed91fada2233efb98368d1716b44ab532c83a9c293cf1890b7905d5b45fb25, vars: {}, profile: , target: dev, version: 1.9.4
+[0m19:15:59.476718 [debug] [Dummy-1   ]: Partial parsing enabled: 0 files deleted, 0 files added, 1 files changed.
+[0m19:15:59.477880 [debug] [Dummy-1   ]: Partial parsing: updated file: incident_management://models/semantic_views/alpha.sql
+[0m19:16:00.174658 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m19:16:00.178006 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m19:16:00.245414 [info ] [Dummy-1   ]: Found 13 models, 32 data tests, 6 sources, 483 macros
+[0m19:16:00.248677 [info ] [Dummy-1   ]: 
+[0m19:16:00.249415 [info ] [Dummy-1   ]: Concurrency: 1 threads (target='dev')
+[0m19:16:00.250025 [info ] [Dummy-1   ]: 
+[0m19:16:00.250978 [debug] [Dummy-1   ]: Acquiring new snowflake connection 'master'
+[0m19:16:00.253424 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_incident_management'
+[0m19:16:00.416125 [debug] [ThreadPool]: Using snowflake connection "list_incident_management"
+[0m19:16:00.416849 [debug] [ThreadPool]: On list_incident_management: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management"} */
+show terse schemas in database incident_management
+    limit 10000
+[0m19:16:00.417430 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m19:16:01.347204 [debug] [ThreadPool]: SQL status: SUCCESS 6 in 0.930 seconds
+[0m19:16:01.357846 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management, now list_incident_management_gold_zone)
+[0m19:16:01.383172 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m19:16:01.383920 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m19:16:01.384467 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m19:16:02.234762 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.850 seconds
+[0m19:16:02.241033 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m19:16:02.241796 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+show objects in incident_management.gold_zone
+    limit 10000
+    
+;
+[0m19:16:02.359602 [debug] [ThreadPool]: SQL status: SUCCESS 7 in 0.117 seconds
+[0m19:16:02.362668 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m19:16:02.363417 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m19:16:02.493222 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.129 seconds
+[0m19:16:02.496088 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management_gold_zone, now list_incident_management_bronze_zone)
+[0m19:16:02.509582 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m19:16:02.510303 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m19:16:02.510908 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m19:16:03.347107 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.836 seconds
+[0m19:16:03.349867 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m19:16:03.350517 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+show objects in incident_management.bronze_zone
+    limit 10000
+    
+;
+[0m19:16:03.466493 [debug] [ThreadPool]: SQL status: SUCCESS 10 in 0.115 seconds
+[0m19:16:03.469575 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m19:16:03.470237 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m19:16:03.555976 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.085 seconds
+[0m19:16:03.558853 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management_bronze_zone, now list_incident_management_semantic_views)
+[0m19:16:03.574601 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m19:16:03.575278 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m19:16:03.575787 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m19:16:04.432058 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.856 seconds
+[0m19:16:04.434708 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m19:16:04.435340 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+show objects in incident_management.semantic_views
+    limit 10000
+    
+;
+[0m19:16:04.535511 [debug] [ThreadPool]: SQL status: SUCCESS 0 in 0.099 seconds
+[0m19:16:04.538013 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m19:16:04.538708 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m19:16:04.629457 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.090 seconds
+[0m19:16:04.637299 [debug] [Thread-2 (]: Began running node model.incident_management.alpha
+[0m19:16:04.638390 [info ] [Thread-2 (]: 1 of 1 START sql semantic_view model semantic_views.alpha ...................... [RUN]
+[0m19:16:04.639273 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly list_incident_management_semantic_views, now model.incident_management.alpha)
+[0m19:16:04.639911 [debug] [Thread-2 (]: Began compiling node model.incident_management.alpha
+[0m19:16:04.661458 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.alpha"
+[0m19:16:04.662491 [debug] [Thread-2 (]: Began executing node model.incident_management.alpha
+[0m19:16:04.842299 [debug] [Thread-2 (]: Writing runtime sql for node "model.incident_management.alpha"
+[0m19:16:04.856852 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.alpha"
+[0m19:16:04.859156 [debug] [Thread-2 (]: On model.incident_management.alpha: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.alpha"} */
+create or replace semantic view incident_management.semantic_views.alpha
+  
+
+TABLES(
+  incidents as incident_management.gold_zone.incidents
+    COMMENT = 'Materialized incidents table with enriched data and calculated fields'
+
+  , active_incidents as incident_management.gold_zone.active_incidents
+    COMMENT = 'Active incidents requiring attention with SLA status and priority ordering'
+
+  , closed_incidents as incident_management.gold_zone.closed_incidents
+    COMMENT = 'Closed incidents with resolution metrics and performance insights'
+
+  , incident_attachments as incident_management.gold_zone.incident_attachments
+    COMMENT = 'Materialized incident attachments table'
+
+  , incident_comment_history as incident_management.gold_zone.incident_comment_history
+    COMMENT = 'Simplified incident comment history for tracking communication'
+
+  , weekly_incident_trends as incident_management.gold_zone.weekly_incident_trends
+    COMMENT = 'Weekly incident trends for the last 12 weeks'
+
+  , quaterly_review_metrics as incident_management.gold_zone.quaterly_review_metrics
+    COMMENT = 'Quarterly review metrics'
+
+)
+
+FACTS (
+    active_incidents.age_hours AS age_hours
+      COMMENT = 'Age of incident in hours'
+    , closed_incidents.total_resolution_hours AS total_resolution_hours
+      COMMENT = 'Total time from creation to closure in hours'
+    , closed_incidents.closed_year AS closed_year
+      COMMENT = 'Year when the incident was closed'
+    , closed_incidents.closed_quarter AS closed_quarter
+      COMMENT = 'Quarter when the incident was closed'
+
+    , weekly_incident_trends.total_incidents AS total_incidents
+      COMMENT = 'Total incidents created in the week'
+    , weekly_incident_trends.resolved_incidents AS resolved_incidents
+      COMMENT = 'Incidents resolved in the week'
+    , weekly_incident_trends.closed_incidents AS closed_incidents
+      COMMENT = 'Incidents closed in the week'
+    , weekly_incident_trends.open_incidents AS open_incidents
+      COMMENT = 'Incidents open in the week'
+    , weekly_incident_trends.critical_incidents AS critical_incidents
+      COMMENT = 'Incidents with critical priority'
+    , weekly_incident_trends.high_incidents AS high_incidents
+      COMMENT = 'Incidents with high priority'
+    , weekly_incident_trends.high_severity_incidents AS high_severity_incidents
+      COMMENT = 'Incidents with critical or high priority'
+    , weekly_incident_trends.payment_incidents AS payment_incidents
+      COMMENT = 'Payment category incidents'
+    , weekly_incident_trends.authentication_incidents AS authentication_incidents
+      COMMENT = 'Authentication category incidents'
+    , weekly_incident_trends.performance_incidents AS performance_incidents
+      COMMENT = 'Performance category incidents'
+    , weekly_incident_trends.security_incidents AS security_incidents
+      COMMENT = 'Security category incidents'
+    , weekly_incident_trends.monitoring_incidents AS monitoring_incidents
+      COMMENT = 'Incidents from monitoring source system'
+    , weekly_incident_trends.customer_portal_incidents AS customer_portal_incidents
+      COMMENT = 'Incidents from customer portal source system'
+    , weekly_incident_trends.avg_resolution_time_hours AS avg_resolution_time_hours
+      COMMENT = 'Average resolution time in hours'
+    , weekly_incident_trends.incidents_with_attachments AS incidents_with_attachments
+      COMMENT = 'Incidents that had attachments'
+    , weekly_incident_trends.resolution_rate_percentage AS resolution_rate_percentage
+      COMMENT = 'Share of resolved/closed incidents as a percentage'
+
+    , quaterly_review_metrics.soh_overall_uptime AS soh_overall_uptime
+      COMMENT = 'Actual recorded overall uptime of all services'
+    , quaterly_review_metrics.soh_critical_uptime AS soh_critical_uptime
+      COMMENT = 'Actual recorded uptime of critical services'
+    , quaterly_review_metrics.soh_sev1_incidents AS soh_sev1_incidents
+      COMMENT = 'Recorded number of Sev-1 incidents'
+    , quaterly_review_metrics.soh_sev2_incidents AS soh_sev2_incidents
+      COMMENT = 'Recorded number of Sev-2 incidents'
+    , quaterly_review_metrics.soh_mtta AS soh_mtta
+      COMMENT = 'Mean time to acknowledge an incident'
+    , quaterly_review_metrics.soh_mttr AS soh_mttr
+      COMMENT = 'Mean time to recover from an incident'
+    , quaterly_review_metrics.soh_cfr AS soh_cfr
+      COMMENT = 'Change failure rate'
+    , quaterly_review_metrics.soh_slo_breaches AS soh_slo_breaches
+      COMMENT = 'Number of SLO breaches'
+    , quaterly_review_metrics.soh_error_budget AS soh_error_budget
+      COMMENT = 'Error budget consumed'
+    , quaterly_review_metrics.soh_downtime AS soh_downtime
+      COMMENT = 'Service downtime'
+    , quaterly_review_metrics.soh_unplanned_outage_hours AS soh_unplanned_outage_hours
+      COMMENT = 'Unplanned outage hours'
+    , quaterly_review_metrics.soh_planned_maintenance_hours AS soh_planned_maintenance_hours
+      COMMENT = 'Planned maintenance hours'
+    , quaterly_review_metrics.soh_sev1_outage_minutes AS soh_sev1_outage_minutes
+      COMMENT = 'Sev-1 outage minutes'
+    , quaterly_review_metrics.soh_sev2_outage_minutes AS soh_sev2_outage_minutes
+      COMMENT = 'Sev-2 outage minutes'
+    , quaterly_review_metrics.soh_longest_outage AS soh_longest_outage
+      COMMENT = 'Longest single outage'
+    , quaterly_review_metrics.soh_mtbft AS soh_mtbft
+      COMMENT = 'Mean time between failures'
+
+    , quaterly_review_metrics.tu_eoq_it_headcount AS tu_eoq_it_headcount
+      COMMENT = 'End of quarter IT headcount'
+    , quaterly_review_metrics.tu_eng_headcount AS tu_eng_headcount
+      COMMENT = 'Engineering headcount'
+    , quaterly_review_metrics.tu_on_call_coverage AS tu_on_call_coverage
+      COMMENT = 'On call coverage'
+    , quaterly_review_metrics.tu_project_work_alloc AS tu_project_work_alloc
+      COMMENT = 'Project work allocation'
+    , quaterly_review_metrics.tu_bau_ops_alloc AS tu_bau_ops_alloc
+      COMMENT = 'BAU/Operations allocation'
+    , quaterly_review_metrics.tu_on_call_hours_per_eng AS tu_on_call_hours_per_eng
+      COMMENT = 'On call hours per engineer'
+    , quaterly_review_metrics.tu_after_hours_incidents AS tu_after_hours_incidents
+      COMMENT = 'After hours incidents handled'
+    , quaterly_review_metrics.tu_training_hours_per_fte AS tu_training_hours_per_fte
+      COMMENT = 'Training hours per FTE'
+    , quaterly_review_metrics.tu_certifications AS tu_certifications
+      COMMENT = 'Certifications earned'
+    , quaterly_review_metrics.tu_attrition AS tu_attrition
+      COMMENT = 'Attrition'
+
+    , quaterly_review_metrics.tls_atlassian AS tls_atlassian
+      COMMENT = 'Spend on Atlassian licenses'
+    , quaterly_review_metrics.tls_github AS tls_github
+      COMMENT = 'Spend on GitHub licenses'
+    , quaterly_review_metrics.tls_slack AS tls_slack
+      COMMENT = 'Spend on Slack licenses'
+    , quaterly_review_metrics.tls_pagerduty AS tls_pagerduty
+      COMMENT = 'Spend on PagerDuty licenses'
+    , quaterly_review_metrics.tls_datadog AS tls_datadog
+      COMMENT = 'Spend on Datadog licenses'
+    , quaterly_review_metrics.tls_sentry AS tls_sentry
+      COMMENT = 'Spend on Sentry licenses'
+    , quaterly_review_metrics.tls_okta AS tls_okta
+      COMMENT = 'Spend on Okta licenses'
+    , quaterly_review_metrics.tls_aws AS tls_aws
+      COMMENT = 'Spend on AWS licenses'
+    , quaterly_review_metrics.tls_total AS tls_total
+      COMMENT = 'Total spend on licenses'
+ )
+
+ DIMENSIONS (
+    incidents.incident_number AS incident_number
+      COMMENT = 'Incident identifier'
+   , incidents.category AS category
+      COMMENT = 'Incident category'
+   , incidents.title AS title
+      COMMENT = 'Incident title'
+   , incidents.priority AS priority
+      COMMENT = 'Incident priority'
+   , incidents.status AS status
+      COMMENT = 'Incident status'
+   , incidents.assignee_id AS assignee_id
+      COMMENT = 'Assignee user id'
+   , incidents.reportee_id AS reportee_id
+      COMMENT = 'Reportee user id'
+   , incidents.created_at AS created_at
+      COMMENT = 'Creation timestamp'
+   , incidents.closed_at AS closed_at
+      COMMENT = 'Close timestamp'
+   , incidents.updated_at AS updated_at
+      COMMENT = 'Last update timestamp'
+   , incidents.source_system AS source_system
+      COMMENT = 'Source system for the incident'
+   ,incidents.external_source_id AS external_source_id
+      COMMENT = 'External source identifier'
+   , incidents.has_attachments AS has_attachments
+      COMMENT = 'Whether the incident has attachments'
+   , incidents.slack_message_id AS slack_message_id
+      COMMENT = 'Associated Slack message id'
+   , incidents.last_comment AS last_comment
+      COMMENT = 'Latest comment content'
+
+   , active_incidents.incident_number AS incident_number
+      COMMENT = 'Incident identifier'
+   , active_incidents.title AS title
+      COMMENT = 'Incident title'
+   , active_incidents.category AS category
+      COMMENT = 'Incident category'
+   , active_incidents.priority AS priority
+      COMMENT = 'Incident priority'
+   , active_incidents.status AS status
+      COMMENT = 'Incident status'
+   , active_incidents.assignee_id AS assignee_id
+      COMMENT = 'Assignee user id'
+   , active_incidents.assignee_name AS assignee_name
+      COMMENT = 'Assignee full name'
+   , active_incidents.reportee_id AS reportee_id
+      COMMENT = 'Reportee user id'
+   , active_incidents.reportee_name AS reportee_name
+      COMMENT = 'Reportee full name'
+   , active_incidents.created_at AS created_at
+      COMMENT = 'Creation timestamp'
+   , active_incidents.updated_at AS updated_at
+      COMMENT = 'Last update timestamp'
+   , active_incidents.source_system AS source_system
+      COMMENT = 'Source system for the incident'
+   , active_incidents.external_source_id AS external_source_id
+      COMMENT = 'External source identifier'
+   , active_incidents.has_attachments AS has_attachments
+      COMMENT = 'Whether the incident has attachments'
+
+   , closed_incidents.incident_number AS incident_number
+      COMMENT = 'Incident identifier'
+   , closed_incidents.title AS title
+      COMMENT = 'Incident title'
+   , closed_incidents.category AS category
+      COMMENT = 'Incident category'
+   , closed_incidents.priority AS priority
+      COMMENT = 'Incident priority'
+   , closed_incidents.status AS status
+      COMMENT = 'Incident status'
+   , closed_incidents.assignee_id AS assignee_id
+      COMMENT = 'Assignee user id'
+   , closed_incidents.reportee_id AS reportee_id
+      COMMENT = 'Reportee user id'
+   , closed_incidents.created_at AS created_at
+      COMMENT = 'Creation timestamp'
+   , closed_incidents.closed_at AS closed_at
+      COMMENT = 'Close timestamp'
+   , closed_incidents.updated_at AS updated_at
+      COMMENT = 'Last update timestamp'
+   , closed_incidents.source_system AS source_system
+      COMMENT = 'Source system for the incident'
+   , closed_incidents.external_source_id AS external_source_id
+      COMMENT = 'External source identifier'
+   , closed_incidents.has_attachments AS has_attachments
+      COMMENT = 'Whether the incident had attachments'
+   , closed_incidents.closed_month AS closed_month
+      COMMENT = 'Month when incident was closed'
+
+   , incident_attachments.id AS id
+      COMMENT = 'Attachment id'
+   , incident_attachments.incident_number AS incident_number
+      COMMENT = 'Incident identifier'
+    , incident_attachments.attachment_file AS attachment_file
+      COMMENT = 'Stage file reference for the attachment'
+    , incident_attachments.uploaded_at AS uploaded_at
+      COMMENT = 'Attachment upload timestamp'
+
+   , incident_comment_history.id AS id
+      COMMENT = 'Comment id'
+   , incident_comment_history.incident_number AS incident_number
+      COMMENT = 'Incident identifier'
+   , incident_comment_history.author_id AS author_id
+      COMMENT = 'Comment author user id'
+   ,  incident_comment_history.content AS content
+      COMMENT = 'Comment content'
+   , incident_comment_history.created_at AS created_at
+      COMMENT = 'Comment creation timestamp'
+   , weekly_incident_trends.week AS week
+      COMMENT = 'Week bucket (date truncated to week)'
+
+   , quaterly_review_metrics.relative_path AS relative_path
+      COMMENT = 'Path to the file on the stage'
+   , quaterly_review_metrics.quarter AS quarter
+      COMMENT = 'Year and quarter of the review metrics'
+  )
+[0m19:16:04.860717 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m19:16:06.417218 [debug] [Thread-2 (]: SQL status: SUCCESS 1 in 1.556 seconds
+[0m19:16:06.432017 [info ] [Thread-2 (]: 1 of 1 OK created sql semantic_view model semantic_views.alpha ................. [[32mSUCCESS 1[0m in 1.79s]
+[0m19:16:06.433086 [debug] [Thread-2 (]: Finished running node model.incident_management.alpha
+[0m19:16:06.436375 [debug] [Dummy-1   ]: Connection 'master' was properly closed.
+[0m19:16:06.436977 [debug] [Dummy-1   ]: Connection 'model.incident_management.alpha' was properly closed.
+[0m19:16:06.437572 [info ] [Dummy-1   ]: 
+[0m19:16:06.438135 [info ] [Dummy-1   ]: Finished running 1 semantic view model in 0 hours 0 minutes and 6.19 seconds (6.19s).
+[0m19:16:06.439251 [debug] [Dummy-1   ]: Command end result
+[0m19:16:06.494430 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m19:16:06.497791 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m19:16:06.506487 [debug] [Dummy-1   ]: Wrote artifact RunExecutionResult to /tmp/dbt/target/run_results.json
+[0m19:16:06.507113 [info ] [Dummy-1   ]: 
+[0m19:16:06.507856 [info ] [Dummy-1   ]: [32mCompleted successfully[0m
+[0m19:16:06.508407 [info ] [Dummy-1   ]: 
+[0m19:16:06.509001 [info ] [Dummy-1   ]: Done. PASS=1 WARN=0 ERROR=0 SKIP=0 TOTAL=1
+[0m19:16:06.511000 [debug] [Dummy-1   ]: Resource report: {"command_name": "run", "command_success": true, "command_wall_clock_time": 8.759659, "process_in_blocks": "0", "process_kernel_time": 1.45, "process_mem_max_rss": "480512", "process_out_blocks": "0", "process_user_time": 6.6}
+[0m19:16:06.511745 [debug] [Dummy-1   ]: Command `cli run` succeeded at 19:16:06.511459 after 8.76 seconds
+[0m19:16:06.512326 [debug] [Dummy-1   ]: Flushing usage events

@@ -68,194 +68,194 @@ FACTS (
     , weekly_incident_trends.resolution_rate_percentage AS resolution_rate_percentage
       COMMENT = 'Share of resolved/closed incidents as a percentage'
 
-    , quaterly_review_metrics.soh_overall_uptime AS service_operational_health_overall_uptime
+    , quaterly_review_metrics.soh_overall_uptime AS soh_overall_uptime
       COMMENT = 'Actual recorded overall uptime of all services'
-    , quaterly_review_metrics.soh_critical_uptime AS service_operational_health_critical_services_uptime
+    , quaterly_review_metrics.soh_critical_uptime AS soh_critical_uptime
       COMMENT = 'Actual recorded uptime of critical services'
-    , quaterly_review_metrics.soh_sev1_incidents AS service_operational_health_sev_1_incidents
+    , quaterly_review_metrics.soh_sev1_incidents AS soh_sev1_incidents
       COMMENT = 'Recorded number of Sev-1 incidents'
-    , quaterly_review_metrics.soh_sev2_incidents AS service_operational_health_sev_2_incidents
+    , quaterly_review_metrics.soh_sev2_incidents AS soh_sev2_incidents
       COMMENT = 'Recorded number of Sev-2 incidents'
-    , quaterly_review_metrics.soh_mtta AS service_operational_health_mtta
+    , quaterly_review_metrics.soh_mtta AS soh_mtta
       COMMENT = 'Mean time to acknowledge an incident'
-    , quaterly_review_metrics.soh_mttr AS service_operational_health_mttr
+    , quaterly_review_metrics.soh_mttr AS soh_mttr
       COMMENT = 'Mean time to recover from an incident'
-    , quaterly_review_metrics.soh_cfr AS service_operational_health_change_failure_rate
+    , quaterly_review_metrics.soh_cfr AS soh_cfr
       COMMENT = 'Change failure rate'
-    , quaterly_review_metrics.soh_slo_breaches AS service_operational_health_slo_breaches
+    , quaterly_review_metrics.soh_slo_breaches AS soh_slo_breaches
       COMMENT = 'Number of SLO breaches'
-    , quaterly_review_metrics.soh_error_budget AS service_operational_health_error_budget_consumed
+    , quaterly_review_metrics.soh_error_budget AS soh_error_budget
       COMMENT = 'Error budget consumed'
-    , quaterly_review_metrics.soh_downtime AS service_operational_health_service_downtime
+    , quaterly_review_metrics.soh_downtime AS soh_downtime
       COMMENT = 'Service downtime'
-    , quaterly_review_metrics.soh_unplanned_outage_hours AS service_operational_health_unplanned_outage_hours
+    , quaterly_review_metrics.soh_unplanned_outage_hours AS soh_unplanned_outage_hours
       COMMENT = 'Unplanned outage hours'
-    , quaterly_review_metrics.soh_planned_maintenance_hours AS service_operational_health_planned_maintenance_hours
+    , quaterly_review_metrics.soh_planned_maintenance_hours AS soh_planned_maintenance_hours
       COMMENT = 'Planned maintenance hours'
-    , quaterly_review_metrics.soh_sev1_outage_minutes AS service_operational_health_sev_1_outage_minutes
+    , quaterly_review_metrics.soh_sev1_outage_minutes AS soh_sev1_outage_minutes
       COMMENT = 'Sev-1 outage minutes'
-    , quaterly_review_metrics.soh_sev2_outage_minutes AS service_operational_health_sev_2_outage_minutes
+    , quaterly_review_metrics.soh_sev2_outage_minutes AS soh_sev2_outage_minutes
       COMMENT = 'Sev-2 outage minutes'
-    , quaterly_review_metrics.soh_longest_outage AS service_operational_health_longest_single_outage
+    , quaterly_review_metrics.soh_longest_outage AS soh_longest_outage
       COMMENT = 'Longest single outage'
-    , quaterly_review_metrics.soh_mtbft AS service_operational_health_mtbft
+    , quaterly_review_metrics.soh_mtbft AS soh_mtbft
       COMMENT = 'Mean time between failures'
 
-    , quaterly_review_metrics.tu_eoq_it_headcount AS team_utilisation_end_of_quarter_it_headcount
+    , quaterly_review_metrics.tu_eoq_it_headcount AS tu_eoq_it_headcount
       COMMENT = 'End of quarter IT headcount'
-    , quaterly_review_metrics.tu_eng_headcount AS team_utilisation_engineering_headcount
+    , quaterly_review_metrics.tu_eng_headcount AS tu_eng_headcount
       COMMENT = 'Engineering headcount'
-    , quaterly_review_metrics.tu_on_call_coverage AS team_utilisation_on_call_coverage
+    , quaterly_review_metrics.tu_on_call_coverage AS tu_on_call_coverage
       COMMENT = 'On call coverage'
-    , quaterly_review_metrics.tu_project_work_alloc AS team_utilisation_project_work_allocation
+    , quaterly_review_metrics.tu_project_work_alloc AS tu_project_work_alloc
       COMMENT = 'Project work allocation'
-    , quaterly_review_metrics.tu_bau_ops_alloc AS team_utilisation_bau_operations_allocation
+    , quaterly_review_metrics.tu_bau_ops_alloc AS tu_bau_ops_alloc
       COMMENT = 'BAU/Operations allocation'
-    , quaterly_review_metrics.tu_on_call_hours_per_eng AS team_utilisation_on_call_hours_per_engineer
+    , quaterly_review_metrics.tu_on_call_hours_per_eng AS tu_on_call_hours_per_eng
       COMMENT = 'On call hours per engineer'
-    , quaterly_review_metrics.tu_after_hours_incidents AS team_utilisation_after_hours_incidents_handled
+    , quaterly_review_metrics.tu_after_hours_incidents AS tu_after_hours_incidents
       COMMENT = 'After hours incidents handled'
-    , quaterly_review_metrics.tu_training_hours_per_fte AS team_utilisation_training_hours_per_fte
+    , quaterly_review_metrics.tu_training_hours_per_fte AS tu_training_hours_per_fte
       COMMENT = 'Training hours per FTE'
-    , quaterly_review_metrics.tu_certifications AS team_utilisation_certifications_earned
+    , quaterly_review_metrics.tu_certifications AS tu_certifications
       COMMENT = 'Certifications earned'
-    , quaterly_review_metrics.tu_attrition AS team_utilisation_attrition
+    , quaterly_review_metrics.tu_attrition AS tu_attrition
       COMMENT = 'Attrition'
 
-    , quaterly_review_metrics.tls_atlassian AS tool_licensing_spend_atlassian_spend
+    , quaterly_review_metrics.tls_atlassian AS tls_atlassian
       COMMENT = 'Spend on Atlassian licenses'
-    , quaterly_review_metrics.tls_github AS tool_licensing_spend_github_spend
+    , quaterly_review_metrics.tls_github AS tls_github
       COMMENT = 'Spend on GitHub licenses'
-    , quaterly_review_metrics.tls_slack AS tool_licensing_spend_slack_spend
+    , quaterly_review_metrics.tls_slack AS tls_slack
       COMMENT = 'Spend on Slack licenses'
-    , quaterly_review_metrics.tls_pagerduty AS tool_licensing_spend_pagerduty_spend
+    , quaterly_review_metrics.tls_pagerduty AS tls_pagerduty
       COMMENT = 'Spend on PagerDuty licenses'
-    , quaterly_review_metrics.tls_datadog AS tool_licensing_spend_datadog_spend
+    , quaterly_review_metrics.tls_datadog AS tls_datadog
       COMMENT = 'Spend on Datadog licenses'
-    , quaterly_review_metrics.tls_sentry AS tool_licensing_spend_sentry_spend
+    , quaterly_review_metrics.tls_sentry AS tls_sentry
       COMMENT = 'Spend on Sentry licenses'
-    , quaterly_review_metrics.tls_okta AS tool_licensing_spend_okta_spend
+    , quaterly_review_metrics.tls_okta AS tls_okta
       COMMENT = 'Spend on Okta licenses'
-    , quaterly_review_metrics.tls_aws AS tool_licensing_spend_aws_spend
+    , quaterly_review_metrics.tls_aws AS tls_aws
       COMMENT = 'Spend on AWS licenses'
-    , quaterly_review_metrics.tls_total AS tool_licensing_spend_total_spend
+    , quaterly_review_metrics.tls_total AS tls_total
       COMMENT = 'Total spend on licenses'
  )
 
  DIMENSIONS (
     incidents.incident_number AS incident_number
       COMMENT = 'Incident identifier'
-    , incidents.category AS incident_category
+   , incidents.category AS category
       COMMENT = 'Incident category'
-    , incidents.title AS incident_title
+   , incidents.title AS title
       COMMENT = 'Incident title'
-    , incidents.priority AS incident_priority
+   , incidents.priority AS priority
       COMMENT = 'Incident priority'
-    , incidents.status AS incident_status
+   , incidents.status AS status
       COMMENT = 'Incident status'
-    , incidents.assignee_id AS incident_assignee_id
+   , incidents.assignee_id AS assignee_id
       COMMENT = 'Assignee user id'
-    , incidents.reportee_id AS incident_reportee_id
+   , incidents.reportee_id AS reportee_id
       COMMENT = 'Reportee user id'
-    , incidents.created_at AS incident_created_at
+   , incidents.created_at AS created_at
       COMMENT = 'Creation timestamp'
-    , incidents.closed_at AS incident_closed_at
+   , incidents.closed_at AS closed_at
       COMMENT = 'Close timestamp'
-    , incidents.updated_at AS incident_updated_at
+   , incidents.updated_at AS updated_at
       COMMENT = 'Last update timestamp'
-    , incidents.source_system AS incident_source_system
+   , incidents.source_system AS source_system
       COMMENT = 'Source system for the incident'
-    ,incidents.external_source_id AS incident_external_source_id
+   ,incidents.external_source_id AS external_source_id
       COMMENT = 'External source identifier'
-    , incidents.has_attachments AS incident_has_attachments
+   , incidents.has_attachments AS has_attachments
       COMMENT = 'Whether the incident has attachments'
-    , incidents.slack_message_id AS incident_slack_message_id
+   , incidents.slack_message_id AS slack_message_id
       COMMENT = 'Associated Slack message id'
-    , incidents.last_comment AS incident_last_comment
+   , incidents.last_comment AS last_comment
       COMMENT = 'Latest comment content'
 
-    , active_incidents.incident_number AS active_incident_number
+   , active_incidents.incident_number AS incident_number
       COMMENT = 'Incident identifier'
-    , active_incidents.title AS active_incident_title
+   , active_incidents.title AS title
       COMMENT = 'Incident title'
-    , active_incidents.category AS active_incident_category
+   , active_incidents.category AS category
       COMMENT = 'Incident category'
-    , active_incidents.priority AS active_incident_priority
+   , active_incidents.priority AS priority
       COMMENT = 'Incident priority'
-    , active_incidents.status AS active_incident_status
+   , active_incidents.status AS status
       COMMENT = 'Incident status'
-    , active_incidents.assignee_id AS active_incident_assignee_id
+   , active_incidents.assignee_id AS assignee_id
       COMMENT = 'Assignee user id'
-    , active_incidents.assignee_name AS active_incident_assignee_name
+   , active_incidents.assignee_name AS assignee_name
       COMMENT = 'Assignee full name'
-    , active_incidents.reportee_id AS active_incident_reportee_id
+   , active_incidents.reportee_id AS reportee_id
       COMMENT = 'Reportee user id'
-    , active_incidents.reportee_name AS active_incident_reportee_name
+   , active_incidents.reportee_name AS reportee_name
       COMMENT = 'Reportee full name'
-    , active_incidents.created_at AS active_incident_created_at
+   , active_incidents.created_at AS created_at
       COMMENT = 'Creation timestamp'
-    , active_incidents.updated_at AS active_incident_updated_at
+   , active_incidents.updated_at AS updated_at
       COMMENT = 'Last update timestamp'
-    , active_incidents.source_system AS active_incident_source_system
+   , active_incidents.source_system AS source_system
       COMMENT = 'Source system for the incident'
-    , active_incidents.external_source_id AS active_incident_external_source_id
+   , active_incidents.external_source_id AS external_source_id
       COMMENT = 'External source identifier'
-    , active_incidents.has_attachments AS active_incident_has_attachments
+   , active_incidents.has_attachments AS has_attachments
       COMMENT = 'Whether the incident has attachments'
 
-    , closed_incidents.incident_number AS closed_incident_number
+   , closed_incidents.incident_number AS incident_number
       COMMENT = 'Incident identifier'
-    , closed_incidents.title AS closed_incident_title
+   , closed_incidents.title AS title
       COMMENT = 'Incident title'
-    , closed_incidents.category AS closed_incident_category
+   , closed_incidents.category AS category
       COMMENT = 'Incident category'
-    , closed_incidents.priority AS closed_incident_priority
+   , closed_incidents.priority AS priority
       COMMENT = 'Incident priority'
-    , closed_incidents.status AS closed_incident_status
+   , closed_incidents.status AS status
       COMMENT = 'Incident status'
-    , closed_incidents.assignee_id AS closed_incident_assignee_id
+   , closed_incidents.assignee_id AS assignee_id
       COMMENT = 'Assignee user id'
-    , closed_incidents.reportee_id AS closed_incident_reportee_id
+   , closed_incidents.reportee_id AS reportee_id
       COMMENT = 'Reportee user id'
-    , closed_incidents.created_at AS closed_incident_created_at
+   , closed_incidents.created_at AS created_at
       COMMENT = 'Creation timestamp'
-    , closed_incidents.closed_at AS closed_incident_closed_at
+   , closed_incidents.closed_at AS closed_at
       COMMENT = 'Close timestamp'
-    , closed_incidents.updated_at AS closed_incident_updated_at
+   , closed_incidents.updated_at AS updated_at
       COMMENT = 'Last update timestamp'
-    , closed_incidents.source_system AS closed_incident_source_system
+   , closed_incidents.source_system AS source_system
       COMMENT = 'Source system for the incident'
-    , closed_incidents.external_source_id AS closed_incident_external_source_id
+   , closed_incidents.external_source_id AS external_source_id
       COMMENT = 'External source identifier'
-    , closed_incidents.has_attachments AS closed_incident_has_attachments
+   , closed_incidents.has_attachments AS has_attachments
       COMMENT = 'Whether the incident had attachments'
-    , closed_incidents.closed_month AS closed_incident_month
+   , closed_incidents.closed_month AS closed_month
       COMMENT = 'Month when incident was closed'
 
-    , incident_attachments.id AS attachment_id
+   , incident_attachments.id AS id
       COMMENT = 'Attachment id'
-    , incident_attachments.incident_number AS attachment_incident_number
+   , incident_attachments.incident_number AS incident_number
       COMMENT = 'Incident identifier'
     , incident_attachments.attachment_file AS attachment_file
       COMMENT = 'Stage file reference for the attachment'
-    , incident_attachments.uploaded_at AS attachment_uploaded_at
+    , incident_attachments.uploaded_at AS uploaded_at
       COMMENT = 'Attachment upload timestamp'
 
-    , incident_comment_history.id AS comment_id
+   , incident_comment_history.id AS id
       COMMENT = 'Comment id'
-    , incident_comment_history.incident_number AS comment_incident_number
+   , incident_comment_history.incident_number AS incident_number
       COMMENT = 'Incident identifier'
-    , incident_comment_history.author_id AS comment_author_id
+   , incident_comment_history.author_id AS author_id
       COMMENT = 'Comment author user id'
-    ,  incident_comment_history.content AS comment_content
+   ,  incident_comment_history.content AS content
       COMMENT = 'Comment content'
-    , incident_comment_history.created_at AS comment_created_at
+   , incident_comment_history.created_at AS created_at
       COMMENT = 'Comment creation timestamp'
-    , weekly_incident_trends.week AS trend_week
+   , weekly_incident_trends.week AS week
       COMMENT = 'Week bucket (date truncated to week)'
 
-    , quaterly_review_metrics.relative_path AS qrm_relative_path
+   , quaterly_review_metrics.relative_path AS relative_path
       COMMENT = 'Path to the file on the stage'
-    , quaterly_review_metrics.quarter AS review_quarter
+   , quaterly_review_metrics.quarter AS quarter
       COMMENT = 'Year and quarter of the review metrics'
   )
