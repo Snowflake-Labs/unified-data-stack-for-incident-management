@@ -141,7 +141,6 @@ copy into <% ctx.env.dbt_project_database %>.gold_zone.incident_comment_history 
 
 
 create or replace schema <% ctx.env.dbt_project_database %>.dbt_project_deployments;
-grant all privileges on schema <% ctx.env.dbt_project_database %>.dbt_project_deployments to database role <% ctx.env.dbt_project_database %>.manage_dbt_deployments;
 
 
 CREATE OR REPLACE SECRET <% ctx.env.dbt_project_database %>.dbt_project_deployments.incident_management_git_secret
