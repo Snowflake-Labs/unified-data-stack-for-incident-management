@@ -5,7 +5,7 @@
 
 
 select id
-from incident_management.bronze_zone.users
+from v1_incident_management.bronze_zone.users
 where id is null
 
 

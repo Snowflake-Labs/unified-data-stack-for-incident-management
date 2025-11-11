@@ -2,7 +2,7 @@
   
     
 
-        create or replace transient table incident_management.gold_zone.closed_incidents
+        create or replace transient table v1_incident_management.gold_zone.closed_incidents
          as
         (
 
@@ -33,7 +33,7 @@ SELECT
     EXTRACT(year FROM i.closed_at) AS closed_year,
     EXTRACT(quarter FROM i.closed_at) AS closed_quarter
 
-FROM incident_management.gold_zone.incidents i
+FROM v1_incident_management.gold_zone.incidents i
 WHERE LOWER(i.status) IN ('closed', 'resolved') AND i.closed_at IS NOT NULL
         );
       

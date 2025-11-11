@@ -12,8 +12,8 @@
 
     
 
-    merge into incident_management.bronze_zone.users as DBT_INTERNAL_DEST
-        using incident_management.bronze_zone.users__dbt_tmp as DBT_INTERNAL_SOURCE
+    merge into v1_incident_management.bronze_zone.users as DBT_INTERNAL_DEST
+        using v1_incident_management.bronze_zone.users__dbt_tmp as DBT_INTERNAL_SOURCE
         on ((DBT_INTERNAL_SOURCE.email = DBT_INTERNAL_DEST.email))
 
     

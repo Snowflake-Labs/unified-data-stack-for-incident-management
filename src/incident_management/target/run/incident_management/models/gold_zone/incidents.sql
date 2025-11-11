@@ -12,8 +12,8 @@
 
     
 
-    merge into incident_management.gold_zone.incidents as DBT_INTERNAL_DEST
-        using incident_management.gold_zone.incidents__dbt_tmp as DBT_INTERNAL_SOURCE
+    merge into v1_incident_management.gold_zone.incidents as DBT_INTERNAL_DEST
+        using v1_incident_management.gold_zone.incidents__dbt_tmp as DBT_INTERNAL_SOURCE
         on ((DBT_INTERNAL_SOURCE.incident_number = DBT_INTERNAL_DEST.incident_number))
 
     

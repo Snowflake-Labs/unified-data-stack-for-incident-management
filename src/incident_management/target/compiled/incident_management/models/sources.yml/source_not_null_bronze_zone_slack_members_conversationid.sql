@@ -5,7 +5,7 @@
 
 
 select conversationid
-from incident_management.bronze_zone.slack_members
+from v1_incident_management.bronze_zone.slack_members
 where conversationid is null
 
 
