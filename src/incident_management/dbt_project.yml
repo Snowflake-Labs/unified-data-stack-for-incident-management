@@ -11,7 +11,7 @@ profile: 'incident_management'
 
 # Variables
 vars:
-  docs_stage_path: '@INCIDENT_MANAGEMENT.bronze_zone.DOCUMENTS'
+  docs_stage_path: '@V1_INCIDENT_MANAGEMENT.bronze_zone.DOCUMENTS'
 
 
 
