@@ -8,15 +8,22 @@
     )
 }}
 
+with _temp as (
+ select 
+ *, 
+ arrays_zip(memberids, memberemails) as zip_data 
+ from {{ source('bronze_zone', 'slack_members') }} sm
+)
 select 
-    sm.MEMBERIDS[0] as id,
-    sm.memberemails[0] as email,
-    split(sm.memberemails[0], '@')[0] as first_name,
-    split(sm.memberemails[0], '@')[1] as last_name,
+   f.value:$1 as id,
+   f.value:$2 as email,
+    split(email, '@')[0] as first_name,
+    split(email, '@')[1] as last_name,
     'reporter' as role,
     '' as department,
     '' as team,
     true as is_active,
     current_timestamp() as created_at,
     current_timestamp() as updated_at
-from {{ source('bronze_zone', 'slack_members') }} sm 
+from _temp,
+lateral flatten(input => zip_data) f

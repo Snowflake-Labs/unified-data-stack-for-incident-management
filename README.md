@@ -175,46 +175,67 @@ This demonstrates a complete modern data stack handling real-world operational s
 ## Project Structure
 
 ```
-incident-management/
+unified-data-stack-for-incident-management/
 ├── data/                          # Sample data and test files
-│   ├── csv/                      # CSV seed data
-│   │   ├── incidents.csv         # Sample incident records
+│   ├── csv/                       # CSV seed data
 │   │   ├── incident_comment_history.csv
-│   │   └── users.csv             # User directory
-│   └── images/                   # Sample incident attachments
+│   │   ├── incidents.csv
+│   │   ├── slack_conversation_history.csv
+│   │   └── users.csv
+│   └── images/                    # Sample incident attachments
 │       ├── invalid_credentials.jpeg
 │       └── payment_gateway_outage.jpeg
+├── screenshots/
+│   ├── destination_params.png
+│   └── snowflake_role_params.png
 ├── src/
-│   ├── incident_management/      # dbt project
+│   ├── incident_management/       # dbt project
+│   │   ├── analyses/
+│   │   ├── dbt_packages/
+│   │   │   └── dbt_semantic_view/ # Installed package
+│   │   ├── macros/                # Custom dbt macros
+│   │   │   ├── clean_stale_documents.sql
+│   │   │   └── generate_schema_name.sql
 │   │   ├── models/
-│   │   │   ├── bronze_zone/     # Raw data models
-│   │   │   │   ├── incidents.sql        # Core incident processing
-│   │   │   │   ├── incident_attachments.sql
+│   │   │   ├── bronze_zone/       # Raw staging/views
 │   │   │   │   ├── users.sql
-│   │   │   │   └── v_*.sql              # Slack message views
-│   │   │   ├── gold_zone/            # Analytics-ready models
+│   │   │   │   ├── users.yml
+│   │   │   │   ├── v_qualify_slack_messages.sql
+│   │   │   │   └── v_qualify_slack_messages.yml
+│   │   │   ├── gold_zone/         # Analytics-ready models
 │   │   │   │   ├── active_incidents.sql
+│   │   │   │   ├── active_incidents.yml
 │   │   │   │   ├── closed_incidents.sql
-│   │   │   │   └── weekly_incident_trends.sql
-│   │   │   └── schema.yml        # Model documentation
-│   │   ├── macros/               # Custom dbt macros
-│   │   ├── dbt_project.yml       # dbt configuration
-│   │   └── profiles.yml          # Database connections
-│   ├── scripts/                  # Deployment and setup scripts
-│   │   ├── create_snowflake_yaml.sh # Generate snowflake.yml from template
-│   │   ├── dbtdeploy.sh         # dbt deployment automation
-│   │   ├── dbtexec.sh           # dbt execution wrapper
+│   │   │   │   ├── closed_incidents.yml
+│   │   │   │   ├── incident_attachments.sql
+│   │   │   │   ├── incident_attachments.yml
+│   │   │   │   ├── incident_comment_history.sql
+│   │   │   │   ├── incident_comment_history.yml
+│   │   │   │   ├── incidents.sql
+│   │   │   │   ├── incidents.yml
+│   │   │   │   ├── weekly_incident_trends.sql
+│   │   │   │   └── weekly_incident_trends.yml
+│   │   │   └── sources.yml        # Source definitions and tests
+│   │   ├── seeds/
+│   │   ├── snapshots/
+│   │   ├── dbt_project.yml        # dbt configuration
+│   │   ├── packages.yml
+│   │   └── profiles.yml           # Database connections
+│   ├── scripts/                   # Deployment and setup scripts
+│   │   ├── create_snowflake_yaml.sh
+│   │   ├── dbtdeploy.sh
+│   │   ├── dbtexec.sh
 │   │   └── snowflake.yml.template
-│   ├── sql/                      # Raw SQL scripts
-│   │   ├── 01_dbt_projects_stack.sql # dbt Projects infrastructure setup
-│   │   ├── 02_slack_connector.sql    # Slack connector setup
-│   │   └── snowflake.yml
+│   ├── sql/                       # Raw SQL scripts
+│   │   ├── 01_dbt_projects_stack.sql
+│   │   └── 02_slack_connector.sql
 │   └── streamlit/                # Dashboard application
-│       ├── main.py              # Main dashboard
-│       ├── app_utils.py         # Utility functions
-│       └── snowflake.png        # Assets
+│       ├── main.py               # Main dashboard
+│       ├── app_utils.py          # Utility functions
+│       └── snowflake.png         # Assets
+├── Makefile
 ├── requirements.txt              # Python dependencies
-└── README.md                    # This file
+└── README.md                     # This file
 ```
 
 ## Setup
@@ -244,7 +265,7 @@ Before starting the installation, ensure you have:
 1. **Clone this repo**
 
    ```bash
-   git clone --branch v1.0.0 https://github.com/Snowflake-Labs/unified-data-stack-for-incident-management.git
+   git clone https://github.com/Snowflake-Labs/unified-data-stack-for-incident-management.git
    cd unified-data-stack-for-incident-management
    ```
 

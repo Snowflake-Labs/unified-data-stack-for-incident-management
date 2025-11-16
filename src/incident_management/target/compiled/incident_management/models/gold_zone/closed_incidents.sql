@@ -27,5 +27,5 @@ SELECT
     EXTRACT(year FROM i.closed_at) AS closed_year,
     EXTRACT(quarter FROM i.closed_at) AS closed_quarter
 
-FROM incident_management.gold_zone.incidents i
+FROM v1_incident_management.gold_zone.incidents i
 WHERE LOWER(i.status) IN ('closed', 'resolved') AND i.closed_at IS NOT NULL

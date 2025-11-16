@@ -6,7 +6,7 @@
 with 
 
 recent_open_incidents as (
-    select * from incident_management.gold_zone.incidents
+    select * from v1_incident_management.gold_zone.incidents
     where lower(status) = 'open' 
     and reportee_id is not null
     and created_at > dateadd('day', -7, current_timestamp())
@@ -14,7 +14,7 @@ recent_open_incidents as (
 
 , new_slack_messages as (
     select lh.*
-    from incident_management.bronze_zone.v_qualify_slack_messages lh 
+    from v1_incident_management.bronze_zone.v_qualify_slack_messages lh 
     left join recent_open_incidents rh 
     on lh.slack_message_id = rh.slack_message_id
     where rh.slack_message_id is null

@@ -12,8 +12,8 @@
 
     
 
-    merge into incident_management.gold_zone.incident_comment_history as DBT_INTERNAL_DEST
-        using incident_management.gold_zone.incident_comment_history__dbt_tmp as DBT_INTERNAL_SOURCE
+    merge into v1_incident_management.gold_zone.incident_comment_history as DBT_INTERNAL_DEST
+        using v1_incident_management.gold_zone.incident_comment_history__dbt_tmp as DBT_INTERNAL_SOURCE
         on (
                     DBT_INTERNAL_SOURCE.id = DBT_INTERNAL_DEST.id
                 )

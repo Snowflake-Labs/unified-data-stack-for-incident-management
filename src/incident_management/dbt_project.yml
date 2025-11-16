@@ -11,12 +11,8 @@ profile: 'incident_management'
 
 # Variables
 vars:
-  docs_stage_path: '@INCIDENT_MANAGEMENT.bronze_zone.DOCUMENTS'
-  supported_doc_formats: ['pdf', 'docx', 'doc', 'txt', 'text', 'html', 'md', 'pptx', 'ppt', 'png', 'eml', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff', 'tif', 'webp', 'htm']
-  parse_mode: "LAYOUT"
-  page_split: true
-  max_chunk_size: 500
-  max_chunk_depth: 5
+  docs_stage_path: '@V1_INCIDENT_MANAGEMENT.bronze_zone.DOCUMENTS'
+
 
 
 # These configurations specify where dbt should look for different types of files.
@@ -46,12 +42,6 @@ models:
     bronze_zone:
       +schema: bronze_zone
       +materialized: table
-    silver_zone:
-      +schema: silver_zone
-      +materialized: incremental
     gold_zone:
       +schema: gold_zone
       +materialized: table
-    semantic_views:
-      +schema: semantic_views
-      +materialized: semantic_view

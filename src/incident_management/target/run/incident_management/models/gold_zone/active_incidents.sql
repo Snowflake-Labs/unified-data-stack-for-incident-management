@@ -2,7 +2,7 @@
   
     
 
-        create or replace transient table incident_management.gold_zone.active_incidents
+        create or replace transient table v1_incident_management.gold_zone.active_incidents
          as
         (
 
@@ -22,9 +22,9 @@ SELECT
     i.source_system,
     i.external_source_id,
     i.has_attachments
-FROM incident_management.gold_zone.incidents i
-LEFT JOIN incident_management.bronze_zone.users assignee ON i.assignee_id = assignee.id
-LEFT JOIN incident_management.bronze_zone.users reportee ON i.reportee_id = reportee.id
+FROM v1_incident_management.gold_zone.incidents i
+LEFT JOIN v1_incident_management.bronze_zone.users assignee ON i.assignee_id = assignee.id
+LEFT JOIN v1_incident_management.bronze_zone.users reportee ON i.reportee_id = reportee.id
 WHERE i.status = 'open'
         );
       

@@ -1,3 +1,0 @@
-packages:
-  - package: Snowflake-Labs/dbt_semantic_view
-    version: 1.0.3

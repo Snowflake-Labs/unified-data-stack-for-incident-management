@@ -5,7 +5,7 @@
 
 
 select email
-from incident_management.bronze_zone.users
+from v1_incident_management.bronze_zone.users
 where email is null
 
 

@@ -2,10 +2,205 @@
 Incident Management Dashboard - Single Page Streamlit Application
 """
 
+from dataclasses import dataclass
+import json
+from typing import List, Optional
 import streamlit as st
 from datetime import datetime, timedelta
-import app_utils as au
 import pandas as pd
+from snowflake.snowpark.session import Session
+from snowflake.snowpark.context import get_active_session
+from snowflake.core import Root
+import requests
+from dotenv import load_dotenv
+import os
+
+# Constants and utilities merged from app_utils.py
+API_TIMEOUT = 50000  # in milliseconds
+FEEDBACK_API_ENDPOINT = "/api/v2/cortex/analyst/feedback"
+
+
+class SnowflakeConnectionException(Exception):
+    """Custom exception for Snowflake connection errors."""
+    pass
+
+
+@dataclass
+class SnowflakeConnection:
+
+    """
+    SnowflakeConnection class to connect to Snowflake using Snowpark and Snowflake Root.
+
+    You can set the config using few different ways if running externally from Snowflake:
+    - If you set the connection parameters using kwargs, they will take precedence over the .env file.
+    - If you do not set the connection parameters using kwargs, the .env file will be used.
+    - If you do not set the connection parameters using kwargs or the .env file, the connection will be established using the active Snowpark session.
+    - If you do not have an active Snowpark session, the connection will be established using the .env file.
+    - If you do not have an active Snowpark session and the .env file is not set, the connection will fail.
+
+    If running from Snowflake, the connection will be established using the active Snowpark session.
+    If you do not have an active Snowpark session, the connection will fail.
+    
+    Args:
+        **kwargs: Connection parameters including:
+            - account: Snowflake account identifier
+            - user: Username
+            - password: Programmatic Access Token
+            - role: User role 
+            - warehouse: Default warehouse (optional)
+            - database: Default database (optional)
+            - schema: Default schema (optional)
+    """
+
+    def connect(self, **kwargs) -> List:
+        try:
+            try:
+                self.snowpark_session = get_active_session()   
+                if self.snowpark_session is None:
+                    raise SnowflakeConnectionException("No active Snowpark session found")  
+                else:
+                    self.snowflake_root = Root(self.snowpark_session)
+            except Exception as e:
+                if len(kwargs) > 0:
+                    # TODO: Add validation for connection parameters
+                    self.snowpark_session = Session.builder.configs({k: v for k, v in kwargs.items() if v is not None and v != ""}).create()
+                    self.snowflake_root = Root(self.snowpark_session)
+                else:
+                    load_dotenv()
+                    
+                    # Read from environment variables if no connection parameters are provided using .env file
+                    connection_parameters = {
+                        "account": os.getenv("DBT_SNOWFLAKE_ACCOUNT"),
+                        "user": os.getenv("SNOWFLAKE_USER"),
+                        "password": os.getenv("DBT_SNOWFLAKE_PASSWORD"),
+                        "role": os.getenv("DBT_PROJECT_ADMIN_ROLE"), 
+                        "warehouse": os.getenv("DBT_SNOWFLAKE_WAREHOUSE"),  # optional
+                        "database": os.getenv("DBT_PROJECT_DATABASE"),  # optional
+                        "schema": os.getenv("DBT_PROJECT_SCHEMA"),  # optional
+                    }
+                    self.snowpark_session = Session.builder.configs(connection_parameters).create()
+                    self.snowflake_root = Root(self.snowpark_session)
+        except Exception as e:
+            raise e
+        
+        return [self.snowpark_session, self.snowflake_root]
+
+    def disconnect(self):
+        self.snowpark_session.close()
+
+
+def connect_to_snowflake(**kwargs):
+    session, root = SnowflakeConnection().connect(**kwargs)
+    return session, root
+
+
+def execute_sql(sql: str, session: Session) -> pd.DataFrame:
+    rows = session.sql(sql).collect()
+    res = []
+    for row in rows:
+        res.append(row.as_dict(True))
+    return pd.DataFrame(res)
+
+
+def ask_cortex(prompt: str, session: Session, model: str = "claude-4-sonnet") -> str:
+    # Send a POST request to the Cortex Inference API endpoint
+    HOST = os.getenv("SNOWFLAKE_HOST", f'{session.get_current_account()}.snowflakecomputing.com')
+    PAT = os.getenv("SNOWFLAKE_USER_PAT")
+
+    resp = requests.post(
+        url=f"https://{HOST}/api/v2/cortex/inference:complete",
+        json={"messages": [{"role": "user", "content": prompt}], "model": model, "stream": False},
+        headers={
+            "Authorization": f'Bearer {PAT}',
+            "X-Snowflake-Authorization-Token-Type": "PROGRAMMATIC_ACCESS_TOKEN",
+            "Content-Type": "application/json",
+        },
+    )
+    try:
+        response_body = resp.json()
+        return response_body
+    except Exception as e:
+        return f"Error: {e}"
+
+
+def ask_cortex_analyst(prompt: str, session: Session, semantic_view: str) -> str:
+    # Prepare the request body with the user's prompt
+    request_body = {
+        "messages": [{"role": "user", "content": [{"type": "text", "text": prompt}]}],
+        "semantic_view": f"{semantic_view}",
+    }
+
+    # Send a POST request to the Cortex Analyst API endpoint
+    HOST = os.getenv("SNOWFLAKE_HOST", f'{session.get_current_account()}.snowflakecomputing.com')
+    PAT = os.getenv("SNOWFLAKE_USER_PAT")
+    
+    resp = requests.post(
+        url=f"https://{HOST}/api/v2/cortex/analyst/message",
+        json=request_body,
+        headers={
+            "Authorization": f'Bearer {PAT}',
+            "X-Snowflake-Authorization-Token-Type": "PROGRAMMATIC_ACCESS_TOKEN",
+            "Content-Type": "application/json",
+        },
+    )
+    
+    if resp.status_code < 400:
+        request_id = resp.headers.get("X-Snowflake-Request-Id")
+        return {**resp.json(), "request_id": request_id}  # type: ignore[arg-type]
+    else:
+        # Craft readable error message
+        request_id = resp.headers.get("X-Snowflake-Request-Id")
+        error_msg = f"""
+                    🚨 An Analyst API error has occurred 🚨
+
+                    * response code: `{resp.status_code}`
+                    * request-id: `{request_id}`
+                    * error: `{resp.text}`
+            """
+        raise Exception(error_msg)
+
+
+def submit_feedback(session: Session, request_id: str, positive: bool, feedback_message: str) -> Optional[str]:
+    request_body = {
+        "request_id": request_id,
+        "positive": positive,
+        "feedback_message": feedback_message,
+    }
+    
+    # Send a POST request to the Cortex Analyst API endpoint
+    HOST = os.getenv("SNOWFLAKE_HOST", f'{session.get_current_account()}.snowflakecomputing.com')
+    PAT = os.getenv("SNOWFLAKE_USER_PAT")
+
+    resp = requests.post(
+        url=f"https://{HOST}/api/v2/cortex/analyst/feedback",
+        json=request_body,
+        headers={
+            "Authorization": f'Bearer {PAT}',
+            "X-Snowflake-Authorization-Token-Type": "PROGRAMMATIC_ACCESS_TOKEN",
+            "Content-Type": "application/json",
+        },
+        timeout=API_TIMEOUT
+    )
+    
+    if resp.status_code == 200:
+        return None
+
+    parsed_content = json.loads(resp.content)
+    
+    # Craft readable error message
+    err_msg = f"""
+        🚨 An Analyst API error has occurred 🚨
+        
+        * response code: `{resp.status_code}`
+        * request-id: `{parsed_content['request_id']}`
+        * error code: `{parsed_content['error_code']}`
+        
+        Message:
+        ```
+        {parsed_content['message']}
+        ```
+        """
+    return err_msg
 
 # Page configuration
 st.set_page_config(
@@ -15,14 +210,14 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-st.logo("snowflake.png")
+# st.logo("snowflake.png")
 
 def initialize_session_state():
     if "snowpark_session" not in st.session_state:
-        snowflake_connection = au.SnowflakeConnection()
+        snowflake_connection = SnowflakeConnection()
         ## if you're running this locally, make sure you export env variables from the .env file
         st.session_state.snowpark_session, st.session_state.snowflake_root = snowflake_connection.connect()
-        st.session_state.snowpark_session.use_schema("bronze_zone")
+
 
 
 def create_header():
@@ -70,10 +265,10 @@ def create_metrics_cards():
         schema = "gold_zone"
         
         # Calculate current metrics
-        total_active = au.execute_sql(f"SELECT COUNT(*) as count FROM {database}.{schema}.active_incidents", st.session_state.snowpark_session)
-        critical_count = au.execute_sql(f"SELECT COUNT(*) as count FROM {database}.{schema}.active_incidents WHERE lower(priority) = 'critical'", st.session_state.snowpark_session)
-        high_count = au.execute_sql(f"SELECT COUNT(*) as count FROM {database}.{schema}.active_incidents WHERE lower(priority) = 'high'", st.session_state.snowpark_session)
-        closed_count = au.execute_sql(f"SELECT COUNT(*) as count FROM {database}.{schema}.closed_incidents WHERE closed_at >= DATEADD('day', -30, CURRENT_DATE())", st.session_state.snowpark_session)
+        total_active = execute_sql(f"SELECT COUNT(*) as count FROM {database}.{schema}.active_incidents", st.session_state.snowpark_session)
+        critical_count = execute_sql(f"SELECT COUNT(*) as count FROM {database}.{schema}.active_incidents WHERE lower(priority) = 'critical'", st.session_state.snowpark_session)
+        high_count = execute_sql(f"SELECT COUNT(*) as count FROM {database}.{schema}.active_incidents WHERE lower(priority) = 'high'", st.session_state.snowpark_session)
+        closed_count = execute_sql(f"SELECT COUNT(*) as count FROM {database}.{schema}.closed_incidents WHERE closed_at >= DATEADD('day', -30, CURRENT_DATE())", st.session_state.snowpark_session)
     except Exception as e:
         total_active = pd.DataFrame({"COUNT": 0}, index=[0])
         critical_count = pd.DataFrame({"COUNT": 0}, index=[0])
@@ -169,7 +364,7 @@ def create_charts():
                 ORDER BY month DESC
                 LIMIT 12
             """
-            monthly_df = au.execute_sql(monthly_query, st.session_state.snowpark_session)
+            monthly_df = execute_sql(monthly_query, st.session_state.snowpark_session)
             
             if not monthly_df.empty:
                 import altair as alt
@@ -207,7 +402,7 @@ def create_charts():
                 ORDER BY week DESC
                 LIMIT 12
             """
-            weekly_df = au.execute_sql(weekly_query, st.session_state.snowpark_session)
+            weekly_df = execute_sql(weekly_query, st.session_state.snowpark_session)
             
             if not weekly_df.empty:
                 import altair as alt
@@ -243,7 +438,7 @@ def create_charts():
                 GROUP BY category
                 ORDER BY incident_count DESC
             """
-            category_df = au.execute_sql(category_query, st.session_state.snowpark_session)
+            category_df = execute_sql(category_query, st.session_state.snowpark_session)
             
             if not category_df.empty:
                 import plotly.graph_objects as go
@@ -294,7 +489,7 @@ def get_incident_attachments(incident_id):
     """
     
     try:
-        attachments = au.execute_sql(query, st.session_state.snowpark_session)
+        attachments = execute_sql(query, st.session_state.snowpark_session)
         return attachments
     except Exception as e:
         st.error(f"Error fetching attachments: {str(e)}")
@@ -332,7 +527,7 @@ def create_active_incidents_table():
         database = st.session_state.snowpark_session.get_current_database()
         schema = "gold_zone"
             # Convert to DataFrame
-        df = au.execute_sql(f"""
+        df = execute_sql(f"""
                 WITH latest_created_at AS (
                     SELECT
                         incident_number,
@@ -454,7 +649,7 @@ def create_recently_closed_incidents_table():
             ORDER BY closed_at DESC
             LIMIT 5
         """
-        closed_incidents = au.execute_sql(query, st.session_state.snowpark_session)
+        closed_incidents = execute_sql(query, st.session_state.snowpark_session)
     except Exception as e:
         closed_incidents = pd.DataFrame()
 
