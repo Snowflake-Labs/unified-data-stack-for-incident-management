@@ -40430,3 +40430,13 @@ ORDER BY week DESC
 [0m17:05:58.612186 [debug] [Dummy-1   ]: Resource report: {"command_name": "run", "command_success": true, "command_wall_clock_time": 31.655277, "process_in_blocks": "0", "process_kernel_time": 1.47, "process_mem_max_rss": "439460", "process_out_blocks": "0", "process_user_time": 6.39}
 [0m17:05:58.612851 [debug] [Dummy-1   ]: Command `cli run` succeeded at 17:05:58.612585 after 31.66 seconds
 [0m17:05:58.613383 [debug] [Dummy-1   ]: Flushing usage events
+[0m18:58:13.262396 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1053e5310>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10714e970>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10714ef70>]}
+
+
+============================== 18:58:13.268880 | 272ee5a4-bd90-4997-9332-b3069138ec1a ==============================
+[0m18:58:13.268880 [info ] [MainThread]: Running with dbt=1.5.4
+[0m18:58:13.269225 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'fail_fast': 'False', 'debug': 'False', 'log_path': '/Users/clakkad/Documents/Work/publish/incident-management/src/incident_management/logs', 'version_check': 'True', 'profiles_dir': '/Users/clakkad/Documents/Work/publish/incident-management/src/incident_management', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'introspect': 'True', 'static_parser': 'True', 'log_format': 'default', 'target_path': 'None', 'send_anonymous_usage_stats': 'True'}
+[0m18:58:13.288587 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'project_id', 'label': '272ee5a4-bd90-4997-9332-b3069138ec1a', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1071868e0>]}
+[0m18:58:13.318911 [debug] [MainThread]: Command `dbt clean` succeeded at 18:58:13.318813 after 0.20 seconds
+[0m18:58:13.319154 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1053e5310>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1071bcdf0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1071bc1f0>]}
+[0m18:58:13.319352 [debug] [MainThread]: Flushing usage events

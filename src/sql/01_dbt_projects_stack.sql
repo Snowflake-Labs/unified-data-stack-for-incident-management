@@ -148,14 +148,14 @@ CREATE OR REPLACE SECRET <% ctx.env.dbt_project_database %>.dbt_project_deployme
   USERNAME = '<% ctx.env.git_user_email %>'
   PASSWORD = '<% ctx.env.git_user_repo_pat %>';
 
-CREATE OR REPLACE GIT REPOSITORY <% ctx.env.dbt_project_database %>.dbt_project_deployments.incident_management_dbt_project_repo
+CREATE OR REPLACE GIT REPOSITORY <% ctx.env.dbt_project_database %>.dbt_project_deployments.project_git_repo
 ORIGIN = '<% ctx.env.git_repository_url %>'
 API_INTEGRATION = <% ctx.env.snowflake_git_api_int %>
 GIT_CREDENTIALS = <% ctx.env.dbt_project_database %>.dbt_project_deployments.incident_management_git_secret;
 
 
 CREATE DBT PROJECT <% ctx.env.dbt_project_database %>.dbt_project_deployments.<% ctx.env.dbt_project_name %>
-  FROM '@<% ctx.env.dbt_project_database %>.dbt_project_deployments.incident_management_dbt_project_repo/branches/main/src/incident_management'
+  FROM '@<% ctx.env.dbt_project_database %>.dbt_project_deployments.project_git_repo/branches/main/src/incident_management'
   COMMENT = 'generates incident management data models';
 
 alter task if exists dbt_project_deployments.im_root_task_scheduler suspend;
@@ -234,5 +234,16 @@ create or replace task dbt_project_deployments.im_project_run_select_gold_zone
 --     EXECUTE dbt project dbt_project_deployments.<% ctx.env.dbt_project_name %> args=:command;
 --     END;
 --   $$;
+
+
+-------------------------------------------------
+-- Create Streamlit App for Incident Management Dashboard
+-------------------------------------------------
+
+CREATE OR REPLACE STREAMLIT <% ctx.env.dbt_project_database %>.gold_zone.incident_management_dashboard
+  ROOT_LOCATION = '@<% ctx.env.dbt_project_database %>.dbt_project_deployments.project_git_repo/branches/main/src/streamlit'
+  MAIN_FILE = '/main.py'
+  QUERY_WAREHOUSE = <% ctx.env.dbt_snowflake_warehouse %>
+  COMMENT = 'Incident Management Dashboard - Monitor, track, and analyze incidents in real-time';
 
 
