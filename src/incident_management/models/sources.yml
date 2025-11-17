@@ -138,6 +138,22 @@ sources:
           - name: staged_file_path
             description: "Path where the file is staged for processing"
   
+      - name: documents_stream
+        description: "Stream of new or updated documents for processing"
+        columns:
+          - name: relative_path
+            description: "Path to the file on the stage"
+          - name: size
+            description: "Size of the file in bytes"
+          - name: last_modified
+            description: "Timestamp when the file was last updated in the stage"
+          - name: md5
+            description: "MD5 checksum for the file"
+          - name: etag
+            description: "ETag header for the file"
+          - name: file_url
+            description: "Snowflake file URL to the file"
+
       - name: users
         description: "Materialized users table with enriched data"
         columns:
