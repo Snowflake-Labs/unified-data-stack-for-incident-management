@@ -40440,3 +40440,1852 @@ ORDER BY week DESC
 [0m18:58:13.318911 [debug] [MainThread]: Command `dbt clean` succeeded at 18:58:13.318813 after 0.20 seconds
 [0m18:58:13.319154 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1053e5310>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1071bcdf0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1071bc1f0>]}
 [0m18:58:13.319352 [debug] [MainThread]: Flushing usage events
+
+
+============================== 17:04:18.387998 | d86e6e04-8bc9-4bfd-83ed-5e140f1a7b65 ==============================
+[0m17:04:18.387998 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m17:04:18.389316 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': '/tmp/dbt/', 'version_check': 'True', 'warn_error': 'None', 'log_path': '/tmp/dbt/logs', 'fail_fast': 'False', 'debug': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'False', 'log_format': 'default', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'invocation_command': 'dbt ', 'target_path': '/tmp/dbt/target/', 'introspect': 'True', 'send_anonymous_usage_stats': 'False'}
+[0m17:04:18.462904 [error] [Dummy-1   ]:  adapter: Invalid profile: 'user' is a required property.
+[0m17:04:18.782354 [info ] [Dummy-1   ]: Registered adapter: snowflake=1.9.2
+[0m17:04:19.509790 [error] [Dummy-1   ]: Encountered an error:
+Compilation Error
+  dbt found 1 package(s) specified in packages.yml, but only 0 package(s) installed in dbt_packages. Run "dbt deps" to install package dependencies.
+[0m17:04:19.511863 [debug] [Dummy-1   ]: Resource report: {"command_name": "compile", "command_success": false, "command_wall_clock_time": 1.2253029, "process_in_blocks": "0", "process_kernel_time": 1.07, "process_mem_max_rss": "403056", "process_out_blocks": "0", "process_user_time": 4.65}
+[0m17:04:19.512762 [debug] [Dummy-1   ]: Command `cli compile` failed at 17:04:19.512444 after 1.23 seconds
+[0m17:04:19.513485 [debug] [Dummy-1   ]: Flushing usage events
+
+
+============================== 17:05:12.021427 | 30ebc9dd-6a2e-434a-b564-7ca866e4bfeb ==============================
+[0m17:05:12.021427 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m17:05:12.022605 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': '/tmp/dbt/', 'fail_fast': 'False', 'debug': 'False', 'log_path': '/tmp/dbt/logs', 'version_check': 'True', 'warn_error': 'None', 'use_colors': 'True', 'use_experimental_parser': 'False', 'empty': 'None', 'quiet': 'False', 'no_print': 'None', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'static_parser': 'True', 'introspect': 'True', 'invocation_command': 'dbt ', 'target_path': 'None', 'log_format': 'default', 'send_anonymous_usage_stats': 'False'}
+[0m17:05:12.273555 [debug] [Dummy-1   ]: Set downloads directory='/tmp/dbt-downloads-f37hl1u2'
+[0m17:05:12.274508 [debug] [Dummy-1   ]: Making package index registry request: GET https://hub.getdbt.com/api/v1/index.json
+[0m17:05:12.441817 [debug] [Dummy-1   ]: Response from registry index: GET https://hub.getdbt.com/api/v1/index.json 200
+[0m17:05:12.442897 [debug] [Dummy-1   ]: Making package registry request: GET https://hub.getdbt.com/api/v1/Snowflake-Labs/dbt_semantic_view.json
+[0m17:05:12.632502 [debug] [Dummy-1   ]: Response from registry: GET https://hub.getdbt.com/api/v1/Snowflake-Labs/dbt_semantic_view.json 200
+[0m17:05:12.641869 [info ] [Dummy-1   ]: Updating lock file in file path: /tmp/dbt/package-lock.yml
+[0m17:05:12.644435 [debug] [Dummy-1   ]: Set downloads directory='/tmp/dbt-downloads-jmdjcrcu'
+[0m17:05:12.645919 [info ] [Dummy-1   ]: Installing Snowflake-Labs/dbt_semantic_view
+[0m17:05:13.037720 [info ] [Dummy-1   ]: Installed from version 1.0.3
+[0m17:05:13.038333 [info ] [Dummy-1   ]: Up to date!
+[0m17:05:13.040741 [debug] [Dummy-1   ]: Resource report: {"command_name": "deps", "command_success": true, "command_wall_clock_time": 1.1185166, "process_in_blocks": "0", "process_kernel_time": 0.75, "process_mem_max_rss": "401676", "process_out_blocks": "0", "process_user_time": 4.1}
+[0m17:05:13.041489 [debug] [Dummy-1   ]: Command `cli deps` succeeded at 17:05:13.041197 after 1.12 seconds
+[0m17:05:13.042053 [debug] [Dummy-1   ]: Flushing usage events
+
+
+============================== 17:05:34.970491 | 3111dd3a-f010-451b-bb8c-635ad30ee4c7 ==============================
+[0m17:05:34.970491 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m17:05:34.971708 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'fail_fast': 'False', 'debug': 'False', 'log_path': '/tmp/dbt/logs', 'version_check': 'True', 'profiles_dir': '/tmp/dbt/', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'False', 'log_format': 'default', 'invocation_command': 'dbt ', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'target_path': '/tmp/dbt/target/', 'introspect': 'True', 'send_anonymous_usage_stats': 'False'}
+[0m17:05:35.045166 [error] [Dummy-1   ]:  adapter: Invalid profile: 'user' is a required property.
+[0m17:05:35.364156 [info ] [Dummy-1   ]: Registered adapter: snowflake=1.9.2
+[0m17:05:36.150686 [debug] [Dummy-1   ]: checksum: 53ed91fada2233efb98368d1716b44ab532c83a9c293cf1890b7905d5b45fb25, vars: {}, profile: , target: dev, version: 1.9.4
+[0m17:05:36.152104 [info ] [Dummy-1   ]: Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m17:05:39.301366 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m17:05:39.304483 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m17:05:39.355790 [info ] [Dummy-1   ]: Found 13 models, 32 data tests, 6 sources, 483 macros
+[0m17:05:39.361088 [info ] [Dummy-1   ]: 
+[0m17:05:39.361827 [info ] [Dummy-1   ]: Concurrency: 1 threads (target='dev')
+[0m17:05:39.362362 [info ] [Dummy-1   ]: 
+[0m17:05:39.363314 [debug] [Dummy-1   ]: Acquiring new snowflake connection 'master'
+[0m17:05:39.372023 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_v1_incident_management_silver_zone'
+[0m17:05:39.530444 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_silver_zone"
+[0m17:05:39.531200 [debug] [ThreadPool]: On list_v1_incident_management_silver_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_silver_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:05:39.531841 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:05:40.893929 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 1.362 seconds
+[0m17:05:40.900098 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_silver_zone"
+[0m17:05:40.900777 [debug] [ThreadPool]: On list_v1_incident_management_silver_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_silver_zone"} */
+show objects in v1_incident_management.silver_zone
+    limit 10000
+    
+;
+[0m17:05:40.970708 [debug] [ThreadPool]: Snowflake adapter: Snowflake query id: 01c070e1-0107-0b79-0032-318705940d9a
+[0m17:05:40.971338 [debug] [ThreadPool]: Snowflake adapter: Snowflake error: 002043 (02000): SQL compilation error:
+Object does not exist, or operation cannot be performed.
+[0m17:05:40.972011 [debug] [ThreadPool]: Snowflake adapter: Error running SQL: macro list_relations_without_caching
+[0m17:05:40.972529 [debug] [ThreadPool]: Snowflake adapter: Rolling back transaction.
+[0m17:05:40.973534 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_v1_incident_management_silver_zone, now list_v1_incident_management_bronze_zone)
+[0m17:05:40.986622 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_bronze_zone"
+[0m17:05:40.987263 [debug] [ThreadPool]: On list_v1_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_bronze_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:05:40.987756 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:05:41.893458 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.905 seconds
+[0m17:05:41.896145 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_bronze_zone"
+[0m17:05:41.896820 [debug] [ThreadPool]: On list_v1_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_bronze_zone"} */
+show objects in v1_incident_management.bronze_zone
+    limit 10000
+    
+;
+[0m17:05:42.033293 [debug] [ThreadPool]: SQL status: SUCCESS 7 in 0.136 seconds
+[0m17:05:42.036547 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_bronze_zone"
+[0m17:05:42.037177 [debug] [ThreadPool]: On list_v1_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_bronze_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:05:42.211282 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.173 seconds
+[0m17:05:42.213965 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_v1_incident_management_bronze_zone, now list_v1_incident_management_gold_zone)
+[0m17:05:42.227000 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_gold_zone"
+[0m17:05:42.227646 [debug] [ThreadPool]: On list_v1_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_gold_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:05:42.228137 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:05:43.134148 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.906 seconds
+[0m17:05:43.136722 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_gold_zone"
+[0m17:05:43.137354 [debug] [ThreadPool]: On list_v1_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_gold_zone"} */
+show objects in v1_incident_management.gold_zone
+    limit 10000
+    
+;
+[0m17:05:43.274620 [debug] [ThreadPool]: SQL status: SUCCESS 6 in 0.137 seconds
+[0m17:05:43.277526 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_gold_zone"
+[0m17:05:43.278156 [debug] [ThreadPool]: On list_v1_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_gold_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:05:43.388850 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.110 seconds
+[0m17:05:43.391589 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_v1_incident_management_gold_zone, now list_v1_incident_management_semantic_views)
+[0m17:05:43.405851 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_semantic_views"
+[0m17:05:43.406488 [debug] [ThreadPool]: On list_v1_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_semantic_views"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:05:43.406984 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:05:44.353982 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.947 seconds
+[0m17:05:44.356519 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_semantic_views"
+[0m17:05:44.357138 [debug] [ThreadPool]: On list_v1_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_semantic_views"} */
+show objects in v1_incident_management.semantic_views
+    limit 10000
+    
+;
+[0m17:05:44.405393 [debug] [ThreadPool]: Snowflake adapter: Snowflake query id: 01c070e1-0107-0b79-0032-318705940e12
+[0m17:05:44.406078 [debug] [ThreadPool]: Snowflake adapter: Snowflake error: 002043 (02000): SQL compilation error:
+Object does not exist, or operation cannot be performed.
+[0m17:05:44.406755 [debug] [ThreadPool]: Snowflake adapter: Error running SQL: macro list_relations_without_caching
+[0m17:05:44.407263 [debug] [ThreadPool]: Snowflake adapter: Rolling back transaction.
+[0m17:05:44.414224 [debug] [Thread-2 (]: Began running node model.incident_management.users
+[0m17:05:44.415099 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly list_v1_incident_management_semantic_views, now model.incident_management.users)
+[0m17:05:44.415757 [debug] [Thread-2 (]: Began compiling node model.incident_management.users
+[0m17:05:44.433941 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.users"
+[0m17:05:44.435004 [debug] [Thread-2 (]: Began executing node model.incident_management.users
+[0m17:05:44.436087 [debug] [Thread-2 (]: Finished running node model.incident_management.users
+[0m17:05:44.437497 [debug] [Thread-2 (]: Began running node model.incident_management.v_qualify_new_documents
+[0m17:05:44.438687 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly model.incident_management.users, now model.incident_management.v_qualify_new_documents)
+[0m17:05:44.439322 [debug] [Thread-2 (]: Began compiling node model.incident_management.v_qualify_new_documents
+[0m17:05:44.453120 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.v_qualify_new_documents"
+[0m17:05:44.454008 [debug] [Thread-2 (]: Began executing node model.incident_management.v_qualify_new_documents
+[0m17:05:44.455076 [debug] [Thread-2 (]: Finished running node model.incident_management.v_qualify_new_documents
+[0m17:05:44.456224 [debug] [Thread-2 (]: Began running node model.incident_management.v_qualify_slack_messages
+[0m17:05:44.457348 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly model.incident_management.v_qualify_new_documents, now model.incident_management.v_qualify_slack_messages)
+[0m17:05:44.457974 [debug] [Thread-2 (]: Began compiling node model.incident_management.v_qualify_slack_messages
+[0m17:05:44.471709 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.v_qualify_slack_messages"
+[0m17:05:44.472636 [debug] [Thread-2 (]: Began executing node model.incident_management.v_qualify_slack_messages
+[0m17:05:44.473697 [debug] [Thread-2 (]: Finished running node model.incident_management.v_qualify_slack_messages
+[0m17:05:44.474906 [debug] [Thread-2 (]: Began running node test.incident_management.source_not_null_bronze_zone_doc_metadata_channel_id.c215ee3d7c
+[0m17:05:44.475911 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly model.incident_management.v_qualify_slack_messages, now test.incident_management.source_not_null_bronze_zone_doc_metadata_channel_id.c215ee3d7c)
+[0m17:05:44.476526 [debug] [Thread-2 (]: Began compiling node test.incident_management.source_not_null_bronze_zone_doc_metadata_channel_id.c215ee3d7c
+[0m17:05:44.497444 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.source_not_null_bronze_zone_doc_metadata_channel_id.c215ee3d7c"
+[0m17:05:44.498485 [debug] [Thread-2 (]: Began executing node test.incident_management.source_not_null_bronze_zone_doc_metadata_channel_id.c215ee3d7c
+[0m17:05:44.499596 [debug] [Thread-2 (]: Finished running node test.incident_management.source_not_null_bronze_zone_doc_metadata_channel_id.c215ee3d7c
+[0m17:05:44.500759 [debug] [Thread-2 (]: Began running node test.incident_management.source_not_null_bronze_zone_doc_metadata_event_ts.8b545f1d7b
+[0m17:05:44.501608 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.source_not_null_bronze_zone_doc_metadata_channel_id.c215ee3d7c, now test.incident_management.source_not_null_bronze_zone_doc_metadata_event_ts.8b545f1d7b)
+[0m17:05:44.502205 [debug] [Thread-2 (]: Began compiling node test.incident_management.source_not_null_bronze_zone_doc_metadata_event_ts.8b545f1d7b
+[0m17:05:44.515571 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.source_not_null_bronze_zone_doc_metadata_event_ts.8b545f1d7b"
+[0m17:05:44.516494 [debug] [Thread-2 (]: Began executing node test.incident_management.source_not_null_bronze_zone_doc_metadata_event_ts.8b545f1d7b
+[0m17:05:44.517559 [debug] [Thread-2 (]: Finished running node test.incident_management.source_not_null_bronze_zone_doc_metadata_event_ts.8b545f1d7b
+[0m17:05:44.518714 [debug] [Thread-2 (]: Began running node test.incident_management.source_not_null_bronze_zone_doc_metadata_file_id.b8ec34c9b2
+[0m17:05:44.519562 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.source_not_null_bronze_zone_doc_metadata_event_ts.8b545f1d7b, now test.incident_management.source_not_null_bronze_zone_doc_metadata_file_id.b8ec34c9b2)
+[0m17:05:44.520157 [debug] [Thread-2 (]: Began compiling node test.incident_management.source_not_null_bronze_zone_doc_metadata_file_id.b8ec34c9b2
+[0m17:05:44.533106 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.source_not_null_bronze_zone_doc_metadata_file_id.b8ec34c9b2"
+[0m17:05:44.534005 [debug] [Thread-2 (]: Began executing node test.incident_management.source_not_null_bronze_zone_doc_metadata_file_id.b8ec34c9b2
+[0m17:05:44.535056 [debug] [Thread-2 (]: Finished running node test.incident_management.source_not_null_bronze_zone_doc_metadata_file_id.b8ec34c9b2
+[0m17:05:44.536190 [debug] [Thread-2 (]: Began running node test.incident_management.source_not_null_bronze_zone_file_hashes_hash_value.af662aaabc
+[0m17:05:44.537040 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.source_not_null_bronze_zone_doc_metadata_file_id.b8ec34c9b2, now test.incident_management.source_not_null_bronze_zone_file_hashes_hash_value.af662aaabc)
+[0m17:05:44.537640 [debug] [Thread-2 (]: Began compiling node test.incident_management.source_not_null_bronze_zone_file_hashes_hash_value.af662aaabc
+[0m17:05:44.552522 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.source_not_null_bronze_zone_file_hashes_hash_value.af662aaabc"
+[0m17:05:44.553425 [debug] [Thread-2 (]: Began executing node test.incident_management.source_not_null_bronze_zone_file_hashes_hash_value.af662aaabc
+[0m17:05:44.554458 [debug] [Thread-2 (]: Finished running node test.incident_management.source_not_null_bronze_zone_file_hashes_hash_value.af662aaabc
+[0m17:05:44.555545 [debug] [Thread-2 (]: Began running node test.incident_management.source_not_null_bronze_zone_slack_members_conversationid.425c949d44
+[0m17:05:44.556378 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.source_not_null_bronze_zone_file_hashes_hash_value.af662aaabc, now test.incident_management.source_not_null_bronze_zone_slack_members_conversationid.425c949d44)
+[0m17:05:44.556994 [debug] [Thread-2 (]: Began compiling node test.incident_management.source_not_null_bronze_zone_slack_members_conversationid.425c949d44
+[0m17:05:44.569832 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.source_not_null_bronze_zone_slack_members_conversationid.425c949d44"
+[0m17:05:44.570724 [debug] [Thread-2 (]: Began executing node test.incident_management.source_not_null_bronze_zone_slack_members_conversationid.425c949d44
+[0m17:05:44.571765 [debug] [Thread-2 (]: Finished running node test.incident_management.source_not_null_bronze_zone_slack_members_conversationid.425c949d44
+[0m17:05:44.572855 [debug] [Thread-2 (]: Began running node test.incident_management.source_not_null_bronze_zone_slack_members_lastupdated.3f8dd11efc
+[0m17:05:44.573675 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.source_not_null_bronze_zone_slack_members_conversationid.425c949d44, now test.incident_management.source_not_null_bronze_zone_slack_members_lastupdated.3f8dd11efc)
+[0m17:05:44.574260 [debug] [Thread-2 (]: Began compiling node test.incident_management.source_not_null_bronze_zone_slack_members_lastupdated.3f8dd11efc
+[0m17:05:44.588926 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.source_not_null_bronze_zone_slack_members_lastupdated.3f8dd11efc"
+[0m17:05:44.589835 [debug] [Thread-2 (]: Began executing node test.incident_management.source_not_null_bronze_zone_slack_members_lastupdated.3f8dd11efc
+[0m17:05:44.590883 [debug] [Thread-2 (]: Finished running node test.incident_management.source_not_null_bronze_zone_slack_members_lastupdated.3f8dd11efc
+[0m17:05:44.591968 [debug] [Thread-2 (]: Began running node test.incident_management.source_not_null_bronze_zone_slack_messages_ts.472b618185
+[0m17:05:44.592799 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.source_not_null_bronze_zone_slack_members_lastupdated.3f8dd11efc, now test.incident_management.source_not_null_bronze_zone_slack_messages_ts.472b618185)
+[0m17:05:44.593387 [debug] [Thread-2 (]: Began compiling node test.incident_management.source_not_null_bronze_zone_slack_messages_ts.472b618185
+[0m17:05:44.606379 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.source_not_null_bronze_zone_slack_messages_ts.472b618185"
+[0m17:05:44.607298 [debug] [Thread-2 (]: Began executing node test.incident_management.source_not_null_bronze_zone_slack_messages_ts.472b618185
+[0m17:05:44.608420 [debug] [Thread-2 (]: Finished running node test.incident_management.source_not_null_bronze_zone_slack_messages_ts.472b618185
+[0m17:05:44.609572 [debug] [Thread-2 (]: Began running node test.incident_management.source_not_null_bronze_zone_users_created_at.1978bf3b23
+[0m17:05:44.610377 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.source_not_null_bronze_zone_slack_messages_ts.472b618185, now test.incident_management.source_not_null_bronze_zone_users_created_at.1978bf3b23)
+[0m17:05:44.610979 [debug] [Thread-2 (]: Began compiling node test.incident_management.source_not_null_bronze_zone_users_created_at.1978bf3b23
+[0m17:05:44.625561 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.source_not_null_bronze_zone_users_created_at.1978bf3b23"
+[0m17:05:44.626448 [debug] [Thread-2 (]: Began executing node test.incident_management.source_not_null_bronze_zone_users_created_at.1978bf3b23
+[0m17:05:44.627471 [debug] [Thread-2 (]: Finished running node test.incident_management.source_not_null_bronze_zone_users_created_at.1978bf3b23
+[0m17:05:44.628674 [debug] [Thread-2 (]: Began running node test.incident_management.source_not_null_bronze_zone_users_email.36447ce580
+[0m17:05:44.629494 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.source_not_null_bronze_zone_users_created_at.1978bf3b23, now test.incident_management.source_not_null_bronze_zone_users_email.36447ce580)
+[0m17:05:44.630077 [debug] [Thread-2 (]: Began compiling node test.incident_management.source_not_null_bronze_zone_users_email.36447ce580
+[0m17:05:44.643151 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.source_not_null_bronze_zone_users_email.36447ce580"
+[0m17:05:44.644038 [debug] [Thread-2 (]: Began executing node test.incident_management.source_not_null_bronze_zone_users_email.36447ce580
+[0m17:05:44.645092 [debug] [Thread-2 (]: Finished running node test.incident_management.source_not_null_bronze_zone_users_email.36447ce580
+[0m17:05:44.646185 [debug] [Thread-2 (]: Began running node test.incident_management.source_not_null_bronze_zone_users_id.88848c2ec8
+[0m17:05:44.646989 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.source_not_null_bronze_zone_users_email.36447ce580, now test.incident_management.source_not_null_bronze_zone_users_id.88848c2ec8)
+[0m17:05:44.647572 [debug] [Thread-2 (]: Began compiling node test.incident_management.source_not_null_bronze_zone_users_id.88848c2ec8
+[0m17:05:44.662546 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.source_not_null_bronze_zone_users_id.88848c2ec8"
+[0m17:05:44.663422 [debug] [Thread-2 (]: Began executing node test.incident_management.source_not_null_bronze_zone_users_id.88848c2ec8
+[0m17:05:44.664444 [debug] [Thread-2 (]: Finished running node test.incident_management.source_not_null_bronze_zone_users_id.88848c2ec8
+[0m17:05:44.665520 [debug] [Thread-2 (]: Began running node test.incident_management.source_unique_bronze_zone_users_email.fec1fcf20d
+[0m17:05:44.666483 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.source_not_null_bronze_zone_users_id.88848c2ec8, now test.incident_management.source_unique_bronze_zone_users_email.fec1fcf20d)
+[0m17:05:44.667096 [debug] [Thread-2 (]: Began compiling node test.incident_management.source_unique_bronze_zone_users_email.fec1fcf20d
+[0m17:05:44.683131 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.source_unique_bronze_zone_users_email.fec1fcf20d"
+[0m17:05:44.684010 [debug] [Thread-2 (]: Began executing node test.incident_management.source_unique_bronze_zone_users_email.fec1fcf20d
+[0m17:05:44.685047 [debug] [Thread-2 (]: Finished running node test.incident_management.source_unique_bronze_zone_users_email.fec1fcf20d
+[0m17:05:44.686212 [debug] [Thread-2 (]: Began running node test.incident_management.not_null_users_EMAIL.561bd8e6a0
+[0m17:05:44.686995 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.source_unique_bronze_zone_users_email.fec1fcf20d, now test.incident_management.not_null_users_EMAIL.561bd8e6a0)
+[0m17:05:44.687562 [debug] [Thread-2 (]: Began compiling node test.incident_management.not_null_users_EMAIL.561bd8e6a0
+[0m17:05:44.700577 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.not_null_users_EMAIL.561bd8e6a0"
+[0m17:05:44.701502 [debug] [Thread-2 (]: Began executing node test.incident_management.not_null_users_EMAIL.561bd8e6a0
+[0m17:05:44.702532 [debug] [Thread-2 (]: Finished running node test.incident_management.not_null_users_EMAIL.561bd8e6a0
+[0m17:05:44.703698 [debug] [Thread-2 (]: Began running node test.incident_management.not_null_users_ID.3d3e87fab3
+[0m17:05:44.704510 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.not_null_users_EMAIL.561bd8e6a0, now test.incident_management.not_null_users_ID.3d3e87fab3)
+[0m17:05:44.705099 [debug] [Thread-2 (]: Began compiling node test.incident_management.not_null_users_ID.3d3e87fab3
+[0m17:05:44.719792 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.not_null_users_ID.3d3e87fab3"
+[0m17:05:44.720690 [debug] [Thread-2 (]: Began executing node test.incident_management.not_null_users_ID.3d3e87fab3
+[0m17:05:44.721708 [debug] [Thread-2 (]: Finished running node test.incident_management.not_null_users_ID.3d3e87fab3
+[0m17:05:44.722883 [debug] [Thread-2 (]: Began running node model.incident_management.document_full_extracts
+[0m17:05:44.723672 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.not_null_users_ID.3d3e87fab3, now model.incident_management.document_full_extracts)
+[0m17:05:44.724252 [debug] [Thread-2 (]: Began compiling node model.incident_management.document_full_extracts
+[0m17:05:44.737398 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.document_full_extracts"
+[0m17:05:44.738288 [debug] [Thread-2 (]: Began executing node model.incident_management.document_full_extracts
+[0m17:05:44.739424 [debug] [Thread-2 (]: Finished running node model.incident_management.document_full_extracts
+[0m17:05:44.740971 [debug] [Thread-2 (]: Began running node model.incident_management.document_question_extracts
+[0m17:05:44.742121 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly model.incident_management.document_full_extracts, now model.incident_management.document_question_extracts)
+[0m17:05:44.743112 [debug] [Thread-2 (]: Began compiling node model.incident_management.document_question_extracts
+[0m17:05:44.779405 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.document_question_extracts"
+[0m17:05:44.780713 [debug] [Thread-2 (]: Began executing node model.incident_management.document_question_extracts
+[0m17:05:44.782089 [debug] [Thread-2 (]: Finished running node model.incident_management.document_question_extracts
+[0m17:05:44.783293 [debug] [Thread-2 (]: Began running node model.incident_management.incidents
+[0m17:05:44.784312 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly model.incident_management.document_question_extracts, now model.incident_management.incidents)
+[0m17:05:44.784918 [debug] [Thread-2 (]: Began compiling node model.incident_management.incidents
+[0m17:05:44.798041 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.incidents"
+[0m17:05:44.799119 [debug] [Thread-2 (]: Began executing node model.incident_management.incidents
+[0m17:05:44.800215 [debug] [Thread-2 (]: Finished running node model.incident_management.incidents
+[0m17:05:44.801439 [debug] [Thread-2 (]: Began running node test.incident_management.not_null_v_qualify_slack_messages_SLACK_MESSAGE_ID.b99d07fd3f
+[0m17:05:44.802686 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly model.incident_management.incidents, now test.incident_management.not_null_v_qualify_slack_messages_SLACK_MESSAGE_ID.b99d07fd3f)
+[0m17:05:44.803325 [debug] [Thread-2 (]: Began compiling node test.incident_management.not_null_v_qualify_slack_messages_SLACK_MESSAGE_ID.b99d07fd3f
+[0m17:05:44.817860 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.not_null_v_qualify_slack_messages_SLACK_MESSAGE_ID.b99d07fd3f"
+[0m17:05:44.818886 [debug] [Thread-2 (]: Began executing node test.incident_management.not_null_v_qualify_slack_messages_SLACK_MESSAGE_ID.b99d07fd3f
+[0m17:05:44.819946 [debug] [Thread-2 (]: Finished running node test.incident_management.not_null_v_qualify_slack_messages_SLACK_MESSAGE_ID.b99d07fd3f
+[0m17:05:44.821122 [debug] [Thread-2 (]: Began running node test.incident_management.not_null_document_full_extracts_CHUNK.82c90db149
+[0m17:05:44.821998 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.not_null_v_qualify_slack_messages_SLACK_MESSAGE_ID.b99d07fd3f, now test.incident_management.not_null_document_full_extracts_CHUNK.82c90db149)
+[0m17:05:44.822612 [debug] [Thread-2 (]: Began compiling node test.incident_management.not_null_document_full_extracts_CHUNK.82c90db149
+[0m17:05:44.835618 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.not_null_document_full_extracts_CHUNK.82c90db149"
+[0m17:05:44.836526 [debug] [Thread-2 (]: Began executing node test.incident_management.not_null_document_full_extracts_CHUNK.82c90db149
+[0m17:05:44.837573 [debug] [Thread-2 (]: Finished running node test.incident_management.not_null_document_full_extracts_CHUNK.82c90db149
+[0m17:05:44.838800 [debug] [Thread-2 (]: Began running node test.incident_management.not_null_document_full_extracts_RELATIVE_PATH.13ce0db60d
+[0m17:05:44.839655 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.not_null_document_full_extracts_CHUNK.82c90db149, now test.incident_management.not_null_document_full_extracts_RELATIVE_PATH.13ce0db60d)
+[0m17:05:44.840310 [debug] [Thread-2 (]: Began compiling node test.incident_management.not_null_document_full_extracts_RELATIVE_PATH.13ce0db60d
+[0m17:05:44.855153 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.not_null_document_full_extracts_RELATIVE_PATH.13ce0db60d"
+[0m17:05:44.856034 [debug] [Thread-2 (]: Began executing node test.incident_management.not_null_document_full_extracts_RELATIVE_PATH.13ce0db60d
+[0m17:05:44.857089 [debug] [Thread-2 (]: Finished running node test.incident_management.not_null_document_full_extracts_RELATIVE_PATH.13ce0db60d
+[0m17:05:44.858268 [debug] [Thread-2 (]: Began running node model.incident_management.quaterly_review_metrics
+[0m17:05:44.859217 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.not_null_document_full_extracts_RELATIVE_PATH.13ce0db60d, now model.incident_management.quaterly_review_metrics)
+[0m17:05:44.859841 [debug] [Thread-2 (]: Began compiling node model.incident_management.quaterly_review_metrics
+[0m17:05:44.872339 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.quaterly_review_metrics"
+[0m17:05:44.873248 [debug] [Thread-2 (]: Began executing node model.incident_management.quaterly_review_metrics
+[0m17:05:44.874306 [debug] [Thread-2 (]: Finished running node model.incident_management.quaterly_review_metrics
+[0m17:05:44.875491 [debug] [Thread-2 (]: Began running node test.incident_management.accepted_values_document_question_extracts_analysis_type__question.db1181c5ee
+[0m17:05:44.876616 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly model.incident_management.quaterly_review_metrics, now test.incident_management.accepted_values_document_question_extracts_analysis_type__question.db1181c5ee)
+[0m17:05:44.877235 [debug] [Thread-2 (]: Began compiling node test.incident_management.accepted_values_document_question_extracts_analysis_type__question.db1181c5ee
+[0m17:05:44.890847 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.accepted_values_document_question_extracts_analysis_type__question.db1181c5ee"
+[0m17:05:44.891790 [debug] [Thread-2 (]: Began executing node test.incident_management.accepted_values_document_question_extracts_analysis_type__question.db1181c5ee
+[0m17:05:44.892851 [debug] [Thread-2 (]: Finished running node test.incident_management.accepted_values_document_question_extracts_analysis_type__question.db1181c5ee
+[0m17:05:44.893983 [debug] [Thread-2 (]: Began running node test.incident_management.not_null_document_question_extracts_relative_path.cf91da63bf
+[0m17:05:44.894774 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.accepted_values_document_question_extracts_analysis_type__question.db1181c5ee, now test.incident_management.not_null_document_question_extracts_relative_path.cf91da63bf)
+[0m17:05:44.895360 [debug] [Thread-2 (]: Began compiling node test.incident_management.not_null_document_question_extracts_relative_path.cf91da63bf
+[0m17:05:44.910124 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.not_null_document_question_extracts_relative_path.cf91da63bf"
+[0m17:05:44.911051 [debug] [Thread-2 (]: Began executing node test.incident_management.not_null_document_question_extracts_relative_path.cf91da63bf
+[0m17:05:44.912079 [debug] [Thread-2 (]: Finished running node test.incident_management.not_null_document_question_extracts_relative_path.cf91da63bf
+[0m17:05:44.913258 [debug] [Thread-2 (]: Began running node model.incident_management.active_incidents
+[0m17:05:44.914118 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.not_null_document_question_extracts_relative_path.cf91da63bf, now model.incident_management.active_incidents)
+[0m17:05:44.914726 [debug] [Thread-2 (]: Began compiling node model.incident_management.active_incidents
+[0m17:05:44.927272 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.active_incidents"
+[0m17:05:44.928156 [debug] [Thread-2 (]: Began executing node model.incident_management.active_incidents
+[0m17:05:44.929324 [debug] [Thread-2 (]: Finished running node model.incident_management.active_incidents
+[0m17:05:44.930536 [debug] [Thread-2 (]: Began running node model.incident_management.closed_incidents
+[0m17:05:44.931615 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly model.incident_management.active_incidents, now model.incident_management.closed_incidents)
+[0m17:05:44.932249 [debug] [Thread-2 (]: Began compiling node model.incident_management.closed_incidents
+[0m17:05:44.945857 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.closed_incidents"
+[0m17:05:44.946736 [debug] [Thread-2 (]: Began executing node model.incident_management.closed_incidents
+[0m17:05:44.947763 [debug] [Thread-2 (]: Finished running node model.incident_management.closed_incidents
+[0m17:05:44.948996 [debug] [Thread-2 (]: Began running node model.incident_management.incident_attachments
+[0m17:05:44.950076 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly model.incident_management.closed_incidents, now model.incident_management.incident_attachments)
+[0m17:05:44.950690 [debug] [Thread-2 (]: Began compiling node model.incident_management.incident_attachments
+[0m17:05:44.963527 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.incident_attachments"
+[0m17:05:44.964504 [debug] [Thread-2 (]: Began executing node model.incident_management.incident_attachments
+[0m17:05:44.965611 [debug] [Thread-2 (]: Finished running node model.incident_management.incident_attachments
+[0m17:05:44.966782 [debug] [Thread-2 (]: Began running node model.incident_management.incident_comment_history
+[0m17:05:44.967919 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly model.incident_management.incident_attachments, now model.incident_management.incident_comment_history)
+[0m17:05:44.968673 [debug] [Thread-2 (]: Began compiling node model.incident_management.incident_comment_history
+[0m17:05:44.985967 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.incident_comment_history"
+[0m17:05:44.986897 [debug] [Thread-2 (]: Began executing node model.incident_management.incident_comment_history
+[0m17:05:44.987926 [debug] [Thread-2 (]: Finished running node model.incident_management.incident_comment_history
+[0m17:05:44.989150 [debug] [Thread-2 (]: Began running node model.incident_management.weekly_incident_trends
+[0m17:05:44.990147 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly model.incident_management.incident_comment_history, now model.incident_management.weekly_incident_trends)
+[0m17:05:44.990761 [debug] [Thread-2 (]: Began compiling node model.incident_management.weekly_incident_trends
+[0m17:05:45.168008 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.weekly_incident_trends"
+[0m17:05:45.169073 [debug] [Thread-2 (]: Began executing node model.incident_management.weekly_incident_trends
+[0m17:05:45.170169 [debug] [Thread-2 (]: Finished running node model.incident_management.weekly_incident_trends
+[0m17:05:45.171369 [debug] [Thread-2 (]: Began running node test.incident_management.not_null_incidents_INCIDENT_NUMBER.b6d171038e
+[0m17:05:45.172402 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly model.incident_management.weekly_incident_trends, now test.incident_management.not_null_incidents_INCIDENT_NUMBER.b6d171038e)
+[0m17:05:45.173046 [debug] [Thread-2 (]: Began compiling node test.incident_management.not_null_incidents_INCIDENT_NUMBER.b6d171038e
+[0m17:05:45.185965 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.not_null_incidents_INCIDENT_NUMBER.b6d171038e"
+[0m17:05:45.186913 [debug] [Thread-2 (]: Began executing node test.incident_management.not_null_incidents_INCIDENT_NUMBER.b6d171038e
+[0m17:05:45.187957 [debug] [Thread-2 (]: Finished running node test.incident_management.not_null_incidents_INCIDENT_NUMBER.b6d171038e
+[0m17:05:45.189209 [debug] [Thread-2 (]: Began running node test.incident_management.not_null_quaterly_review_metrics_RELATIVE_PATH.c49b8a99fd
+[0m17:05:45.190040 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.not_null_incidents_INCIDENT_NUMBER.b6d171038e, now test.incident_management.not_null_quaterly_review_metrics_RELATIVE_PATH.c49b8a99fd)
+[0m17:05:45.190643 [debug] [Thread-2 (]: Began compiling node test.incident_management.not_null_quaterly_review_metrics_RELATIVE_PATH.c49b8a99fd
+[0m17:05:45.205375 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.not_null_quaterly_review_metrics_RELATIVE_PATH.c49b8a99fd"
+[0m17:05:45.206349 [debug] [Thread-2 (]: Began executing node test.incident_management.not_null_quaterly_review_metrics_RELATIVE_PATH.c49b8a99fd
+[0m17:05:45.207405 [debug] [Thread-2 (]: Finished running node test.incident_management.not_null_quaterly_review_metrics_RELATIVE_PATH.c49b8a99fd
+[0m17:05:45.208727 [debug] [Thread-2 (]: Began running node test.incident_management.not_null_active_incidents_INCIDENT_NUMBER.1a30a5faf9
+[0m17:05:45.209600 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.not_null_quaterly_review_metrics_RELATIVE_PATH.c49b8a99fd, now test.incident_management.not_null_active_incidents_INCIDENT_NUMBER.1a30a5faf9)
+[0m17:05:45.210207 [debug] [Thread-2 (]: Began compiling node test.incident_management.not_null_active_incidents_INCIDENT_NUMBER.1a30a5faf9
+[0m17:05:45.223347 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.not_null_active_incidents_INCIDENT_NUMBER.1a30a5faf9"
+[0m17:05:45.224300 [debug] [Thread-2 (]: Began executing node test.incident_management.not_null_active_incidents_INCIDENT_NUMBER.1a30a5faf9
+[0m17:05:45.225389 [debug] [Thread-2 (]: Finished running node test.incident_management.not_null_active_incidents_INCIDENT_NUMBER.1a30a5faf9
+[0m17:05:45.226554 [debug] [Thread-2 (]: Began running node test.incident_management.accepted_values_closed_incidents_priority__low__medium__high__critical.663517691c
+[0m17:05:45.227367 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.not_null_active_incidents_INCIDENT_NUMBER.1a30a5faf9, now test.incident_management.accepted_values_closed_incidents_priority__low__medium__high__critical.663517691c)
+[0m17:05:45.227961 [debug] [Thread-2 (]: Began compiling node test.incident_management.accepted_values_closed_incidents_priority__low__medium__high__critical.663517691c
+[0m17:05:45.243187 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.accepted_values_closed_incidents_priority__low__medium__high__critical.663517691c"
+[0m17:05:45.244146 [debug] [Thread-2 (]: Began executing node test.incident_management.accepted_values_closed_incidents_priority__low__medium__high__critical.663517691c
+[0m17:05:45.245247 [debug] [Thread-2 (]: Finished running node test.incident_management.accepted_values_closed_incidents_priority__low__medium__high__critical.663517691c
+[0m17:05:45.246426 [debug] [Thread-2 (]: Began running node test.incident_management.accepted_values_closed_incidents_status__closed__resolved.ebedd591a4
+[0m17:05:45.247250 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.accepted_values_closed_incidents_priority__low__medium__high__critical.663517691c, now test.incident_management.accepted_values_closed_incidents_status__closed__resolved.ebedd591a4)
+[0m17:05:45.247845 [debug] [Thread-2 (]: Began compiling node test.incident_management.accepted_values_closed_incidents_status__closed__resolved.ebedd591a4
+[0m17:05:45.261011 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.accepted_values_closed_incidents_status__closed__resolved.ebedd591a4"
+[0m17:05:45.261907 [debug] [Thread-2 (]: Began executing node test.incident_management.accepted_values_closed_incidents_status__closed__resolved.ebedd591a4
+[0m17:05:45.262943 [debug] [Thread-2 (]: Finished running node test.incident_management.accepted_values_closed_incidents_status__closed__resolved.ebedd591a4
+[0m17:05:45.264099 [debug] [Thread-2 (]: Began running node test.incident_management.not_null_closed_incidents_closed_at.ff47a7249a
+[0m17:05:45.264922 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.accepted_values_closed_incidents_status__closed__resolved.ebedd591a4, now test.incident_management.not_null_closed_incidents_closed_at.ff47a7249a)
+[0m17:05:45.265508 [debug] [Thread-2 (]: Began compiling node test.incident_management.not_null_closed_incidents_closed_at.ff47a7249a
+[0m17:05:45.280659 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.not_null_closed_incidents_closed_at.ff47a7249a"
+[0m17:05:45.281569 [debug] [Thread-2 (]: Began executing node test.incident_management.not_null_closed_incidents_closed_at.ff47a7249a
+[0m17:05:45.282620 [debug] [Thread-2 (]: Finished running node test.incident_management.not_null_closed_incidents_closed_at.ff47a7249a
+[0m17:05:45.283791 [debug] [Thread-2 (]: Began running node test.incident_management.not_null_closed_incidents_created_at.f144a202e9
+[0m17:05:45.284642 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.not_null_closed_incidents_closed_at.ff47a7249a, now test.incident_management.not_null_closed_incidents_created_at.f144a202e9)
+[0m17:05:45.285231 [debug] [Thread-2 (]: Began compiling node test.incident_management.not_null_closed_incidents_created_at.f144a202e9
+[0m17:05:45.298248 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.not_null_closed_incidents_created_at.f144a202e9"
+[0m17:05:45.299267 [debug] [Thread-2 (]: Began executing node test.incident_management.not_null_closed_incidents_created_at.f144a202e9
+[0m17:05:45.300321 [debug] [Thread-2 (]: Finished running node test.incident_management.not_null_closed_incidents_created_at.f144a202e9
+[0m17:05:45.301489 [debug] [Thread-2 (]: Began running node test.incident_management.not_null_closed_incidents_incident_number.f083158543
+[0m17:05:45.302307 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.not_null_closed_incidents_created_at.f144a202e9, now test.incident_management.not_null_closed_incidents_incident_number.f083158543)
+[0m17:05:45.302895 [debug] [Thread-2 (]: Began compiling node test.incident_management.not_null_closed_incidents_incident_number.f083158543
+[0m17:05:45.316146 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.not_null_closed_incidents_incident_number.f083158543"
+[0m17:05:45.317111 [debug] [Thread-2 (]: Began executing node test.incident_management.not_null_closed_incidents_incident_number.f083158543
+[0m17:05:45.318185 [debug] [Thread-2 (]: Finished running node test.incident_management.not_null_closed_incidents_incident_number.f083158543
+[0m17:05:45.319482 [debug] [Thread-2 (]: Began running node test.incident_management.not_null_closed_incidents_title.bf5e3f1d33
+[0m17:05:45.320314 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.not_null_closed_incidents_incident_number.f083158543, now test.incident_management.not_null_closed_incidents_title.bf5e3f1d33)
+[0m17:05:45.320947 [debug] [Thread-2 (]: Began compiling node test.incident_management.not_null_closed_incidents_title.bf5e3f1d33
+[0m17:05:45.336604 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.not_null_closed_incidents_title.bf5e3f1d33"
+[0m17:05:45.337535 [debug] [Thread-2 (]: Began executing node test.incident_management.not_null_closed_incidents_title.bf5e3f1d33
+[0m17:05:45.338666 [debug] [Thread-2 (]: Finished running node test.incident_management.not_null_closed_incidents_title.bf5e3f1d33
+[0m17:05:45.339847 [debug] [Thread-2 (]: Began running node test.incident_management.not_null_closed_incidents_total_resolution_hours.838e65647a
+[0m17:05:45.340675 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.not_null_closed_incidents_title.bf5e3f1d33, now test.incident_management.not_null_closed_incidents_total_resolution_hours.838e65647a)
+[0m17:05:45.341264 [debug] [Thread-2 (]: Began compiling node test.incident_management.not_null_closed_incidents_total_resolution_hours.838e65647a
+[0m17:05:45.354127 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.not_null_closed_incidents_total_resolution_hours.838e65647a"
+[0m17:05:45.355039 [debug] [Thread-2 (]: Began executing node test.incident_management.not_null_closed_incidents_total_resolution_hours.838e65647a
+[0m17:05:45.356068 [debug] [Thread-2 (]: Finished running node test.incident_management.not_null_closed_incidents_total_resolution_hours.838e65647a
+[0m17:05:45.357259 [debug] [Thread-2 (]: Began running node test.incident_management.unique_closed_incidents_incident_number.dd9483020e
+[0m17:05:45.358079 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.not_null_closed_incidents_total_resolution_hours.838e65647a, now test.incident_management.unique_closed_incidents_incident_number.dd9483020e)
+[0m17:05:45.358749 [debug] [Thread-2 (]: Began compiling node test.incident_management.unique_closed_incidents_incident_number.dd9483020e
+[0m17:05:45.373601 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.unique_closed_incidents_incident_number.dd9483020e"
+[0m17:05:45.374505 [debug] [Thread-2 (]: Began executing node test.incident_management.unique_closed_incidents_incident_number.dd9483020e
+[0m17:05:45.375552 [debug] [Thread-2 (]: Finished running node test.incident_management.unique_closed_incidents_incident_number.dd9483020e
+[0m17:05:45.376744 [debug] [Thread-2 (]: Began running node test.incident_management.not_null_incident_attachments_ID.18eb3015c5
+[0m17:05:45.377571 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.unique_closed_incidents_incident_number.dd9483020e, now test.incident_management.not_null_incident_attachments_ID.18eb3015c5)
+[0m17:05:45.378164 [debug] [Thread-2 (]: Began compiling node test.incident_management.not_null_incident_attachments_ID.18eb3015c5
+[0m17:05:45.391413 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.not_null_incident_attachments_ID.18eb3015c5"
+[0m17:05:45.392360 [debug] [Thread-2 (]: Began executing node test.incident_management.not_null_incident_attachments_ID.18eb3015c5
+[0m17:05:45.393438 [debug] [Thread-2 (]: Finished running node test.incident_management.not_null_incident_attachments_ID.18eb3015c5
+[0m17:05:45.394598 [debug] [Thread-2 (]: Began running node test.incident_management.not_null_incident_comment_history_ID.c0ecf47c3d
+[0m17:05:45.395404 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.not_null_incident_attachments_ID.18eb3015c5, now test.incident_management.not_null_incident_comment_history_ID.c0ecf47c3d)
+[0m17:05:45.395982 [debug] [Thread-2 (]: Began compiling node test.incident_management.not_null_incident_comment_history_ID.c0ecf47c3d
+[0m17:05:45.410919 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.not_null_incident_comment_history_ID.c0ecf47c3d"
+[0m17:05:45.411861 [debug] [Thread-2 (]: Began executing node test.incident_management.not_null_incident_comment_history_ID.c0ecf47c3d
+[0m17:05:45.412960 [debug] [Thread-2 (]: Finished running node test.incident_management.not_null_incident_comment_history_ID.c0ecf47c3d
+[0m17:05:45.414229 [debug] [Thread-2 (]: Began running node model.incident_management.alpha
+[0m17:05:45.415091 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.incident_management.not_null_incident_comment_history_ID.c0ecf47c3d, now model.incident_management.alpha)
+[0m17:05:45.415678 [debug] [Thread-2 (]: Began compiling node model.incident_management.alpha
+[0m17:05:45.430742 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.alpha"
+[0m17:05:45.431721 [debug] [Thread-2 (]: Began executing node model.incident_management.alpha
+[0m17:05:45.432787 [debug] [Thread-2 (]: Finished running node model.incident_management.alpha
+[0m17:05:45.434066 [debug] [Thread-2 (]: Began running node test.incident_management.not_null_weekly_incident_trends_WEEK.e4ef7b7709
+[0m17:05:45.434892 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly model.incident_management.alpha, now test.incident_management.not_null_weekly_incident_trends_WEEK.e4ef7b7709)
+[0m17:05:45.435475 [debug] [Thread-2 (]: Began compiling node test.incident_management.not_null_weekly_incident_trends_WEEK.e4ef7b7709
+[0m17:05:45.448292 [debug] [Thread-2 (]: Writing injected SQL for node "test.incident_management.not_null_weekly_incident_trends_WEEK.e4ef7b7709"
+[0m17:05:45.449350 [debug] [Thread-2 (]: Began executing node test.incident_management.not_null_weekly_incident_trends_WEEK.e4ef7b7709
+[0m17:05:45.450394 [debug] [Thread-2 (]: Finished running node test.incident_management.not_null_weekly_incident_trends_WEEK.e4ef7b7709
+[0m17:05:45.453098 [debug] [Dummy-1   ]: Connection 'master' was properly closed.
+[0m17:05:45.453780 [debug] [Dummy-1   ]: Connection 'test.incident_management.not_null_weekly_incident_trends_WEEK.e4ef7b7709' was properly closed.
+[0m17:05:45.461807 [debug] [Dummy-1   ]: Command end result
+[0m17:05:45.514946 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m17:05:45.517922 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m17:05:45.529490 [debug] [Dummy-1   ]: Wrote artifact RunExecutionResult to /tmp/dbt/target/run_results.json
+[0m17:05:45.531692 [debug] [Dummy-1   ]: Resource report: {"command_name": "compile", "command_success": true, "command_wall_clock_time": 10.663808, "process_in_blocks": "0", "process_kernel_time": 1.27, "process_mem_max_rss": "490276", "process_out_blocks": "0", "process_user_time": 9.29}
+[0m17:05:45.532475 [debug] [Dummy-1   ]: Command `cli compile` succeeded at 17:05:45.532159 after 10.66 seconds
+[0m17:05:45.533101 [debug] [Dummy-1   ]: Flushing usage events
+
+
+============================== 17:06:36.807726 | edfbeb9e-2a80-43b0-a069-d2d86582c058 ==============================
+[0m17:06:36.807726 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m17:06:36.808998 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'version_check': 'True', 'profiles_dir': '/tmp/dbt/', 'log_path': '/tmp/dbt/logs', 'debug': 'False', 'fail_fast': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'False', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'static_parser': 'True', 'introspect': 'True', 'invocation_command': 'dbt ', 'target_path': '/tmp/dbt/target/', 'log_format': 'default', 'send_anonymous_usage_stats': 'False'}
+[0m17:06:36.880687 [error] [Dummy-1   ]:  adapter: Invalid profile: 'user' is a required property.
+[0m17:06:37.191963 [info ] [Dummy-1   ]: Registered adapter: snowflake=1.9.2
+[0m17:06:37.961508 [debug] [Dummy-1   ]: checksum: 53ed91fada2233efb98368d1716b44ab532c83a9c293cf1890b7905d5b45fb25, vars: {}, profile: , target: dev, version: 1.9.4
+[0m17:06:38.391476 [debug] [Dummy-1   ]: Partial parsing enabled: 0 files deleted, 0 files added, 0 files changed.
+[0m17:06:38.392132 [debug] [Dummy-1   ]: Partial parsing enabled, no changes found, skipping parsing
+[0m17:06:38.612790 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m17:06:38.615769 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m17:06:38.677215 [info ] [Dummy-1   ]: Found 13 models, 32 data tests, 6 sources, 483 macros
+[0m17:06:38.708924 [info ] [Dummy-1   ]: 
+[0m17:06:38.709672 [info ] [Dummy-1   ]: Concurrency: 1 threads (target='dev')
+[0m17:06:38.710214 [info ] [Dummy-1   ]: 
+[0m17:06:38.711231 [debug] [Dummy-1   ]: Acquiring new snowflake connection 'master'
+[0m17:06:38.713431 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_v1_incident_management'
+[0m17:06:38.865236 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management"
+[0m17:06:38.865953 [debug] [ThreadPool]: On list_v1_incident_management: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management"} */
+show terse schemas in database v1_incident_management
+    limit 10000
+[0m17:06:38.866487 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:06:39.706294 [debug] [ThreadPool]: SQL status: SUCCESS 5 in 0.840 seconds
+[0m17:06:39.709442 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_v1_incident_management, now create_v1_incident_management_silver_zone)
+[0m17:06:39.710304 [debug] [ThreadPool]: Creating schema "database: "v1_incident_management"
+schema: "silver_zone"
+"
+[0m17:06:39.726575 [debug] [ThreadPool]: Using snowflake connection "create_v1_incident_management_silver_zone"
+[0m17:06:39.727319 [debug] [ThreadPool]: On create_v1_incident_management_silver_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "create_v1_incident_management_silver_zone"} */
+create schema if not exists v1_incident_management.silver_zone
+[0m17:06:39.727878 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:06:40.718838 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.991 seconds
+[0m17:06:40.728342 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly create_v1_incident_management_silver_zone, now list_v1_incident_management_silver_zone)
+[0m17:06:40.751009 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_silver_zone"
+[0m17:06:40.751686 [debug] [ThreadPool]: On list_v1_incident_management_silver_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_silver_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:06:40.752190 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:06:41.659667 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.907 seconds
+[0m17:06:41.665542 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_silver_zone"
+[0m17:06:41.666298 [debug] [ThreadPool]: On list_v1_incident_management_silver_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_silver_zone"} */
+show objects in v1_incident_management.silver_zone
+    limit 10000
+    
+;
+[0m17:06:41.750749 [debug] [ThreadPool]: SQL status: SUCCESS 0 in 0.084 seconds
+[0m17:06:41.753232 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_silver_zone"
+[0m17:06:41.753845 [debug] [ThreadPool]: On list_v1_incident_management_silver_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_silver_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:06:41.856890 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.102 seconds
+[0m17:06:41.859366 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_v1_incident_management_silver_zone, now list_v1_incident_management_bronze_zone)
+[0m17:06:41.871802 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_bronze_zone"
+[0m17:06:41.872474 [debug] [ThreadPool]: On list_v1_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_bronze_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:06:41.872986 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:06:42.562116 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.689 seconds
+[0m17:06:42.564732 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_bronze_zone"
+[0m17:06:42.565361 [debug] [ThreadPool]: On list_v1_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_bronze_zone"} */
+show objects in v1_incident_management.bronze_zone
+    limit 10000
+    
+;
+[0m17:06:42.676542 [debug] [ThreadPool]: SQL status: SUCCESS 7 in 0.110 seconds
+[0m17:06:42.679460 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_bronze_zone"
+[0m17:06:42.680067 [debug] [ThreadPool]: On list_v1_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_bronze_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:06:42.776710 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.096 seconds
+[0m17:06:42.779417 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_v1_incident_management_bronze_zone, now list_v1_incident_management_gold_zone)
+[0m17:06:42.792651 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_gold_zone"
+[0m17:06:42.793293 [debug] [ThreadPool]: On list_v1_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_gold_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:06:42.793775 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:06:43.472693 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.679 seconds
+[0m17:06:43.475191 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_gold_zone"
+[0m17:06:43.475790 [debug] [ThreadPool]: On list_v1_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_gold_zone"} */
+show objects in v1_incident_management.gold_zone
+    limit 10000
+    
+;
+[0m17:06:43.579856 [debug] [ThreadPool]: SQL status: SUCCESS 6 in 0.103 seconds
+[0m17:06:43.582552 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_gold_zone"
+[0m17:06:43.583157 [debug] [ThreadPool]: On list_v1_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_gold_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:06:43.664945 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.081 seconds
+[0m17:06:43.667809 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_v1_incident_management_gold_zone, now list_v1_incident_management_semantic_views)
+[0m17:06:43.681921 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_semantic_views"
+[0m17:06:43.682544 [debug] [ThreadPool]: On list_v1_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_semantic_views"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:06:43.683049 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:06:44.375761 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.692 seconds
+[0m17:06:44.378299 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_semantic_views"
+[0m17:06:44.379051 [debug] [ThreadPool]: On list_v1_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_semantic_views"} */
+show objects in v1_incident_management.semantic_views
+    limit 10000
+    
+;
+[0m17:06:44.452646 [debug] [ThreadPool]: Snowflake adapter: Snowflake query id: 01c070e2-0107-0b61-0032-318705948792
+[0m17:06:44.453291 [debug] [ThreadPool]: Snowflake adapter: Snowflake error: 002043 (02000): SQL compilation error:
+Object does not exist, or operation cannot be performed.
+[0m17:06:44.454012 [debug] [ThreadPool]: Snowflake adapter: Error running SQL: macro list_relations_without_caching
+[0m17:06:44.454511 [debug] [ThreadPool]: Snowflake adapter: Rolling back transaction.
+[0m17:06:44.460755 [debug] [Thread-2 (]: Began running node model.incident_management.document_question_extracts
+[0m17:06:44.462043 [info ] [Thread-2 (]: 1 of 1 START python incremental model silver_zone.document_question_extracts ... [RUN]
+[0m17:06:44.462859 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly list_v1_incident_management_semantic_views, now model.incident_management.document_question_extracts)
+[0m17:06:44.463751 [debug] [Thread-2 (]: Began compiling node model.incident_management.document_question_extracts
+[0m17:06:44.508470 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.document_question_extracts"
+[0m17:06:44.509880 [debug] [Thread-2 (]: Began executing node model.incident_management.document_question_extracts
+[0m17:06:44.605180 [debug] [Thread-2 (]: Writing runtime python for node "model.incident_management.document_question_extracts"
+[0m17:06:44.610629 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.document_question_extracts"
+[0m17:06:44.612661 [debug] [Thread-2 (]: On model.incident_management.document_question_extracts: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.document_question_extracts"} */
+WITH document_question_extracts__dbt_sp AS PROCEDURE ()
+
+RETURNS STRING
+LANGUAGE PYTHON
+RUNTIME_VERSION = '3.9'
+PACKAGES = ('snowflake-snowpark-python')
+
+
+
+HANDLER = 'main'
+EXECUTE AS CALLER
+AS
+$$
+
+
+
+  
+    
+    
+import snowflake.snowpark.functions as F
+from snowflake.snowpark import Session
+
+    
+def model(dbt, session: Session):
+
+    dbt.config(
+        materialized='incremental',
+        incremental_strategy='append',
+        description='Table to store question extracts from documents'
+    )
+    
+    docs_stage = dbt.config.get("docs_stage_path")
+
+    all_meta = dbt.config.get("meta")
+    
+    reponse_schema = {
+        'schema': {
+            'type': 'object',
+            'properties': {}
+        }
+    }
+    
+    for key in all_meta.keys():
+        if all_meta[key]['enabled']:
+            for prop in all_meta[key]['schema']['properties']:
+                reponse_schema['schema']['properties'][prop] = all_meta[key]['schema']['properties'][prop]
+
+
+    # Get the upstream model
+    v_qualify_new_documents = dbt.ref('v_qualify_new_documents')
+    
+    # Filter for question analysis type
+    document_all_pages = v_qualify_new_documents.filter(
+        F.lower(F.col('doc_type')) == 'question'
+    ).drop(
+        "METADATA$ACTION",
+        "METADATA$ISUPDATE",
+        "METADATA$ROW_ID"
+    )
+    
+    document_all_pages = document_all_pages.with_column(
+        'question_extracts_json',
+        F.call_builtin(
+            'AI_EXTRACT',
+            F.call_builtin('TO_FILE', F.lit(f'{docs_stage}'), F.col('relative_path')),
+            reponse_schema
+        )
+    ) 
+    
+    return document_all_pages
+
+
+# This part is user provided model code
+# you will need to copy the next section to run the code
+# COMMAND ----------
+# this part is dbt logic for get ref work, do not modify
+
+def ref(*args, **kwargs):
+    refs = {"v_qualify_new_documents": "v1_incident_management.bronze_zone.v_qualify_new_documents"}
+    key = '.'.join(args)
+    version = kwargs.get("v") or kwargs.get("version")
+    if version:
+        key += f".v{version}"
+    dbt_load_df_function = kwargs.get("dbt_load_df_function")
+    return dbt_load_df_function(refs[key])
+
+
+def source(*args, dbt_load_df_function):
+    sources = {}
+    key = '.'.join(args)
+    return dbt_load_df_function(sources[key])
+
+
+config_dict = {'docs_stage_path': '@INCIDENT_MANAGEMENT.bronze_zone.DOCUMENTS', 'meta': {'quaterly_review_metrics': {'enabled': True, 'schema': {'type': 'object', 'properties': {'quarter': {'description': 'The year and quarter of the review metrics', 'type': 'string'}, 'overall_uptime': {'description': 'The actual recorded overall uptime of all services', 'type': 'string'}, 'critical_services_uptime': {'description': 'What was the actual recorded  uptime of critical services', 'type': 'string'}, 'sev_1_incidents': {'description': 'What were the actual recorded string of Sev-1 incidents', 'type': 'string'}, 'sev_2_incidents': {'description': 'What were the actual recorded string of Sev-2 incidents', 'type': 'string'}, 'mtta': {'description': 'What was the actual recorded mean time to acknowledge an incident', 'type': 'string'}, 'mttr': {'description': 'What was the actual recorded mean time to recover from an incident', 'type': 'string'}, 'change_failure_rate': {'description': 'What was the actual recorded change failure rate', 'type': 'string'}, 'slo_breaches': {'description': 'What was the actual recorded string of SLO breaches', 'type': 'string'}, 'error_budget_consumed': {'description': 'What was the actual recorded error budget consumed', 'type': 'string'}, 'service_downtime': {'description': 'What was the actual recorded service downtime', 'type': 'string'}, 'unplanned_outage_hours': {'description': 'What was the actual recorded unplanned outage hours', 'type': 'string'}, 'planned_maintenance_hours': {'description': 'What was the actual recorded planned maintenance hours', 'type': 'string'}, 'sev_1_outage_minutes': {'description': 'What was the actual recorded Sev-1 outage minutes', 'type': 'string'}, 'sev_2_outage_minutes': {'description': 'What was the actual recorded Sev-2 outage minutes', 'type': 'string'}, 'longest_single_outage': {'description': 'What was the actual recorded longest single outage', 'type': 'string'}, 'mtbft': {'description': 'What was the actual recorded mean time between failures', 'type': 'string'}, 'end_of_quarter_it_headcount': {'description': 'What was the actual recorded end of quarter IT headcount', 'type': 'string'}, 'engineering_headcount': {'description': 'What was the actual recorded engineering headcount', 'type': 'string'}, 'on_call_coverage': {'description': 'What was the actual recorded on call coverage', 'type': 'string'}, 'project_work_allocation': {'description': 'What was the actual recorded project work allocation', 'type': 'string'}, 'bau_operations_allocation': {'description': 'What was the actual recorded BAU/Operations allocation', 'type': 'string'}, 'on_call_hours_per_engineer': {'description': 'What was the actual recorded on call hours per engineer', 'type': 'string'}, 'after_hours_incidents_handled': {'description': 'What was the actual recorded after hours incidents handled', 'type': 'string'}, 'training_hours_per_fte': {'description': 'What was the actual recorded training hours per FTE', 'type': 'string'}, 'certifications_earned': {'description': 'What was the actual recorded certifications earned', 'type': 'string'}, 'attrition': {'description': 'What was the actual recorded attrition', 'type': 'string'}, 'atlassian_spend': {'description': 'What was the actual spend on Atlassian licenses', 'type': 'string'}, 'github_spend': {'description': 'What was the actual spend on GitHub licenses', 'type': 'string'}, 'slack_spend': {'description': 'What was the actual spend on Slack licenses', 'type': 'string'}, 'pagerduty_spend': {'description': 'What was the actual spend on PagerDuty licenses', 'type': 'string'}, 'datadog_spend': {'description': 'What was the actual spend on Datadog licenses', 'type': 'string'}, 'sentry_spend': {'description': 'What was the actual spend on Sentry licenses', 'type': 'string'}, 'okta_spend': {'description': 'What was the actual spend on Okta licenses', 'type': 'string'}, 'aws_spend': {'description': 'What was the actual spend on AWS licenses', 'type': 'string'}, 'total_spend': {'description': 'What was the actual spend on total licenses', 'type': 'string'}}}}}}
+
+
+class config:
+    def __init__(self, *args, **kwargs):
+        pass
+
+    @staticmethod
+    def get(key, default=None):
+        return config_dict.get(key, default)
+
+class this:
+    """dbt.this() or dbt.this.identifier"""
+    database = "v1_incident_management"
+    schema = "silver_zone"
+    identifier = "document_question_extracts"
+    
+    def __repr__(self):
+        return 'v1_incident_management.silver_zone.document_question_extracts'
+
+
+class dbtObj:
+    def __init__(self, load_df_function) -> None:
+        self.source = lambda *args: source(*args, dbt_load_df_function=load_df_function)
+        self.ref = lambda *args, **kwargs: ref(*args, **kwargs, dbt_load_df_function=load_df_function)
+        self.config = config
+        self.this = this()
+        self.is_incremental = False
+
+# COMMAND ----------
+
+
+
+def materialize(session, df, target_relation):
+    # make sure pandas exists
+    import importlib.util
+    package_name = 'pandas'
+    if importlib.util.find_spec(package_name):
+        import pandas
+        if isinstance(df, pandas.core.frame.DataFrame):
+          session.use_database(target_relation.database)
+          session.use_schema(target_relation.schema)
+          # session.write_pandas does not have overwrite function
+          df = session.createDataFrame(df)
+    
+    df.write.mode("overwrite").save_as_table('v1_incident_management.silver_zone.document_question_extracts', table_type='transient')
+
+def main(session):
+    dbt = dbtObj(session.table)
+    df = model(dbt, session)
+    materialize(session, df, dbt.this)
+    return "OK"
+
+  
+$$
+CALL document_question_extracts__dbt_sp();
+[0m17:06:44.614253 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m17:06:48.550081 [debug] [Thread-2 (]: Snowflake adapter: Snowflake query id: 01c070e2-0107-0b61-0032-3187059487b2
+[0m17:06:48.551903 [debug] [Thread-2 (]: Snowflake adapter: Snowflake error: 100357 (P0000): Python Interpreter Error:
+Traceback (most recent call last):
+  File "_udf_code.py", line 131, in main
+    df = model(dbt, session)
+  File "_udf_code.py", line 41, in model
+    document_all_pages = v_qualify_new_documents.filter(
+  File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/telemetry.py", line 374, in wrap
+    r = func(*args, **kwargs)
+  File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/utils.py", line 1148, in call_wrapper
+    return func(*args, **kwargs)
+  File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/dataframe.py", line 2084, in filter
+    self._select_statement.filter(filter_col_expr),
+  File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/select_statement.py", line 1456, in filter
+    derive_dependent_columns(col), self.column_states
+  File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/select_statement.py", line 978, in column_states
+    self.column_states = self.from_.column_states
+  File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/select_statement.py", line 482, in column_states
+    column_attrs = self.snowflake_plan.attributes
+  File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/snowflake_plan.py", line 608, in attributes
+    attributes = self._analyze_attributes()
+  File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/snowflake_plan.py", line 426, in wrap
+    raise ne.with_traceback(tb) from None
+  File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/snowflake_plan.py", line 179, in wrap
+    return func(*args, **kwargs)
+  File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/snowflake_plan.py", line 597, in _analyze_attributes
+    return analyze_attributes(
+  File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/schema_utils.py", line 108, in analyze_attributes
+    attributes = session._get_result_attributes(sql, query_params)
+  File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/session.py", line 3048, in _get_result_attributes
+    return self._conn.get_result_attributes(query, query_params)
+  File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/server_connection.py", line 277, in get_result_attributes
+    self._run_new_describe(self._cursor, query, query_params=query_params),
+  File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/server_connection.py", line 288, in _run_new_describe
+    result_metadata = run_new_describe(cursor, query, query_params)
+  File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/schema_utils.py", line 177, in run_new_describe
+    return cursor._describe_internal(query, params=query_params)  # pyright: ignore
+  File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/connector/cursor.py", line 1116, in _describe_internal
+    self.execute(*args, **kwargs)
+  File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/connector/cursor.py", line 1071, in execute
+    Error.errorhandler_wrapper(
+  File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/connector/errors.py", line 232, in errorhandler_wrapper
+    handed_over = Error.hand_to_other_handler(
+  File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/connector/errors.py", line 287, in hand_to_other_handler
+    cursor.errorhandler(connection, cursor, error_class, error_value)
+  File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/connector/errors.py", line 165, in default_errorhandler
+    raise error_class(
+snowflake.snowpark.exceptions.SnowparkSQLException: (1304): 01c070e2-0107-0b61-0032-3187059487be: 002003 (42S02): SQL compilation error:
+Object 'V1_INCIDENT_MANAGEMENT.BRONZE_ZONE.V_QUALIFY_NEW_DOCUMENTS' does not exist or not authorized.
+ in function DOCUMENT_QUESTION_EXTRACTS__DBT_SP with handler main
+[0m17:06:48.559760 [debug] [Thread-2 (]: Database Error in model document_question_extracts (models/silver_zone/document_question_extracts.py)
+  100357 (P0000): Python Interpreter Error:
+  Traceback (most recent call last):
+    File "_udf_code.py", line 131, in main
+      df = model(dbt, session)
+    File "_udf_code.py", line 41, in model
+      document_all_pages = v_qualify_new_documents.filter(
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/telemetry.py", line 374, in wrap
+      r = func(*args, **kwargs)
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/utils.py", line 1148, in call_wrapper
+      return func(*args, **kwargs)
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/dataframe.py", line 2084, in filter
+      self._select_statement.filter(filter_col_expr),
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/select_statement.py", line 1456, in filter
+      derive_dependent_columns(col), self.column_states
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/select_statement.py", line 978, in column_states
+      self.column_states = self.from_.column_states
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/select_statement.py", line 482, in column_states
+      column_attrs = self.snowflake_plan.attributes
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/snowflake_plan.py", line 608, in attributes
+      attributes = self._analyze_attributes()
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/snowflake_plan.py", line 426, in wrap
+      raise ne.with_traceback(tb) from None
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/snowflake_plan.py", line 179, in wrap
+      return func(*args, **kwargs)
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/snowflake_plan.py", line 597, in _analyze_attributes
+      return analyze_attributes(
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/schema_utils.py", line 108, in analyze_attributes
+      attributes = session._get_result_attributes(sql, query_params)
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/session.py", line 3048, in _get_result_attributes
+      return self._conn.get_result_attributes(query, query_params)
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/server_connection.py", line 277, in get_result_attributes
+      self._run_new_describe(self._cursor, query, query_params=query_params),
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/server_connection.py", line 288, in _run_new_describe
+      result_metadata = run_new_describe(cursor, query, query_params)
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/schema_utils.py", line 177, in run_new_describe
+      return cursor._describe_internal(query, params=query_params)  # pyright: ignore
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/connector/cursor.py", line 1116, in _describe_internal
+      self.execute(*args, **kwargs)
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/connector/cursor.py", line 1071, in execute
+      Error.errorhandler_wrapper(
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/connector/errors.py", line 232, in errorhandler_wrapper
+      handed_over = Error.hand_to_other_handler(
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/connector/errors.py", line 287, in hand_to_other_handler
+      cursor.errorhandler(connection, cursor, error_class, error_value)
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/connector/errors.py", line 165, in default_errorhandler
+      raise error_class(
+  snowflake.snowpark.exceptions.SnowparkSQLException: (1304): 01c070e2-0107-0b61-0032-3187059487be: 002003 (42S02): SQL compilation error:
+  Object 'V1_INCIDENT_MANAGEMENT.BRONZE_ZONE.V_QUALIFY_NEW_DOCUMENTS' does not exist or not authorized.
+   in function DOCUMENT_QUESTION_EXTRACTS__DBT_SP with handler main
+  compiled code at /tmp/dbt/target/run/incident_management/models/silver_zone/document_question_extracts.py
+[0m17:06:48.564210 [error] [Thread-2 (]: 1 of 1 ERROR creating python incremental model silver_zone.document_question_extracts  [[31mERROR[0m in 4.10s]
+[0m17:06:48.565907 [debug] [Thread-2 (]: Finished running node model.incident_management.document_question_extracts
+[0m17:06:48.567943 [debug] [Thread-5 (]: Marking all children of 'model.incident_management.document_question_extracts' to be skipped because of status 'error'.  Reason: Database Error in model document_question_extracts (models/silver_zone/document_question_extracts.py)
+  100357 (P0000): Python Interpreter Error:
+  Traceback (most recent call last):
+    File "_udf_code.py", line 131, in main
+      df = model(dbt, session)
+    File "_udf_code.py", line 41, in model
+      document_all_pages = v_qualify_new_documents.filter(
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/telemetry.py", line 374, in wrap
+      r = func(*args, **kwargs)
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/utils.py", line 1148, in call_wrapper
+      return func(*args, **kwargs)
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/dataframe.py", line 2084, in filter
+      self._select_statement.filter(filter_col_expr),
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/select_statement.py", line 1456, in filter
+      derive_dependent_columns(col), self.column_states
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/select_statement.py", line 978, in column_states
+      self.column_states = self.from_.column_states
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/select_statement.py", line 482, in column_states
+      column_attrs = self.snowflake_plan.attributes
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/snowflake_plan.py", line 608, in attributes
+      attributes = self._analyze_attributes()
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/snowflake_plan.py", line 426, in wrap
+      raise ne.with_traceback(tb) from None
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/snowflake_plan.py", line 179, in wrap
+      return func(*args, **kwargs)
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/snowflake_plan.py", line 597, in _analyze_attributes
+      return analyze_attributes(
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/schema_utils.py", line 108, in analyze_attributes
+      attributes = session._get_result_attributes(sql, query_params)
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/session.py", line 3048, in _get_result_attributes
+      return self._conn.get_result_attributes(query, query_params)
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/server_connection.py", line 277, in get_result_attributes
+      self._run_new_describe(self._cursor, query, query_params=query_params),
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/server_connection.py", line 288, in _run_new_describe
+      result_metadata = run_new_describe(cursor, query, query_params)
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/schema_utils.py", line 177, in run_new_describe
+      return cursor._describe_internal(query, params=query_params)  # pyright: ignore
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/connector/cursor.py", line 1116, in _describe_internal
+      self.execute(*args, **kwargs)
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/connector/cursor.py", line 1071, in execute
+      Error.errorhandler_wrapper(
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/connector/errors.py", line 232, in errorhandler_wrapper
+      handed_over = Error.hand_to_other_handler(
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/connector/errors.py", line 287, in hand_to_other_handler
+      cursor.errorhandler(connection, cursor, error_class, error_value)
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/connector/errors.py", line 165, in default_errorhandler
+      raise error_class(
+  snowflake.snowpark.exceptions.SnowparkSQLException: (1304): 01c070e2-0107-0b61-0032-3187059487be: 002003 (42S02): SQL compilation error:
+  Object 'V1_INCIDENT_MANAGEMENT.BRONZE_ZONE.V_QUALIFY_NEW_DOCUMENTS' does not exist or not authorized.
+   in function DOCUMENT_QUESTION_EXTRACTS__DBT_SP with handler main
+  compiled code at /tmp/dbt/target/run/incident_management/models/silver_zone/document_question_extracts.py.
+[0m17:06:48.572267 [debug] [Dummy-1   ]: Connection 'master' was properly closed.
+[0m17:06:48.572988 [debug] [Dummy-1   ]: Connection 'model.incident_management.document_question_extracts' was properly closed.
+[0m17:06:48.573548 [info ] [Dummy-1   ]: 
+[0m17:06:48.574082 [info ] [Dummy-1   ]: Finished running 1 incremental model in 0 hours 0 minutes and 9.86 seconds (9.86s).
+[0m17:06:48.575398 [debug] [Dummy-1   ]: Command end result
+[0m17:06:48.628139 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m17:06:48.631105 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m17:06:48.639500 [debug] [Dummy-1   ]: Wrote artifact RunExecutionResult to /tmp/dbt/target/run_results.json
+[0m17:06:48.640095 [info ] [Dummy-1   ]: 
+[0m17:06:48.640785 [info ] [Dummy-1   ]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
+[0m17:06:48.641305 [info ] [Dummy-1   ]: 
+[0m17:06:48.643081 [error] [Dummy-1   ]:   Database Error in model document_question_extracts (models/silver_zone/document_question_extracts.py)
+  100357 (P0000): Python Interpreter Error:
+  Traceback (most recent call last):
+    File "_udf_code.py", line 131, in main
+      df = model(dbt, session)
+    File "_udf_code.py", line 41, in model
+      document_all_pages = v_qualify_new_documents.filter(
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/telemetry.py", line 374, in wrap
+      r = func(*args, **kwargs)
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/utils.py", line 1148, in call_wrapper
+      return func(*args, **kwargs)
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/dataframe.py", line 2084, in filter
+      self._select_statement.filter(filter_col_expr),
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/select_statement.py", line 1456, in filter
+      derive_dependent_columns(col), self.column_states
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/select_statement.py", line 978, in column_states
+      self.column_states = self.from_.column_states
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/select_statement.py", line 482, in column_states
+      column_attrs = self.snowflake_plan.attributes
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/snowflake_plan.py", line 608, in attributes
+      attributes = self._analyze_attributes()
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/snowflake_plan.py", line 426, in wrap
+      raise ne.with_traceback(tb) from None
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/snowflake_plan.py", line 179, in wrap
+      return func(*args, **kwargs)
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/snowflake_plan.py", line 597, in _analyze_attributes
+      return analyze_attributes(
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/schema_utils.py", line 108, in analyze_attributes
+      attributes = session._get_result_attributes(sql, query_params)
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/session.py", line 3048, in _get_result_attributes
+      return self._conn.get_result_attributes(query, query_params)
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/server_connection.py", line 277, in get_result_attributes
+      self._run_new_describe(self._cursor, query, query_params=query_params),
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/server_connection.py", line 288, in _run_new_describe
+      result_metadata = run_new_describe(cursor, query, query_params)
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/snowpark/_internal/analyzer/schema_utils.py", line 177, in run_new_describe
+      return cursor._describe_internal(query, params=query_params)  # pyright: ignore
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/connector/cursor.py", line 1116, in _describe_internal
+      self.execute(*args, **kwargs)
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/connector/cursor.py", line 1071, in execute
+      Error.errorhandler_wrapper(
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/connector/errors.py", line 232, in errorhandler_wrapper
+      handed_over = Error.hand_to_other_handler(
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/connector/errors.py", line 287, in hand_to_other_handler
+      cursor.errorhandler(connection, cursor, error_class, error_value)
+    File "/usr/lib/python_udf/a7c7c787771a265bc292a6f089e6505a67876d67d0afb51ca48e31dac6704bdd/lib/python3.9/site-packages/snowflake/connector/errors.py", line 165, in default_errorhandler
+      raise error_class(
+  snowflake.snowpark.exceptions.SnowparkSQLException: (1304): 01c070e2-0107-0b61-0032-3187059487be: 002003 (42S02): SQL compilation error:
+  Object 'V1_INCIDENT_MANAGEMENT.BRONZE_ZONE.V_QUALIFY_NEW_DOCUMENTS' does not exist or not authorized.
+   in function DOCUMENT_QUESTION_EXTRACTS__DBT_SP with handler main
+  compiled code at /tmp/dbt/target/run/incident_management/models/silver_zone/document_question_extracts.py
+[0m17:06:48.644057 [info ] [Dummy-1   ]: 
+[0m17:06:48.644627 [info ] [Dummy-1   ]: Done. PASS=0 WARN=0 ERROR=1 SKIP=0 TOTAL=1
+[0m17:06:48.646472 [debug] [Dummy-1   ]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 11.93693, "process_in_blocks": "0", "process_kernel_time": 1.4, "process_mem_max_rss": "442672", "process_out_blocks": "0", "process_user_time": 6.16}
+[0m17:06:48.647158 [debug] [Dummy-1   ]: Command `cli run` failed at 17:06:48.646885 after 11.94 seconds
+[0m17:06:48.647724 [debug] [Dummy-1   ]: Flushing usage events
+
+
+============================== 17:08:27.896936 | 3e13753f-fd48-493e-83d1-023ded678ab7 ==============================
+[0m17:08:27.896936 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m17:08:27.898212 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'version_check': 'True', 'debug': 'False', 'log_path': '/tmp/dbt/logs', 'fail_fast': 'False', 'profiles_dir': '/tmp/dbt/', 'use_colors': 'True', 'use_experimental_parser': 'False', 'empty': 'False', 'quiet': 'False', 'no_print': 'None', 'log_format': 'default', 'static_parser': 'True', 'introspect': 'True', 'invocation_command': 'dbt ', 'target_path': '/tmp/dbt/target/', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'send_anonymous_usage_stats': 'False'}
+[0m17:08:27.972868 [error] [Dummy-1   ]:  adapter: Invalid profile: 'user' is a required property.
+[0m17:08:28.298120 [info ] [Dummy-1   ]: Registered adapter: snowflake=1.9.2
+[0m17:08:29.116299 [debug] [Dummy-1   ]: checksum: 53ed91fada2233efb98368d1716b44ab532c83a9c293cf1890b7905d5b45fb25, vars: {}, profile: , target: dev, version: 1.9.4
+[0m17:08:29.539257 [debug] [Dummy-1   ]: Partial parsing enabled: 0 files deleted, 0 files added, 0 files changed.
+[0m17:08:29.539979 [debug] [Dummy-1   ]: Partial parsing enabled, no changes found, skipping parsing
+[0m17:08:29.761559 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m17:08:29.764737 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m17:08:29.827247 [info ] [Dummy-1   ]: Found 13 models, 32 data tests, 6 sources, 483 macros
+[0m17:08:29.831144 [info ] [Dummy-1   ]: 
+[0m17:08:29.831795 [info ] [Dummy-1   ]: Concurrency: 1 threads (target='dev')
+[0m17:08:29.832362 [info ] [Dummy-1   ]: 
+[0m17:08:29.833331 [debug] [Dummy-1   ]: Acquiring new snowflake connection 'master'
+[0m17:08:29.841028 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_v1_incident_management'
+[0m17:08:29.975875 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management"
+[0m17:08:29.976601 [debug] [ThreadPool]: On list_v1_incident_management: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management"} */
+show terse schemas in database v1_incident_management
+    limit 10000
+[0m17:08:29.977162 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:08:31.029225 [debug] [ThreadPool]: SQL status: SUCCESS 6 in 1.052 seconds
+[0m17:08:31.042657 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management"
+[0m17:08:31.043348 [debug] [ThreadPool]: On list_v1_incident_management: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management"} */
+show terse schemas in database v1_incident_management
+    limit 10000
+[0m17:08:31.043844 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:08:32.073951 [debug] [ThreadPool]: SQL status: SUCCESS 6 in 1.030 seconds
+[0m17:08:32.079398 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_v1_incident_management_semantic_views'
+[0m17:08:32.104070 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_semantic_views"
+[0m17:08:32.104733 [debug] [ThreadPool]: On list_v1_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_semantic_views"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:08:32.105244 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:08:33.138044 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 1.033 seconds
+[0m17:08:33.143984 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_semantic_views"
+[0m17:08:33.144618 [debug] [ThreadPool]: On list_v1_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_semantic_views"} */
+show objects in v1_incident_management.semantic_views
+    limit 10000
+    
+;
+[0m17:08:33.271440 [debug] [ThreadPool]: Snowflake adapter: Snowflake query id: 01c070e4-0107-09e1-0032-318705943b46
+[0m17:08:33.272122 [debug] [ThreadPool]: Snowflake adapter: Snowflake error: 002043 (02000): SQL compilation error:
+Object does not exist, or operation cannot be performed.
+[0m17:08:33.272819 [debug] [ThreadPool]: Snowflake adapter: Error running SQL: macro list_relations_without_caching
+[0m17:08:33.273364 [debug] [ThreadPool]: Snowflake adapter: Rolling back transaction.
+[0m17:08:33.274309 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_v1_incident_management_semantic_views, now list_v1_incident_management_bronze_zone)
+[0m17:08:33.284943 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_bronze_zone"
+[0m17:08:33.285523 [debug] [ThreadPool]: On list_v1_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_bronze_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:08:33.286000 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:08:34.332154 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 1.046 seconds
+[0m17:08:34.334696 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_bronze_zone"
+[0m17:08:34.335332 [debug] [ThreadPool]: On list_v1_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_bronze_zone"} */
+show objects in v1_incident_management.bronze_zone
+    limit 10000
+    
+;
+[0m17:08:34.493786 [debug] [ThreadPool]: SQL status: SUCCESS 7 in 0.158 seconds
+[0m17:08:34.496658 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_bronze_zone"
+[0m17:08:34.497302 [debug] [ThreadPool]: On list_v1_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_bronze_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:08:34.648548 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.150 seconds
+[0m17:08:34.651285 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_v1_incident_management_bronze_zone, now list_v1_incident_management_gold_zone)
+[0m17:08:34.664456 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_gold_zone"
+[0m17:08:34.665096 [debug] [ThreadPool]: On list_v1_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_gold_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:08:34.665590 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:08:36.085242 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 1.419 seconds
+[0m17:08:36.087754 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_gold_zone"
+[0m17:08:36.088387 [debug] [ThreadPool]: On list_v1_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_gold_zone"} */
+show objects in v1_incident_management.gold_zone
+    limit 10000
+    
+;
+[0m17:08:36.297352 [debug] [ThreadPool]: SQL status: SUCCESS 6 in 0.208 seconds
+[0m17:08:36.300129 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_gold_zone"
+[0m17:08:36.300755 [debug] [ThreadPool]: On list_v1_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_gold_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:08:36.433856 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.132 seconds
+[0m17:08:36.436413 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_v1_incident_management_gold_zone, now list_v1_incident_management_silver_zone)
+[0m17:08:36.449101 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_silver_zone"
+[0m17:08:36.449752 [debug] [ThreadPool]: On list_v1_incident_management_silver_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_silver_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:08:36.450287 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:08:37.422376 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.972 seconds
+[0m17:08:37.424869 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_silver_zone"
+[0m17:08:37.425470 [debug] [ThreadPool]: On list_v1_incident_management_silver_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_silver_zone"} */
+show objects in v1_incident_management.silver_zone
+    limit 10000
+    
+;
+[0m17:08:37.583464 [debug] [ThreadPool]: SQL status: SUCCESS 0 in 0.157 seconds
+[0m17:08:37.585914 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_silver_zone"
+[0m17:08:37.586526 [debug] [ThreadPool]: On list_v1_incident_management_silver_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_silver_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:08:37.731857 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.145 seconds
+[0m17:08:37.739063 [debug] [Thread-2 (]: Began running node model.incident_management.v_qualify_new_documents
+[0m17:08:37.740066 [info ] [Thread-2 (]: 1 of 2 START sql view model bronze_zone.v_qualify_new_documents ................ [RUN]
+[0m17:08:37.740851 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly list_v1_incident_management_silver_zone, now model.incident_management.v_qualify_new_documents)
+[0m17:08:37.741520 [debug] [Thread-2 (]: Began compiling node model.incident_management.v_qualify_new_documents
+[0m17:08:37.759619 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.v_qualify_new_documents"
+[0m17:08:37.760617 [debug] [Thread-2 (]: Began executing node model.incident_management.v_qualify_new_documents
+[0m17:08:37.821912 [debug] [Thread-2 (]: Writing runtime sql for node "model.incident_management.v_qualify_new_documents"
+[0m17:08:37.823930 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.v_qualify_new_documents"
+[0m17:08:37.824663 [debug] [Thread-2 (]: On model.incident_management.v_qualify_new_documents: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.v_qualify_new_documents"} */
+create or replace   view v1_incident_management.bronze_zone.v_qualify_new_documents
+  
+   as (
+    
+
+select
+   *,
+    case 
+        when contains(relative_path, 'qa') then 'question'
+        when contains(relative_path, 'full') then 'full'
+        else 'slack'
+    end as doc_type,
+    split_part(relative_path, '.', 2) as extension
+from v1_incident_management.bronze_zone.documents_stream
+WHERE METADATA$ACTION != 'DELETE'
+and relative_path is not null
+and array_contains(extension::VARIANT, ['pdf', 'docx', 'doc', 'txt', 'text', 'html', 'md', 'pptx', 'ppt', 'png', 'eml', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff', 'tif', 'webp', 'htm'] )
+and size > 0
+  );
+[0m17:08:37.825329 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m17:08:38.698256 [debug] [Thread-2 (]: Snowflake adapter: Snowflake query id: 01c070e4-0107-09e1-0032-318705943bde
+[0m17:08:38.699116 [debug] [Thread-2 (]: Snowflake adapter: Snowflake error: 002003 (42S02): SQL compilation error:
+Object 'V1_INCIDENT_MANAGEMENT.BRONZE_ZONE.DOCUMENTS_STREAM' does not exist or not authorized.
+[0m17:08:38.704858 [debug] [Thread-2 (]: Database Error in model v_qualify_new_documents (models/bronze_zone/v_qualify_new_documents.sql)
+  002003 (42S02): SQL compilation error:
+  Object 'V1_INCIDENT_MANAGEMENT.BRONZE_ZONE.DOCUMENTS_STREAM' does not exist or not authorized.
+  compiled code at /tmp/dbt/target/run/incident_management/models/bronze_zone/v_qualify_new_documents.sql
+[0m17:08:38.708403 [error] [Thread-2 (]: 1 of 2 ERROR creating sql view model bronze_zone.v_qualify_new_documents ....... [[31mERROR[0m in 0.96s]
+[0m17:08:38.709424 [debug] [Thread-2 (]: Finished running node model.incident_management.v_qualify_new_documents
+[0m17:08:38.710753 [debug] [Thread-5 (]: Marking all children of 'model.incident_management.v_qualify_new_documents' to be skipped because of status 'error'.  Reason: Database Error in model v_qualify_new_documents (models/bronze_zone/v_qualify_new_documents.sql)
+  002003 (42S02): SQL compilation error:
+  Object 'V1_INCIDENT_MANAGEMENT.BRONZE_ZONE.DOCUMENTS_STREAM' does not exist or not authorized.
+  compiled code at /tmp/dbt/target/run/incident_management/models/bronze_zone/v_qualify_new_documents.sql.
+[0m17:08:38.713238 [debug] [Thread-2 (]: Began running node model.incident_management.document_question_extracts
+[0m17:08:38.714495 [info ] [Thread-2 (]: 2 of 2 SKIP relation silver_zone.document_question_extracts .................... [[33mSKIP[0m]
+[0m17:08:38.715567 [debug] [Thread-2 (]: Finished running node model.incident_management.document_question_extracts
+[0m17:08:38.718479 [debug] [Dummy-1   ]: Connection 'master' was properly closed.
+[0m17:08:38.719030 [debug] [Dummy-1   ]: Connection 'list_v1_incident_management' was properly closed.
+[0m17:08:38.719500 [debug] [Dummy-1   ]: Connection 'model.incident_management.v_qualify_new_documents' was properly closed.
+[0m17:08:38.720013 [info ] [Dummy-1   ]: 
+[0m17:08:38.720531 [info ] [Dummy-1   ]: Finished running 1 incremental model, 1 view model in 0 hours 0 minutes and 8.89 seconds (8.89s).
+[0m17:08:38.721569 [debug] [Dummy-1   ]: Command end result
+[0m17:08:38.773296 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m17:08:38.776133 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m17:08:38.784249 [debug] [Dummy-1   ]: Wrote artifact RunExecutionResult to /tmp/dbt/target/run_results.json
+[0m17:08:38.784825 [info ] [Dummy-1   ]: 
+[0m17:08:38.785488 [info ] [Dummy-1   ]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
+[0m17:08:38.786030 [info ] [Dummy-1   ]: 
+[0m17:08:38.786779 [error] [Dummy-1   ]:   Database Error in model v_qualify_new_documents (models/bronze_zone/v_qualify_new_documents.sql)
+  002003 (42S02): SQL compilation error:
+  Object 'V1_INCIDENT_MANAGEMENT.BRONZE_ZONE.DOCUMENTS_STREAM' does not exist or not authorized.
+  compiled code at /tmp/dbt/target/run/incident_management/models/bronze_zone/v_qualify_new_documents.sql
+[0m17:08:38.787357 [info ] [Dummy-1   ]: 
+[0m17:08:38.787887 [info ] [Dummy-1   ]: Done. PASS=0 WARN=0 ERROR=1 SKIP=1 TOTAL=2
+[0m17:08:38.789789 [debug] [Dummy-1   ]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 10.997396, "process_in_blocks": "0", "process_kernel_time": 1.51, "process_mem_max_rss": "437768", "process_out_blocks": "0", "process_user_time": 6.01}
+[0m17:08:38.790488 [debug] [Dummy-1   ]: Command `cli run` failed at 17:08:38.790218 after 11.00 seconds
+[0m17:08:38.791077 [debug] [Dummy-1   ]: Flushing usage events
+
+
+============================== 17:12:28.621486 | 15e74b0f-e3c5-44c5-9c0c-29650c47df2f ==============================
+[0m17:12:28.621486 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m17:12:28.622929 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': '/tmp/dbt/', 'version_check': 'True', 'fail_fast': 'False', 'log_path': '/tmp/dbt/logs', 'debug': 'False', 'warn_error': 'None', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'False', 'log_format': 'default', 'introspect': 'True', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'invocation_command': 'dbt ', 'target_path': '/tmp/dbt/target/', 'static_parser': 'True', 'send_anonymous_usage_stats': 'False'}
+[0m17:12:28.702823 [error] [Dummy-1   ]:  adapter: Invalid profile: 'user' is a required property.
+[0m17:12:29.047256 [info ] [Dummy-1   ]: Registered adapter: snowflake=1.9.2
+[0m17:12:29.820037 [debug] [Dummy-1   ]: checksum: 53ed91fada2233efb98368d1716b44ab532c83a9c293cf1890b7905d5b45fb25, vars: {}, profile: , target: dev, version: 1.9.4
+[0m17:12:30.266907 [debug] [Dummy-1   ]: Partial parsing enabled: 0 files deleted, 0 files added, 0 files changed.
+[0m17:12:30.267712 [debug] [Dummy-1   ]: Partial parsing enabled, no changes found, skipping parsing
+[0m17:12:30.501038 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m17:12:30.504656 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m17:12:30.574152 [info ] [Dummy-1   ]: Found 13 models, 32 data tests, 6 sources, 483 macros
+[0m17:12:30.578403 [info ] [Dummy-1   ]: 
+[0m17:12:30.579164 [info ] [Dummy-1   ]: Concurrency: 1 threads (target='dev')
+[0m17:12:30.579679 [info ] [Dummy-1   ]: 
+[0m17:12:30.580618 [debug] [Dummy-1   ]: Acquiring new snowflake connection 'master'
+[0m17:12:30.588381 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_v1_incident_management'
+[0m17:12:30.735807 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management"
+[0m17:12:30.736574 [debug] [ThreadPool]: On list_v1_incident_management: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management"} */
+show terse schemas in database v1_incident_management
+    limit 10000
+[0m17:12:30.737175 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:12:31.548309 [debug] [ThreadPool]: SQL status: SUCCESS 6 in 0.811 seconds
+[0m17:12:31.562949 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management"
+[0m17:12:31.563690 [debug] [ThreadPool]: On list_v1_incident_management: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management"} */
+show terse schemas in database v1_incident_management
+    limit 10000
+[0m17:12:31.564231 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:12:32.532105 [debug] [ThreadPool]: SQL status: SUCCESS 6 in 0.968 seconds
+[0m17:12:32.537808 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_v1_incident_management_bronze_zone'
+[0m17:12:32.561721 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_bronze_zone"
+[0m17:12:32.562416 [debug] [ThreadPool]: On list_v1_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_bronze_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:12:32.562974 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:12:33.509650 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.946 seconds
+[0m17:12:33.515958 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_bronze_zone"
+[0m17:12:33.516737 [debug] [ThreadPool]: On list_v1_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_bronze_zone"} */
+show objects in v1_incident_management.bronze_zone
+    limit 10000
+    
+;
+[0m17:12:33.635775 [debug] [ThreadPool]: SQL status: SUCCESS 7 in 0.118 seconds
+[0m17:12:33.638813 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_bronze_zone"
+[0m17:12:33.639486 [debug] [ThreadPool]: On list_v1_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_bronze_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:12:33.773523 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.133 seconds
+[0m17:12:33.776403 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_v1_incident_management_bronze_zone, now list_v1_incident_management_semantic_views)
+[0m17:12:33.791772 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_semantic_views"
+[0m17:12:33.792525 [debug] [ThreadPool]: On list_v1_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_semantic_views"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:12:33.793114 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:12:34.557277 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.764 seconds
+[0m17:12:34.560067 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_semantic_views"
+[0m17:12:34.560734 [debug] [ThreadPool]: On list_v1_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_semantic_views"} */
+show objects in v1_incident_management.semantic_views
+    limit 10000
+    
+;
+[0m17:12:34.661130 [debug] [ThreadPool]: Snowflake adapter: Snowflake query id: 01c070e8-0107-0a20-0032-3187059492c2
+[0m17:12:34.661863 [debug] [ThreadPool]: Snowflake adapter: Snowflake error: 002043 (02000): SQL compilation error:
+Object does not exist, or operation cannot be performed.
+[0m17:12:34.662656 [debug] [ThreadPool]: Snowflake adapter: Error running SQL: macro list_relations_without_caching
+[0m17:12:34.663241 [debug] [ThreadPool]: Snowflake adapter: Rolling back transaction.
+[0m17:12:34.664237 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_v1_incident_management_semantic_views, now list_v1_incident_management_silver_zone)
+[0m17:12:34.675406 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_silver_zone"
+[0m17:12:34.676066 [debug] [ThreadPool]: On list_v1_incident_management_silver_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_silver_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:12:34.676576 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:12:35.463704 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.787 seconds
+[0m17:12:35.466467 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_silver_zone"
+[0m17:12:35.467160 [debug] [ThreadPool]: On list_v1_incident_management_silver_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_silver_zone"} */
+show objects in v1_incident_management.silver_zone
+    limit 10000
+    
+;
+[0m17:12:35.579909 [debug] [ThreadPool]: SQL status: SUCCESS 0 in 0.112 seconds
+[0m17:12:35.582366 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_silver_zone"
+[0m17:12:35.583010 [debug] [ThreadPool]: On list_v1_incident_management_silver_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_silver_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:12:35.678342 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.095 seconds
+[0m17:12:35.680934 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_v1_incident_management_silver_zone, now list_v1_incident_management_gold_zone)
+[0m17:12:35.693703 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_gold_zone"
+[0m17:12:35.694352 [debug] [ThreadPool]: On list_v1_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_gold_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:12:35.694882 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:12:36.508865 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.814 seconds
+[0m17:12:36.511491 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_gold_zone"
+[0m17:12:36.512141 [debug] [ThreadPool]: On list_v1_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_gold_zone"} */
+show objects in v1_incident_management.gold_zone
+    limit 10000
+    
+;
+[0m17:12:36.608816 [debug] [ThreadPool]: SQL status: SUCCESS 6 in 0.096 seconds
+[0m17:12:36.611728 [debug] [ThreadPool]: Using snowflake connection "list_v1_incident_management_gold_zone"
+[0m17:12:36.612363 [debug] [ThreadPool]: On list_v1_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_v1_incident_management_gold_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:12:36.723465 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.110 seconds
+[0m17:12:36.733358 [debug] [Thread-2 (]: Began running node model.incident_management.v_qualify_new_documents
+[0m17:12:36.734388 [info ] [Thread-2 (]: 1 of 2 START sql view model bronze_zone.v_qualify_new_documents ................ [RUN]
+[0m17:12:36.735265 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly list_v1_incident_management_gold_zone, now model.incident_management.v_qualify_new_documents)
+[0m17:12:36.735904 [debug] [Thread-2 (]: Began compiling node model.incident_management.v_qualify_new_documents
+[0m17:12:36.754869 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.v_qualify_new_documents"
+[0m17:12:36.756002 [debug] [Thread-2 (]: Began executing node model.incident_management.v_qualify_new_documents
+[0m17:12:36.820089 [debug] [Thread-2 (]: Writing runtime sql for node "model.incident_management.v_qualify_new_documents"
+[0m17:12:36.822206 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.v_qualify_new_documents"
+[0m17:12:36.823034 [debug] [Thread-2 (]: On model.incident_management.v_qualify_new_documents: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.v_qualify_new_documents"} */
+create or replace   view v1_incident_management.bronze_zone.v_qualify_new_documents
+  
+   as (
+    
+
+select
+   *,
+    case 
+        when contains(relative_path, 'qa') then 'question'
+        when contains(relative_path, 'full') then 'full'
+        else 'slack'
+    end as doc_type,
+    split_part(relative_path, '.', 2) as extension
+from v1_incident_management.bronze_zone.documents_stream
+WHERE METADATA$ACTION != 'DELETE'
+and relative_path is not null
+and array_contains(extension::VARIANT, ['pdf', 'docx', 'doc', 'txt', 'text', 'html', 'md', 'pptx', 'ppt', 'png', 'eml', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff', 'tif', 'webp', 'htm'] )
+and size > 0
+  );
+[0m17:12:36.823749 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m17:12:37.576341 [debug] [Thread-2 (]: Snowflake adapter: Snowflake query id: 01c070e8-0107-0a20-0032-318705949332
+[0m17:12:37.577154 [debug] [Thread-2 (]: Snowflake adapter: Snowflake error: 002003 (42S02): SQL compilation error:
+Object 'V1_INCIDENT_MANAGEMENT.BRONZE_ZONE.DOCUMENTS_STREAM' does not exist or not authorized.
+[0m17:12:37.583537 [debug] [Thread-2 (]: Database Error in model v_qualify_new_documents (models/bronze_zone/v_qualify_new_documents.sql)
+  002003 (42S02): SQL compilation error:
+  Object 'V1_INCIDENT_MANAGEMENT.BRONZE_ZONE.DOCUMENTS_STREAM' does not exist or not authorized.
+  compiled code at /tmp/dbt/target/run/incident_management/models/bronze_zone/v_qualify_new_documents.sql
+[0m17:12:37.587348 [error] [Thread-2 (]: 1 of 2 ERROR creating sql view model bronze_zone.v_qualify_new_documents ....... [[31mERROR[0m in 0.85s]
+[0m17:12:37.588508 [debug] [Thread-2 (]: Finished running node model.incident_management.v_qualify_new_documents
+[0m17:12:37.589929 [debug] [Thread-5 (]: Marking all children of 'model.incident_management.v_qualify_new_documents' to be skipped because of status 'error'.  Reason: Database Error in model v_qualify_new_documents (models/bronze_zone/v_qualify_new_documents.sql)
+  002003 (42S02): SQL compilation error:
+  Object 'V1_INCIDENT_MANAGEMENT.BRONZE_ZONE.DOCUMENTS_STREAM' does not exist or not authorized.
+  compiled code at /tmp/dbt/target/run/incident_management/models/bronze_zone/v_qualify_new_documents.sql.
+[0m17:12:37.592397 [debug] [Thread-2 (]: Began running node model.incident_management.document_question_extracts
+[0m17:12:37.593780 [info ] [Thread-2 (]: 2 of 2 SKIP relation silver_zone.document_question_extracts .................... [[33mSKIP[0m]
+[0m17:12:37.594908 [debug] [Thread-2 (]: Finished running node model.incident_management.document_question_extracts
+[0m17:12:37.597826 [debug] [Dummy-1   ]: Connection 'master' was properly closed.
+[0m17:12:37.598465 [debug] [Dummy-1   ]: Connection 'list_v1_incident_management' was properly closed.
+[0m17:12:37.598996 [debug] [Dummy-1   ]: Connection 'model.incident_management.v_qualify_new_documents' was properly closed.
+[0m17:12:37.599581 [info ] [Dummy-1   ]: 
+[0m17:12:37.600147 [info ] [Dummy-1   ]: Finished running 1 incremental model, 1 view model in 0 hours 0 minutes and 7.02 seconds (7.02s).
+[0m17:12:37.601198 [debug] [Dummy-1   ]: Command end result
+[0m17:12:37.652907 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m17:12:37.655821 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m17:12:37.664591 [debug] [Dummy-1   ]: Wrote artifact RunExecutionResult to /tmp/dbt/target/run_results.json
+[0m17:12:37.665178 [info ] [Dummy-1   ]: 
+[0m17:12:37.665860 [info ] [Dummy-1   ]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
+[0m17:12:37.666394 [info ] [Dummy-1   ]: 
+[0m17:12:37.667185 [error] [Dummy-1   ]:   Database Error in model v_qualify_new_documents (models/bronze_zone/v_qualify_new_documents.sql)
+  002003 (42S02): SQL compilation error:
+  Object 'V1_INCIDENT_MANAGEMENT.BRONZE_ZONE.DOCUMENTS_STREAM' does not exist or not authorized.
+  compiled code at /tmp/dbt/target/run/incident_management/models/bronze_zone/v_qualify_new_documents.sql
+[0m17:12:37.667731 [info ] [Dummy-1   ]: 
+[0m17:12:37.668264 [info ] [Dummy-1   ]: Done. PASS=0 WARN=0 ERROR=1 SKIP=1 TOTAL=2
+[0m17:12:37.670244 [debug] [Dummy-1   ]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 9.158142, "process_in_blocks": "0", "process_kernel_time": 1.42, "process_mem_max_rss": "431964", "process_out_blocks": "0", "process_user_time": 6.51}
+[0m17:12:37.671013 [debug] [Dummy-1   ]: Command `cli run` failed at 17:12:37.670692 after 9.16 seconds
+[0m17:12:37.671621 [debug] [Dummy-1   ]: Flushing usage events
+
+
+============================== 17:13:29.133918 | 6eea72b6-29dc-40ed-aa3b-b8fbb3f8e5cf ==============================
+[0m17:13:29.133918 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m17:13:29.135247 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'fail_fast': 'False', 'profiles_dir': '/tmp/dbt/', 'log_path': '/tmp/dbt/logs', 'version_check': 'True', 'debug': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'empty': 'False', 'quiet': 'False', 'no_print': 'None', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'introspect': 'True', 'log_format': 'default', 'static_parser': 'True', 'target_path': '/tmp/dbt/target/', 'invocation_command': 'dbt ', 'send_anonymous_usage_stats': 'False'}
+[0m17:13:29.211935 [error] [Dummy-1   ]:  adapter: Invalid profile: 'user' is a required property.
+[0m17:13:29.539978 [info ] [Dummy-1   ]: Registered adapter: snowflake=1.9.2
+[0m17:13:30.388431 [debug] [Dummy-1   ]: checksum: 53ed91fada2233efb98368d1716b44ab532c83a9c293cf1890b7905d5b45fb25, vars: {}, profile: , target: dev, version: 1.9.4
+[0m17:13:30.724281 [info ] [Dummy-1   ]: Unable to do partial parsing because profile has changed
+[0m17:13:33.542685 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m17:13:33.545819 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m17:13:33.611157 [info ] [Dummy-1   ]: Found 13 models, 32 data tests, 6 sources, 483 macros
+[0m17:13:33.615074 [info ] [Dummy-1   ]: 
+[0m17:13:33.615753 [info ] [Dummy-1   ]: Concurrency: 1 threads (target='dev')
+[0m17:13:33.616369 [info ] [Dummy-1   ]: 
+[0m17:13:33.617296 [debug] [Dummy-1   ]: Acquiring new snowflake connection 'master'
+[0m17:13:33.625031 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_incident_management'
+[0m17:13:33.945256 [debug] [ThreadPool]: Using snowflake connection "list_incident_management"
+[0m17:13:33.945971 [debug] [ThreadPool]: On list_incident_management: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management"} */
+show terse schemas in database incident_management
+    limit 10000
+[0m17:13:33.946539 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:13:34.962918 [debug] [ThreadPool]: SQL status: SUCCESS 7 in 1.016 seconds
+[0m17:13:34.976839 [debug] [ThreadPool]: Using snowflake connection "list_incident_management"
+[0m17:13:34.977539 [debug] [ThreadPool]: On list_incident_management: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management"} */
+show terse schemas in database incident_management
+    limit 10000
+[0m17:13:34.978072 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:13:35.828337 [debug] [ThreadPool]: SQL status: SUCCESS 7 in 0.850 seconds
+[0m17:13:35.833968 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_incident_management_semantic_views'
+[0m17:13:35.860470 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m17:13:35.861149 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:13:35.861679 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:13:36.636657 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.775 seconds
+[0m17:13:36.642687 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m17:13:36.643356 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+show objects in incident_management.semantic_views
+    limit 10000
+    
+;
+[0m17:13:36.735427 [debug] [ThreadPool]: SQL status: SUCCESS 0 in 0.091 seconds
+[0m17:13:36.738464 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m17:13:36.739152 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:13:36.845174 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.105 seconds
+[0m17:13:36.847727 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management_semantic_views, now list_incident_management_bronze_zone)
+[0m17:13:36.858581 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m17:13:36.859253 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:13:36.859770 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:13:37.683602 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.824 seconds
+[0m17:13:37.686250 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m17:13:37.686931 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+show objects in incident_management.bronze_zone
+    limit 10000
+    
+;
+[0m17:13:37.808949 [debug] [ThreadPool]: SQL status: SUCCESS 8 in 0.121 seconds
+[0m17:13:37.811973 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m17:13:37.812625 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:13:37.886608 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.073 seconds
+[0m17:13:37.889511 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management_bronze_zone, now list_incident_management_silver_zone)
+[0m17:13:37.905144 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_silver_zone"
+[0m17:13:37.905797 [debug] [ThreadPool]: On list_incident_management_silver_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_silver_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:13:37.906325 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:13:38.710634 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.804 seconds
+[0m17:13:38.713226 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_silver_zone"
+[0m17:13:38.713857 [debug] [ThreadPool]: On list_incident_management_silver_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_silver_zone"} */
+show objects in incident_management.silver_zone
+    limit 10000
+    
+;
+[0m17:13:38.814452 [debug] [ThreadPool]: SQL status: SUCCESS 2 in 0.100 seconds
+[0m17:13:38.817152 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_silver_zone"
+[0m17:13:38.817800 [debug] [ThreadPool]: On list_incident_management_silver_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_silver_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:13:38.907683 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.089 seconds
+[0m17:13:38.910295 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management_silver_zone, now list_incident_management_gold_zone)
+[0m17:13:38.921670 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m17:13:38.922343 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:13:38.922891 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:13:39.756256 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.833 seconds
+[0m17:13:39.758898 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m17:13:39.759543 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+show objects in incident_management.gold_zone
+    limit 10000
+    
+;
+[0m17:13:39.903564 [debug] [ThreadPool]: SQL status: SUCCESS 7 in 0.143 seconds
+[0m17:13:39.906415 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m17:13:39.907085 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:13:40.022414 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.115 seconds
+[0m17:13:40.032529 [debug] [Thread-2 (]: Began running node model.incident_management.v_qualify_new_documents
+[0m17:13:40.033552 [info ] [Thread-2 (]: 1 of 2 START sql view model bronze_zone.v_qualify_new_documents ................ [RUN]
+[0m17:13:40.034407 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly list_incident_management_gold_zone, now model.incident_management.v_qualify_new_documents)
+[0m17:13:40.035097 [debug] [Thread-2 (]: Began compiling node model.incident_management.v_qualify_new_documents
+[0m17:13:40.055362 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.v_qualify_new_documents"
+[0m17:13:40.056349 [debug] [Thread-2 (]: Began executing node model.incident_management.v_qualify_new_documents
+[0m17:13:40.117258 [debug] [Thread-2 (]: Writing runtime sql for node "model.incident_management.v_qualify_new_documents"
+[0m17:13:40.119325 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.v_qualify_new_documents"
+[0m17:13:40.120112 [debug] [Thread-2 (]: On model.incident_management.v_qualify_new_documents: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.v_qualify_new_documents"} */
+create or replace   view incident_management.bronze_zone.v_qualify_new_documents
+  
+   as (
+    
+
+select
+   *,
+    case 
+        when contains(relative_path, 'qa') then 'question'
+        when contains(relative_path, 'full') then 'full'
+        else 'slack'
+    end as doc_type,
+    split_part(relative_path, '.', 2) as extension
+from incident_management.bronze_zone.documents_stream
+WHERE METADATA$ACTION != 'DELETE'
+and relative_path is not null
+and array_contains(extension::VARIANT, ['pdf', 'docx', 'doc', 'txt', 'text', 'html', 'md', 'pptx', 'ppt', 'png', 'eml', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff', 'tif', 'webp', 'htm'] )
+and size > 0
+  );
+[0m17:13:40.120838 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m17:13:41.462002 [debug] [Thread-2 (]: SQL status: SUCCESS 1 in 1.341 seconds
+[0m17:13:41.499061 [info ] [Thread-2 (]: 1 of 2 OK created sql view model bronze_zone.v_qualify_new_documents ........... [[32mSUCCESS 1[0m in 1.46s]
+[0m17:13:41.500179 [debug] [Thread-2 (]: Finished running node model.incident_management.v_qualify_new_documents
+[0m17:13:41.502571 [debug] [Thread-2 (]: Began running node model.incident_management.document_question_extracts
+[0m17:13:41.504243 [info ] [Thread-2 (]: 2 of 2 START python incremental model silver_zone.document_question_extracts ... [RUN]
+[0m17:13:41.505147 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly model.incident_management.v_qualify_new_documents, now model.incident_management.document_question_extracts)
+[0m17:13:41.506159 [debug] [Thread-2 (]: Began compiling node model.incident_management.document_question_extracts
+[0m17:13:41.546247 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.document_question_extracts"
+[0m17:13:41.547735 [debug] [Thread-2 (]: Began executing node model.incident_management.document_question_extracts
+[0m17:13:41.635810 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.document_question_extracts"
+[0m17:13:41.638014 [debug] [Thread-2 (]: On model.incident_management.document_question_extracts: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.document_question_extracts"} */
+WITH document_question_extracts__dbt_sp AS PROCEDURE ()
+
+RETURNS STRING
+LANGUAGE PYTHON
+RUNTIME_VERSION = '3.9'
+PACKAGES = ('snowflake-snowpark-python')
+
+
+
+HANDLER = 'main'
+EXECUTE AS CALLER
+AS
+$$
+
+
+
+  
+    
+    
+import snowflake.snowpark.functions as F
+from snowflake.snowpark import Session
+
+    
+def model(dbt, session: Session):
+
+    dbt.config(
+        materialized='incremental',
+        incremental_strategy='append',
+        description='Table to store question extracts from documents'
+    )
+    
+    docs_stage = dbt.config.get("docs_stage_path")
+
+    all_meta = dbt.config.get("meta")
+    
+    reponse_schema = {
+        'schema': {
+            'type': 'object',
+            'properties': {}
+        }
+    }
+    
+    for key in all_meta.keys():
+        if all_meta[key]['enabled']:
+            for prop in all_meta[key]['schema']['properties']:
+                reponse_schema['schema']['properties'][prop] = all_meta[key]['schema']['properties'][prop]
+
+
+    # Get the upstream model
+    v_qualify_new_documents = dbt.ref('v_qualify_new_documents')
+    
+    # Filter for question analysis type
+    document_all_pages = v_qualify_new_documents.filter(
+        F.lower(F.col('doc_type')) == 'question'
+    ).drop(
+        "METADATA$ACTION",
+        "METADATA$ISUPDATE",
+        "METADATA$ROW_ID"
+    )
+    
+    document_all_pages = document_all_pages.with_column(
+        'question_extracts_json',
+        F.call_builtin(
+            'AI_EXTRACT',
+            F.call_builtin('TO_FILE', F.lit(f'{docs_stage}'), F.col('relative_path')),
+            reponse_schema
+        )
+    ) 
+    
+    return document_all_pages
+
+
+# This part is user provided model code
+# you will need to copy the next section to run the code
+# COMMAND ----------
+# this part is dbt logic for get ref work, do not modify
+
+def ref(*args, **kwargs):
+    refs = {"v_qualify_new_documents": "incident_management.bronze_zone.v_qualify_new_documents"}
+    key = '.'.join(args)
+    version = kwargs.get("v") or kwargs.get("version")
+    if version:
+        key += f".v{version}"
+    dbt_load_df_function = kwargs.get("dbt_load_df_function")
+    return dbt_load_df_function(refs[key])
+
+
+def source(*args, dbt_load_df_function):
+    sources = {}
+    key = '.'.join(args)
+    return dbt_load_df_function(sources[key])
+
+
+config_dict = {'docs_stage_path': '@INCIDENT_MANAGEMENT.bronze_zone.DOCUMENTS', 'meta': {'quaterly_review_metrics': {'enabled': True, 'schema': {'type': 'object', 'properties': {'quarter': {'description': 'The year and quarter of the review metrics', 'type': 'string'}, 'overall_uptime': {'description': 'The actual recorded overall uptime of all services', 'type': 'string'}, 'critical_services_uptime': {'description': 'What was the actual recorded  uptime of critical services', 'type': 'string'}, 'sev_1_incidents': {'description': 'What were the actual recorded string of Sev-1 incidents', 'type': 'string'}, 'sev_2_incidents': {'description': 'What were the actual recorded string of Sev-2 incidents', 'type': 'string'}, 'mtta': {'description': 'What was the actual recorded mean time to acknowledge an incident', 'type': 'string'}, 'mttr': {'description': 'What was the actual recorded mean time to recover from an incident', 'type': 'string'}, 'change_failure_rate': {'description': 'What was the actual recorded change failure rate', 'type': 'string'}, 'slo_breaches': {'description': 'What was the actual recorded string of SLO breaches', 'type': 'string'}, 'error_budget_consumed': {'description': 'What was the actual recorded error budget consumed', 'type': 'string'}, 'service_downtime': {'description': 'What was the actual recorded service downtime', 'type': 'string'}, 'unplanned_outage_hours': {'description': 'What was the actual recorded unplanned outage hours', 'type': 'string'}, 'planned_maintenance_hours': {'description': 'What was the actual recorded planned maintenance hours', 'type': 'string'}, 'sev_1_outage_minutes': {'description': 'What was the actual recorded Sev-1 outage minutes', 'type': 'string'}, 'sev_2_outage_minutes': {'description': 'What was the actual recorded Sev-2 outage minutes', 'type': 'string'}, 'longest_single_outage': {'description': 'What was the actual recorded longest single outage', 'type': 'string'}, 'mtbft': {'description': 'What was the actual recorded mean time between failures', 'type': 'string'}, 'end_of_quarter_it_headcount': {'description': 'What was the actual recorded end of quarter IT headcount', 'type': 'string'}, 'engineering_headcount': {'description': 'What was the actual recorded engineering headcount', 'type': 'string'}, 'on_call_coverage': {'description': 'What was the actual recorded on call coverage', 'type': 'string'}, 'project_work_allocation': {'description': 'What was the actual recorded project work allocation', 'type': 'string'}, 'bau_operations_allocation': {'description': 'What was the actual recorded BAU/Operations allocation', 'type': 'string'}, 'on_call_hours_per_engineer': {'description': 'What was the actual recorded on call hours per engineer', 'type': 'string'}, 'after_hours_incidents_handled': {'description': 'What was the actual recorded after hours incidents handled', 'type': 'string'}, 'training_hours_per_fte': {'description': 'What was the actual recorded training hours per FTE', 'type': 'string'}, 'certifications_earned': {'description': 'What was the actual recorded certifications earned', 'type': 'string'}, 'attrition': {'description': 'What was the actual recorded attrition', 'type': 'string'}, 'atlassian_spend': {'description': 'What was the actual spend on Atlassian licenses', 'type': 'string'}, 'github_spend': {'description': 'What was the actual spend on GitHub licenses', 'type': 'string'}, 'slack_spend': {'description': 'What was the actual spend on Slack licenses', 'type': 'string'}, 'pagerduty_spend': {'description': 'What was the actual spend on PagerDuty licenses', 'type': 'string'}, 'datadog_spend': {'description': 'What was the actual spend on Datadog licenses', 'type': 'string'}, 'sentry_spend': {'description': 'What was the actual spend on Sentry licenses', 'type': 'string'}, 'okta_spend': {'description': 'What was the actual spend on Okta licenses', 'type': 'string'}, 'aws_spend': {'description': 'What was the actual spend on AWS licenses', 'type': 'string'}, 'total_spend': {'description': 'What was the actual spend on total licenses', 'type': 'string'}}}}}}
+
+
+class config:
+    def __init__(self, *args, **kwargs):
+        pass
+
+    @staticmethod
+    def get(key, default=None):
+        return config_dict.get(key, default)
+
+class this:
+    """dbt.this() or dbt.this.identifier"""
+    database = "incident_management"
+    schema = "silver_zone"
+    identifier = "document_question_extracts"
+    
+    def __repr__(self):
+        return 'incident_management.silver_zone.document_question_extracts'
+
+
+class dbtObj:
+    def __init__(self, load_df_function) -> None:
+        self.source = lambda *args: source(*args, dbt_load_df_function=load_df_function)
+        self.ref = lambda *args, **kwargs: ref(*args, **kwargs, dbt_load_df_function=load_df_function)
+        self.config = config
+        self.this = this()
+        self.is_incremental = True
+
+# COMMAND ----------
+
+
+
+def materialize(session, df, target_relation):
+    # make sure pandas exists
+    import importlib.util
+    package_name = 'pandas'
+    if importlib.util.find_spec(package_name):
+        import pandas
+        if isinstance(df, pandas.core.frame.DataFrame):
+          session.use_database(target_relation.database)
+          session.use_schema(target_relation.schema)
+          # session.write_pandas does not have overwrite function
+          df = session.createDataFrame(df)
+    
+    df.write.mode("overwrite").save_as_table('incident_management.silver_zone.document_question_extracts__dbt_tmp', table_type='temporary')
+
+def main(session):
+    dbt = dbtObj(session.table)
+    df = model(dbt, session)
+    materialize(session, df, dbt.this)
+    return "OK"
+
+  
+$$
+CALL document_question_extracts__dbt_sp();
+[0m17:13:41.639790 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m17:13:46.932250 [debug] [Thread-2 (]: SQL status: SUCCESS 1 in 5.292 seconds
+[0m17:13:46.953601 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.document_question_extracts"
+[0m17:13:46.954814 [debug] [Thread-2 (]: On model.incident_management.document_question_extracts: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.document_question_extracts"} */
+describe table incident_management.silver_zone.document_question_extracts__dbt_tmp
+[0m17:13:47.059954 [debug] [Thread-2 (]: SQL status: SUCCESS 9 in 0.104 seconds
+[0m17:13:47.073377 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.document_question_extracts"
+[0m17:13:47.074540 [debug] [Thread-2 (]: On model.incident_management.document_question_extracts: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.document_question_extracts"} */
+describe table incident_management.silver_zone.document_question_extracts
+[0m17:13:47.146525 [debug] [Thread-2 (]: SQL status: SUCCESS 9 in 0.071 seconds
+[0m17:13:47.167694 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.document_question_extracts"
+[0m17:13:47.168873 [debug] [Thread-2 (]: On model.incident_management.document_question_extracts: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.document_question_extracts"} */
+describe table "INCIDENT_MANAGEMENT"."SILVER_ZONE"."DOCUMENT_QUESTION_EXTRACTS"
+[0m17:13:47.235851 [debug] [Thread-2 (]: SQL status: SUCCESS 9 in 0.066 seconds
+[0m17:13:47.255229 [debug] [Thread-2 (]: Writing runtime sql for node "model.incident_management.document_question_extracts"
+[0m17:13:47.257276 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.document_question_extracts"
+[0m17:13:47.258375 [debug] [Thread-2 (]: On model.incident_management.document_question_extracts: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.document_question_extracts"} */
+BEGIN
+[0m17:13:47.394254 [debug] [Thread-2 (]: SQL status: SUCCESS 1 in 0.135 seconds
+[0m17:13:47.395510 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.document_question_extracts"
+[0m17:13:47.396622 [debug] [Thread-2 (]: On model.incident_management.document_question_extracts: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.document_question_extracts"} */
+insert into incident_management.silver_zone.document_question_extracts ("RELATIVE_PATH", "SIZE", "LAST_MODIFIED", "MD5", "ETAG", "FILE_URL", "DOC_TYPE", "EXTENSION", "QUESTION_EXTRACTS_JSON")
+    (
+        select "RELATIVE_PATH", "SIZE", "LAST_MODIFIED", "MD5", "ETAG", "FILE_URL", "DOC_TYPE", "EXTENSION", "QUESTION_EXTRACTS_JSON"
+        from incident_management.silver_zone.document_question_extracts__dbt_tmp
+    )
+
+;
+[0m17:13:47.631253 [debug] [Thread-2 (]: SQL status: SUCCESS 0 in 0.233 seconds
+[0m17:13:47.632622 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.document_question_extracts"
+[0m17:13:47.633738 [debug] [Thread-2 (]: On model.incident_management.document_question_extracts: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.document_question_extracts"} */
+COMMIT
+[0m17:13:47.831288 [debug] [Thread-2 (]: SQL status: SUCCESS 1 in 0.196 seconds
+[0m17:13:47.852774 [debug] [Thread-2 (]: Applying DROP to: incident_management.silver_zone.document_question_extracts__dbt_tmp
+[0m17:13:47.876925 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.document_question_extracts"
+[0m17:13:47.878203 [debug] [Thread-2 (]: On model.incident_management.document_question_extracts: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.document_question_extracts"} */
+drop table if exists incident_management.silver_zone.document_question_extracts__dbt_tmp cascade
+[0m17:13:48.075704 [debug] [Thread-2 (]: SQL status: SUCCESS 1 in 0.196 seconds
+[0m17:13:48.082913 [info ] [Thread-2 (]: 2 of 2 OK created python incremental model silver_zone.document_question_extracts  [[32mSUCCESS 0[0m in 6.58s]
+[0m17:13:48.084301 [debug] [Thread-2 (]: Finished running node model.incident_management.document_question_extracts
+[0m17:13:48.087238 [debug] [Dummy-1   ]: Connection 'master' was properly closed.
+[0m17:13:48.087938 [debug] [Dummy-1   ]: Connection 'list_incident_management' was properly closed.
+[0m17:13:48.088461 [debug] [Dummy-1   ]: Connection 'model.incident_management.document_question_extracts' was properly closed.
+[0m17:13:48.089060 [info ] [Dummy-1   ]: 
+[0m17:13:48.089619 [info ] [Dummy-1   ]: Finished running 1 incremental model, 1 view model in 0 hours 0 minutes and 14.47 seconds (14.47s).
+[0m17:13:48.090911 [debug] [Dummy-1   ]: Command end result
+[0m17:13:48.141531 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m17:13:48.144638 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m17:13:48.152797 [debug] [Dummy-1   ]: Wrote artifact RunExecutionResult to /tmp/dbt/target/run_results.json
+[0m17:13:48.153383 [info ] [Dummy-1   ]: 
+[0m17:13:48.154119 [info ] [Dummy-1   ]: [32mCompleted successfully[0m
+[0m17:13:48.154682 [info ] [Dummy-1   ]: 
+[0m17:13:48.155250 [info ] [Dummy-1   ]: Done. PASS=2 WARN=0 ERROR=0 SKIP=0 TOTAL=2
+[0m17:13:48.157157 [debug] [Dummy-1   ]: Resource report: {"command_name": "run", "command_success": true, "command_wall_clock_time": 19.127577, "process_in_blocks": "0", "process_kernel_time": 1.42, "process_mem_max_rss": "482144", "process_out_blocks": "0", "process_user_time": 9.25}
+[0m17:13:48.157899 [debug] [Dummy-1   ]: Command `cli run` succeeded at 17:13:48.157611 after 19.13 seconds
+[0m17:13:48.158547 [debug] [Dummy-1   ]: Flushing usage events
+
+
+============================== 17:16:16.828213 | ee0d49e9-ee8c-4641-a72f-1065a3207a71 ==============================
+[0m17:16:16.828213 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m17:16:16.829607 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': '/tmp/dbt/', 'fail_fast': 'False', 'version_check': 'True', 'log_path': '/tmp/dbt/logs', 'debug': 'False', 'warn_error': 'None', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'False', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'static_parser': 'True', 'introspect': 'True', 'invocation_command': 'dbt ', 'target_path': '/tmp/dbt/target/', 'log_format': 'default', 'send_anonymous_usage_stats': 'False'}
+[0m17:16:16.906691 [error] [Dummy-1   ]:  adapter: Invalid profile: 'user' is a required property.
+[0m17:16:17.238699 [info ] [Dummy-1   ]: Registered adapter: snowflake=1.9.2
+[0m17:16:18.045159 [debug] [Dummy-1   ]: checksum: 53ed91fada2233efb98368d1716b44ab532c83a9c293cf1890b7905d5b45fb25, vars: {}, profile: , target: dev, version: 1.9.4
+[0m17:16:18.483880 [debug] [Dummy-1   ]: Partial parsing enabled: 0 files deleted, 0 files added, 0 files changed.
+[0m17:16:18.484574 [debug] [Dummy-1   ]: Partial parsing enabled, no changes found, skipping parsing
+[0m17:16:18.711617 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m17:16:18.714896 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m17:16:18.779614 [info ] [Dummy-1   ]: Found 13 models, 32 data tests, 6 sources, 483 macros
+[0m17:16:18.783635 [info ] [Dummy-1   ]: 
+[0m17:16:18.784399 [info ] [Dummy-1   ]: Concurrency: 1 threads (target='dev')
+[0m17:16:18.785031 [info ] [Dummy-1   ]: 
+[0m17:16:18.786018 [debug] [Dummy-1   ]: Acquiring new snowflake connection 'master'
+[0m17:16:18.788407 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_incident_management'
+[0m17:16:18.937522 [debug] [ThreadPool]: Using snowflake connection "list_incident_management"
+[0m17:16:18.938266 [debug] [ThreadPool]: On list_incident_management: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management"} */
+show terse schemas in database incident_management
+    limit 10000
+[0m17:16:18.939135 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:16:20.011567 [debug] [ThreadPool]: SQL status: SUCCESS 7 in 1.072 seconds
+[0m17:16:20.023383 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management, now list_incident_management_semantic_views)
+[0m17:16:20.046391 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m17:16:20.047124 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:16:20.047662 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:16:21.064596 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 1.017 seconds
+[0m17:16:21.070659 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m17:16:21.071319 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+show objects in incident_management.semantic_views
+    limit 10000
+    
+;
+[0m17:16:21.220025 [debug] [ThreadPool]: SQL status: SUCCESS 0 in 0.148 seconds
+[0m17:16:21.222597 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m17:16:21.223249 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:16:21.357141 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.133 seconds
+[0m17:16:21.359738 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management_semantic_views, now list_incident_management_gold_zone)
+[0m17:16:21.370739 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m17:16:21.371515 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:16:21.372082 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:16:22.320720 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.948 seconds
+[0m17:16:22.323427 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m17:16:22.324088 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+show objects in incident_management.gold_zone
+    limit 10000
+    
+;
+[0m17:16:22.484688 [debug] [ThreadPool]: SQL status: SUCCESS 7 in 0.160 seconds
+[0m17:16:22.487683 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m17:16:22.488409 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:16:22.649178 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.160 seconds
+[0m17:16:22.651956 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management_gold_zone, now list_incident_management_silver_zone)
+[0m17:16:22.665426 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_silver_zone"
+[0m17:16:22.666106 [debug] [ThreadPool]: On list_incident_management_silver_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_silver_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:16:22.666709 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:16:23.784206 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 1.117 seconds
+[0m17:16:23.786874 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_silver_zone"
+[0m17:16:23.787533 [debug] [ThreadPool]: On list_incident_management_silver_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_silver_zone"} */
+show objects in incident_management.silver_zone
+    limit 10000
+    
+;
+[0m17:16:23.945434 [debug] [ThreadPool]: SQL status: SUCCESS 2 in 0.157 seconds
+[0m17:16:23.948191 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_silver_zone"
+[0m17:16:23.948987 [debug] [ThreadPool]: On list_incident_management_silver_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_silver_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:16:24.081003 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.131 seconds
+[0m17:16:24.083666 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management_silver_zone, now list_incident_management_bronze_zone)
+[0m17:16:24.095539 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m17:16:24.096238 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:16:24.096814 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:16:25.068718 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.972 seconds
+[0m17:16:25.071434 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m17:16:25.072079 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+show objects in incident_management.bronze_zone
+    limit 10000
+    
+;
+[0m17:16:25.237477 [debug] [ThreadPool]: SQL status: SUCCESS 8 in 0.165 seconds
+[0m17:16:25.240545 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m17:16:25.241200 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:16:25.436616 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.195 seconds
+[0m17:16:25.447972 [debug] [Thread-2 (]: Began running node model.incident_management.document_question_extracts
+[0m17:16:25.449464 [info ] [Thread-2 (]: 1 of 1 START python incremental model silver_zone.document_question_extracts ... [RUN]
+[0m17:16:25.450379 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly list_incident_management_bronze_zone, now model.incident_management.document_question_extracts)
+[0m17:16:25.451387 [debug] [Thread-2 (]: Began compiling node model.incident_management.document_question_extracts
+[0m17:16:25.501423 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.document_question_extracts"
+[0m17:16:25.502898 [debug] [Thread-2 (]: Began executing node model.incident_management.document_question_extracts
+[0m17:16:25.600583 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.document_question_extracts"
+[0m17:16:25.602716 [debug] [Thread-2 (]: On model.incident_management.document_question_extracts: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.document_question_extracts"} */
+WITH document_question_extracts__dbt_sp AS PROCEDURE ()
+
+RETURNS STRING
+LANGUAGE PYTHON
+RUNTIME_VERSION = '3.9'
+PACKAGES = ('snowflake-snowpark-python')
+
+
+
+HANDLER = 'main'
+EXECUTE AS CALLER
+AS
+$$
+
+
+
+  
+    
+    
+import snowflake.snowpark.functions as F
+from snowflake.snowpark import Session
+
+    
+def model(dbt, session: Session):
+
+    dbt.config(
+        materialized='incremental',
+        incremental_strategy='append',
+        description='Table to store question extracts from documents'
+    )
+    
+    docs_stage = dbt.config.get("docs_stage_path")
+
+    all_meta = dbt.config.get("meta")
+    
+    reponse_schema = {
+        'schema': {
+            'type': 'object',
+            'properties': {}
+        }
+    }
+    
+    for key in all_meta.keys():
+        if all_meta[key]['enabled']:
+            for prop in all_meta[key]['schema']['properties']:
+                reponse_schema['schema']['properties'][prop] = all_meta[key]['schema']['properties'][prop]
+
+
+    # Get the upstream model
+    v_qualify_new_documents = dbt.ref('v_qualify_new_documents')
+    
+    # Filter for question analysis type
+    document_all_pages = v_qualify_new_documents.filter(
+        F.lower(F.col('doc_type')) == 'question'
+    ).drop(
+        "METADATA$ACTION",
+        "METADATA$ISUPDATE",
+        "METADATA$ROW_ID"
+    )
+    
+    document_all_pages = document_all_pages.with_column(
+        'question_extracts_json',
+        F.call_builtin(
+            'AI_EXTRACT',
+            F.call_builtin('TO_FILE', F.lit(f'{docs_stage}'), F.col('relative_path')),
+            reponse_schema
+        )
+    ) 
+    
+    return document_all_pages
+
+
+# This part is user provided model code
+# you will need to copy the next section to run the code
+# COMMAND ----------
+# this part is dbt logic for get ref work, do not modify
+
+def ref(*args, **kwargs):
+    refs = {"v_qualify_new_documents": "incident_management.bronze_zone.v_qualify_new_documents"}
+    key = '.'.join(args)
+    version = kwargs.get("v") or kwargs.get("version")
+    if version:
+        key += f".v{version}"
+    dbt_load_df_function = kwargs.get("dbt_load_df_function")
+    return dbt_load_df_function(refs[key])
+
+
+def source(*args, dbt_load_df_function):
+    sources = {}
+    key = '.'.join(args)
+    return dbt_load_df_function(sources[key])
+
+
+config_dict = {'docs_stage_path': '@INCIDENT_MANAGEMENT.bronze_zone.DOCUMENTS', 'meta': {'quaterly_review_metrics': {'enabled': True, 'schema': {'type': 'object', 'properties': {'quarter': {'description': 'The year and quarter of the review metrics', 'type': 'string'}, 'overall_uptime': {'description': 'The actual recorded overall uptime of all services', 'type': 'string'}, 'critical_services_uptime': {'description': 'What was the actual recorded  uptime of critical services', 'type': 'string'}, 'sev_1_incidents': {'description': 'What were the actual recorded string of Sev-1 incidents', 'type': 'string'}, 'sev_2_incidents': {'description': 'What were the actual recorded string of Sev-2 incidents', 'type': 'string'}, 'mtta': {'description': 'What was the actual recorded mean time to acknowledge an incident', 'type': 'string'}, 'mttr': {'description': 'What was the actual recorded mean time to recover from an incident', 'type': 'string'}, 'change_failure_rate': {'description': 'What was the actual recorded change failure rate', 'type': 'string'}, 'slo_breaches': {'description': 'What was the actual recorded string of SLO breaches', 'type': 'string'}, 'error_budget_consumed': {'description': 'What was the actual recorded error budget consumed', 'type': 'string'}, 'service_downtime': {'description': 'What was the actual recorded service downtime', 'type': 'string'}, 'unplanned_outage_hours': {'description': 'What was the actual recorded unplanned outage hours', 'type': 'string'}, 'planned_maintenance_hours': {'description': 'What was the actual recorded planned maintenance hours', 'type': 'string'}, 'sev_1_outage_minutes': {'description': 'What was the actual recorded Sev-1 outage minutes', 'type': 'string'}, 'sev_2_outage_minutes': {'description': 'What was the actual recorded Sev-2 outage minutes', 'type': 'string'}, 'longest_single_outage': {'description': 'What was the actual recorded longest single outage', 'type': 'string'}, 'mtbft': {'description': 'What was the actual recorded mean time between failures', 'type': 'string'}, 'end_of_quarter_it_headcount': {'description': 'What was the actual recorded end of quarter IT headcount', 'type': 'string'}, 'engineering_headcount': {'description': 'What was the actual recorded engineering headcount', 'type': 'string'}, 'on_call_coverage': {'description': 'What was the actual recorded on call coverage', 'type': 'string'}, 'project_work_allocation': {'description': 'What was the actual recorded project work allocation', 'type': 'string'}, 'bau_operations_allocation': {'description': 'What was the actual recorded BAU/Operations allocation', 'type': 'string'}, 'on_call_hours_per_engineer': {'description': 'What was the actual recorded on call hours per engineer', 'type': 'string'}, 'after_hours_incidents_handled': {'description': 'What was the actual recorded after hours incidents handled', 'type': 'string'}, 'training_hours_per_fte': {'description': 'What was the actual recorded training hours per FTE', 'type': 'string'}, 'certifications_earned': {'description': 'What was the actual recorded certifications earned', 'type': 'string'}, 'attrition': {'description': 'What was the actual recorded attrition', 'type': 'string'}, 'atlassian_spend': {'description': 'What was the actual spend on Atlassian licenses', 'type': 'string'}, 'github_spend': {'description': 'What was the actual spend on GitHub licenses', 'type': 'string'}, 'slack_spend': {'description': 'What was the actual spend on Slack licenses', 'type': 'string'}, 'pagerduty_spend': {'description': 'What was the actual spend on PagerDuty licenses', 'type': 'string'}, 'datadog_spend': {'description': 'What was the actual spend on Datadog licenses', 'type': 'string'}, 'sentry_spend': {'description': 'What was the actual spend on Sentry licenses', 'type': 'string'}, 'okta_spend': {'description': 'What was the actual spend on Okta licenses', 'type': 'string'}, 'aws_spend': {'description': 'What was the actual spend on AWS licenses', 'type': 'string'}, 'total_spend': {'description': 'What was the actual spend on total licenses', 'type': 'string'}}}}}}
+
+
+class config:
+    def __init__(self, *args, **kwargs):
+        pass
+
+    @staticmethod
+    def get(key, default=None):
+        return config_dict.get(key, default)
+
+class this:
+    """dbt.this() or dbt.this.identifier"""
+    database = "incident_management"
+    schema = "silver_zone"
+    identifier = "document_question_extracts"
+    
+    def __repr__(self):
+        return 'incident_management.silver_zone.document_question_extracts'
+
+
+class dbtObj:
+    def __init__(self, load_df_function) -> None:
+        self.source = lambda *args: source(*args, dbt_load_df_function=load_df_function)
+        self.ref = lambda *args, **kwargs: ref(*args, **kwargs, dbt_load_df_function=load_df_function)
+        self.config = config
+        self.this = this()
+        self.is_incremental = True
+
+# COMMAND ----------
+
+
+
+def materialize(session, df, target_relation):
+    # make sure pandas exists
+    import importlib.util
+    package_name = 'pandas'
+    if importlib.util.find_spec(package_name):
+        import pandas
+        if isinstance(df, pandas.core.frame.DataFrame):
+          session.use_database(target_relation.database)
+          session.use_schema(target_relation.schema)
+          # session.write_pandas does not have overwrite function
+          df = session.createDataFrame(df)
+    
+    df.write.mode("overwrite").save_as_table('incident_management.silver_zone.document_question_extracts__dbt_tmp', table_type='temporary')
+
+def main(session):
+    dbt = dbtObj(session.table)
+    df = model(dbt, session)
+    materialize(session, df, dbt.this)
+    return "OK"
+
+  
+$$
+CALL document_question_extracts__dbt_sp();
+[0m17:16:25.604353 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m17:16:41.672342 [debug] [Thread-2 (]: SQL status: SUCCESS 1 in 16.068 seconds
+[0m17:16:41.696084 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.document_question_extracts"
+[0m17:16:41.697260 [debug] [Thread-2 (]: On model.incident_management.document_question_extracts: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.document_question_extracts"} */
+describe table incident_management.silver_zone.document_question_extracts__dbt_tmp
+[0m17:16:41.924608 [debug] [Thread-2 (]: SQL status: SUCCESS 9 in 0.226 seconds
+[0m17:16:41.938086 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.document_question_extracts"
+[0m17:16:41.939376 [debug] [Thread-2 (]: On model.incident_management.document_question_extracts: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.document_question_extracts"} */
+describe table incident_management.silver_zone.document_question_extracts
+[0m17:16:42.180681 [debug] [Thread-2 (]: SQL status: SUCCESS 9 in 0.240 seconds
+[0m17:16:42.201215 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.document_question_extracts"
+[0m17:16:42.202342 [debug] [Thread-2 (]: On model.incident_management.document_question_extracts: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.document_question_extracts"} */
+describe table "INCIDENT_MANAGEMENT"."SILVER_ZONE"."DOCUMENT_QUESTION_EXTRACTS"
+[0m17:16:42.415222 [debug] [Thread-2 (]: SQL status: SUCCESS 9 in 0.212 seconds
+[0m17:16:42.435301 [debug] [Thread-2 (]: Writing runtime sql for node "model.incident_management.document_question_extracts"
+[0m17:16:42.437393 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.document_question_extracts"
+[0m17:16:42.438638 [debug] [Thread-2 (]: On model.incident_management.document_question_extracts: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.document_question_extracts"} */
+BEGIN
+[0m17:16:42.665849 [debug] [Thread-2 (]: SQL status: SUCCESS 1 in 0.226 seconds
+[0m17:16:42.667101 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.document_question_extracts"
+[0m17:16:42.668203 [debug] [Thread-2 (]: On model.incident_management.document_question_extracts: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.document_question_extracts"} */
+insert into incident_management.silver_zone.document_question_extracts ("RELATIVE_PATH", "SIZE", "LAST_MODIFIED", "MD5", "ETAG", "FILE_URL", "DOC_TYPE", "EXTENSION", "QUESTION_EXTRACTS_JSON")
+    (
+        select "RELATIVE_PATH", "SIZE", "LAST_MODIFIED", "MD5", "ETAG", "FILE_URL", "DOC_TYPE", "EXTENSION", "QUESTION_EXTRACTS_JSON"
+        from incident_management.silver_zone.document_question_extracts__dbt_tmp
+    )
+
+;
+[0m17:16:43.767913 [debug] [Thread-2 (]: SQL status: SUCCESS 1 in 1.098 seconds
+[0m17:16:43.769340 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.document_question_extracts"
+[0m17:16:43.770421 [debug] [Thread-2 (]: On model.incident_management.document_question_extracts: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.document_question_extracts"} */
+COMMIT
+[0m17:16:44.503093 [debug] [Thread-2 (]: SQL status: SUCCESS 1 in 0.731 seconds
+[0m17:16:44.524694 [debug] [Thread-2 (]: Applying DROP to: incident_management.silver_zone.document_question_extracts__dbt_tmp
+[0m17:16:44.548419 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.document_question_extracts"
+[0m17:16:44.549666 [debug] [Thread-2 (]: On model.incident_management.document_question_extracts: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.document_question_extracts"} */
+drop table if exists incident_management.silver_zone.document_question_extracts__dbt_tmp cascade
+[0m17:16:44.806010 [debug] [Thread-2 (]: SQL status: SUCCESS 1 in 0.255 seconds
+[0m17:16:44.838775 [info ] [Thread-2 (]: 1 of 1 OK created python incremental model silver_zone.document_question_extracts  [[32mSUCCESS 1[0m in 19.39s]
+[0m17:16:44.840212 [debug] [Thread-2 (]: Finished running node model.incident_management.document_question_extracts
+[0m17:16:44.843590 [debug] [Dummy-1   ]: Connection 'master' was properly closed.
+[0m17:16:44.844200 [debug] [Dummy-1   ]: Connection 'model.incident_management.document_question_extracts' was properly closed.
+[0m17:16:44.844759 [info ] [Dummy-1   ]: 
+[0m17:16:44.845334 [info ] [Dummy-1   ]: Finished running 1 incremental model in 0 hours 0 minutes and 26.06 seconds (26.06s).
+[0m17:16:44.846361 [debug] [Dummy-1   ]: Command end result
+[0m17:16:44.900044 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m17:16:44.903120 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m17:16:44.911696 [debug] [Dummy-1   ]: Wrote artifact RunExecutionResult to /tmp/dbt/target/run_results.json
+[0m17:16:44.912324 [info ] [Dummy-1   ]: 
+[0m17:16:44.913068 [info ] [Dummy-1   ]: [32mCompleted successfully[0m
+[0m17:16:44.913593 [info ] [Dummy-1   ]: 
+[0m17:16:44.914147 [info ] [Dummy-1   ]: Done. PASS=1 WARN=0 ERROR=0 SKIP=0 TOTAL=1
+[0m17:16:44.916167 [debug] [Dummy-1   ]: Resource report: {"command_name": "run", "command_success": true, "command_wall_clock_time": 28.193258, "process_in_blocks": "0", "process_kernel_time": 1.45, "process_mem_max_rss": "431476", "process_out_blocks": "0", "process_user_time": 6.44}
+[0m17:16:44.916937 [debug] [Dummy-1   ]: Command `cli run` succeeded at 17:16:44.916643 after 28.19 seconds
+[0m17:16:44.917539 [debug] [Dummy-1   ]: Flushing usage events

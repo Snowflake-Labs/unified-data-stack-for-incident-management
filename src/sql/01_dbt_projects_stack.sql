@@ -57,6 +57,9 @@ create stage if not exists <% ctx.env.dbt_project_database %>.bronze_zone.docume
 DIRECTORY=(ENABLE=true)
 ENCRYPTION = (TYPE = 'SNOWFLAKE_SSE');
 
+create or replace stream <% ctx.env.dbt_project_database %>.bronze_zone.documents_stream
+on stage <% ctx.env.dbt_project_database %>.bronze_zone.documents;
+
 create or replace schema <% ctx.env.dbt_project_database %>.gold_zone;
 
 -- Users table (employees, customers, system users)
