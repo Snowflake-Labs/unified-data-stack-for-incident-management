@@ -39,16 +39,16 @@ An end-to-end incident management platform* built on Snowflake that demonstrates
 ## 2. Architecture
 
 ```
-┌─────────────────┐    ┌──────────────┐         ┌─────────────────┐
-│   Slack App     │───▶│   OpenFlow   │────────▶│   Snowflake     │
-│                 │    │  Connector   │         |    Landing Zone │
-└─────────────────┘    └──────────────┘         └─────────────────┘
-                                                     │
-                                                     ▼
-┌─────────────────┐    ┌─────────────────┐    ┌──────────────────┐
-│   Streamlit     │◀───│   Snowflake     │◀───│   dbt Trans-     │
-│   Dashboard     │    │ Curated Zone    │    | - formations     │
-└─────────────────┘    └─────────────────┘    └──────────────────┘
+┌─────────────────┐       ┌──────────────────┐         ┌─────────────────┐
+│   Slack App     │──────▶│   OpenFlow       │────────▶│   Snowflake     │
+│                 │       │  Slack Connector │         |    Bronze Zone  │
+└─────────────────┘       └──────────────────┘         └─────────────────┘
+                                                               │
+                                                               ▼
+┌─────────────────┐        ┌─────────────────┐           ┌──────────────────┐
+│   Streamlit     │◀───────│   Snowflake     │◀──────────│   dbt Trans-     │
+│   Dashboard     │        │   Gold Zone     │           | - formations     │
+└─────────────────┘        └─────────────────┘           └──────────────────┘
 ```
 
 
