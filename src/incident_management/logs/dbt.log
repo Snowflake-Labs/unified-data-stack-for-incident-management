@@ -42299,3 +42299,370 @@ drop table if exists incident_management.silver_zone.document_question_extracts_
 [0m20:41:53.818651 [debug] [MainThread]: Command `dbt clean` succeeded at 20:41:53.818543 after 0.09 seconds
 [0m20:41:53.818921 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x102e810d0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x104d60d90>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x104daa490>]}
 [0m20:41:53.819150 [debug] [MainThread]: Flushing usage events
+
+
+============================== 17:44:10.351728 | 2cf952f1-ef7e-465e-9210-dfcc8ce4bcfb ==============================
+[0m17:44:10.351728 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m17:44:10.353014 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'version_check': 'True', 'fail_fast': 'False', 'log_path': '/tmp/dbt/logs', 'profiles_dir': '/tmp/dbt/', 'debug': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'False', 'log_format': 'default', 'introspect': 'True', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'target_path': '/tmp/dbt/target/', 'invocation_command': 'dbt ', 'send_anonymous_usage_stats': 'False'}
+[0m17:44:10.426547 [error] [Dummy-1   ]:  adapter: Invalid profile: 'user' is a required property.
+[0m17:44:10.744934 [info ] [Dummy-1   ]: Registered adapter: snowflake=1.9.2
+[0m17:44:11.524250 [error] [Dummy-1   ]: Encountered an error:
+Compilation Error
+  dbt found 1 package(s) specified in packages.yml, but only 0 package(s) installed in dbt_packages. Run "dbt deps" to install package dependencies.
+[0m17:44:11.526724 [debug] [Dummy-1   ]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 1.2754865, "process_in_blocks": "0", "process_kernel_time": 1.28, "process_mem_max_rss": "406436", "process_out_blocks": "0", "process_user_time": 4.55}
+[0m17:44:11.527523 [debug] [Dummy-1   ]: Command `cli run` failed at 17:44:11.527225 after 1.28 seconds
+[0m17:44:11.528203 [debug] [Dummy-1   ]: Flushing usage events
+
+
+============================== 17:44:32.315970 | bae3c8d2-60be-4b04-8d39-bc57d03159bd ==============================
+[0m17:44:32.315970 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m17:44:32.317230 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'version_check': 'True', 'profiles_dir': '/tmp/dbt/', 'log_path': '/tmp/dbt/logs', 'debug': 'False', 'fail_fast': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'empty': 'None', 'quiet': 'False', 'no_print': 'None', 'log_format': 'default', 'static_parser': 'True', 'introspect': 'True', 'invocation_command': 'dbt ', 'target_path': 'None', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'send_anonymous_usage_stats': 'False'}
+[0m17:44:32.577148 [debug] [Dummy-1   ]: Set downloads directory='/tmp/dbt-downloads-46mazcqb'
+[0m17:44:32.577921 [debug] [Dummy-1   ]: Making package index registry request: GET https://hub.getdbt.com/api/v1/index.json
+[0m17:44:32.813690 [debug] [Dummy-1   ]: Response from registry index: GET https://hub.getdbt.com/api/v1/index.json 200
+[0m17:44:32.814771 [debug] [Dummy-1   ]: Making package registry request: GET https://hub.getdbt.com/api/v1/Snowflake-Labs/dbt_semantic_view.json
+[0m17:44:33.005858 [debug] [Dummy-1   ]: Response from registry: GET https://hub.getdbt.com/api/v1/Snowflake-Labs/dbt_semantic_view.json 200
+[0m17:44:33.007857 [info ] [Dummy-1   ]: Installing Snowflake-Labs/dbt_semantic_view
+[0m17:44:33.398683 [info ] [Dummy-1   ]: Installed from version 1.0.3
+[0m17:44:33.399294 [info ] [Dummy-1   ]: Up to date!
+[0m17:44:33.401637 [debug] [Dummy-1   ]: Resource report: {"command_name": "deps", "command_success": true, "command_wall_clock_time": 1.1873708, "process_in_blocks": "0", "process_kernel_time": 0.75, "process_mem_max_rss": "401400", "process_out_blocks": "0", "process_user_time": 4.11}
+[0m17:44:33.402372 [debug] [Dummy-1   ]: Command `cli deps` succeeded at 17:44:33.402095 after 1.19 seconds
+[0m17:44:33.402924 [debug] [Dummy-1   ]: Flushing usage events
+
+
+============================== 17:44:55.950726 | eea3be96-39ba-4ba3-aaa6-fed88428f5f4 ==============================
+[0m17:44:55.950726 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m17:44:55.951960 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': '/tmp/dbt/', 'version_check': 'True', 'debug': 'False', 'log_path': '/tmp/dbt/logs', 'fail_fast': 'False', 'warn_error': 'None', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'False', 'log_format': 'default', 'introspect': 'True', 'static_parser': 'True', 'invocation_command': 'dbt ', 'target_path': '/tmp/dbt/target/', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'send_anonymous_usage_stats': 'False'}
+[0m17:44:56.025038 [error] [Dummy-1   ]:  adapter: Invalid profile: 'user' is a required property.
+[0m17:44:56.340576 [info ] [Dummy-1   ]: Registered adapter: snowflake=1.9.2
+[0m17:44:57.161329 [debug] [Dummy-1   ]: checksum: 53ed91fada2233efb98368d1716b44ab532c83a9c293cf1890b7905d5b45fb25, vars: {}, profile: , target: dev, version: 1.9.4
+[0m17:44:57.162737 [info ] [Dummy-1   ]: Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m17:45:00.073616 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m17:45:00.076512 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m17:45:00.303053 [info ] [Dummy-1   ]: Found 13 models, 32 data tests, 6 sources, 483 macros
+[0m17:45:00.306355 [info ] [Dummy-1   ]: 
+[0m17:45:00.307076 [info ] [Dummy-1   ]: Concurrency: 1 threads (target='dev')
+[0m17:45:00.307658 [info ] [Dummy-1   ]: 
+[0m17:45:00.308675 [debug] [Dummy-1   ]: Acquiring new snowflake connection 'master'
+[0m17:45:00.311139 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_incident_management'
+[0m17:45:00.472130 [debug] [ThreadPool]: Using snowflake connection "list_incident_management"
+[0m17:45:00.472855 [debug] [ThreadPool]: On list_incident_management: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management"} */
+show terse schemas in database incident_management
+    limit 10000
+[0m17:45:00.473395 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:45:01.389801 [debug] [ThreadPool]: SQL status: SUCCESS 7 in 0.916 seconds
+[0m17:45:01.400587 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management, now list_incident_management_silver_zone)
+[0m17:45:01.424501 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_silver_zone"
+[0m17:45:01.425234 [debug] [ThreadPool]: On list_incident_management_silver_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_silver_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:45:01.425750 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:45:02.570309 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 1.144 seconds
+[0m17:45:02.576575 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_silver_zone"
+[0m17:45:02.577276 [debug] [ThreadPool]: On list_incident_management_silver_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_silver_zone"} */
+show objects in incident_management.silver_zone
+    limit 10000
+    
+;
+[0m17:45:02.913410 [debug] [ThreadPool]: SQL status: SUCCESS 2 in 0.335 seconds
+[0m17:45:02.916223 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_silver_zone"
+[0m17:45:02.916926 [debug] [ThreadPool]: On list_incident_management_silver_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_silver_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:45:03.123055 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.205 seconds
+[0m17:45:03.125705 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management_silver_zone, now list_incident_management_gold_zone)
+[0m17:45:03.139426 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m17:45:03.140104 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:45:03.140636 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:45:05.552022 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 2.411 seconds
+[0m17:45:05.554685 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m17:45:05.555329 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+show objects in incident_management.gold_zone
+    limit 10000
+    
+;
+[0m17:45:06.975819 [debug] [ThreadPool]: SQL status: SUCCESS 7 in 1.420 seconds
+[0m17:45:06.978925 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m17:45:06.979592 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:45:07.168285 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.188 seconds
+[0m17:45:07.171126 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management_gold_zone, now list_incident_management_semantic_views)
+[0m17:45:07.184273 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m17:45:07.184970 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:45:07.185483 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:45:09.253854 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 2.068 seconds
+[0m17:45:09.256547 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m17:45:09.257237 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+show objects in incident_management.semantic_views
+    limit 10000
+    
+;
+[0m17:45:09.419491 [debug] [ThreadPool]: SQL status: SUCCESS 0 in 0.162 seconds
+[0m17:45:09.422035 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m17:45:09.422676 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:45:09.603548 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.180 seconds
+[0m17:45:09.606110 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management_semantic_views, now list_incident_management_bronze_zone)
+[0m17:45:09.618734 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m17:45:09.619447 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:45:09.619963 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:45:10.374427 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.754 seconds
+[0m17:45:10.377017 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m17:45:10.377638 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+show objects in incident_management.bronze_zone
+    limit 10000
+    
+;
+[0m17:45:10.483073 [debug] [ThreadPool]: SQL status: SUCCESS 8 in 0.105 seconds
+[0m17:45:10.486046 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m17:45:10.486698 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:45:10.595928 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.108 seconds
+[0m17:45:10.606420 [debug] [Thread-2 (]: Began running node model.incident_management.quaterly_review_metrics
+[0m17:45:10.607465 [info ] [Thread-2 (]: 1 of 1 START sql incremental model gold_zone.quaterly_review_metrics ........... [RUN]
+[0m17:45:10.608363 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly list_incident_management_bronze_zone, now model.incident_management.quaterly_review_metrics)
+[0m17:45:10.609077 [debug] [Thread-2 (]: Began compiling node model.incident_management.quaterly_review_metrics
+[0m17:45:10.627429 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.quaterly_review_metrics"
+[0m17:45:10.628621 [debug] [Thread-2 (]: Began executing node model.incident_management.quaterly_review_metrics
+[0m17:45:10.712146 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.quaterly_review_metrics"
+[0m17:45:10.713026 [debug] [Thread-2 (]: On model.incident_management.quaterly_review_metrics: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.quaterly_review_metrics"} */
+create or replace  temporary view incident_management.gold_zone.quaterly_review_metrics__dbt_tmp
+  
+   as (
+    
+
+
+with document_question_extracts as (
+  select 
+  split(relative_path, '/')[1] as filename,
+  QUESTION_EXTRACTS_JSON:response as response
+  from incident_management.silver_zone.document_question_extracts 
+  where is_null_value(question_extracts_json:error)
+)
+select
+dq.filename,
+lf.key as metric,
+lf.value::string as value,
+current_timestamp() as created_at,
+from document_question_extracts dq,
+lateral flatten(input => response) lf
+  );
+[0m17:45:10.713694 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m17:45:11.818565 [debug] [Thread-2 (]: SQL status: SUCCESS 1 in 1.105 seconds
+[0m17:45:11.840910 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.quaterly_review_metrics"
+[0m17:45:11.841698 [debug] [Thread-2 (]: On model.incident_management.quaterly_review_metrics: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.quaterly_review_metrics"} */
+describe table incident_management.gold_zone.quaterly_review_metrics__dbt_tmp
+[0m17:45:11.977477 [debug] [Thread-2 (]: SQL status: SUCCESS 4 in 0.135 seconds
+[0m17:45:11.989930 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.quaterly_review_metrics"
+[0m17:45:11.990702 [debug] [Thread-2 (]: On model.incident_management.quaterly_review_metrics: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.quaterly_review_metrics"} */
+describe table incident_management.gold_zone.quaterly_review_metrics
+[0m17:45:12.078790 [debug] [Thread-2 (]: SQL status: SUCCESS 37 in 0.087 seconds
+[0m17:45:12.099341 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.quaterly_review_metrics"
+[0m17:45:12.100133 [debug] [Thread-2 (]: On model.incident_management.quaterly_review_metrics: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.quaterly_review_metrics"} */
+describe table "INCIDENT_MANAGEMENT"."GOLD_ZONE"."QUATERLY_REVIEW_METRICS"
+[0m17:45:12.200926 [debug] [Thread-2 (]: SQL status: SUCCESS 37 in 0.100 seconds
+[0m17:45:12.296977 [debug] [Thread-2 (]: Writing runtime sql for node "model.incident_management.quaterly_review_metrics"
+[0m17:45:12.301519 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.quaterly_review_metrics"
+[0m17:45:12.302243 [debug] [Thread-2 (]: On model.incident_management.quaterly_review_metrics: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.quaterly_review_metrics"} */
+-- back compat for old kwarg name
+  
+  begin;
+[0m17:45:12.494779 [debug] [Thread-2 (]: SQL status: SUCCESS 1 in 0.192 seconds
+[0m17:45:12.495624 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.quaterly_review_metrics"
+[0m17:45:12.496789 [debug] [Thread-2 (]: On model.incident_management.quaterly_review_metrics: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.quaterly_review_metrics"} */
+merge into incident_management.gold_zone.quaterly_review_metrics as DBT_INTERNAL_DEST
+        using incident_management.gold_zone.quaterly_review_metrics__dbt_tmp as DBT_INTERNAL_SOURCE
+        on (
+                    DBT_INTERNAL_SOURCE.filename = DBT_INTERNAL_DEST.filename
+                )
+
+    
+    when matched then update set
+        "RELATIVE_PATH" = DBT_INTERNAL_SOURCE."RELATIVE_PATH","QUARTER" = DBT_INTERNAL_SOURCE."QUARTER","SOH_OVERALL_UPTIME" = DBT_INTERNAL_SOURCE."SOH_OVERALL_UPTIME","SOH_CRITICAL_UPTIME" = DBT_INTERNAL_SOURCE."SOH_CRITICAL_UPTIME","SOH_SEV1_INCIDENTS" = DBT_INTERNAL_SOURCE."SOH_SEV1_INCIDENTS","SOH_SEV2_INCIDENTS" = DBT_INTERNAL_SOURCE."SOH_SEV2_INCIDENTS","SOH_MTTA" = DBT_INTERNAL_SOURCE."SOH_MTTA","SOH_MTTR" = DBT_INTERNAL_SOURCE."SOH_MTTR","SOH_CFR" = DBT_INTERNAL_SOURCE."SOH_CFR","SOH_SLO_BREACHES" = DBT_INTERNAL_SOURCE."SOH_SLO_BREACHES","SOH_ERROR_BUDGET" = DBT_INTERNAL_SOURCE."SOH_ERROR_BUDGET","SOH_DOWNTIME" = DBT_INTERNAL_SOURCE."SOH_DOWNTIME","SOH_UNPLANNED_OUTAGE_HOURS" = DBT_INTERNAL_SOURCE."SOH_UNPLANNED_OUTAGE_HOURS","SOH_PLANNED_MAINTENANCE_HOURS" = DBT_INTERNAL_SOURCE."SOH_PLANNED_MAINTENANCE_HOURS","SOH_SEV1_OUTAGE_MINUTES" = DBT_INTERNAL_SOURCE."SOH_SEV1_OUTAGE_MINUTES","SOH_SEV2_OUTAGE_MINUTES" = DBT_INTERNAL_SOURCE."SOH_SEV2_OUTAGE_MINUTES","SOH_LONGEST_OUTAGE" = DBT_INTERNAL_SOURCE."SOH_LONGEST_OUTAGE","SOH_MTBFT" = DBT_INTERNAL_SOURCE."SOH_MTBFT","TU_EOQ_IT_HEADCOUNT" = DBT_INTERNAL_SOURCE."TU_EOQ_IT_HEADCOUNT","TU_ENG_HEADCOUNT" = DBT_INTERNAL_SOURCE."TU_ENG_HEADCOUNT","TU_ON_CALL_COVERAGE" = DBT_INTERNAL_SOURCE."TU_ON_CALL_COVERAGE","TU_PROJECT_WORK_ALLOC" = DBT_INTERNAL_SOURCE."TU_PROJECT_WORK_ALLOC","TU_BAU_OPS_ALLOC" = DBT_INTERNAL_SOURCE."TU_BAU_OPS_ALLOC","TU_ON_CALL_HOURS_PER_ENG" = DBT_INTERNAL_SOURCE."TU_ON_CALL_HOURS_PER_ENG","TU_AFTER_HOURS_INCIDENTS" = DBT_INTERNAL_SOURCE."TU_AFTER_HOURS_INCIDENTS","TU_TRAINING_HOURS_PER_FTE" = DBT_INTERNAL_SOURCE."TU_TRAINING_HOURS_PER_FTE","TU_CERTIFICATIONS" = DBT_INTERNAL_SOURCE."TU_CERTIFICATIONS","TU_ATTRITION" = DBT_INTERNAL_SOURCE."TU_ATTRITION","TLS_ATLASSIAN" = DBT_INTERNAL_SOURCE."TLS_ATLASSIAN","TLS_GITHUB" = DBT_INTERNAL_SOURCE."TLS_GITHUB","TLS_SLACK" = DBT_INTERNAL_SOURCE."TLS_SLACK","TLS_PAGERDUTY" = DBT_INTERNAL_SOURCE."TLS_PAGERDUTY","TLS_DATADOG" = DBT_INTERNAL_SOURCE."TLS_DATADOG","TLS_SENTRY" = DBT_INTERNAL_SOURCE."TLS_SENTRY","TLS_OKTA" = DBT_INTERNAL_SOURCE."TLS_OKTA","TLS_AWS" = DBT_INTERNAL_SOURCE."TLS_AWS","TLS_TOTAL" = DBT_INTERNAL_SOURCE."TLS_TOTAL"
+    
+
+    when not matched then insert
+        ("RELATIVE_PATH", "QUARTER", "SOH_OVERALL_UPTIME", "SOH_CRITICAL_UPTIME", "SOH_SEV1_INCIDENTS", "SOH_SEV2_INCIDENTS", "SOH_MTTA", "SOH_MTTR", "SOH_CFR", "SOH_SLO_BREACHES", "SOH_ERROR_BUDGET", "SOH_DOWNTIME", "SOH_UNPLANNED_OUTAGE_HOURS", "SOH_PLANNED_MAINTENANCE_HOURS", "SOH_SEV1_OUTAGE_MINUTES", "SOH_SEV2_OUTAGE_MINUTES", "SOH_LONGEST_OUTAGE", "SOH_MTBFT", "TU_EOQ_IT_HEADCOUNT", "TU_ENG_HEADCOUNT", "TU_ON_CALL_COVERAGE", "TU_PROJECT_WORK_ALLOC", "TU_BAU_OPS_ALLOC", "TU_ON_CALL_HOURS_PER_ENG", "TU_AFTER_HOURS_INCIDENTS", "TU_TRAINING_HOURS_PER_FTE", "TU_CERTIFICATIONS", "TU_ATTRITION", "TLS_ATLASSIAN", "TLS_GITHUB", "TLS_SLACK", "TLS_PAGERDUTY", "TLS_DATADOG", "TLS_SENTRY", "TLS_OKTA", "TLS_AWS", "TLS_TOTAL")
+    values
+        ("RELATIVE_PATH", "QUARTER", "SOH_OVERALL_UPTIME", "SOH_CRITICAL_UPTIME", "SOH_SEV1_INCIDENTS", "SOH_SEV2_INCIDENTS", "SOH_MTTA", "SOH_MTTR", "SOH_CFR", "SOH_SLO_BREACHES", "SOH_ERROR_BUDGET", "SOH_DOWNTIME", "SOH_UNPLANNED_OUTAGE_HOURS", "SOH_PLANNED_MAINTENANCE_HOURS", "SOH_SEV1_OUTAGE_MINUTES", "SOH_SEV2_OUTAGE_MINUTES", "SOH_LONGEST_OUTAGE", "SOH_MTBFT", "TU_EOQ_IT_HEADCOUNT", "TU_ENG_HEADCOUNT", "TU_ON_CALL_COVERAGE", "TU_PROJECT_WORK_ALLOC", "TU_BAU_OPS_ALLOC", "TU_ON_CALL_HOURS_PER_ENG", "TU_AFTER_HOURS_INCIDENTS", "TU_TRAINING_HOURS_PER_FTE", "TU_CERTIFICATIONS", "TU_ATTRITION", "TLS_ATLASSIAN", "TLS_GITHUB", "TLS_SLACK", "TLS_PAGERDUTY", "TLS_DATADOG", "TLS_SENTRY", "TLS_OKTA", "TLS_AWS", "TLS_TOTAL")
+
+;
+[0m17:45:12.574490 [debug] [Thread-2 (]: Snowflake adapter: Snowflake query id: 01c07109-0107-0a20-0032-31870594994e
+[0m17:45:12.575266 [debug] [Thread-2 (]: Snowflake adapter: Snowflake error: 000904 (42000): SQL compilation error: error line 15 at position 9
+invalid identifier 'RELATIVE_PATH'
+[0m17:45:12.581030 [debug] [Thread-2 (]: Database Error in model quaterly_review_metrics (models/gold_zone/quaterly_review_metrics.sql)
+  000904 (42000): SQL compilation error: error line 15 at position 9
+  invalid identifier 'RELATIVE_PATH'
+  compiled code at /tmp/dbt/target/run/incident_management/models/gold_zone/quaterly_review_metrics.sql
+[0m17:45:12.584798 [error] [Thread-2 (]: 1 of 1 ERROR creating sql incremental model gold_zone.quaterly_review_metrics .. [[31mERROR[0m in 1.97s]
+[0m17:45:12.585893 [debug] [Thread-2 (]: Finished running node model.incident_management.quaterly_review_metrics
+[0m17:45:12.587403 [debug] [Thread-5 (]: Marking all children of 'model.incident_management.quaterly_review_metrics' to be skipped because of status 'error'.  Reason: Database Error in model quaterly_review_metrics (models/gold_zone/quaterly_review_metrics.sql)
+  000904 (42000): SQL compilation error: error line 15 at position 9
+  invalid identifier 'RELATIVE_PATH'
+  compiled code at /tmp/dbt/target/run/incident_management/models/gold_zone/quaterly_review_metrics.sql.
+[0m17:45:12.591157 [debug] [Dummy-1   ]: Connection 'master' was properly closed.
+[0m17:45:12.591759 [debug] [Dummy-1   ]: Connection 'model.incident_management.quaterly_review_metrics' was properly closed.
+[0m17:45:12.592294 [info ] [Dummy-1   ]: 
+[0m17:45:12.592885 [info ] [Dummy-1   ]: Finished running 1 incremental model in 0 hours 0 minutes and 12.28 seconds (12.28s).
+[0m17:45:12.593909 [debug] [Dummy-1   ]: Command end result
+[0m17:45:12.643514 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m17:45:12.646613 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m17:45:12.654854 [debug] [Dummy-1   ]: Wrote artifact RunExecutionResult to /tmp/dbt/target/run_results.json
+[0m17:45:12.655459 [info ] [Dummy-1   ]: 
+[0m17:45:12.656165 [info ] [Dummy-1   ]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
+[0m17:45:12.656743 [info ] [Dummy-1   ]: 
+[0m17:45:12.657532 [error] [Dummy-1   ]:   Database Error in model quaterly_review_metrics (models/gold_zone/quaterly_review_metrics.sql)
+  000904 (42000): SQL compilation error: error line 15 at position 9
+  invalid identifier 'RELATIVE_PATH'
+  compiled code at /tmp/dbt/target/run/incident_management/models/gold_zone/quaterly_review_metrics.sql
+[0m17:45:12.658094 [info ] [Dummy-1   ]: 
+[0m17:45:12.658697 [info ] [Dummy-1   ]: Done. PASS=0 WARN=0 ERROR=1 SKIP=0 TOTAL=1
+[0m17:45:12.660745 [debug] [Dummy-1   ]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 16.810051, "process_in_blocks": "0", "process_kernel_time": 1.52, "process_mem_max_rss": "493292", "process_out_blocks": "0", "process_user_time": 8.37}
+[0m17:45:12.661492 [debug] [Dummy-1   ]: Command `cli run` failed at 17:45:12.661207 after 16.81 seconds
+[0m17:45:12.662130 [debug] [Dummy-1   ]: Flushing usage events
+
+
+============================== 17:46:47.203121 | 4695e620-ff38-4e09-aaed-0b72427f8101 ==============================
+[0m17:46:47.203121 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m17:46:47.204243 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'fail_fast': 'False', 'profiles_dir': '/tmp/dbt/', 'log_path': '/tmp/dbt/logs', 'version_check': 'True', 'debug': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'False', 'log_format': 'default', 'introspect': 'True', 'invocation_command': 'dbt ', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'target_path': '/tmp/dbt/target/', 'static_parser': 'True', 'send_anonymous_usage_stats': 'False'}
+[0m17:46:47.275778 [error] [Dummy-1   ]:  adapter: Invalid profile: 'user' is a required property.
+[0m17:46:47.585444 [info ] [Dummy-1   ]: Registered adapter: snowflake=1.9.2
+[0m17:46:48.372636 [debug] [Dummy-1   ]: checksum: 53ed91fada2233efb98368d1716b44ab532c83a9c293cf1890b7905d5b45fb25, vars: {}, profile: , target: dev, version: 1.9.4
+[0m17:46:48.787455 [debug] [Dummy-1   ]: Partial parsing enabled: 0 files deleted, 0 files added, 0 files changed.
+[0m17:46:48.788081 [debug] [Dummy-1   ]: Partial parsing enabled, no changes found, skipping parsing
+[0m17:46:49.003941 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m17:46:49.006830 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m17:46:49.066694 [info ] [Dummy-1   ]: Found 13 models, 32 data tests, 6 sources, 483 macros
+[0m17:46:49.069821 [info ] [Dummy-1   ]: 
+[0m17:46:49.070510 [info ] [Dummy-1   ]: Concurrency: 1 threads (target='dev')
+[0m17:46:49.071090 [info ] [Dummy-1   ]: 
+[0m17:46:49.072042 [debug] [Dummy-1   ]: Acquiring new snowflake connection 'master'
+[0m17:46:49.074163 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_incident_management'
+[0m17:46:49.223670 [debug] [ThreadPool]: Using snowflake connection "list_incident_management"
+[0m17:46:49.224376 [debug] [ThreadPool]: On list_incident_management: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management"} */
+show terse schemas in database incident_management
+    limit 10000
+[0m17:46:49.224963 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:46:49.990499 [debug] [ThreadPool]: SQL status: SUCCESS 7 in 0.765 seconds
+[0m17:46:50.001618 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management, now list_incident_management_gold_zone)
+[0m17:46:50.024077 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m17:46:50.024771 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:46:50.025269 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:46:50.759119 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.734 seconds
+[0m17:46:50.764943 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m17:46:50.765622 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+show objects in incident_management.gold_zone
+    limit 10000
+    
+;
+[0m17:46:50.863841 [debug] [ThreadPool]: SQL status: SUCCESS 6 in 0.097 seconds
+[0m17:46:50.866568 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_gold_zone"
+[0m17:46:50.867174 [debug] [ThreadPool]: On list_incident_management_gold_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_gold_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:46:50.977636 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.110 seconds
+[0m17:46:50.980287 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management_gold_zone, now list_incident_management_silver_zone)
+[0m17:46:50.994741 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_silver_zone"
+[0m17:46:50.995379 [debug] [ThreadPool]: On list_incident_management_silver_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_silver_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:46:50.995862 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:46:51.727503 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.731 seconds
+[0m17:46:51.730088 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_silver_zone"
+[0m17:46:51.730697 [debug] [ThreadPool]: On list_incident_management_silver_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_silver_zone"} */
+show objects in incident_management.silver_zone
+    limit 10000
+    
+;
+[0m17:46:51.881489 [debug] [ThreadPool]: SQL status: SUCCESS 2 in 0.150 seconds
+[0m17:46:51.884004 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_silver_zone"
+[0m17:46:51.884614 [debug] [ThreadPool]: On list_incident_management_silver_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_silver_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:46:52.005854 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.121 seconds
+[0m17:46:52.008272 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management_silver_zone, now list_incident_management_semantic_views)
+[0m17:46:52.019906 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m17:46:52.020597 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:46:52.021144 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:46:52.780339 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.759 seconds
+[0m17:46:52.782783 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m17:46:52.783374 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+show objects in incident_management.semantic_views
+    limit 10000
+    
+;
+[0m17:46:52.866121 [debug] [ThreadPool]: SQL status: SUCCESS 0 in 0.082 seconds
+[0m17:46:52.868507 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_semantic_views"
+[0m17:46:52.869091 [debug] [ThreadPool]: On list_incident_management_semantic_views: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_semantic_views"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:46:52.940323 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.071 seconds
+[0m17:46:52.942565 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_incident_management_semantic_views, now list_incident_management_bronze_zone)
+[0m17:46:52.954500 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m17:46:52.955095 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m17:46:52.955573 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m17:46:53.678444 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.723 seconds
+[0m17:46:53.680884 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m17:46:53.681499 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+show objects in incident_management.bronze_zone
+    limit 10000
+    
+;
+[0m17:46:53.841627 [debug] [ThreadPool]: SQL status: SUCCESS 8 in 0.159 seconds
+[0m17:46:53.844312 [debug] [ThreadPool]: Using snowflake connection "list_incident_management_bronze_zone"
+[0m17:46:53.844876 [debug] [ThreadPool]: On list_incident_management_bronze_zone: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "connection_name": "list_incident_management_bronze_zone"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m17:46:53.913497 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.068 seconds
+[0m17:46:53.923051 [debug] [Thread-2 (]: Began running node model.incident_management.quaterly_review_metrics
+[0m17:46:53.923971 [info ] [Thread-2 (]: 1 of 1 START sql incremental model gold_zone.quaterly_review_metrics ........... [RUN]
+[0m17:46:53.924725 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly list_incident_management_bronze_zone, now model.incident_management.quaterly_review_metrics)
+[0m17:46:53.925313 [debug] [Thread-2 (]: Began compiling node model.incident_management.quaterly_review_metrics
+[0m17:46:53.943464 [debug] [Thread-2 (]: Writing injected SQL for node "model.incident_management.quaterly_review_metrics"
+[0m17:46:53.944406 [debug] [Thread-2 (]: Began executing node model.incident_management.quaterly_review_metrics
+[0m17:46:54.033344 [debug] [Thread-2 (]: Writing runtime sql for node "model.incident_management.quaterly_review_metrics"
+[0m17:46:54.035279 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.quaterly_review_metrics"
+[0m17:46:54.035954 [debug] [Thread-2 (]: On model.incident_management.quaterly_review_metrics: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.quaterly_review_metrics"} */
+create or replace transient table incident_management.gold_zone.quaterly_review_metrics
+         as
+        (
+
+
+with document_question_extracts as (
+  select 
+  split(relative_path, '/')[1] as filename,
+  QUESTION_EXTRACTS_JSON:response as response
+  from incident_management.silver_zone.document_question_extracts 
+  where is_null_value(question_extracts_json:error)
+)
+select
+dq.filename,
+lf.key as metric,
+lf.value::string as value,
+current_timestamp() as created_at,
+from document_question_extracts dq,
+lateral flatten(input => response) lf
+        );
+[0m17:46:54.036603 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m17:46:55.532822 [debug] [Thread-2 (]: SQL status: SUCCESS 1 in 1.496 seconds
+[0m17:46:55.555244 [debug] [Thread-2 (]: Applying DROP to: incident_management.gold_zone.quaterly_review_metrics__dbt_tmp
+[0m17:46:55.576476 [debug] [Thread-2 (]: Using snowflake connection "model.incident_management.quaterly_review_metrics"
+[0m17:46:55.577235 [debug] [Thread-2 (]: On model.incident_management.quaterly_review_metrics: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "incident_management", "target_name": "dev", "node_id": "model.incident_management.quaterly_review_metrics"} */
+drop view if exists incident_management.gold_zone.quaterly_review_metrics__dbt_tmp cascade
+[0m17:46:55.641373 [debug] [Thread-2 (]: SQL status: SUCCESS 1 in 0.063 seconds
+[0m17:46:55.671721 [info ] [Thread-2 (]: 1 of 1 OK created sql incremental model gold_zone.quaterly_review_metrics ...... [[32mSUCCESS 1[0m in 1.74s]
+[0m17:46:55.672747 [debug] [Thread-2 (]: Finished running node model.incident_management.quaterly_review_metrics
+[0m17:46:55.675715 [debug] [Dummy-1   ]: Connection 'master' was properly closed.
+[0m17:46:55.676310 [debug] [Dummy-1   ]: Connection 'model.incident_management.quaterly_review_metrics' was properly closed.
+[0m17:46:55.676927 [info ] [Dummy-1   ]: 
+[0m17:46:55.677462 [info ] [Dummy-1   ]: Finished running 1 incremental model in 0 hours 0 minutes and 6.61 seconds (6.61s).
+[0m17:46:55.678508 [debug] [Dummy-1   ]: Command end result
+[0m17:46:55.728551 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m17:46:55.731305 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m17:46:55.739307 [debug] [Dummy-1   ]: Wrote artifact RunExecutionResult to /tmp/dbt/target/run_results.json
+[0m17:46:55.739869 [info ] [Dummy-1   ]: 
+[0m17:46:55.740594 [info ] [Dummy-1   ]: [32mCompleted successfully[0m
+[0m17:46:55.741091 [info ] [Dummy-1   ]: 
+[0m17:46:55.741609 [info ] [Dummy-1   ]: Done. PASS=1 WARN=0 ERROR=0 SKIP=0 TOTAL=1
+[0m17:46:55.743407 [debug] [Dummy-1   ]: Resource report: {"command_name": "run", "command_success": true, "command_wall_clock_time": 8.638037, "process_in_blocks": "0", "process_kernel_time": 1.3, "process_mem_max_rss": "432164", "process_out_blocks": "0", "process_user_time": 5.92}
+[0m17:46:55.744094 [debug] [Dummy-1   ]: Command `cli run` succeeded at 17:46:55.743827 after 8.64 seconds
+[0m17:46:55.744675 [debug] [Dummy-1   ]: Flushing usage events
