@@ -23,7 +23,9 @@ def model(dbt, session: Session):
     
     for key in all_meta.keys():
         if all_meta[key]['enabled']:
-            reponse_schema['schema']['properties'][key] = all_meta[key]['schema']['properties']
+            for prop in all_meta[key]['schema']['properties']:
+                reponse_schema['schema']['properties'][prop] = all_meta[key]['schema']['properties'][prop]
+
 
     # Get the upstream model
     v_qualify_new_documents = dbt.ref('v_qualify_new_documents')
