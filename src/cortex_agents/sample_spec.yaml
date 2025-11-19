@@ -1,0 +1,33 @@
+models:
+  orchestration: <model_name>
+
+orchestration:
+  budget:
+      seconds: <number_of_seconds>
+      tokens: <number_of_tokens>
+
+instructions:
+  response: '<response_instructions>'
+  orchestration: '<orchestration_instructions>'
+  system: '<system_instructions>'
+  sample_questions:
+      - question: '<sample_question>'
+        answer: '<sample_answer>'
+
+tools:
+  - tool_spec:
+      type: '<tool_type>'
+      name: '<tool_name>'
+      description: '<tool_description>'
+      input_schema:
+          type: 'object'
+          properties:
+            <property_name>:
+              type: '<property_type>'
+              description: '<property_description>'
+          required: <required_property_names>
+
+tool_resources:
+  <tool_name>:
+    <resource_key>: '<resource_value>'
+    

@@ -128,6 +128,10 @@ CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.gold_zone.incident_at
     CONSTRAINT fk_attachments_incident FOREIGN KEY (incident_number) REFERENCES <% ctx.env.dbt_project_database %>.gold_zone.incidents(incident_number)
 );
 
+CREATE OR REPLACE STAGE <% ctx.env.dbt_project_database %>.gold_zone.agent_specs;
+
+-- put file://../../cortex_agents/sample_spec.yaml  @<% ctx.env.dbt_project_database %>.gold_zone.agent_specs overwrite=true;
+
 put file://../../data/csv/users.csv  @<% ctx.env.dbt_project_database %>.bronze_zone.csv_stage overwrite=true;
 put file://../../data/csv/incidents.csv @<% ctx.env.dbt_project_database %>.bronze_zone.csv_stage overwrite=true;
 put file://../../data/csv/incident_comment_history.csv @<% ctx.env.dbt_project_database %>.bronze_zone.csv_stage overwrite=true;
@@ -160,83 +164,6 @@ GIT_CREDENTIALS = <% ctx.env.dbt_project_database %>.dbt_project_deployments.inc
 CREATE DBT PROJECT <% ctx.env.dbt_project_database %>.dbt_project_deployments.<% ctx.env.dbt_project_name %>
   FROM '@<% ctx.env.dbt_project_database %>.dbt_project_deployments.project_git_repo/branches/main/src/incident_management'
   COMMENT = 'generates incident management data models';
-
-alter task if exists dbt_project_deployments.im_root_task_scheduler suspend;
-alter task if exists dbt_project_deployments.im_project_run_select_bronze_zone suspend;
-alter task if exists dbt_project_deployments.im_project_run_select_gold_zone suspend;
-alter task if exists dbt_project_deployments.im_project_test suspend;
-alter task if exists dbt_project_deployments.im_project_compile suspend;
-
-
-create or replace task dbt_project_deployments.im_root_task_scheduler
-	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
-	schedule='USING CRON 1 0 * * * America/Toronto'
-	config='{"target": "dev"}'
-	as SELECT 1;
-
-create or replace task dbt_project_deployments.im_project_compile
-	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
-	after dbt_project_deployments.im_root_task_scheduler
-	as 
-  EXECUTE IMMEDIATE
-  $$
-    BEGIN
-    LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
-    LET _dbt_nodes := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('select'));
-    LET _eai := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('eai'));
-    LET command := 'compile --target '|| _target;
-
-    EXECUTE DBT PROJECT dbt_project_deployments.<% ctx.env.dbt_project_name %> args=:command;
-    END;
-  $$
-  ;
-
-create or replace task dbt_project_deployments.im_project_run_select_bronze_zone
-	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
-	after dbt_project_deployments.im_project_compile
-	as 
-  EXECUTE IMMEDIATE
-  $$
-    BEGIN
-    LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
-    LET _dbt_nodes := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('select'));
-    LET _eai := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('eai'));
-    LET command := 'run --select bronze_zone --target '|| _target;
-    EXECUTE dbt project dbt_project_deployments.<% ctx.env.dbt_project_name %> args=:command;
-    END;
-  $$;
-
-create or replace task dbt_project_deployments.im_project_run_select_gold_zone
-	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
-	after dbt_project_deployments.im_project_compile, dbt_project_deployments.im_project_run_select_bronze_zone
-	as 
-  EXECUTE IMMEDIATE
-  $$
-    BEGIN
-    LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
-    LET _dbt_nodes := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('select'));
-    LET _eai := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('eai'));
-    LET command := 'run --select gold_zone --target '|| _target;
-    EXECUTE dbt project dbt_project_deployments.<% ctx.env.dbt_project_name %> args=:command;
-    END;
-  $$;
-
-
--- create or replace task dbt_project_deployments.im_project_test
--- 	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
--- 	after dbt_project_deployments.im_project_compile, dbt_project_deployments.im_project_run_select_bronze_zone, dbt_project_deployments.im_project_run_select_gold_zone
--- 	as
---   EXECUTE IMMEDIATE 
---   $$
---     BEGIN
---     LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
---     LET _dbt_nodes := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('select'));
---     LET _eai := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('eai'));
---     LET command := 'test --target '|| _target;
-
---     EXECUTE dbt project dbt_project_deployments.<% ctx.env.dbt_project_name %> args=:command;
---     END;
---   $$;
 
 
 -------------------------------------------------
