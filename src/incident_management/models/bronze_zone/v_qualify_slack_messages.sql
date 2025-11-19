@@ -37,6 +37,7 @@ select
     to_file('{{ var("docs_stage_path") }}', dm.staged_file_path) as attachment_file,
     case 
         -- When there is an attachment file and it is an image, use the image to extract the incident code
+        -- TODO: Add structured response
         when dm.staged_file_path is not null and fl_is_image(to_file('{{ var("docs_stage_path") }}', dm.staged_file_path)) then 
         ai_complete('claude-3-5-sonnet',
             prompt(
@@ -83,6 +84,7 @@ select
     null as attachment_file,
     case 
         -- Only use text to extract the incident code since there are no attachments
+        -- TODO: Add structured response
         when sm.text is not null then ai_complete('claude-3-5-sonnet',
                 prompt(
                 $$

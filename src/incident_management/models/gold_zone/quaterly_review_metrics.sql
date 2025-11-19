@@ -14,7 +14,13 @@ with document_question_extracts as (
   split(relative_path, '/')[1] as filename,
   QUESTION_EXTRACTS_JSON:response as response
   from {{ ref('document_question_extracts') }} 
-  where is_null_value(question_extracts_json:error)
+  where 
+  {% if is_incremental() %}
+    lower(trim(filename)) not in ( select distinct lower(trim(filename)) from {{ this }} )
+    and to_timestamp_ntz(last_modified) > ( select max(to_timestamp_ntz(created_at)) from {{ this }} )
+    and is_null_value(question_extracts_json:error)
+  {% endif %}
+  
 )
 select
 dq.filename,

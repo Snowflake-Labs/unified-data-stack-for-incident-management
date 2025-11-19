@@ -2,6 +2,7 @@
 
 TABLES(
   incidents as {{ ref('incidents') }}
+    PRIMARY KEY(incident_number)
     COMMENT = 'Materialized incidents table with enriched data and calculated fields'
 
   , active_incidents as {{ ref('active_incidents') }}
@@ -36,8 +37,6 @@ RELATIONSHIPS (
       incident_attachments (incident_number) REFERENCES incidents (incident_number)
     , incident_comment_history_to_incidents AS
       incident_comment_history (incident_number) REFERENCES incidents (incident_number)
-    , weekly_incident_trends_to_incidents AS
-      weekly_incident_trends (incident_number) REFERENCES incidents (incident_number)
   )
 
 
@@ -227,7 +226,7 @@ FACTS (
    , quaterly_review_metrics.created_at AS created_at
       COMMENT = 'Record creation timestamp'
 
-   , users.email AS user_email
+   , users.email AS email
       WITH SYNONYMS = ('email', 'email address')
       COMMENT = 'Primary email address'
    , users.first_name AS first_name
@@ -236,7 +235,7 @@ FACTS (
    , users.last_name AS last_name
       WITH SYNONYMS = ('last name')
       COMMENT = 'Last name parsed from email domain part'
-   , users.role AS user_role
+   , users.role AS role
       COMMENT = 'User role'
    , users.department AS department
       COMMENT = 'User department'
