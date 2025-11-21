@@ -1,421 +1,200 @@
+# Unified Data Stack for Incident Management
 
-# Table of Contents
-- [1. An Unified Data Stack on Snowflake](#1-an-unified-data-stack-on-snowflake)
-- [2. Architecture](#2-architecture)
-- [3. Key Features](#3-key-features)
-- [4. Demo Vignettes](#4-demo-vignettes)
-  - [OpenFlow-Based Slack Ingestion](#openflow-based-slack-ingestion)
-  - [dbt Projects on Snowflake](#dbt-projects-on-snowflake)
-  - [AI/SQL Integration within dbt Models](#aisql-integration-within-dbt-models)
-    - [Unstructured Text Processing](#unstructured-text-processing)
-    - [Image Processing](#image-processing)
-  - [Streamlit Integration](#streamlit-integration)
-  - [End-to-End Workflow Example](#end-to-end-workflow-example)
-- [5. Data Models](#5-data-models)
-  - [Bronze Zone](#bronze-zone)
-  - [Gold Zone](#gold-zone)
-- [6. Project Structure](#6-project-structure)
-- [7. Setup](#7-setup)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Installation Steps](#installation-steps)
-- [8. Streamlit in Snowflake app](#8-streamlit-in-snowflake-app)
-  - [Dashboard Features](#dashboard-features)
-  - [Managing Incidents via Slack](#managing-incidents-via-slack)
-- [9. Reference material](#9-reference-material)
-- [10. Questions, Feedback, and Contribution](#10-questions-feedback-and-contribution)
+> An end-to-end AI-powered incident management platform built entirely on Snowflake, demonstrating modern data engineering practices with dbt, Cortex AI, and Streamlit.
 
+[![Snowflake](https://img.shields.io/badge/Snowflake-Native-29B5E8?logo=snowflake)](https://www.snowflake.com/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?logo=streamlit)](https://streamlit.io/)
 
-## 1. An Unified Data Stack on Snowflake
+---
 
-*This project demonstrates a modern data stack for an example real-life situation that of incident management that typically requires multiple steps, and close collaboration between representatives using tools like Slack. This project uses a modern stack with Snowflake to bring AI-powered automation and real-time analytics to this known business process that can benefit from AI inclusion.*
+## Overview
 
+This project demonstrates a modern data stack for incident management—a real-world business process that benefits from AI-powered automation and real-time analytics. The platform ingests incident reports from Slack, intelligently classifies them using Snowflake Cortex AI, and provides real-time visualization through an interactive Streamlit dashboard.
 
-An end-to-end incident management platform* built on Snowflake that demonstrates modern data engineering practices using dbt, AI/ML capabilities, and real-time visualization through Streamlit. The system ingests incident data from Slack via Snowflake's OpenFlow connector and provides intelligent categorization, tracking, and reporting capabilities.
+**This is a small cross-section of a much larger process to show the art of possible.*
 
-*a small cross-section of a much larger process to show the art of possible 
-
-
-## 2. Architecture
+### Architecture at a Glance
 
 ```
-┌─────────────────┐       ┌──────────────────┐         ┌─────────────────┐
-│   Slack App     │──────▶│   OpenFlow       │────────▶│   Snowflake     │
-│                 │       │  Slack Connector │         |    Bronze Zone  │
-└─────────────────┘       └──────────────────┘         └─────────────────┘
-                                                               │
-                                                               ▼
-┌─────────────────┐        ┌─────────────────┐           ┌──────────────────┐
-│   Streamlit     │◀───────│   Snowflake     │◀──────────│   dbt Trans-     │
-│   Dashboard     │        │   Gold Zone     │           | - formations     │
-└─────────────────┘        └─────────────────┘           └──────────────────┘
+Slack App → OpenFlow Slack Connector → Bronze Zone → AISQL+ transformations via dbt Projects on Snowflake  → Gold Zone → Cortex Agents → Snowflake Intelligence
+                                                                                                                                       → Streamlit Dashboard  
 ```
 
+### Key Features
 
-## 3. Key Features
+✨ **AI-Powered Classification** - Automatically categorizes incidents using Snowflake Cortex AI  
+🖼️ **Image Processing** - AI analysis of screenshots and attachments  
+⚡ **Real-time Pipeline** - Near real-time ingestion from Slack via OpenFlow  
+📊 **Interactive Dashboard** - Streamlit-based monitoring and management  
+🔧 **Modern Data Engineering** - dbt transformations on Snowflake's native runtime  
 
-- **AI-Powered Classification**: Automatically categorizes incidents using Snowflake's AI functions
-- **Image Processing**: AI analysis of attached images for incident categorization
-- **Real-time Data Pipeline**: Ingests Slack messages and converts them to structured incident records
-- **Interactive Dashboard**: Streamlit-based dashboard for monitoring and managing incidents
-- **dbt Data Transformations**: Data modeling using one of the most popular build tool - dbt - on Snowflake provided runtime engine
+---
 
-
-## 4. Demo Vignettes
-
-This project demonstrates several key modern data platform capabilities through realistic incident management scenarios.
-
-### OpenFlow-Based Slack Ingestion
-
-   **Scenario**: Real-time incident reporting through Slack
-   - Users report incidents in dedicated Slack channels
-   - OpenFlow connector automatically ingests messages to Snowflake
-   - System processes both text and image attachments
-   - Demonstrates: Real-time data ingestion, unstructured data handling
-
-   **Demo Flow**:
-   1. Post incident message in Slack: "Payment gateway is returning 500 errors"
-   2. Attach screenshot of error page (use the sample image JPEG provided)
-   3. If Tasks are not setup, then run the dbt Project end-to-end
-   4. Watch as system creates structured incident record with AI classification
-
-### dbt Projects on Snowflake
-
-   **Scenario**: Working with dbt Projects in Snowflake
-   - Remote deployment and execution of dbt Projects using Snowflake CLI
-   - Using variables in [`dbt_project.yml`](src/incident_management/dbt_project.yml)
-   - Support for dbt command options as "select"
-   - Passing arguments using Task config to dbt commands executed using `EXECUTE DBT PROJECT`
-
-   **Scenario**: Scalable data transformation pipeline
-   - Raw Slack data transformed into analytics-ready models
-   - Incremental processing for performance
-   - Data quality testing and documentation
-   - Demonstrates: Modern data engineering practices, data lineage
-
-   **Key Models**:
-   - [`bronze_zone.v_qualify_slack_messages`](src/incident_management/models/bronze_zone/v_qualify_slack_messages.sql): Qualified Slack messages ready for transformation
-   - [`gold_zone.incidents`](src/incident_management/models/gold_zone/incidents.sql): AI-enhanced incident processing with image analysis
-   - [`gold_zone.active_incidents`](src/incident_management/models/gold_zone/active_incidents.sql): Business-ready incident tracking
-
-### AI/SQL Integration within dbt Models
-
-   **Scenario**: Intelligent incident classification and processing
-
-   #### Unstructured Text Processing
-   ```sql
-   -- Automatic incident categorization from Slack messages
-   ai_classify(sri.text, ['payment gateway error', 'login error', 'other']):labels[0] as category
-
-   -- Smart incident matching using natural language
-   ai_filter(
-   prompt('The text category {0} is logically relatable to this record\'s categoßry {1}', 
-            text_category, roi.category)
-   )
-   ```
-
-   #### Image Processing
-   ```sql
-   -- AI analysis of attached screenshots
-   case 
-      when sri.attachment_file is not null then 
-         ai_classify(sri.attachment_file, ['payment gateway error', 'login error', 'other']):labels[0]
-      else ai_classify(sri.text, ['payment gateway error', 'login error', 'other']):labels[0]
-   end as category
-   ```
-
-   **Demonstrates**: AI-native data processing, multimodal analysis, intelligent data enrichment
-
-   > See the complete implementation in [`incidents.sql`](src/incident_management/models/gold_zone/incidents.sql)
-
-### Streamlit Integration
-
-   A sample Streamlit in Snowflake (SiS) app gets deployed to Snowflake when you run the setup. It will enable you to run through few foundational scenarios end-to-end (from when you drop messages in Slack channel, run through your dbt Project to update your models, and then see the metrics in the dashboard).
-
-   **Scenario**: Real-time operational dashboard
-   - Live incident monitoring and management
-   - Interactive attachment viewing
-   - Trend analysis and reporting
-   - Demonstrates: Data visualization, real-time analytics, user experience
-
-   **Dashboard Features**:
-   - Real-time incident metrics with priority-based color coding
-   - Sample trend charts powered by Snowflake analytics
-   - In-app image viewing for incident attachments
-
-### End-to-End Workflow Example
-
-   **Complete Incident Lifecycle**:
-   1. **Report**: "Our login page is showing 'Invalid credentials' for valid users" + screenshot
-   2. **Ingest**: OpenFlow captures message and image from Slack
-   3. **Process**: dbt transforms raw data:
-      - AI classifies as "login error" (critical priority)
-      - Image analysis confirms authentication issue
-      - Creates incident record INC-2025-XXX
-   4. **Monitor**: Streamlit dashboard shows new critical incident
-   5. **Resolve**: Team addresses issue, updates status
-   6. **Analyze**: System tracks resolution time, updates trends
-
-This demonstrates a complete modern data stack handling real-world operational scenarios with AI enhancement and real-time visibility.
-
-## 5. Data Models
-
-### Bronze Zone
-   - [`users`](src/incident_management/models/bronze_zone/users.sql): User directory for assignees and reporters
-   - [`v_qualify_slack_messages`](src/incident_management/models/bronze_zone/v_qualify_slack_messages.sql): Qualified and filtered Slack messages for incident processing
-
-### Gold Zone
-   - [`incidents`](src/incident_management/models/gold_zone/incidents.sql): Core incident records with AI-powered classification
-   - [`incident_comment_history`](src/incident_management/models/gold_zone/incident_comment_history.sql): Chronological updates and comments
-   - [`incident_attachments`](src/incident_management/models/gold_zone/incident_attachments.sql): File attachments with metadata (as ingested from Slack)
-   - [`active_incidents`](src/incident_management/models/gold_zone/active_incidents.sql): Currently open incidents with enriched data
-   - [`closed_incidents`](src/incident_management/models/gold_zone/closed_incidents.sql): Resolved incidents with resolution metrics
-   - [`weekly_incident_trends`](src/incident_management/models/gold_zone/weekly_incident_trends.sql): Weekly trend analysis
-
-
-## 6. Project Structure
-
-```
-incident-management/
-├── data/                          # Sample data and test files
-│   ├── csv/                       # CSV seed data
-│   │   ├── incident_comment_history.csv
-│   │   ├── incidents.csv
-│   │   ├── slack_conversation_history.csv
-│   │   └── users.csv
-│   ├── exports/                   # Generated reports
-│   │   └── incm_quaterly_review_metrics_2025_Q2.pdf
-│   └── images/                    # Sample incident attachments
-│       ├── invalid_credentials.jpeg
-│       └── payment_gateway_outage.jpeg
-├── python_scripts/                # Python utilities and report generators
-│   ├── generate_incident_report_pptx.py
-│   └── incm_quaterly_review_metrics_*.md
-├── screenshots/                   # Documentation screenshots
-│   ├── destination_params.png
-│   └── snowflake_role_params.png
-├── src/
-│   ├── incident_management/       # dbt project
-│   │   ├── analyses/
-│   │   ├── logs/
-│   │   │   └── dbt.log
-│   │   ├── macros/                # Custom dbt macros
-│   │   │   ├── clean_stale_documents.sql
-│   │   │   └── generate_schema_name.sql
-│   │   ├── models/
-│   │   │   ├── bronze_zone/       # Raw staging/views
-│   │   │   │   ├── users.sql
-│   │   │   │   ├── users.yml
-│   │   │   │   ├── v_qualify_slack_messages.sql
-│   │   │   │   └── v_qualify_slack_messages.yml
-│   │   │   ├── gold_zone/         # Analytics-ready models
-│   │   │   │   ├── active_incidents.sql
-│   │   │   │   ├── active_incidents.yml
-│   │   │   │   ├── closed_incidents.sql
-│   │   │   │   ├── closed_incidents.yml
-│   │   │   │   ├── incident_attachments.sql
-│   │   │   │   ├── incident_attachments.yml
-│   │   │   │   ├── incident_comment_history.sql
-│   │   │   │   ├── incident_comment_history.yml
-│   │   │   │   ├── incidents.sql
-│   │   │   │   ├── incidents.yml
-│   │   │   │   ├── weekly_incident_trends.sql
-│   │   │   │   └── weekly_incident_trends.yml
-│   │   │   └── sources.yml        # Source definitions and tests
-│   │   ├── seeds/
-│   │   ├── snapshots/
-│   │   ├── target/                # dbt build artifacts (generated)
-│   │   ├── tests/
-│   │   ├── dbt_project.yml        # dbt configuration
-│   │   └── profiles.yml           # Database connections
-│   ├── logs/
-│   │   └── dbt.log
-│   ├── scripts/                   # Deployment and setup scripts
-│   │   ├── create_snowflake_yaml.sh
-│   │   ├── dbtdeploy.sh
-│   │   ├── dbtexec.sh
-│   │   └── snowflake.yml.template
-│   ├── sql/                       # Raw SQL scripts
-│   │   ├── 01_dbt_projects_stack.sql
-│   │   ├── 02_slack_connector.sql
-│   │   └── snowflake.yml
-│   └── streamlit/                 # Dashboard application
-│       ├── main.py                # Main dashboard
-│       └── snowflake.png          # Assets
-├── .gitignore
-├── Makefile
-├── requirements.txt               # Python dependencies
-└── README.md                      # This file
-```
-
-## 7. Setup
-
-### Installation
-
-This project demonstrates dbt Projects deployment and execution from local dev machine. But once deployed, it is easy to switch to Snowflake Workspaces to manage further redeployments and test executions.
+## Quick Start
 
 ### Prerequisites
 
-Before starting the installation, ensure you have:
-- **Snowflake CLI** installed ([installation guide](https://docs.snowflake.com/en/developer-guide/snowflake-cli/installation/installation))
-- **Snowflake connection** configured in `~/.snowflake/config.toml`
-- **ACCOUNTADMIN privileges** in your Snowflake account
-- **Openflow SPCS** Use these installation [instructions](https://docs.snowflake.com/en/user-guide/data-integration/openflow/setup-openflow-spcs) to setup Openflow SPCS deployment and a runtime on top within your Snowflake account
+- Snowflake account with ACCOUNTADMIN privileges
+- [Snowflake CLI](https://docs.snowflake.com/en/developer-guide/snowflake-cli/installation/installation) installed
+- [OpenFlow SPCS](https://docs.snowflake.com/en/user-guide/data-integration/openflow/setup-openflow-spcs) deployed in your account
 
-### Installation Steps
+### Installation
 
-   1. **Fork this repo**
+1. **Clone the repository**
 
-      ```bash
-      git clone https://github.com/Snowflake-Labs/unified-data-stack-for-incident-management.git
-      cd unified-data-stack-for-incident-management
-      git remote add upstream https://github.com/ORIGINAL_OWNER/REPO_NAME.git
-      git remote -v
-      ```
+```bash
+git clone https://github.com/Snowflake-Labs/unified-data-stack-for-incident-management.git
+cd unified-data-stack-for-incident-management
+```
 
-   2. **Configure Environment Variables**
+2. **Configure environment**
 
-      Copy the template and configure your environment:
-      ```bash
-      cp .env.template .env
-      ```
-      
-      Edit `.env` file and configure all variables except these two (generated later):
-      - `DBT_SNOWFLAKE_PASSWORD`
-      - `DBT_SNOWFLAKE_PRIVATE_KEY_PATH`
+```bash
+cp .env.template .env
+# Edit .env with your configuration
+```
 
-      > **Note:** If you change any of the below parameters, be sure to change the profiles.yml as well
-         - `DBT_PROJECT_DATABASE=v1_incident_management`
-         - `DBT_PROJECT_SCHEMA=dbt_project_deployments`
-         - `MODEL_SCHEMA=bronze_zone`
-         - `DBT_SNOWFLAKE_WAREHOUSE=v1_demo_wh`
-         - `DBT_PROJECT_ADMIN_ROLE=dbt_projects_engineer`
+3. **Run automated setup**
 
-   3. **Setup Snowflake Infrastructure (Automated)**
-      Use the Makefile to automate the entire Snowflake setup:
+```bash
+make install ENV_FILE=.env CONN=<your-connection-name>
+```
 
-      **Option A: Complete Setup (Recommended)**
-      ```bash
-      # Run complete installation
-      make install ENV_FILE=.env CONN=<your-connection-name>
-      ```
+4. **Configure Slack connector**
 
-      **Option B: Step-by-Step Setup**
-      For detailed information about available Makefile targets:
-      ```bash
-         make help
-      ```
+Follow the [detailed setup guide](docs/SETUP.md#slack-connector-configuration) to connect your Slack workspace.
 
-      ```bash
-      # Step 2.1: Generate snowflake.yml configuration
-      make generate-yaml ENV_FILE=.env
-      
-      # Step 2.2: Setup dbt Projects infrastructure
-      make setup-dbt-stack CONN=<your-connection-name>
-      
-      # Step 2.3: Setup Slack connector infrastructure
-      make setup-slack-connector CONN=<your-connection-name>
-      ```
+**That's it!** You now have a fully functional AI-powered incident management platform.
 
-      > **Note:** Replace `<your-connection-name>` with the connection name defined in your `~/.snowflake/config.toml`
-
-      > **Note:** Role setup commands require ACCOUNTADMIN privileges
-
-   4. **Setup User Authentication (Optional)**
-
-      Execute this step if planning to run Streamlit app remotely and/or deploy dbt Projects remotely:
-      
-      a. **Generate PAT Token**: From Snowsight UI generate a PAT for the dbt Projects service user tied to the role created in previous step. Note and copy the token for use during authentication.
-      
-      b. **Generate Key-Pair Authentication**: Follow the steps [here](https://docs.snowflake.com/en/user-guide/key-pair-auth#configuring-key-pair-authentication):
-         ```bash
-         # Generate private and public key
-         openssl genrsa -out rsa_private_key.pem 2048
-         openssl rsa -in rsa_private_key.pem -pubout -out rsa_public_key.pem
-         ```
-         
-         Then update the user in Snowflake (replace placeholder):
-         ```sql
-         ALTER USER <user name> SET RSA_PUBLIC_KEY='
-         -----BEGIN PUBLIC KEY-----
-         MIIBIjANBgkqhkiG9w0BAQEFAA...
-         -----END PUBLIC KEY-----';
-         ```
-      
-      c. **Update Environment Variables**: Update `.env` with:
-         - `DBT_SNOWFLAKE_PASSWORD=<your-PAT-token>`
-         - `DBT_SNOWFLAKE_PRIVATE_KEY_PATH=<path-to-private-key-file>`
-
-   5. **Configure Slack Connector (Post-Installation)**
-
-      After running the Makefile setup, configure the Slack connector in your OpenFlow SPCS runtime:
-      
-      a. **Review Prerequisites**: Check the [pre-requisites](https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/slack/setup#prerequisites)
-      
-      b. **Create Slack App**: Create a Slack app in your workspace using the given [manifest](https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/slack/setup#set-up-a-slack-app)
-      
-      c. **Generate App Token**: While creating your Slack app, ensure to generate the App token using atleast the below scope:
-         - connections:write
-      
-      d. **Update External Access in Snowflake**: [Update](https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/slack/setup#setup-necessary-ingress-rules) the External Access Integration object to add `slack.com` domain for egress from SPCS containers
-      
-      e. **Configure Connector in Openflow runtime canvas**: Use these [instructions](https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/slack/setup#configure-the-connector) to configure the connector. Ensure to use the database and role parameters created by the Makefile:
-      
-         ![Destination Parameters](screenshots/destination_params.png)
-         ![Snowflake Role Parameters](screenshots/snowflake_role_params.png)
-      
-      e. **Start and Test**: Start the connector and add the Slack app to a channel. Verify these tables are created:
-         - `SLACK_MEMBERS`,
-         - `SLACK_MEMBERS_STAGING`
-         - `DOC_METADATA`
-         - `FILE_HASHES`
-         - `SLACK_MESSAGES`
-
-      f. **Test that Slack app can send messages to Snowflake**: Drop a test message in your Slack channel and verify that a record appears in the `SLACK_MESSAGES` table (might take a few seconds).
-
-
-
-**Troubleshooting:**
-- Ensure your Snowflake connection is properly configured in `~/.snowflake/config.toml`
-- Verify you have ACCOUNTADMIN privileges
-- Check that all environment variables are set in your `.env` file
-- Run `make check-prereqs` to verify prerequisites
-
-## 8. Streamlit in Snowflake app
-
-### Dashboard Features
-
-   - **Metrics Overview**: Critical, high-priority, active, and recently closed incident counts
-   - **Active Incidents Table**: Real-time view of open incidents with priority indicators
-   - **Recently Closed Incidents**: Track resolution times and outcomes
-   - **Attachment Viewer**: Click on incidents with attachments to view images
-   - **Trend Analysis**: Monthly and weekly incident patterns (when data is available)
-
-### Managing Incidents via Slack
-
-   1. **Report New Incidents**: Post messages in configured Slack channels
-   2. **Automatic Processing**: The system will:
-      - Extract incident details from messages
-      - Classify incident type and priority using AI
-      - Process attached images for additional context
-      - Create structured incident records
-   3. **Track Progress**: Monitor incidents through the Streamlit dashboard
-
-## 9. Reference material
-
-   - [Snowflake AI Functions Documentation](https://docs.snowflake.com/en/user-guide/snowflake-cortex/aisql)
-   - [dbt Projects on Snowflake](https://docs.snowflake.com/en/user-guide/data-engineering/dbt-projects-on-snowflake)
-   - [Streamlit Documentation](https://docs.streamlit.io/)
-   - [OpenFlow Connectors](https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/about-openflow-connectors)
+For detailed installation instructions, see the [**Setup Guide**](docs/SETUP.md).
 
 ---
 
-## 10. Questions, Feedback, and Contribution
-Please feel free to reach out with any questions to chinmayee.lakkad@snowflake.com
+## What Can You Build?
 
-Feedback and contributions are very welcome:
+This project showcases several modern data platform patterns:
 
-- GitHub Issues for bug reports and feature requests
-- Pull Requests for direct contributions
+### 🔄 Real-Time Data Ingestion
+Stream data from Slack to Snowflake using OpenFlow connectors. Handles text, images, and metadata automatically.
+
+### 🤖 AI-Native Data Processing
+Embed Cortex AI functions directly in SQL transformations:
+
+```sql
+-- Intelligent categorization from text
+ai_classify(text, ['payment gateway error', 'login error', 'other'])
+
+-- Multi-modal analysis with images
+ai_classify(attachment_file, ['critical', 'warning', 'info'])
+```
+
+### 📈 Analytics-Ready Data Models
+Transform raw Slack messages into structured incident records with:
+- Automatic ID generation
+- Priority assignment
+- Status tracking
+- Resolution metrics
+
+### 🎨 Interactive Dashboards
+Real-time Streamlit dashboard with:
+- Live incident metrics
+- Attachment viewing
+- Trend analysis
+- Priority-based alerts
 
 ---
+
+## Documentation
+
+| Document | Description |
+|----------|-------------|
+| [**Setup Guide**](docs/SETUP.md) | Complete installation and configuration instructions |
+| [**Architecture**](docs/ARCHITECTURE.md) | System design, data models, and project structure |
+| [**Demo Vignettes**](docs/DEMOS.md) | Hands-on examples and usage scenarios |
+| [**Troubleshooting**](docs/TROUBLESHOOTING.md) | Common issues and solutions |
+
+---
+
+## Project Structure
+
+```
+incident-management/
+├── docs/                    # 📚 Documentation
+├── data/                    # 📊 Sample data and test files
+├── src/
+│   ├── incident_management/ # 🔧 dbt project (data models)
+│   ├── sql/                 # 🗄️  Infrastructure setup scripts
+│   ├── streamlit/           # 📱 Dashboard application
+│   └── cortex_agents/       # 🤖 AI agent specifications
+└── Makefile                 # ⚙️  Automation tasks
+```
+
+See the [**Architecture Guide**](docs/ARCHITECTURE.md) for complete details.
+
+---
+
+## Use Cases & Examples
+
+### End-to-End Incident Lifecycle
+
+1. **Report**: User posts in Slack: *"Payment gateway returning 500 errors"* + screenshot
+2. **Ingest**: OpenFlow captures message and image
+3. **Process**: dbt + AI classify as critical payment issue
+4. **Monitor**: Dashboard shows new critical incident
+5. **Resolve**: Team addresses issue, system tracks resolution time
+
+### Real-World Scenarios
+
+- **Payment outages** → Critical priority, auto-escalation
+- **Login issues** → High priority, authentication team notified  
+- **UI bugs** → Low priority, added to backlog
+
+Explore more examples in the [**Demo Vignettes**](docs/DEMOS.md).
+
+---
+
+## Technology Stack
+
+| Component | Technology |
+|-----------|-----------|
+| **Data Warehouse** | Snowflake |
+| **Data Transformation** | dbt (Snowflake runtime) |
+| **Data Ingestion** | OpenFlow SPCS |
+| **AI/ML** | Snowflake Cortex AI |
+| **Visualization** | Streamlit in Snowflake |
+| **Orchestration** | Snowflake Tasks |
+
+---
+
+## Resources
+
+- [Snowflake Cortex AI Documentation](https://docs.snowflake.com/en/user-guide/snowflake-cortex/aisql)
+- [dbt Projects on Snowflake](https://docs.snowflake.com/en/user-guide/data-engineering/dbt-projects-on-snowflake)
+- [OpenFlow Connectors](https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/about-openflow-connectors)
+- [Streamlit in Snowflake](https://docs.streamlit.io/)
+
+---
+
+## Contributing
+
+We welcome contributions! Here's how you can help:
+
+- 🐛 **Report bugs** via [GitHub Issues](https://github.com/Snowflake-Labs/unified-data-stack-for-incident-management/issues)
+- 💡 **Suggest features** or improvements
+- 🔧 **Submit Pull Requests** with enhancements
+
+---
+
+## Questions & Support
+
+For questions or feedback, please contact: **chinmayee.lakkad@snowflake.com**
+
+---
+
+## License
+
+This project is provided as-is for demonstration purposes.
+
+---
+
+**Ready to get started?** Head to the [**Setup Guide**](docs/SETUP.md) →

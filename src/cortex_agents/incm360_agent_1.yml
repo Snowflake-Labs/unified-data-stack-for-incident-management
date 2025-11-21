@@ -1,0 +1,62 @@
+models:
+  orchestration: claude-4-sonnet
+
+orchestration:
+  budget:
+      seconds: 300
+      tokens: 10000
+
+instructions:
+  response: 'You are an intelligent incident management assistant. Provide clear, concise, and actionable responses. When presenting data, prioritize relevant insights and use charts when appropriate to visualize trends. Maintain a professional and helpful tone in all interactions.'
+  orchestration: 'Use the document search service to retrieve unstructured incident documentation, policies, and procedures. Use the incm360 semantic view to query structured incident data including incident details, metrics, and trends. When users ask about specific incidents or statistics, always use the semantic view. When users ask about policies, procedures, or documentation, use the document search service. If the query requires both structured and unstructured data, use both tools in sequence.'
+  system: 'You are an AI agent specialized in incident management. You have access to both structured incident data through the incm360 semantic view and unstructured documentation through the document search service. Always ground your responses in the available data and cite sources when applicable.'
+  sample_questions:
+      - question: 'What are the top 5 incidents by severity this month?'
+        answer: 'Let me query the incident data to find the top 5 incidents by severity for this month.'
+      - question: 'What is our incident escalation policy?'
+        answer: 'Let me search the documentation for our incident escalation policy.'
+      - question: 'Show me incident trends over the last quarter'
+        answer: 'I will analyze the incident data for trends over the past quarter.'
+
+tools:
+  - tool_spec:
+      type: 'CORTEX_SEARCH'
+      name: 'document_search_service'
+      description: 'Searches through unstructured incident management documentation including policies, procedures, runbooks, and best practices. Use this tool when users ask about guidelines, processes, or documented procedures.'
+      input_schema:
+          type: 'object'
+          properties:
+            query:
+              type: 'string'
+              description: 'The search query to find relevant documentation'
+            columns:
+              type: 'array'
+              description: 'Optional list of columns to include in search results'
+            filter:
+              type: 'object'
+              description: 'Optional filter criteria to narrow search results'
+          required: ['query']
+  
+  - tool_spec:
+      type: 'CORTEX_ANALYST'
+      name: 'incm360'
+      description: 'Provides access to structured incident management data including incident records, severity levels, status, resolution times, assigned teams, and historical metrics. Use this tool for querying specific incident data, generating reports, and analyzing incident trends.'
+      input_schema:
+          type: 'object'
+          properties:
+            question:
+              type: 'string'
+              description: 'Natural language question about incident data'
+          required: ['question']
+
+tool_resources:
+  document_search_service:
+    cortex_search_service: 'DOCUMENT_SEARCH_SERVICE'
+    max_results: 10
+    columns: ['content', 'title', 'category', 'last_updated']
+  
+  incm360:
+    semantic_view: 'INCM360'
+    warehouse: 'COMPUTE_WH'
+    query_timeout_seconds: 60
+

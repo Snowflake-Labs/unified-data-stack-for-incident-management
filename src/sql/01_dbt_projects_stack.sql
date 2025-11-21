@@ -177,3 +177,11 @@ CREATE OR REPLACE STREAMLIT <% ctx.env.dbt_project_database %>.gold_zone.inciden
   COMMENT = 'Incident Management Dashboard - Monitor, track, and analyze incidents in real-time';
 
 
+-------------------------------------------------
+-- Create Stage for Agent Specifications
+-------------------------------------------------
+
+CREATE OR REPLACE STAGE <% ctx.env.dbt_project_database %>.gold_zone.agent_specs
+  DIRECTORY = ( ENABLE = true )
+  ENCRYPTION = (TYPE = 'SNOWFLAKE_SSE')
+  COMMENT = 'Stage for storing agent specification files with server-side encryption';
