@@ -62,11 +62,11 @@ make install ENV_FILE=.env CONN=<your-connection-name>
 
 4. **Configure Slack connector**
 
-Follow the [detailed setup guide](docs/SETUP.md#slack-connector-configuration) to connect your Slack workspace.
+Follow the [detailed setup guide](md-docs/SETUP.md#slack-connector-configuration) to connect your Slack workspace.
 
 **That's it!** You now have a fully functional AI-powered incident management platform.
 
-For detailed installation instructions, see the [**Setup Guide**](docs/SETUP.md).
+For detailed installation instructions, see the [**Setup Guide**](md-docs/SETUP.md).
 
 ---
 
@@ -108,10 +108,10 @@ Real-time Streamlit dashboard with:
 
 | Document | Description |
 |----------|-------------|
-| [**Setup Guide**](docs/SETUP.md) | Complete installation and configuration instructions |
-| [**Architecture**](docs/ARCHITECTURE.md) | System design, data models, and project structure |
-| [**Demo Vignettes**](docs/DEMOS.md) | Hands-on examples and usage scenarios |
-| [**Troubleshooting**](docs/TROUBLESHOOTING.md) | Common issues and solutions |
+| [**Setup Guide**](md-docs/SETUP.md) | Complete installation and configuration instructions |
+| [**Architecture**](md-docs/ARCHITECTURE.md) | System design, data models, and project structure |
+| [**Demo Vignettes**](md-docs/DEMOS.md) | Hands-on examples and usage scenarios |
+| [**Troubleshooting**](md-docs/TROUBLESHOOTING.md) | Common issues and solutions |
 
 ---
 
@@ -119,7 +119,7 @@ Real-time Streamlit dashboard with:
 
 ```
 incident-management/
-├── docs/                    # 📚 Documentation
+├── md-docs/                    # 📚 Documentation
 ├── data/                    # 📊 Sample data and test files
 ├── src/
 │   ├── incident_management/ # 🔧 dbt project (data models)
@@ -129,7 +129,7 @@ incident-management/
 └── Makefile                 # ⚙️  Automation tasks
 ```
 
-See the [**Architecture Guide**](docs/ARCHITECTURE.md) for complete details.
+See the [**Architecture Guide**](md-docs/ARCHITECTURE.md) for complete details.
 
 ---
 
@@ -149,7 +149,7 @@ See the [**Architecture Guide**](docs/ARCHITECTURE.md) for complete details.
 - **Login issues** → High priority, authentication team notified  
 - **UI bugs** → Low priority, added to backlog
 
-Explore more examples in the [**Demo Vignettes**](docs/DEMOS.md).
+Explore more examples in the [**Demo Vignettes**](md-docs/DEMOS.md).
 
 ---
 
@@ -197,4 +197,4 @@ This project is provided as-is for demonstration purposes.
 
 ---
 
-**Ready to get started?** Head to the [**Setup Guide**](docs/SETUP.md) →
+**Ready to get started?** Head to the [**Setup Guide**](md-docs/SETUP.md) →

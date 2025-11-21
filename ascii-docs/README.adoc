@@ -1,0 +1,240 @@
+= Unified Data Stack for Incident Management
+:toc:
+:toc-placement!:
+
+[quote]
+An end-to-end AI-powered incident management platform built entirely on Snowflake, demonstrating modern data engineering practices with dbt, Cortex AI, and Streamlit.
+
+image:https://img.shields.io/badge/Snowflake-Native-29B5E8?logo=snowflake[link="https://www.snowflake.com/"]
+image:https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?logo=streamlit[link="https://streamlit.io/"]
+
+'''
+
+toc::[]
+
+== Overview
+
+This project demonstrates a modern data stack for incident management—a real-world business process that benefits from AI-powered automation and real-time analytics. The platform ingests incident reports from Slack, intelligently classifies them using Snowflake Cortex AI, and provides real-time visualization through an interactive Streamlit dashboard.
+
+*This is a small cross-section of a much larger process to show the art of possible.*
+
+=== Architecture at a Glance
+
+----
+Slack App → OpenFlow Slack Connector → Bronze Zone → AISQL+ transformations via dbt Projects on Snowflake  → Gold Zone → Cortex Agents → Snowflake Intelligence
+                                                                                                                                       → Streamlit Dashboard  
+----
+
+=== Key Features
+
+✨ *AI-Powered Classification* - Automatically categorizes incidents using Snowflake Cortex AI +
+🖼️ *Image Processing* - AI analysis of screenshots and attachments +
+⚡ *Real-time Pipeline* - Near real-time ingestion from Slack via OpenFlow +
+📊 *Interactive Dashboard* - Streamlit-based monitoring and management +
+🔧 *Modern Data Engineering* - dbt transformations on Snowflake's native runtime
+
+'''
+
+== Quick Start
+
+=== Prerequisites
+
+* Snowflake account with ACCOUNTADMIN privileges
+* link:https://docs.snowflake.com/en/developer-guide/snowflake-cli/installation/installation[Snowflake CLI] installed
+* link:https://docs.snowflake.com/en/user-guide/data-integration/openflow/setup-openflow-spcs[OpenFlow SPCS] deployed in your account
+
+=== Installation
+
+. *Clone the repository*
++
+[source,bash]
+----
+git clone https://github.com/Snowflake-Labs/unified-data-stack-for-incident-management.git
+cd unified-data-stack-for-incident-management
+----
+
+. *Configure environment*
++
+[source,bash]
+----
+cp .env.template .env
+# Edit .env with your configuration
+----
+
+. *Run automated setup*
++
+[source,bash]
+----
+make install ENV_FILE=.env CONN=<your-connection-name>
+----
+
+. *Configure Slack connector*
++
+Follow the link:md-docs/SETUP.adoc#slack-connector-configuration[detailed setup guide] to connect your Slack workspace.
+
+*That's it!* You now have a fully functional AI-powered incident management platform.
+
+For detailed installation instructions, see the link:md-docs/SETUP.adoc[*Setup Guide*].
+
+'''
+
+== What Can You Build?
+
+This project showcases several modern data platform patterns:
+
+=== 🔄 Real-Time Data Ingestion
+
+Stream data from Slack to Snowflake using OpenFlow connectors. Handles text, images, and metadata automatically.
+
+=== 🤖 AI-Native Data Processing
+
+Embed Cortex AI functions directly in SQL transformations:
+
+[source,sql]
+----
+-- Intelligent categorization from text
+ai_classify(text, ['payment gateway error', 'login error', 'other'])
+
+-- Multi-modal analysis with images
+ai_classify(attachment_file, ['critical', 'warning', 'info'])
+----
+
+=== 📈 Analytics-Ready Data Models
+
+Transform raw Slack messages into structured incident records with:
+
+* Automatic ID generation
+* Priority assignment
+* Status tracking
+* Resolution metrics
+
+=== 🎨 Interactive Dashboards
+
+Real-time Streamlit dashboard with:
+
+* Live incident metrics
+* Attachment viewing
+* Trend analysis
+* Priority-based alerts
+
+'''
+
+== Documentation
+
+[cols="1,2"]
+|===
+|Document |Description
+
+|link:md-docs/SETUP.adoc[*Setup Guide*]
+|Complete installation and configuration instructions
+
+|link:md-docs/ARCHITECTURE.adoc[*Architecture*]
+|System design, data models, and project structure
+
+|link:md-docs/DEMOS.adoc[*Demo Vignettes*]
+|Hands-on examples and usage scenarios
+
+|link:md-docs/TROUBLESHOOTING.adoc[*Troubleshooting*]
+|Common issues and solutions
+|===
+
+'''
+
+== Project Structure
+
+----
+incident-management/
+├── md-docs/                    # 📚 Documentation
+├── data/                    # 📊 Sample data and test files
+├── src/
+│   ├── incident_management/ # 🔧 dbt project (data models)
+│   ├── sql/                 # 🗄️  Infrastructure setup scripts
+│   ├── streamlit/           # 📱 Dashboard application
+│   └── cortex_agents/       # 🤖 AI agent specifications
+└── Makefile                 # ⚙️  Automation tasks
+----
+
+See the link:md-docs/ARCHITECTURE.adoc[*Architecture Guide*] for complete details.
+
+'''
+
+== Use Cases & Examples
+
+=== End-to-End Incident Lifecycle
+
+. *Report*: User posts in Slack: _"Payment gateway returning 500 errors"_ + screenshot
+. *Ingest*: OpenFlow captures message and image
+. *Process*: dbt + AI classify as critical payment issue
+. *Monitor*: Dashboard shows new critical incident
+. *Resolve*: Team addresses issue, system tracks resolution time
+
+=== Real-World Scenarios
+
+* *Payment outages* → Critical priority, auto-escalation
+* *Login issues* → High priority, authentication team notified  
+* *UI bugs* → Low priority, added to backlog
+
+Explore more examples in the link:md-docs/DEMOS.adoc[*Demo Vignettes*].
+
+'''
+
+== Technology Stack
+
+[cols="1,1"]
+|===
+|Component |Technology
+
+|*Data Warehouse*
+|Snowflake
+
+|*Data Transformation*
+|dbt (Snowflake runtime)
+
+|*Data Ingestion*
+|OpenFlow SPCS
+
+|*AI/ML*
+|Snowflake Cortex AI
+
+|*Visualization*
+|Streamlit in Snowflake
+
+|*Orchestration*
+|Snowflake Tasks
+|===
+
+'''
+
+== Resources
+
+* link:https://docs.snowflake.com/en/user-guide/snowflake-cortex/aisql[Snowflake Cortex AI Documentation]
+* link:https://docs.snowflake.com/en/user-guide/data-engineering/dbt-projects-on-snowflake[dbt Projects on Snowflake]
+* link:https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/about-openflow-connectors[OpenFlow Connectors]
+* link:https://docs.streamlit.io/[Streamlit in Snowflake]
+
+'''
+
+== Contributing
+
+We welcome contributions! Here's how you can help:
+
+* 🐛 *Report bugs* via link:https://github.com/Snowflake-Labs/unified-data-stack-for-incident-management/issues[GitHub Issues]
+* 💡 *Suggest features* or improvements
+* 🔧 *Submit Pull Requests* with enhancements
+
+'''
+
+== Questions & Support
+
+For questions or feedback, please contact: *chinmayee.lakkad@snowflake.com*
+
+'''
+
+== License
+
+This project is provided as-is for demonstration purposes.
+
+'''
+
+*Ready to get started?* Head to the link:md-docs/SETUP.adoc[*Setup Guide*] →
+
