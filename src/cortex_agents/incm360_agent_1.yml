@@ -20,7 +20,7 @@ instructions:
 
 tools:
   - tool_spec:
-      type: 'CORTEX_SEARCH'
+      type: 'cortex_search'
       name: 'document_search_service'
       description: 'Searches through unstructured incident management documentation including policies, procedures, runbooks, and best practices. Use this tool when users ask about guidelines, processes, or documented procedures.'
       input_schema:
@@ -38,7 +38,7 @@ tools:
           required: ['query']
   
   - tool_spec:
-      type: 'CORTEX_ANALYST'
+      type: 'cortex_analyst_text_to_sql'
       name: 'incm360'
       description: 'Provides access to structured incident management data including incident records, severity levels, status, resolution times, assigned teams, and historical metrics. Use this tool for querying specific incident data, generating reports, and analyzing incident trends.'
       input_schema:
@@ -46,17 +46,18 @@ tools:
           properties:
             question:
               type: 'string'
-              description: 'Natural language question about incident data'
+              description: 'Natural language question about incident data like incident records, attachments, comments, quaterly review metrics, etc.'
           required: ['question']
 
 tool_resources:
   document_search_service:
-    cortex_search_service: 'DOCUMENT_SEARCH_SERVICE'
-    max_results: 10
-    columns: ['content', 'title', 'category', 'last_updated']
-  
-  incm360:
-    semantic_view: 'INCM360'
-    warehouse: 'COMPUTE_WH'
-    query_timeout_seconds: 60
+    search_service: '@INCIDENT_MANAGEMENT.bronze_zone.document_search_service'
+    title_column: 'relative_path'
+    id_column: 'etag'
 
+  incm360:
+    semantic_view: '@INCIDENT_MANAGEMENT.semantic_views.INCM360'
+    execution_environment: 
+      type: 'warehouse'
+      warehouse: 'demo_wh'
+      query_timeout: 60

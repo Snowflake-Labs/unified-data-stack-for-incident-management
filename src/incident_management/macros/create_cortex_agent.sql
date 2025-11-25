@@ -15,6 +15,12 @@
 
 {% set cortex_agent_ddl %}
     CREATE OR REPLACE AGENT {{ target.database }}.GOLD_ZONE.{{ agent_name }}
+    COMMENT = $$
+    This is a Cortex Agent that can be used to answer a variety of questions about the incident management process.
+    It has access to different tools to help it answer the questions. 
+    It can use hybrid search to answer questions about the incident management process from the unstructured incident documentation like policy documents, runbooks, and best practices etc.
+    It can also use the a semantic view to query structured data including incident details, metrics, trends, and quaterly review metrics etc.
+    $$
     PROFILE = '{"display_name": "Incident Management 360", "avatar": "Agent", "color": "green"}'
     FROM SPECIFICATION
     $$
