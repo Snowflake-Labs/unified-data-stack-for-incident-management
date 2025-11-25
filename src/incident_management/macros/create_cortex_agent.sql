@@ -24,7 +24,7 @@
     PROFILE = '{"display_name": "Incident Management 360", "avatar": "Agent", "color": "green"}'
     FROM SPECIFICATION
     $$
-    {{ agent_spec['data'][0][0] }}
+    {{ agent_spec['data'][0][0] | indent(4) }}
     $$;
 {% endset %}
 
