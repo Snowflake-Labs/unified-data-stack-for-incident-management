@@ -2,7 +2,7 @@
 :toc:
 :toc-placement!:
 
-*Author*: link:https://github.com/chinmayee-lakkad[Chinmayee Lakkad]
+*Author*: Chinmayee Lakkad
 *Email*: link:mailto:chinmayee.lakkad@snowflake.com[chinmayee.lakkad@snowflake.com]
 *Release Date*: November 2025
 *Version*: 2.0.0
