@@ -9,11 +9,11 @@
 :snowflake-config: ~/.snowflake/config.toml
 :conn-placeholder: your-connection-name
 :repo-placeholder: your-repository-url
-:default-database: v1_incident_management
+:default-database: incident_management
 :default-schema: dbt_project_deployments
 :model-schema: bronze_zone
 :gold-schema: gold_zone
-:default-warehouse: v1_demo_wh
+:default-warehouse: demo_wh
 :default-role: dbt_projects_engineer
 :streamlit-env-var: STREAMLIT_DEPLOYMENT_ENABLED
 
@@ -69,11 +69,9 @@ cp {env-template} {env-file}
 +
 Edit the `{env-file}` file and configure all variables except this one (generated later):
 +
-** `DBT_SNOWFLAKE_PASSWORD`
-+
 [NOTE]
 ====
-If you change any of the below parameters, be sure to change the `profiles.yml` as well:
+If you change any of the below parameters, be sure to change the `profiles.yml` as well before running the Makefile:
 
 ** `DBT_PROJECT_DATABASE={default-database}`
 ** `DBT_PROJECT_SCHEMA={default-schema}`
@@ -81,6 +79,9 @@ If you change any of the below parameters, be sure to change the `profiles.yml` 
 ** `DBT_PIPELINE_WH={default-warehouse}`
 ** `DBT_PROJECT_ADMIN_ROLE={default-role}`
 ====
+
+** `DBT_SNOWFLAKE_PASSWORD`
+
 
 . Setup Snowflake Infrastructure
 +
