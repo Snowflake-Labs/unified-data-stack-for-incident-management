@@ -7,8 +7,8 @@
 :env-file: .env
 :env-template: .env.template
 :snowflake-config: ~/.snowflake/config.toml
-:conn-placeholder: <your-connection-name>
-:repo-placeholder: <your-repository-url>
+:conn-placeholder: your-connection-name
+:repo-placeholder: your-repository-url
 :default-database: v1_incident_management
 :default-schema: dbt_project_deployments
 :model-schema: bronze_zone
@@ -53,7 +53,7 @@ git clone {repo-url}
 
 cd {repo-name}
 
-git remote add upstream {repo-placeholder}
+git remote add upstream <{repo-placeholder}>
 
 git remote -v
 ----
@@ -88,7 +88,7 @@ Use the Makefile to automate the entire Snowflake setup.
 +
 [NOTE]
 ====
-Replace `{conn-placeholder}` with the connection name defined in your `{snowflake-config}`
+Replace `<{conn-placeholder}>` with the connection name defined in your `{snowflake-config}`
 ====
 +
 [IMPORTANT]
@@ -101,7 +101,7 @@ Role setup commands require ACCOUNTADMIN privileges
 [source,bash,subs="attributes+"]
 ----
 # Run complete installation
-make install ENV_FILE={env-file} CONN={conn-placeholder}
+make install ENV_FILE={env-file} CONN=<{conn-placeholder}>
 ----
 
 .. Option B: Step-by-Step Setup
@@ -121,19 +121,19 @@ Run each step individually:
 make generate-yaml ENV_FILE={env-file}
 
 # Step 2: Setup dbt Projects infrastructure
-make setup-dbt-stack CONN={conn-placeholder}
+make setup-dbt-stack CONN=<{conn-placeholder}>
 
 # Step 3: Setup Slack connector infrastructure
-make setup-slack-connector CONN={conn-placeholder}
+make setup-slack-connector CONN=<{conn-placeholder}>
 
 # Step 4: Setup Snowflake tasks
-make setup-tasks CONN={conn-placeholder}
+make setup-tasks CONN=<{conn-placeholder}>
 
 # Step 5: Setup procedures and functions
-make setup-procs-funcs CONN={conn-placeholder}
+make setup-procs-funcs CONN=<{conn-placeholder}>
 
 # Step 6: Deploy Streamlit app (optional, requires {streamlit-env-var}=true)
-{streamlit-env-var}=true make deploy-streamlit CONN={conn-placeholder}
+{streamlit-env-var}=true make deploy-streamlit CONN=<{conn-placeholder}>
 ----
 +
 [NOTE]
