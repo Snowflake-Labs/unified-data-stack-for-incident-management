@@ -10,6 +10,38 @@ toc::[]
 
 This project demonstrates several key modern data platform capabilities through realistic incident management scenarios. Each vignette showcases a specific capability or integration pattern.
 
+
+== Data Flow
+
+=== Incident Lifecycle
+
+. *Ingestion*: User posts incident message in Slack
+   ** OpenFlow captures message metadata
+   ** Attachments are stored and linked
+   ** Raw data lands in `SLACK_MESSAGES` table
+
+. *Qualification*: dbt processes raw messages
+   ** Filters relevant incident messages
+   ** Deduplicates records
+   ** Creates qualified view for processing
+
+. *Enrichment*: AI-powered classification
+   ** Text analysis using Cortex AI functions
+   ** Image classification for attachments
+   ** Category and priority assignment
+
+. *Structuring*: Incident record creation
+   ** Generates unique incident IDs
+   ** Links to reporters and assignees
+   ** Creates comment and attachment records
+
+. *Visualization*: Dashboard updates
+   ** Real-time metrics calculation
+   ** Active incident tracking
+   ** Trend analysis
+
+
+
 == OpenFlow-Based Slack Ingestion
 
 === Scenario
@@ -467,8 +499,8 @@ System automatically tracks:
 
 == Next Steps
 
-* Set up your own Slack channel following the link:SETUP.adoc[Setup Guide]
-* Review the link:ARCHITECTURE.adoc[Architecture Documentation] to understand the data flow
+* Set up your own Slack channel following the link:setup.adoc[Setup Guide]
+* Review the link:architecture.adoc[Architecture Documentation] to understand the data flow
 * Explore the actual SQL in the model files to see implementation details
 * Experiment with different incident scenarios
 

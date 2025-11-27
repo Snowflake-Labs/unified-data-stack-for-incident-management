@@ -1,0 +1,4 @@
+link:architecture.adoc[← Back to Architecture]
+
+'''
+

@@ -1,0 +1,64 @@
+= Unified Data Stack on Snowflake
+:toc:
+:toc-placement!:
+
+Author: Chinmayee Lakkad
+Release Date: November 2025
+
+toc::[]
+
+== Overview
+
+This project is a comprehensive example of building an end-to-end pipeline on Snowflake to ingest data through OpenFlow, transform it using dbt Projects for Standard models, Semantic Views, Cortex Search and Cortex Agents for AI-powered automation, batch analytics and conversational AI through Snowflake Intelligence.
+
+[IMPORTANT]
+*To demonstrate the design pattern of this stack the project uses incident management as an illustrative subset of the real-world business process only to show the art of possible with this modern design pattern on Snowflake that can be applied for any industry or business process.*
+
+=== Key Features
+
+==== 1. *Open new data frontiers* to ingest from using OpenFlow connectors
+==== 2. *Standardize data models* using SQL and well established engineerings tools like dbt core 
+==== 3. *Interleave AISQL* within dbt models for dynamic reasoning and decision making
+    3.1 This includes using AISQL to process unstructured text and images for classification and enrichment
+
+    3.2 Or, unstructured documents (PDFss, PPTs, TXTs, etc) for search and retrieval, and question extraction
+
+==== 4. *Deploy Cortex services* such as Cortex Search and Cortex Agents from within the same dbt Project
+==== 5. *Unlock conversational AI* through Snowflake Intelligence for decision making through all data within a business process.
+
+== Getting Started
+
+[cols="1,2"]
+|===
+|Document |Description
+
+|link:ascii-docs/architecture.adoc[*Architecture*]
+|Technical architecture, data models, and project structure
+
+|link:ascii-docs/setup.adoc[*Setup Guide*]
+|Complete installation and configuration instructions
+
+|link:ascii-docs/demos.adoc[*Demo Vignettes*]
+|Hands-on examples and usage scenarios
+
+|===
+
+
+== Resources
+
+image:https://img.shields.io/badge/Snowflake-Intelligence-29B5E8?logo=snowflake[link="https://docs.snowflake.com/en/user-guide/snowflake-cortex/snowflake-intelligence"]
+image:https://img.shields.io/badge/Cortex-Agents-29B5E8?logo=snowflake[link="https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-agents"]
+image:https://img.shields.io/badge/dbt-Projects-29B5E8?logo=snowflake[link="https://docs.snowflake.com/en/user-guide/data-engineering/dbt-projects-on-snowflake-understanding-dbt-project-objects"]
+image:https://img.shields.io/badge/Snowflake-OpenFlow-29B5E8?logo=snowflake[link="https://docs.snowflake.com/en/user-guide/data-integration/openflow/about"]
+image:https://img.shields.io/badge/Streamlit-Dashboard-29B5E8?logo=streamlit[link="https://streamlit.io/"]
+image:https://img.shields.io/badge/OpenFlow-Slack-29B5E8?logo=snowflake[link="https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/slack/about"]
+
+
+== Contributing
+
+We welcome contributions! Here's how you can help:
+
+* *Report bugs* via link:https://github.com/Snowflake-Labs/unified-data-stack-for-incident-management/issues[GitHub Issues]
+* *Suggest features* or improvements
+* *Submit Pull Requests* with enhancements
+* *Submit Pull Requests* with enhancements

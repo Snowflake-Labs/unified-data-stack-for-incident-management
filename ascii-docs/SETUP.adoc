@@ -6,6 +6,48 @@ This guide walks you through setting up the Incident Management platform on Snow
 
 toc::[]
 
+
+== Quick Start
+
+=== Prerequisites
+
+* Snowflake account with ACCOUNTADMIN privileges
+* link:https://docs.snowflake.com/en/developer-guide/snowflake-cli/installation/installation[Snowflake CLI] installed
+* link:https://docs.snowflake.com/en/user-guide/data-integration/openflow/setup-openflow-spcs[OpenFlow SPCS] deployed in your account
+
+=== Installation
+
+. *Clone the repository*
++
+[source,bash]
+----
+git clone https://github.com/Snowflake-Labs/unified-data-stack-for-incident-management.git
+cd unified-data-stack-for-incident-management
+----
+
+. *Configure environment*
++
+[source,bash]
+----
+cp .env.template .env
+# Edit .env with your configuration
+----
+
+. *Run automated setup*
++
+[source,bash]
+----
+make install ENV_FILE=.env CONN=<your-connection-name>
+----
+
+. *Configure Slack connector*
++
+Follow the <<slack-connector-configuration,detailed setup guide>> below to connect your Slack workspace.
+
+*That's it!* You now have a fully functional AI-powered incident management platform.
+
+'''
+
 == Prerequisites
 
 Before starting the installation, ensure you have:
@@ -14,6 +56,16 @@ Before starting the installation, ensure you have:
 * *Snowflake connection* configured in `~/.snowflake/config.toml`
 * *ACCOUNTADMIN privileges* in your Snowflake account
 * *Openflow SPCS* deployment and runtime. Use these link:https://docs.snowflake.com/en/user-guide/data-integration/openflow/setup-openflow-spcs[installation instructions] to set up OpenFlow SPCS within your Snowflake account
+
+
+=== Key Directories
+
+* *`data/`*: Sample and seed data for testing and initial setup
+* *`docs/`*: All documentation in modular format
+* *`src/incident_management/`*: Core dbt project with data models
+* *`src/sql/`*: Infrastructure setup and raw SQL scripts
+* *`src/streamlit/`*: Interactive dashboard application
+* *`python_scripts/`*: Utility scripts for reporting and automation
 
 == Installation Steps
 
@@ -232,12 +284,10 @@ make check-prereqs
 * Check that the warehouse and role exist
 * Review `profiles.yml` for correct connection settings
 
-For more detailed troubleshooting, see link:TROUBLESHOOTING.adoc[TROUBLESHOOTING.adoc].
-
 == Next Steps
 
-* Review the link:ARCHITECTURE.adoc[Architecture Documentation] to understand the system design
-* Explore link:DEMOS.adoc[Demo Vignettes] to see the platform in action
+* Review the link:architecture.adoc[Architecture Documentation] to understand the system design
+* Explore link:demos.adoc[Demo Vignettes] to see the platform in action
 * Check out the <<reference-material>> for additional resources
 
 [[reference-material]]
