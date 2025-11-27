@@ -24,7 +24,7 @@ create or replace task incm_project_deps
       LET _eai := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('eai'));
       LET command := 'deps';
 
-      EXECUTE DBT PROJECT <% ctx.env.dbt_project_name %> args=:command;
+      EXECUTE DBT PROJECT <% ctx.env.dbt_project_name %> args=:command external_access_integrations = (:_eai);
     END;
   $$
   ;
@@ -70,7 +70,7 @@ create or replace task incm_daily_models_refresh
 
 
 -- Triggered Task for document based model refreshes
-CREATE TASK incm_triggered_docs_processing
+CREATE OR REPLACE TASK incm_triggered_docs_processing
   TARGET_COMPLETION_INTERVAL='15 MINUTES'
   WHEN SYSTEM$STREAM_HAS_DATA('INCIDENT_MANAGEMENT.bronze_zone.documents_stream')
   AS
