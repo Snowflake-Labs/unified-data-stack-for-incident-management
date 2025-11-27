@@ -64,13 +64,11 @@ The platform follows a modern data stack architecture built entirely on Snowflak
 
 * link:semantic_view.adoc[Semantic Views] created from *all* the processed and conformed (structured) data in Gold Zone for Text2SQL analysis through Cortex Analyst
 
-*dbt DAG*
-++++++++
+=== dbt DAG
 
 image::UDS_v2.png[width=100%]
 
-
-*Quick Links for dbt Models for document processing*
+=== Quick Links for dbt Models for document processing
 
 [cols="1,2"]
 |===
