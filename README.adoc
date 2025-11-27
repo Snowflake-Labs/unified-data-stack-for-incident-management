@@ -18,15 +18,18 @@ This project is a comprehensive example of building an end-to-end pipeline on Sn
 
 === Key Features
 
-==== 1. *Open new data frontiers* to ingest from using OpenFlow connectors
-==== 2. *Standardize data models* using SQL and well-established engineering tools like dbt core 
-==== 3. *Interleave AISQL* within dbt models for dynamic reasoning and decision-making
-    3.1 This includes using AISQL to process unstructured text and images for classification and enrichment
+. *Open new data frontiers* to ingest from using OpenFlow connectors
 
-    3.2 Or, unstructured documents (PDFs, PPTs, TXTs, etc.) for search and retrieval, and question extraction
+. *Standardize data models* using SQL and well-established engineering tools like dbt core
 
-==== 4. *Deploy Cortex services*, such as Cortex Search and Cortex Agents, from within the same dbt Project
-==== 5. *Unlock conversational AI* through Snowflake Intelligence for decision-making through all data within a business process.
+. *Interleave AISQL* within dbt models for dynamic reasoning and decision-making
++
+* This includes using AISQL to process unstructured text and images for classification and enrichment
+* Or, unstructured documents (PDFs, PPTs, TXTs, etc.) for search and retrieval, and question extraction
+
+. *Deploy Cortex services*, such as Cortex Search and Cortex Agents, from within the same dbt Project
+
+. *Unlock conversational AI* through Snowflake Intelligence for decision-making through all data within a business process
 
 == Getting Started
 

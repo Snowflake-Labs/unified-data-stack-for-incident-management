@@ -16,29 +16,34 @@ This project demonstrates several key modern data platform capabilities through 
 === Incident Lifecycle
 
 . *Ingestion*: User posts incident message in Slack
-   ** OpenFlow captures message metadata
-   ** Attachments are stored and linked
-   ** Raw data lands in `SLACK_MESSAGES` table
++
+** OpenFlow captures message metadata
+** Attachments are stored and linked
+** Raw data lands in `SLACK_MESSAGES` table
 
 . *Qualification*: dbt processes raw messages
-   ** Filters relevant incident messages
-   ** Deduplicates records
-   ** Creates qualified view for processing
++
+** Filters relevant incident messages
+** Deduplicates records
+** Creates qualified view for processing
 
 . *Enrichment*: AI-powered classification
-   ** Text analysis using Cortex AI functions
-   ** Image classification for attachments
-   ** Category and priority assignment
++
+** Text analysis using Cortex AI functions
+** Image classification for attachments
+** Category and priority assignment
 
 . *Structuring*: Incident record creation
-   ** Generates unique incident IDs
-   ** Links to reporters and assignees
-   ** Creates comment and attachment records
++
+** Generates unique incident IDs
+** Links to reporters and assignees
+** Creates comment and attachment records
 
 . *Visualization*: Dashboard updates
-   ** Real-time metrics calculation
-   ** Active incident tracking
-   ** Trend analysis
++
+** Real-time metrics calculation
+** Active incident tracking
+** Trend analysis
 
 
 
@@ -169,25 +174,25 @@ ai_classify(text, {{ var('incident_categories') }})
 +
 link:../src/incident_management/models/bronze_zone/v_qualify_slack_messages.sql[`v_qualify_slack_messages`]
 +
-   ** Filters relevant incident messages
-   ** Removes duplicates using window functions
-   ** Prepares clean data for transformation
+** Filters relevant incident messages
+** Removes duplicates using window functions
+** Prepares clean data for transformation
 
 . *Gold Zone: Incident Processing*
 +
 link:../src/incident_management/models/gold_zone/incidents.sql[`incidents`]
 +
-   ** AI-enhanced incident classification
-   ** Multi-modal analysis (text + images)
-   ** Automatic priority assignment
+** AI-enhanced incident classification
+** Multi-modal analysis (text + images)
+** Automatic priority assignment
 
 . *Gold Zone: Business Views*
 +
 link:../src/incident_management/models/gold_zone/active_incidents.sql[`active_incidents`]
 +
-   ** Real-time operational view
-   ** Enriched with user information
-   ** Calculated fields (age, SLA status)
+** Real-time operational view
+** Enriched with user information
+** Calculated fields (age, SLA status)
 
 === What This Demonstrates
 
@@ -467,27 +472,30 @@ System automatically tracks:
 . *Message:* "Payment processing is completely down, customers can't check out"
 . *Attachment:* `payment_gateway_outage.jpeg`
 . *Expected Result:*
-   ** Category: "payment gateway error"
-   ** Priority: "Critical"
-   ** Auto-assigned to on-call engineer
++
+** Category: "payment gateway error"
+** Priority: "Critical"
+** Auto-assigned to on-call engineer
 
 === Test Scenario 2: Minor UI Issue
 
 . *Message:* "The logo is slightly misaligned on mobile devices"
 . *No Attachment*
 . *Expected Result:*
-   ** Category: "other"
-   ** Priority: "Low"
-   ** Added to backlog
++
+** Category: "other"
+** Priority: "Low"
+** Added to backlog
 
 === Test Scenario 3: Database Connectivity
 
 . *Message:* "Getting connection timeout errors to production database"
 . *No Attachment*
 . *Expected Result:*
-   ** Category: "database connectivity"
-   ** Priority: "Critical"
-   ** Immediate escalation
++
+** Category: "database connectivity"
+** Priority: "Critical"
+** Immediate escalation
 
 == Running Your Own Tests
 

@@ -2,51 +2,10 @@
 :toc:
 :toc-placement!:
 
-This guide walks you through setting up the Incident Management platform on Snowflake.
+This guide walks you through setting up the unified data stack on Snowflake.
 
 toc::[]
 
-
-== Quick Start
-
-=== Prerequisites
-
-* Snowflake account with ACCOUNTADMIN privileges
-* link:https://docs.snowflake.com/en/developer-guide/snowflake-cli/installation/installation[Snowflake CLI] installed
-* link:https://docs.snowflake.com/en/user-guide/data-integration/openflow/setup-openflow-spcs[OpenFlow SPCS] deployed in your account
-
-=== Installation
-
-. *Clone the repository*
-+
-[source,bash]
-----
-git clone https://github.com/Snowflake-Labs/unified-data-stack-for-incident-management.git
-cd unified-data-stack-for-incident-management
-----
-
-. *Configure environment*
-+
-[source,bash]
-----
-cp .env.template .env
-# Edit .env with your configuration
-----
-
-. *Run automated setup*
-+
-[source,bash]
-----
-make install ENV_FILE=.env CONN=<your-connection-name>
-----
-
-. *Configure Slack connector*
-+
-Follow the <<slack-connector-configuration,detailed setup guide>> below to connect your Slack workspace.
-
-*That's it!* You now have a fully functional AI-powered incident management platform.
-
-'''
 
 == Prerequisites
 
@@ -55,13 +14,13 @@ Before starting the installation, ensure you have:
 * *Snowflake CLI* installed (link:https://docs.snowflake.com/en/developer-guide/snowflake-cli/installation/installation[installation guide])
 * *Snowflake connection* configured in `~/.snowflake/config.toml`
 * *ACCOUNTADMIN privileges* in your Snowflake account
-* *Openflow SPCS* deployment and runtime. Use these link:https://docs.snowflake.com/en/user-guide/data-integration/openflow/setup-openflow-spcs[installation instructions] to set up OpenFlow SPCS within your Snowflake account
+* *Git* installed on your local machine
+* *OpenFlow SPCS* deployment and runtime. Use these link:https://docs.snowflake.com/en/user-guide/data-integration/openflow/setup-openflow-spcs[installation instructions] to set up OpenFlow SPCS within your Snowflake account
 
-
-=== Key Directories
+== Key Directories
 
 * *`data/`*: Sample and seed data for testing and initial setup
-* *`docs/`*: All documentation in modular format
+* *`docs/`*: Sample documents for text extraction and question extraction.
 * *`src/incident_management/`*: Core dbt project with data models
 * *`src/sql/`*: Infrastructure setup and raw SQL scripts
 * *`src/streamlit/`*: Interactive dashboard application
@@ -71,64 +30,77 @@ Before starting the installation, ensure you have:
 
 This project demonstrates dbt Projects deployment and execution from a local dev machine. Once deployed, you can switch to Snowflake Workspaces to manage further redeployments and test executions.
 
-=== 1. Fork and Clone the Repository
-
+. Fork and Clone the Repository
++
 [source,bash]
 ----
 git clone https://github.com/Snowflake-Labs/unified-data-stack-for-incident-management.git
+
 cd unified-data-stack-for-incident-management
-git remote add upstream https://github.com/ORIGINAL_OWNER/REPO_NAME.git
+
+git remote add upstream <your-repository-url>
+
 git remote -v
 ----
 
-=== 2. Configure Environment Variables
-
+. Configure Environment Variables
++
 Copy the template and configure your environment:
-
++
 [source,bash]
 ----
 cp .env.template .env
 ----
-
++
 Edit the `.env` file and configure all variables except these two (generated later):
-
-* `DBT_SNOWFLAKE_PASSWORD`
-* `DBT_SNOWFLAKE_PRIVATE_KEY_PATH`
-
++
+** `DBT_SNOWFLAKE_PASSWORD`
+** `DBT_SNOWFLAKE_PRIVATE_KEY_PATH`
++
 [NOTE]
 ====
 If you change any of the below parameters, be sure to change the `profiles.yml` as well:
 
-* `DBT_PROJECT_DATABASE=v1_incident_management`
-* `DBT_PROJECT_SCHEMA=dbt_project_deployments`
-* `MODEL_SCHEMA=bronze_zone`
-* `DBT_SNOWFLAKE_WAREHOUSE=v1_demo_wh`
-* `DBT_PROJECT_ADMIN_ROLE=dbt_projects_engineer`
+** `DBT_PROJECT_DATABASE=v1_incident_management`
+** `DBT_PROJECT_SCHEMA=dbt_project_deployments`
+** `MODEL_SCHEMA=bronze_zone`
+** `DBT_SNOWFLAKE_WAREHOUSE=v1_demo_wh`
+** `DBT_PROJECT_ADMIN_ROLE=dbt_projects_engineer`
 ====
 
-=== 3. Setup Snowflake Infrastructure
-
+. Setup Snowflake Infrastructure
++
 Use the Makefile to automate the entire Snowflake setup.
-
-==== Option A: Complete Setup (Recommended)
-
++
+[NOTE]
+====
+Replace `<your-connection-name>` with the connection name defined in your `~/.snowflake/config.toml`
+====
++
+[IMPORTANT]
+====
+Role setup commands require ACCOUNTADMIN privileges
+====
++
+.. Option A: Complete Setup (Recommended)
++
 [source,bash]
 ----
 # Run complete installation
 make install ENV_FILE=.env CONN=<your-connection-name>
 ----
 
-==== Option B: Step-by-Step Setup
-
+.. Option B: Step-by-Step Setup
++
 For detailed information about available Makefile targets:
-
++
 [source,bash]
 ----
 make help
 ----
-
++
 Run each step individually:
-
++
 [source,bash]
 ----
 # Step 1: Generate snowflake.yml configuration
@@ -139,162 +111,85 @@ make setup-dbt-stack CONN=<your-connection-name>
 
 # Step 3: Setup Slack connector infrastructure
 make setup-slack-connector CONN=<your-connection-name>
+
+# Step 4: Setup Snowflake tasks
+make setup-tasks CONN=<your-connection-name>
+
+# Step 5: Setup procedures and functions
+make setup-procs-funcs CONN=<your-connection-name>
 ----
 
-[NOTE]
-====
-Replace `<your-connection-name>` with the connection name defined in your `~/.snowflake/config.toml`
-====
-
-[IMPORTANT]
-====
-Role setup commands require ACCOUNTADMIN privileges
-====
-
-== User Authentication Setup
-
-Execute this step if planning to run the Streamlit app remotely and/or deploy dbt Projects remotely.
-
-=== 1. Generate PAT Token
-
-From Snowsight UI, generate a PAT (Personal Access Token) for the dbt Projects service user tied to the role created in the previous step. Note and copy the token for use during authentication.
-
-=== 2. Generate Key-Pair Authentication
-
-Follow the steps in the link:https://docs.snowflake.com/en/user-guide/key-pair-auth#configuring-key-pair-authentication[Snowflake documentation]:
-
-[source,bash]
-----
-# Generate private and public key
-openssl genrsa -out rsa_private_key.pem 2048
-openssl rsa -in rsa_private_key.pem -pubout -out rsa_public_key.pem
-----
-
-Then update the user in Snowflake (replace placeholder):
-
-[source,sql]
-----
-ALTER USER <user name> SET RSA_PUBLIC_KEY='
------BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAA...
------END PUBLIC KEY-----';
-----
-
-=== 3. Update Environment Variables
-
-Update your `.env` file with:
-
-* `DBT_SNOWFLAKE_PASSWORD=<your-PAT-token>`
-* `DBT_SNOWFLAKE_PRIVATE_KEY_PATH=<path-to-private-key-file>`
-
-== Slack Connector Configuration
-
+. Slack Connector Configuration
++
 After running the Makefile setup, configure the Slack connector in your OpenFlow SPCS runtime.
 
-=== 1. Review Prerequisites
-
+.. Review Prerequisites
++
 Check the link:https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/slack/setup#prerequisites[pre-requisites] for the Slack connector.
 
-=== 2. Create Slack App
-
+.. Create Slack App
++
 Create a Slack app in your workspace using the given link:https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/slack/setup#set-up-a-slack-app[manifest].
 
-=== 3. Generate App Token
-
+.. Generate App Token
++
 While creating your Slack app, ensure to generate the App token using at least the below scope:
-
++
 * `connections:write`
 
-=== 4. Update External Access in Snowflake
-
+.. Update External Access in Snowflake
++
 link:https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/slack/setup#setup-necessary-ingress-rules[Update] the External Access Integration object to add `slack.com` domain for egress from SPCS containers.
 
-=== 5. Configure Connector in OpenFlow Runtime Canvas
+.. Configure Connector in OpenFlow Runtime Canvas
++
+Use these link:https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/slack/setup#configure-the-connector[instructions] to configure the connector. 
+Ensure to use the database and role parameters created by the Makefile (values in the screenshot may change based on configuration within .env file):
++
+image::destination_params.png[Destination Parameters]
+image::snowflake_role_params.png[Snowflake Role Parameters]
 
-Use these link:https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/slack/setup#configure-the-connector[instructions] to configure the connector. Ensure to use the database and role parameters created by the Makefile:
-
-image::../screenshots/destination_params.png[Destination Parameters]
-image::../screenshots/snowflake_role_params.png[Snowflake Role Parameters]
-
-=== 6. Start and Test
-
+.. Start and Test
++
 Start the connector and add the Slack app to a channel. Verify these tables are created:
-
++
 * `SLACK_MEMBERS`
 * `SLACK_MEMBERS_STAGING`
 * `DOC_METADATA`
 * `FILE_HASHES`
 * `SLACK_MESSAGES`
 
-=== 7. Test Message Ingestion
-
+.. Test Message Ingestion
++
 Drop a test message in your Slack channel and verify that a record appears in the `SLACK_MESSAGES` table (might take a few seconds).
 
-== Streamlit Dashboard
+. Streamlit Dashboard
 
-=== Accessing the Dashboard
-
+.. Accessing the Dashboard
++
 After completing the setup, a Streamlit in Snowflake (SiS) app will be deployed to your Snowflake account. This enables you to run through foundational scenarios end-to-end.
 
-=== Dashboard Features
-
+.. Dashboard Features
++
 * *Metrics Overview*: Critical, high-priority, active, and recently closed incident counts
 * *Active Incidents Table*: Real-time view of open incidents with priority indicators
 * *Recently Closed Incidents*: Track resolution times and outcomes
 * *Attachment Viewer*: Click on incidents with attachments to view images
 * *Trend Analysis*: Monthly and weekly incident patterns (when data is available)
 
-=== Managing Incidents via Slack
+.. Managing Incidents via Slack
++
+... *Report New Incidents*: Post messages in configured Slack channels
+... *Automatic Processing*: The system will:
++
+** Extract incident details from messages
+** Classify incident type and priority using AI
+** Process attached images for additional context
+** Create structured incident records
+... *Track Progress*: Monitor incidents through the Streamlit dashboard
 
-. *Report New Incidents*: Post messages in configured Slack channels
-. *Automatic Processing*: The system will:
-   ** Extract incident details from messages
-   ** Classify incident type and priority using AI
-   ** Process attached images for additional context
-   ** Create structured incident records
-. *Track Progress*: Monitor incidents through the Streamlit dashboard
+'''
 
-== Troubleshooting
+link:../README.adoc[← To README] ||| link:../demos.adoc[→ To Demo Vignettes]
 
-=== Common Issues
-
-*Connection Issues*
-
-* Ensure your Snowflake connection is properly configured in `~/.snowflake/config.toml`
-* Verify you have ACCOUNTADMIN privileges
-* Check that all environment variables are set in your `.env` file
-
-*Prerequisites Check*
-
-[source,bash]
-----
-make check-prereqs
-----
-
-*Slack Connector Not Working*
-
-* Verify the Slack app has the correct scopes
-* Check that External Access Integration includes `slack.com`
-* Ensure the connector is running in OpenFlow runtime
-* Verify table creation in Snowflake
-
-*dbt Project Deployment Issues*
-
-* Confirm authentication is properly configured
-* Check that the warehouse and role exist
-* Review `profiles.yml` for correct connection settings
-
-== Next Steps
-
-* Review the link:architecture.adoc[Architecture Documentation] to understand the system design
-* Explore link:demos.adoc[Demo Vignettes] to see the platform in action
-* Check out the <<reference-material>> for additional resources
-
-[[reference-material]]
-== Reference Material
-
-* link:https://docs.snowflake.com/en/user-guide/snowflake-cortex/aisql[Snowflake AI Functions Documentation]
-* link:https://docs.snowflake.com/en/user-guide/data-engineering/dbt-projects-on-snowflake[dbt Projects on Snowflake]
-* link:https://docs.streamlit.io/[Streamlit Documentation]
-* link:https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/about-openflow-connectors[OpenFlow Connectors]
-
+'''
