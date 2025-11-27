@@ -21,3 +21,4 @@ env:
   cortex_search_wh: "${CORTEX_SEARCH_WH}"
   streamlit_deployment_enabled: "${STREAMLIT_DEPLOYMENT_ENABLED}"
   streamlit_query_wh: "${STREAMLIT_QUERY_WH}"
+  dbt_deps_eai: "${DBT_DEPS_EAI}"

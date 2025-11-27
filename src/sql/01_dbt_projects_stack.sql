@@ -172,4 +172,4 @@ CREATE OR REPLACE STAGE <% ctx.env.dbt_project_database %>.gold_zone.agent_specs
   ENCRYPTION = (TYPE = 'SNOWFLAKE_SSE')
   COMMENT = 'Stage for storing agent specification files with server-side encryption';
 
-PUT file://../../cortex_agents/incm360_agent_1.yml  @<% ctx.env.dbt_project_database %>.gold_zone.agent_specs overwrite=true auto_compress=false;
+PUT file://../cortex_agents/incm360_agent_1.yml  @<% ctx.env.dbt_project_database %>.gold_zone.agent_specs overwrite=true auto_compress=false;

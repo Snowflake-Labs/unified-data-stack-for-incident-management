@@ -42,7 +42,11 @@ install:
 		echo "Usage: make install ENV_FILE=.env CONN=<connection-name>"; \
 		exit 1; \
 	fi
+	@echo "================================================================================================================"
+	@echo "================================================================================================================"
 	@echo "🚀 Starting complete Snowflake infrastructure setup..."
+	@echo "================================================================================================================"
+	@echo "================================================================================================================"
 	@$(MAKE) generate-yaml ENV_FILE=$(ENV_FILE)
 	@$(MAKE) setup-dbt-stack CONN=$(CONN)
 	@$(MAKE) setup-slack-connector CONN=$(CONN)
@@ -67,7 +71,11 @@ generate-yaml:
 		echo "Please copy env.template to $(ENV_FILE) and configure it"; \
 		exit 1; \
 	fi
+	@echo "================================================================================================================"
+	@echo "================================================================================================================"
 	@echo "🔧 Generating snowflake.yml configuration..."
+	@echo "================================================================================================================"
+	@echo "================================================================================================================"
 	cd src/scripts && ./create_snowflake_yaml.sh -e ../../$(ENV_FILE)
 	@if [ -f "src/sql/snowflake.yml" ]; then \
 		echo "✅ snowflake.yml generated successfully in src/sql/"; \
@@ -89,18 +97,15 @@ setup-dbt-stack:
 		echo "Please install it first: https://docs.snowflake.com/en/developer-guide/snowflake-cli/installation/installation"; \
 		exit 1; \
 	fi
+	@echo "================================================================================================================"
+	@echo "================================================================================================================"
 	@echo "❄️  Setting up dbt Projects infrastructure..."
+	@echo "================================================================================================================"
+	@echo "================================================================================================================"
 	@echo "⚠️  Note: This requires ACCOUNTADMIN privileges"
 	cd src/sql && snow sql --connection $(CONN) -f 01_dbt_projects_stack.sql
 	@echo "✅ dbt Projects infrastructure setup complete!"
 	@echo ""
-	@echo "🔑 Optional next steps for remote deployment:"
-	@echo "1. Generate PAT token in Snowsight for the dbt service user"
-	@echo "2. Generate key-pair authentication:"
-	@echo "   openssl genrsa -out rsa_private_key.pem 2048"
-	@echo "   openssl rsa -in rsa_private_key.pem -pubout -out rsa_public_key.pem"
-	@echo "3. Update user with public key in Snowflake"
-	@echo "4. Update .env with DBT_SNOWFLAKE_PASSWORD"
 
 # Step 2.3: Setup Slack connector infrastructure
 setup-slack-connector:
@@ -115,10 +120,15 @@ setup-slack-connector:
 		echo "Please install it first: https://docs.snowflake.com/en/developer-guide/snowflake-cli/installation/installation"; \
 		exit 1; \
 	fi
-	@echo "💬 Setting up Slack connector infrastructure..."
+	@echo "================================================================================================================"
+	@echo "================================================================================================================"
+	@echo "💬 Setting up Slack connector backend infrastructure..."
+	@echo "================================================================================================================"
+	@echo "================================================================================================================"
 	@echo "⚠️  Note: This requires ACCOUNTADMIN privileges"
 	cd src/sql && snow sql --connection $(CONN) -f 02_slack_connector.sql
-	@echo "✅ Slack connector infrastructure setup complete!"
+	@echo "✅ Slack connector backend infrastructure setup complete!"
+	@echo ""
 	@echo ""
 	@echo "🔗 Next steps for Slack connector:"
 	@echo "1. Login to your OpenFlow SPCS runtime"
@@ -140,7 +150,11 @@ setup-tasks:
 		echo "Please install it first: https://docs.snowflake.com/en/developer-guide/snowflake-cli/installation/installation"; \
 		exit 1; \
 	fi
+	@echo "================================================================================================================"
+	@echo "================================================================================================================"
 	@echo "⏰ Setting up Snowflake tasks..."
+	@echo "================================================================================================================"
+	@echo "================================================================================================================"
 	cd src/sql && snow sql --connection $(CONN) -f 03_tasks.sql
 	@echo "✅ Snowflake tasks setup complete!"
 
@@ -157,7 +171,11 @@ setup-procs-funcs:
 		echo "Please install it first: https://docs.snowflake.com/en/developer-guide/snowflake-cli/installation/installation"; \
 		exit 1; \
 	fi
+	@echo "================================================================================================================"
+	@echo "================================================================================================================"
 	@echo "⚙️  Setting up procedures and functions..."
+	@echo "================================================================================================================"
+	@echo "================================================================================================================"
 	cd src/sql && snow sql --connection $(CONN) -f 04_procs_and_funcs.sql
 	@echo "✅ Procedures and functions setup complete!"
 
@@ -179,7 +197,11 @@ deploy-streamlit:
 		echo "Please install it first: https://docs.snowflake.com/en/developer-guide/snowflake-cli/installation/installation"; \
 		exit 1; \
 	fi
+	@echo "================================================================================================================"
+	@echo "================================================================================================================"
 	@echo "🎨 Deploying Streamlit app..."
+	@echo "================================================================================================================"
+	@echo "================================================================================================================"
 	cd src/sql && snow sql --connection $(CONN) -f 05_streamlit_app.sql
 	@echo "✅ Streamlit app deployment complete!"
 	@echo ""
@@ -188,7 +210,11 @@ deploy-streamlit:
 
 # Check prerequisites
 check-prereqs:
+	@echo "================================================================================================================"
+	@echo "================================================================================================================"
 	@echo "🔍 Checking prerequisites..."
+	@echo "================================================================================================================"
+	@echo "================================================================================================================"
 	@echo -n "uv: "
 	@if command -v uv >/dev/null 2>&1; then echo "✅ installed"; else echo "❌ not found"; fi
 	@echo -n "snow CLI: "
