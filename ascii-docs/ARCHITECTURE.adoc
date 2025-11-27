@@ -71,7 +71,7 @@ image::UDS_v2.png[width=100%]
 
 '''
 
-link:../README.adoc[← To README] ||| link:../setup.adoc[→ To Setup Guide]
+link:../README.adoc[← To README] ||| link:SETUP.adoc[→ To Setup Guide]
 
 '''
 

@@ -37,13 +37,13 @@ This project is a comprehensive example of building an end-to-end pipeline on Sn
 |===
 |Document |Description
 
-|link:ascii-docs/architecture.adoc[*Architecture*]
+|link:ascii-docs/ARCHITECTURE.adoc[*Architecture*]
 |Technical architecture, data models, and project structure
 
-|link:ascii-docs/setup.adoc[*Setup Guide*]
+|link:ascii-docs/SETUP.adoc[*Setup Guide*]
 |Complete installation and configuration instructions
 
-|link:ascii-docs/demos.adoc[*Demo Vignettes*]
+|link:ascii-docs/DEMOS.adoc[*Demo Vignettes*]
 |Hands-on examples and usage scenarios
 
 |===

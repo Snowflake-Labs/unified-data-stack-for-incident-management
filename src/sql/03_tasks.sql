@@ -9,13 +9,13 @@ use schema <% ctx.env.dbt_project_database %>.dbt_project_deployments;
 -- Task to run project dependencies and compile all models, macros, and tests
 -- Does not need to be scheduled
 create or replace task incm_root_deps_and_compile
-	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
-	config='{"target": "<% ctx.env.dbt_target %>"}'
+	warehouse=<% ctx.env.dbt_pipeline_wh %>
+	config='{"target": "<% ctx.env.dbt_target %>", "eai": "<%%>"}'
 	as SELECT 1;
 
 
 create or replace task incm_project_deps
-	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
+	warehouse=<% ctx.env.dbt_pipeline_wh %>
 	after incm_root_deps_and_compile
 	as 
   EXECUTE IMMEDIATE
@@ -32,7 +32,7 @@ create or replace task incm_project_deps
   ;
 
 create or replace task incm_project_compile
-	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
+	warehouse=<% ctx.env.dbt_pipeline_wh %>
 	after incm_project_deps
 	as 
   EXECUTE IMMEDIATE
@@ -50,13 +50,13 @@ create or replace task incm_project_compile
 
 -- Core model refresh tasks
 create or replace task incm_root_daily_incremental_refresh
-	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
+	warehouse=<% ctx.env.dbt_pipeline_wh %>
 	schedule='<% ctx.env.daily_refresh_cron_schedule %>'
 	config='{"target": "<% ctx.env.dbt_target %>"}'
 	as SELECT 1;
 
 create or replace task incm_daily_models_refresh
-	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
+	warehouse=<% ctx.env.dbt_pipeline_wh %>
 	after incm_root_daily_incremental_refresh
 	as 
   EXECUTE IMMEDIATE
@@ -88,13 +88,13 @@ CREATE TASK incm_triggered_docs_processing
 
 -- Weekly refresh tasks
 create or replace task incm_root_weekly_refresh
-	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
+	warehouse=<% ctx.env.dbt_pipeline_wh %>
 	schedule='<% ctx.env.weekly_refresh_cron_schedule %>'
 	config='{"target": "<% ctx.env.dbt_target %>"}'
 	as SELECT 1;
 
 create or replace task incm_weekly_models_refresh
-	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
+	warehouse=<% ctx.env.dbt_pipeline_wh %>
 	after incm_root_weekly_refresh
 	as 
   EXECUTE IMMEDIATE
@@ -128,7 +128,7 @@ create or replace task incm_deploy_cortex_services
       EXECUTE dbt project <% ctx.env.dbt_project_name %> args='run --select semantic_views.incm360 --target '|| _target;
 
       -- Cortex Search
-      EXECUTE dbt project <% ctx.env.dbt_project_name %> args='run-operation create_document_search_service --args "{service_name: incm_doc_search,search_wh: <% ctx.env.cortex_search_warehouse %>,search_column: chunk,target_lag:  1 day}" --target '|| _target;
+      EXECUTE dbt project <% ctx.env.dbt_project_name %> args='run-operation create_document_search_service --args "{service_name: incm_doc_search,search_wh: <% ctx.env.cortex_search_wh %>,search_column: chunk,target_lag:  1 day}" --target '|| _target;
       
       -- Cortex Agents
       EXECUTE dbt project <% ctx.env.dbt_project_name %> args='run-operation create_cortex_agent --args "{agent_name: incm360_a1, stage_name: <% ctx.env.dbt_project_database %>.gold_zone.agent_specs, spec_file: incm360_agent_1.yml}" --target '|| _target;

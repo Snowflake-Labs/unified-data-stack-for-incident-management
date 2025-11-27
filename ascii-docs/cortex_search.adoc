@@ -33,7 +33,7 @@ Hence this macro is only run once when the Cortex Search service is deployed via
 
 '''
 
-link:architecture.adoc[← To Architecture] ||| link:setup.adoc[→ To Setup Guide]
+link:ARCHITECTURE.adoc[← To Architecture] ||| link:SETUP.adoc[→ To Setup Guide]
 
 '''
 

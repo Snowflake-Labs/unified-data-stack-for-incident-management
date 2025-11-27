@@ -24,12 +24,12 @@ For Cortex Search, we need to extract the text chunks from the documents and hen
 
 ==== Question and Answer Extraction
 
-The documents under _qa_ sub-directory are picked up by the dbt model link:../src/incident_management/models/silver_zone/document_question_extracts.sql[`document_question_extracts`] in Silver Zone. 
+The documents under _qa_ sub-directory are picked up by the dbt model link:../src/incident_management/models/silver_zone/document_question_extracts.py[`document_question_extracts`] in Silver Zone. 
 This model is also tagged as 'document_processing' to indicate that it is a document processing model and is going to run through a link:https://docs.snowflake.com/en/user-guide/tasks-triggered[Triggered Task] whenever there is a new document added to the _qa_ sub-directory.
 
 In order to provide the questions that will be used with the AI_EXTRACT function, the model uses the `meta` configuration in the model YAML file to define the questions that will be used with the AI_EXTRACT function.
 
-The `meta` configuration is defined in the dbt model link:../src/incident_management/models/silver_zone/document_question_extracts.yml[`document_question_extracts.yml`] in Silver Zone. It is a dictionary that contains the questions that will be used with the AI_EXTRACT function. The specific set of questions you will find is under the `quaterly_review_metrics` key, written for a quarterly review metrics reports (sample document: link:../data/documents/qa/incm_quarterly_review_metrics_2025Q3.pdf[incm_quarterly_review_metrics_2025Q3.pdf]).
+The `meta` configuration is defined in the dbt model link:../src/incident_management/models/silver_zone/document_question_extracts.yml[`document_question_extracts.yml`] in Silver Zone. It is a dictionary that contains the questions that will be used with the AI_EXTRACT function. The specific set of questions you will find is under the `quaterly_review_metrics` key, written for a quarterly review metrics reports (sample document: link:../data/docs/qa/incm_quaterly_review_metrics_2025_Q2.pdf[incm_quaterly_review_metrics_2025_Q2.pdf]).
 
 You can use this pattern to define the questions for any other type of document processing that you may need. The structure that you can use for each document type can be of the form:
 [source,yaml]
@@ -49,7 +49,7 @@ meta:
 This format ensures that the Snowpark model is able to convert to the JSON schema expected by the AI_EXTRACT function.
 
 '''
-link:architecture.adoc[← To Architecture] ||| link:setup.adoc[→ To Setup Guide]
+link:ARCHITECTURE.adoc[← To Architecture] ||| link:SETUP.adoc[→ To Setup Guide]
 
 '''
 

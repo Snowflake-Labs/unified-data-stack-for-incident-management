@@ -8,6 +8,8 @@ incident_management:
       schema: "bronze_zone"
       user: ""
       warehouse: "demo_wh"
+      query_tag: '{"dbt_project": "incident_management", "environment": "dev"}'
+
   target: "dev"
 
 

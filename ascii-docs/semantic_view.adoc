@@ -39,7 +39,7 @@ The SV ultimately serves as the source of truth for Text2SQL analysis through Co
 
 '''
 
-link:architecture.adoc[← To Architecture] ||| link:setup.adoc[→ To Setup Guide]
+link:ARCHITECTURE.adoc[← To Architecture] ||| link:SETUP.adoc[→ To Setup Guide]
 
 '''
 

@@ -14,8 +14,8 @@ CREATE OR REPLACE API INTEGRATION <% ctx.env.snowflake_git_api_int %>
 
 CREATE OR REPLACE DATABASE <% ctx.env.dbt_project_database %>;
 
-CREATE OR REPLACE WAREHOUSE <% ctx.env.dbt_snowflake_warehouse %> WAREHOUSE_SIZE='X-SMALL' INITIALLY_SUSPENDED=TRUE;
-CREATE OR REPLACE WAREHOUSE <% ctx.env.cortex_search_warehouse %> WAREHOUSE_SIZE='X-SMALL' INITIALLY_SUSPENDED=TRUE;
+CREATE OR REPLACE WAREHOUSE <% ctx.env.dbt_pipeline_wh %> WAREHOUSE_SIZE='X-SMALL' INITIALLY_SUSPENDED=TRUE;
+CREATE OR REPLACE WAREHOUSE <% ctx.env.cortex_search_wh %> WAREHOUSE_SIZE='X-SMALL' INITIALLY_SUSPENDED=TRUE;
 /**
 
 Optional: 
@@ -28,7 +28,7 @@ with login access to Snowsight by granting the dbt_project_admin_role to the use
 **/ 
 -- create or replace user <% ctx.env.snowflake_user %>
 -- type=service
--- default_warehouse=<% ctx.env.dbt_snowflake_warehouse %>
+-- default_warehouse=<% ctx.env.dbt_pipeline_wh %>
 -- default_namespace=<% ctx.env.dbt_project_database %>
 -- default_role=<% ctx.env.dbt_project_admin_role %>
 -- comment='service user for dbt projects';
@@ -41,8 +41,8 @@ grant all privileges on future schemas in database <% ctx.env.dbt_project_databa
 grant database role snowflake.cortex_user to role <% ctx.env.dbt_project_admin_role %>; 
 
 grant usage on integration <% ctx.env.snowflake_git_api_int %> to role <% ctx.env.dbt_project_admin_role %>;
-grant usage on warehouse <% ctx.env.dbt_snowflake_warehouse %> to role <% ctx.env.dbt_project_admin_role %>;
-grant usage on warehouse <% ctx.env.cortex_search_warehouse %> to role <% ctx.env.dbt_project_admin_role %>;
+grant usage on warehouse <% ctx.env.dbt_pipeline_wh %> to role <% ctx.env.dbt_project_admin_role %>;
+grant usage on warehouse <% ctx.env.cortex_search_wh %> to role <% ctx.env.dbt_project_admin_role %>;
 grant execute task on account to role <% ctx.env.dbt_project_admin_role %>;
 grant role <% ctx.env.dbt_project_admin_role %> to role sysadmin;
 grant role <% ctx.env.dbt_project_admin_role %> to user <% ctx.env.snowflake_user %>;
@@ -161,17 +161,6 @@ GIT_CREDENTIALS = <% ctx.env.dbt_project_database %>.dbt_project_deployments.inc
 CREATE DBT PROJECT <% ctx.env.dbt_project_database %>.dbt_project_deployments.<% ctx.env.dbt_project_name %>
   FROM '@<% ctx.env.dbt_project_database %>.dbt_project_deployments.project_git_repo/branches/main/src/incident_management'
   COMMENT = 'generates incident management data models';
-
-
--------------------------------------------------
--- Create Streamlit App for Incident Management Dashboard
--------------------------------------------------
-
-CREATE OR REPLACE STREAMLIT <% ctx.env.dbt_project_database %>.gold_zone.incident_management_dashboard
-  ROOT_LOCATION = '@<% ctx.env.dbt_project_database %>.dbt_project_deployments.project_git_repo/branches/main/src/streamlit'
-  MAIN_FILE = '/main.py'
-  QUERY_WAREHOUSE = <% ctx.env.dbt_snowflake_warehouse %>
-  COMMENT = 'Incident Management Dashboard - Monitor, track, and analyze incidents in real-time';
 
 
 -------------------------------------------------

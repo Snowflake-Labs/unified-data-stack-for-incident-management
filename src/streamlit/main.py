@@ -74,7 +74,7 @@ class SnowflakeConnection:
                         "user": os.getenv("SNOWFLAKE_USER"),
                         "password": os.getenv("DBT_SNOWFLAKE_PASSWORD"),
                         "role": os.getenv("DBT_PROJECT_ADMIN_ROLE"), 
-                        "warehouse": os.getenv("DBT_SNOWFLAKE_WAREHOUSE"),  # optional
+                        "warehouse": os.getenv("STREAMLIT_QUERY_WH"),  # optional
                         "database": os.getenv("DBT_PROJECT_DATABASE"),  # optional
                         "schema": os.getenv("DBT_PROJECT_SCHEMA"),  # optional
                     }

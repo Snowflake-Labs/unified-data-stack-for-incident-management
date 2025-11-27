@@ -1,6 +1,21 @@
 = Installation & Setup Guide
 :toc:
 :toc-placement!:
+// Document attributes and variables
+:repo-url: https://github.com/Snowflake-Labs/unified-data-stack-for-incident-management.git
+:repo-name: unified-data-stack-for-incident-management
+:env-file: .env
+:env-template: .env.template
+:snowflake-config: ~/.snowflake/config.toml
+:conn-placeholder: <your-connection-name>
+:repo-placeholder: <your-repository-url>
+:default-database: v1_incident_management
+:default-schema: dbt_project_deployments
+:model-schema: bronze_zone
+:gold-schema: gold_zone
+:default-warehouse: v1_demo_wh
+:default-role: dbt_projects_engineer
+:streamlit-env-var: STREAMLIT_DEPLOYMENT_ENABLED
 
 This guide walks you through setting up the unified data stack on Snowflake.
 
@@ -12,7 +27,7 @@ toc::[]
 Before starting the installation, ensure you have:
 
 * *Snowflake CLI* installed (link:https://docs.snowflake.com/en/developer-guide/snowflake-cli/installation/installation[installation guide])
-* *Snowflake connection* configured in `~/.snowflake/config.toml`
+* *Snowflake connection* configured in `{snowflake-config}`
 * *ACCOUNTADMIN privileges* in your Snowflake account
 * *Git* installed on your local machine
 * *OpenFlow SPCS* deployment and runtime. Use these link:https://docs.snowflake.com/en/user-guide/data-integration/openflow/setup-openflow-spcs[installation instructions] to set up OpenFlow SPCS within your Snowflake account
@@ -32,13 +47,13 @@ This project demonstrates dbt Projects deployment and execution from a local dev
 
 . Fork and Clone the Repository
 +
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git clone https://github.com/Snowflake-Labs/unified-data-stack-for-incident-management.git
+git clone {repo-url}
 
-cd unified-data-stack-for-incident-management
+cd {repo-name}
 
-git remote add upstream <your-repository-url>
+git remote add upstream {repo-placeholder}
 
 git remote -v
 ----
@@ -47,12 +62,12 @@ git remote -v
 +
 Copy the template and configure your environment:
 +
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-cp .env.template .env
+cp {env-template} {env-file}
 ----
 +
-Edit the `.env` file and configure all variables except these two (generated later):
+Edit the `{env-file}` file and configure all variables except these two (generated later):
 +
 ** `DBT_SNOWFLAKE_PASSWORD`
 ** `DBT_SNOWFLAKE_PRIVATE_KEY_PATH`
@@ -61,11 +76,11 @@ Edit the `.env` file and configure all variables except these two (generated lat
 ====
 If you change any of the below parameters, be sure to change the `profiles.yml` as well:
 
-** `DBT_PROJECT_DATABASE=v1_incident_management`
-** `DBT_PROJECT_SCHEMA=dbt_project_deployments`
-** `MODEL_SCHEMA=bronze_zone`
-** `DBT_SNOWFLAKE_WAREHOUSE=v1_demo_wh`
-** `DBT_PROJECT_ADMIN_ROLE=dbt_projects_engineer`
+** `DBT_PROJECT_DATABASE={default-database}`
+** `DBT_PROJECT_SCHEMA={default-schema}`
+** `MODEL_SCHEMA={model-schema}`
+** `DBT_PIPELINE_WH={default-warehouse}`
+** `DBT_PROJECT_ADMIN_ROLE={default-role}`
 ====
 
 . Setup Snowflake Infrastructure
@@ -74,7 +89,7 @@ Use the Makefile to automate the entire Snowflake setup.
 +
 [NOTE]
 ====
-Replace `<your-connection-name>` with the connection name defined in your `~/.snowflake/config.toml`
+Replace `{conn-placeholder}` with the connection name defined in your `{snowflake-config}`
 ====
 +
 [IMPORTANT]
@@ -84,10 +99,10 @@ Role setup commands require ACCOUNTADMIN privileges
 +
 .. Option A: Complete Setup (Recommended)
 +
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 # Run complete installation
-make install ENV_FILE=.env CONN=<your-connection-name>
+make install ENV_FILE={env-file} CONN={conn-placeholder}
 ----
 
 .. Option B: Step-by-Step Setup
@@ -101,23 +116,31 @@ make help
 +
 Run each step individually:
 +
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 # Step 1: Generate snowflake.yml configuration
-make generate-yaml ENV_FILE=.env
+make generate-yaml ENV_FILE={env-file}
 
 # Step 2: Setup dbt Projects infrastructure
-make setup-dbt-stack CONN=<your-connection-name>
+make setup-dbt-stack CONN={conn-placeholder}
 
 # Step 3: Setup Slack connector infrastructure
-make setup-slack-connector CONN=<your-connection-name>
+make setup-slack-connector CONN={conn-placeholder}
 
 # Step 4: Setup Snowflake tasks
-make setup-tasks CONN=<your-connection-name>
+make setup-tasks CONN={conn-placeholder}
 
 # Step 5: Setup procedures and functions
-make setup-procs-funcs CONN=<your-connection-name>
+make setup-procs-funcs CONN={conn-placeholder}
+
+# Step 6: Deploy Streamlit app (optional, requires {streamlit-env-var}=true)
+{streamlit-env-var}=true make deploy-streamlit CONN={conn-placeholder}
 ----
++
+[NOTE]
+====
+The Streamlit deployment step is optional and will only proceed if `{streamlit-env-var}` is set to `true`. If the environment variable is not set or set to any other value, the deployment will be skipped with a warning message.
+====
 
 . Slack Connector Configuration
 +
@@ -163,7 +186,25 @@ Start the connector and add the Slack app to a channel. Verify these tables are 
 +
 Drop a test message in your Slack channel and verify that a record appears in the `SLACK_MESSAGES` table (might take a few seconds).
 
-. Streamlit Dashboard
+. Snowflake Intelligence
++
+Once you have created the dbt Project, execute the Tasks available in the following order to build the baseline models and the Cortex AI services on top including the Cortex Agent:
+
+* `incm_triggered_docs_processing`
+* `incm_root_deploy_cortex_services`
++
+Once Cortex Agent has been created follow instructions link:https://docs.snowflake.com/en/user-guide/snowflake-cortex/snowflake-intelligence#add-agents[here] to add the Cortex Agent to Snowflake Intelligence.
+
+. Streamlit Dashboard (Optional)
++
+Optionally, you can deploy a Streamlit dashboard to visualize the incidents and their statuses as a more traditional method of reporting pre-calculated metrics and insights.
++
+Deploying the Streamlit dashboard is controlled by an environment variable in the `{env-file}` file called `{streamlit-env-var}`. Set it to `true` to deploy the Streamlit dashboard when you run the Makefile install command.
++
+[NOTE]
+====
+If using Option A (Complete Setup), the Streamlit app will be deployed automatically if `{streamlit-env-var}=true` is set in your `{env-file}` file. If using Option B (Step-by-Step), refer to Step 6 in the commands above.
+====
 
 .. Accessing the Dashboard
 +
@@ -177,19 +218,9 @@ After completing the setup, a Streamlit in Snowflake (SiS) app will be deployed 
 * *Attachment Viewer*: Click on incidents with attachments to view images
 * *Trend Analysis*: Monthly and weekly incident patterns (when data is available)
 
-.. Managing Incidents via Slack
-+
-... *Report New Incidents*: Post messages in configured Slack channels
-... *Automatic Processing*: The system will:
-+
-** Extract incident details from messages
-** Classify incident type and priority using AI
-** Process attached images for additional context
-** Create structured incident records
-... *Track Progress*: Monitor incidents through the Streamlit dashboard
 
 '''
 
-link:../README.adoc[← To README] ||| link:../demos.adoc[→ To Demo Vignettes]
+link:../README.adoc[← To README] ||| link:DEMOS.adoc[→ To Demo Vignettes]
 
 '''

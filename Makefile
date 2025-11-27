@@ -1,7 +1,7 @@
 # Makefile for Incident Management Project Setup
 # Automates installation steps 1-3 as documented in README.md
 
-.PHONY: help install setup-snowflake generate-yaml setup-dbt-stack setup-slack-connector setup-tasks setup-procs-funcs all
+.PHONY: help install setup-snowflake generate-yaml setup-dbt-stack setup-slack-connector setup-tasks setup-procs-funcs deploy-streamlit all
 
 # Default target
 help:
@@ -16,6 +16,7 @@ help:
 	@echo "  setup-slack-connector Setup Slack connector infrastructure (step 2.3)"
 	@echo "  setup-tasks       Setup Snowflake tasks (step 2.4)"
 	@echo "  setup-procs-funcs Setup procedures and functions (step 2.5)"
+	@echo "  deploy-streamlit  Deploy Streamlit app (requires STREAMLIT_DEPLOYMENT_ENABLED=true)"
 	@echo ""
 	@echo "Prerequisites:"
 	@echo "  - Snowflake CLI installed"
@@ -29,6 +30,7 @@ help:
 	@echo "  make setup-slack-connector CONN=myconn  # Setup Slack connector"
 	@echo "  make setup-tasks CONN=myconn    # Setup Snowflake tasks"
 	@echo "  make setup-procs-funcs CONN=myconn  # Setup procedures and functions"
+	@echo "  make deploy-streamlit CONN=myconn  # Deploy Streamlit app (requires STREAMLIT_DEPLOYMENT_ENABLED=true)"
 	@echo ""
 	@echo "Note: Python dependencies are installed separately when running the dashboard"
 	@echo "See README 'Running the Dashboard' section for Python setup instructions"
@@ -158,6 +160,31 @@ setup-procs-funcs:
 	@echo "⚙️  Setting up procedures and functions..."
 	cd src/sql && snow sql --connection $(CONN) -f 04_procs_and_funcs.sql
 	@echo "✅ Procedures and functions setup complete!"
+
+# Deploy Streamlit app
+deploy-streamlit:
+	@if [ "$(STREAMLIT_DEPLOYMENT_ENABLED)" != "true" ]; then \
+		echo "⚠️  Streamlit deployment is disabled"; \
+		echo "Set STREAMLIT_DEPLOYMENT_ENABLED=true to enable deployment"; \
+		exit 0; \
+	fi
+	@if [ -z "$(CONN)" ]; then \
+		echo "❌ Error: CONN parameter required"; \
+		echo "Usage: make deploy-streamlit CONN=<connection-name>"; \
+		echo "Connection should be defined in ~/.snowflake/config.toml"; \
+		exit 1; \
+	fi
+	@if ! command -v snow >/dev/null 2>&1; then \
+		echo "❌ Error: Snowflake CLI (snow) is not installed"; \
+		echo "Please install it first: https://docs.snowflake.com/en/developer-guide/snowflake-cli/installation/installation"; \
+		exit 1; \
+	fi
+	@echo "🎨 Deploying Streamlit app..."
+	cd src/sql && snow sql --connection $(CONN) -f 05_streamlit_app.sql
+	@echo "✅ Streamlit app deployment complete!"
+	@echo ""
+	@echo "📱 Access your Streamlit app in Snowsight:"
+	@echo "   Navigate to: Data Products > Streamlit > INCIDENT_MANAGEMENT_DASHBOARD"
 
 # Check prerequisites
 check-prereqs:

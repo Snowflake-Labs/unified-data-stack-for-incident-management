@@ -25,11 +25,11 @@ This macro does not need to be run on a regular basis and can only be run when t
 Having Cortex Agent created will allow you to use it in Snowflake Intelligence to answer questions about the incident management process. Post installation you will be required to add this explicitly to Snowflake Intelligence as described link:https://docs.snowflake.com/en/user-guide/snowflake-cortex/snowflake-intelligence#add-agents[here].
 
 
-Refer to the link:../demos.adoc[Demo Vignettes] for how to use the Cortex Agent this project deploys in Snowflake Intelligence, and link:../ascii-docs/sample_questions.adoc[sample queries] that can be used to answer questions about the incident management process.
+Refer to the link:DEMOS.adoc[Demo Vignettes] for how to use the Cortex Agent this project deploys in Snowflake Intelligence, and link:sample_questions.adoc[sample queries] that can be used to answer questions about the incident management process.
 
 '''
 
-link:architecture.adoc[← To Architecture] ||| link:setup.adoc[→ To Setup Guide]
+link:ARCHITECTURE.adoc[← To Architecture] ||| link:SETUP.adoc[→ To Setup Guide]
 
 '''
 
