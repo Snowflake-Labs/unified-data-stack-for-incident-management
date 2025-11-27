@@ -2,29 +2,29 @@
 :toc:
 :toc-placement!:
 
-Author: Chinmayee Lakkad
-Release Date: November 2025
+*Author*: Chinmayee Lakkad
+*Release Date*: November 2025
 
 toc::[]
 
 == Overview
 
-This project is a comprehensive example of building an end-to-end pipeline on Snowflake to ingest data through OpenFlow, transform it using dbt Projects for Standard models, Semantic Views, Cortex Search and Cortex Agents for AI-powered automation, batch analytics and conversational AI through Snowflake Intelligence.
+This project is a comprehensive example of building an end-to-end pipeline on Snowflake to ingest data through OpenFlow, transform it using dbt Projects for Standard models, Semantic Views, Cortex Search, and Cortex Agents for AI-powered automation, batch analytics, and conversational AI through Snowflake Intelligence.
 
 [IMPORTANT]
-*To demonstrate the design pattern of this stack the project uses incident management as an illustrative subset of the real-world business process only to show the art of possible with this modern design pattern on Snowflake that can be applied for any industry or business process.*
+*To demonstrate this stack, the project uses incident management as an illustrative subset of the real-world business process only to show the art of possible with this modern design pattern on Snowflake that can be applied for any industry or business process.*
 
 === Key Features
 
 ==== 1. *Open new data frontiers* to ingest from using OpenFlow connectors
-==== 2. *Standardize data models* using SQL and well established engineerings tools like dbt core 
-==== 3. *Interleave AISQL* within dbt models for dynamic reasoning and decision making
+==== 2. *Standardize data models* using SQL and well-established engineering tools like dbt core 
+==== 3. *Interleave AISQL* within dbt models for dynamic reasoning and decision-making
     3.1 This includes using AISQL to process unstructured text and images for classification and enrichment
 
-    3.2 Or, unstructured documents (PDFss, PPTs, TXTs, etc) for search and retrieval, and question extraction
+    3.2 Or, unstructured documents (PDFs, PPTs, TXTs, etc.) for search and retrieval, and question extraction
 
-==== 4. *Deploy Cortex services* such as Cortex Search and Cortex Agents from within the same dbt Project
-==== 5. *Unlock conversational AI* through Snowflake Intelligence for decision making through all data within a business process.
+==== 4. *Deploy Cortex services*, such as Cortex Search and Cortex Agents, from within the same dbt Project
+==== 5. *Unlock conversational AI* through Snowflake Intelligence for decision-making through all data within a business process.
 
 == Getting Started
 
@@ -60,5 +60,4 @@ We welcome contributions! Here's how you can help:
 
 * *Report bugs* via link:https://github.com/Snowflake-Labs/unified-data-stack-for-incident-management/issues[GitHub Issues]
 * *Suggest features* or improvements
-* *Submit Pull Requests* with enhancements
 * *Submit Pull Requests* with enhancements
