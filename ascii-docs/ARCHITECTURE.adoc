@@ -69,6 +69,29 @@ The platform follows a modern data stack architecture built entirely on Snowflak
 
 image::UDS_v2.png[width=100%]
 
+
+*Quick Links for dbt Models for document processing*
+
+[cols="1,2"]
+|===
+|Component |Documentation
+
+|link:docs_processing.adoc[*Document Processing*]
+|Unstructured document processing for text and question extraction
+
+|link:cortex_search.adoc[*Cortex Search*]
+|Hybrid search service for document retrieval
+
+|link:semantic_view.adoc[*Semantic Views*]
+|Semantic layer for Text2SQL analysis
+
+|link:cortex_agent.adoc[*Cortex Agents*]
+|AI agents with access to Semantic Views and Cortex Search
+
+|===
+
+
+
 '''
 
 link:../README.adoc[← To README] ||| link:SETUP.adoc[→ To Setup Guide]
