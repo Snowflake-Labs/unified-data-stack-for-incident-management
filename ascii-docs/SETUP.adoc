@@ -67,10 +67,9 @@ Copy the template and configure your environment:
 cp {env-template} {env-file}
 ----
 +
-Edit the `{env-file}` file and configure all variables except these two (generated later):
+Edit the `{env-file}` file and configure all variables except this one (generated later):
 +
 ** `DBT_SNOWFLAKE_PASSWORD`
-** `DBT_SNOWFLAKE_PRIVATE_KEY_PATH`
 +
 [NOTE]
 ====

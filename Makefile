@@ -100,7 +100,7 @@ setup-dbt-stack:
 	@echo "   openssl genrsa -out rsa_private_key.pem 2048"
 	@echo "   openssl rsa -in rsa_private_key.pem -pubout -out rsa_public_key.pem"
 	@echo "3. Update user with public key in Snowflake"
-	@echo "4. Update .env with DBT_SNOWFLAKE_PASSWORD and DBT_SNOWFLAKE_PRIVATE_KEY_PATH"
+	@echo "4. Update .env with DBT_SNOWFLAKE_PASSWORD"
 
 # Step 2.3: Setup Slack connector infrastructure
 setup-slack-connector:

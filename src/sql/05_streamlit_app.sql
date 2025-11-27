@@ -1,6 +1,6 @@
 use role accountadmin;
 
-CREATE OR REPLACE WAREHOUSE <% ctx.env.streamlit_query_wh %> WAREHOUSE_SIZE='X-SMALL' INITIALLY_SUSPENDED=TRUE;
+CREATE WAREHOUSE IF NOT EXISTS <% ctx.env.streamlit_query_wh %> WAREHOUSE_SIZE='X-SMALL' INITIALLY_SUSPENDED=TRUE;
 
 GRANT USAGE ON WAREHOUSE <% ctx.env.streamlit_query_wh %> TO ROLE <% ctx.env.dbt_project_admin_role %>;
 
