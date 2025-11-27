@@ -67,8 +67,6 @@ Copy the template and configure your environment:
 cp {env-template} {env-file}
 ----
 +
-Edit the `{env-file}` file and configure all variables except this one (generated later):
-+
 [NOTE]
 ====
 If you change any of the below parameters, be sure to change the `profiles.yml` as well before running the Makefile:
@@ -79,7 +77,9 @@ If you change any of the below parameters, be sure to change the `profiles.yml` 
 ** `DBT_PIPELINE_WH={default-warehouse}`
 ** `DBT_PROJECT_ADMIN_ROLE={default-role}`
 ====
-
++
+Edit the `{env-file}` file and configure all variables except this one (generated later):
++
 ** `DBT_SNOWFLAKE_PASSWORD`
 
 
