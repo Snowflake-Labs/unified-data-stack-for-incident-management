@@ -72,7 +72,7 @@ image::UDS_v2.png[width=100%]
 
 [cols="1,2"]
 |===
-|Component |Documentation
+|dbt Projects Component |Documentation
 
 |link:docs_processing.adoc[*Document Processing*]
 |Unstructured document processing for text and question extraction
