@@ -7,7 +7,8 @@ def model(dbt, session: Session):
     dbt.config(
         materialized='incremental',
         incremental_strategy='append',
-        description='Table to store question extracts from documents'
+        description='Table to store question extracts from documents',
+        tags=['document_processing']
     )
     
     docs_stage = dbt.config.get("docs_stage_path")

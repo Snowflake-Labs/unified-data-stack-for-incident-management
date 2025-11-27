@@ -2,11 +2,12 @@
 -- they are not related to any existing incident by title and text.
 {{
     config(
-        materialized='incremental',
-        incremental_strategy='merge',
-        unique_key='incident_number',
-        merge_update_columns=['updated_at', 'slack_message_id', 'last_comment'],
-        description='Materialized incidents table with enriched data and calculated fields'
+        materialized='incremental'
+        ,incremental_strategy='merge'
+        ,unique_key='incident_number'
+        ,merge_update_columns=['updated_at', 'slack_message_id', 'last_comment']
+        ,description='Materialized incidents table with enriched data and calculated fields'
+        ,tags=['daily']
     )
 }}
 

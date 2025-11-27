@@ -1,7 +1,7 @@
 # Makefile for Incident Management Project Setup
 # Automates installation steps 1-3 as documented in README.md
 
-.PHONY: help install setup-snowflake generate-yaml setup-dbt-stack setup-slack-connector all
+.PHONY: help install setup-snowflake generate-yaml setup-dbt-stack setup-slack-connector setup-tasks setup-procs-funcs all
 
 # Default target
 help:
@@ -14,6 +14,8 @@ help:
 	@echo "  generate-yaml     Generate snowflake.yml from template (step 2.1)"
 	@echo "  setup-dbt-stack   Setup dbt Projects infrastructure (step 2.2)"
 	@echo "  setup-slack-connector Setup Slack connector infrastructure (step 2.3)"
+	@echo "  setup-tasks       Setup Snowflake tasks (step 2.4)"
+	@echo "  setup-procs-funcs Setup procedures and functions (step 2.5)"
 	@echo ""
 	@echo "Prerequisites:"
 	@echo "  - Snowflake CLI installed"
@@ -25,6 +27,8 @@ help:
 	@echo "  make generate-yaml ENV_FILE=.env  # Generate snowflake.yml"
 	@echo "  make setup-dbt-stack CONN=myconn  # Setup dbt with connection name"
 	@echo "  make setup-slack-connector CONN=myconn  # Setup Slack connector"
+	@echo "  make setup-tasks CONN=myconn    # Setup Snowflake tasks"
+	@echo "  make setup-procs-funcs CONN=myconn  # Setup procedures and functions"
 	@echo ""
 	@echo "Note: Python dependencies are installed separately when running the dashboard"
 	@echo "See README 'Running the Dashboard' section for Python setup instructions"
@@ -40,11 +44,13 @@ install:
 	@$(MAKE) generate-yaml ENV_FILE=$(ENV_FILE)
 	@$(MAKE) setup-dbt-stack CONN=$(CONN)
 	@$(MAKE) setup-slack-connector CONN=$(CONN)
+	@$(MAKE) setup-tasks CONN=$(CONN)
+	@$(MAKE) setup-procs-funcs CONN=$(CONN)
 	@echo "✅ Installation complete!"
 	@echo "5. For Python dependencies (when running dashboard), see README 'Running the Dashboard' section"
 
 # Step 2: Setup Snowflake Infrastructure
-setup-snowflake: generate-yaml setup-dbt-stack setup-slack-connector
+setup-snowflake: generate-yaml setup-dbt-stack setup-slack-connector setup-tasks setup-procs-funcs
 	@echo "✅ Snowflake infrastructure setup complete!"
 
 # Step 2.1: Generate snowflake.yml file
@@ -118,6 +124,40 @@ setup-slack-connector:
 	@echo "3. Configure the connector with database and role parameters"
 	@echo "4. Start the connector and add the Slack app to your channel"
 	@echo "5. Verify tables are created: SLACK_MEMBERS, SLACK_MESSAGES, etc."
+
+# Step 2.4: Setup Snowflake tasks
+setup-tasks:
+	@if [ -z "$(CONN)" ]; then \
+		echo "❌ Error: CONN parameter required"; \
+		echo "Usage: make setup-tasks CONN=<connection-name>"; \
+		echo "Connection should be defined in ~/.snowflake/config.toml"; \
+		exit 1; \
+	fi
+	@if ! command -v snow >/dev/null 2>&1; then \
+		echo "❌ Error: Snowflake CLI (snow) is not installed"; \
+		echo "Please install it first: https://docs.snowflake.com/en/developer-guide/snowflake-cli/installation/installation"; \
+		exit 1; \
+	fi
+	@echo "⏰ Setting up Snowflake tasks..."
+	cd src/sql && snow sql --connection $(CONN) -f 03_tasks.sql
+	@echo "✅ Snowflake tasks setup complete!"
+
+# Step 2.5: Setup procedures and functions
+setup-procs-funcs:
+	@if [ -z "$(CONN)" ]; then \
+		echo "❌ Error: CONN parameter required"; \
+		echo "Usage: make setup-procs-funcs CONN=<connection-name>"; \
+		echo "Connection should be defined in ~/.snowflake/config.toml"; \
+		exit 1; \
+	fi
+	@if ! command -v snow >/dev/null 2>&1; then \
+		echo "❌ Error: Snowflake CLI (snow) is not installed"; \
+		echo "Please install it first: https://docs.snowflake.com/en/developer-guide/snowflake-cli/installation/installation"; \
+		exit 1; \
+	fi
+	@echo "⚙️  Setting up procedures and functions..."
+	cd src/sql && snow sql --connection $(CONN) -f 04_procs_and_funcs.sql
+	@echo "✅ Procedures and functions setup complete!"
 
 # Check prerequisites
 check-prereqs:

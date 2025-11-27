@@ -15,7 +15,7 @@ CREATE OR REPLACE API INTEGRATION <% ctx.env.snowflake_git_api_int %>
 CREATE OR REPLACE DATABASE <% ctx.env.dbt_project_database %>;
 
 CREATE OR REPLACE WAREHOUSE <% ctx.env.dbt_snowflake_warehouse %> WAREHOUSE_SIZE='X-SMALL' INITIALLY_SUSPENDED=TRUE;
-
+CREATE OR REPLACE WAREHOUSE <% ctx.env.cortex_search_warehouse %> WAREHOUSE_SIZE='X-SMALL' INITIALLY_SUSPENDED=TRUE;
 /**
 
 Optional: 
@@ -42,6 +42,7 @@ grant database role snowflake.cortex_user to role <% ctx.env.dbt_project_admin_r
 
 grant usage on integration <% ctx.env.snowflake_git_api_int %> to role <% ctx.env.dbt_project_admin_role %>;
 grant usage on warehouse <% ctx.env.dbt_snowflake_warehouse %> to role <% ctx.env.dbt_project_admin_role %>;
+grant usage on warehouse <% ctx.env.cortex_search_warehouse %> to role <% ctx.env.dbt_project_admin_role %>;
 grant execute task on account to role <% ctx.env.dbt_project_admin_role %>;
 grant role <% ctx.env.dbt_project_admin_role %> to role sysadmin;
 grant role <% ctx.env.dbt_project_admin_role %> to user <% ctx.env.snowflake_user %>;
@@ -128,10 +129,6 @@ CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.gold_zone.incident_at
     CONSTRAINT fk_attachments_incident FOREIGN KEY (incident_number) REFERENCES <% ctx.env.dbt_project_database %>.gold_zone.incidents(incident_number)
 );
 
-CREATE OR REPLACE STAGE <% ctx.env.dbt_project_database %>.gold_zone.agent_specs;
-
--- put file://../../cortex_agents/sample_spec.yaml  @<% ctx.env.dbt_project_database %>.gold_zone.agent_specs overwrite=true;
-
 put file://../../data/csv/users.csv  @<% ctx.env.dbt_project_database %>.bronze_zone.csv_stage overwrite=true;
 put file://../../data/csv/incidents.csv @<% ctx.env.dbt_project_database %>.bronze_zone.csv_stage overwrite=true;
 put file://../../data/csv/incident_comment_history.csv @<% ctx.env.dbt_project_database %>.bronze_zone.csv_stage overwrite=true;
@@ -185,3 +182,5 @@ CREATE OR REPLACE STAGE <% ctx.env.dbt_project_database %>.gold_zone.agent_specs
   DIRECTORY = ( ENABLE = true )
   ENCRYPTION = (TYPE = 'SNOWFLAKE_SSE')
   COMMENT = 'Stage for storing agent specification files with server-side encryption';
+
+PUT file://../../cortex_agents/incm360_agent_1.yml  @<% ctx.env.dbt_project_database %>.gold_zone.agent_specs overwrite=true auto_compress=false;

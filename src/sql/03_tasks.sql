@@ -6,82 +6,132 @@ use schema <% ctx.env.dbt_project_database %>.dbt_project_deployments;
 -- Tasks for Incident Management Project
 -------------------------------------------------
 
--- Daily Incremental Root Scheduler
-alter task if exists dbt_project_deployments.daily_incremental_root_scheduler suspend;
-alter task if exists dbt_project_deployments.im_project_run_select_bronze_zone suspend;
-alter task if exists dbt_project_deployments.im_project_run_select_gold_zone suspend;
-alter task if exists dbt_project_deployments.im_project_test suspend;
-alter task if exists dbt_project_deployments.im_project_compile suspend;
-
-
-create or replace task dbt_project_deployments.daily_incremental_root_scheduler
+-- Task to run project dependencies and compile all models, macros, and tests
+-- Does not need to be scheduled
+create or replace task incm_root_deps_and_compile
 	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
-	schedule='USING CRON 1 0 * * * America/Toronto'
-	config='{"target": "dev"}'
+	config='{"target": "<% ctx.env.dbt_target %>"}'
 	as SELECT 1;
 
-create or replace task dbt_project_deployments.im_project_compile
+
+create or replace task incm_project_deps
 	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
-	after dbt_project_deployments.daily_incremental_root_scheduler
+	after incm_root_deps_and_compile
 	as 
   EXECUTE IMMEDIATE
   $$
     BEGIN
-    LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
-    LET _dbt_nodes := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('select'));
-    LET _eai := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('eai'));
-    LET command := 'compile --target '|| _target;
+      LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
+      LET _dbt_nodes := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('select'));
+      LET _eai := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('eai'));
+      LET command := 'deps';
 
-    EXECUTE DBT PROJECT dbt_project_deployments.<% ctx.env.dbt_project_name %> args=:command;
+      EXECUTE DBT PROJECT <% ctx.env.dbt_project_name %> args=:command;
     END;
   $$
   ;
 
-create or replace task dbt_project_deployments.im_project_run_select_bronze_zone
+create or replace task incm_project_compile
 	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
-	after dbt_project_deployments.im_project_compile
+	after incm_project_deps
 	as 
   EXECUTE IMMEDIATE
   $$
     BEGIN
-    LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
-    LET _dbt_nodes := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('select'));
-    LET _eai := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('eai'));
-    LET command := 'run --select bronze_zone --target '|| _target;
-    EXECUTE dbt project dbt_project_deployments.<% ctx.env.dbt_project_name %> args=:command;
-    END;
-  $$;
+      LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
+      LET _dbt_nodes := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('select'));
+      LET _eai := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('eai'));
+      LET command := 'compile --target '|| _target;
 
-create or replace task dbt_project_deployments.im_project_run_select_gold_zone
+      EXECUTE DBT PROJECT <% ctx.env.dbt_project_name %> args=:command;
+    END;
+  $$
+  ;
+
+-- Core model refresh tasks
+create or replace task incm_root_daily_incremental_refresh
 	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
-	after dbt_project_deployments.im_project_compile, dbt_project_deployments.im_project_run_select_bronze_zone
+	schedule='<% ctx.env.daily_refresh_cron_schedule %>'
+	config='{"target": "<% ctx.env.dbt_target %>"}'
+	as SELECT 1;
+
+create or replace task incm_daily_models_refresh
+	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
+	after incm_root_daily_incremental_refresh
 	as 
   EXECUTE IMMEDIATE
   $$
     BEGIN
-    LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
-    LET _dbt_nodes := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('select'));
-    LET _eai := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('eai'));
-    LET command := 'run --select gold_zone --target '|| _target;
-    EXECUTE dbt project dbt_project_deployments.<% ctx.env.dbt_project_name %> args=:command;
+      LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
+      LET _dbt_nodes := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('select'));
+      LET _eai := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('eai'));
+      LET command := 'run --select tag:daily --target '|| _target;
+      EXECUTE dbt project <% ctx.env.dbt_project_name %> args=:command;
     END;
   $$;
 
 
--- create or replace task dbt_project_deployments.im_project_test
--- 	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
--- 	after dbt_project_deployments.im_project_compile, dbt_project_deployments.im_project_run_select_bronze_zone, dbt_project_deployments.im_project_run_select_gold_zone
--- 	as
---   EXECUTE IMMEDIATE 
---   $$
---     BEGIN
---     LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
---     LET _dbt_nodes := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('select'));
---     LET _eai := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('eai'));
---     LET command := 'test --target '|| _target;
+-- Triggered Task for document based model refreshes
+CREATE TASK incm_triggered_docs_processing
+  TARGET_COMPLETION_INTERVAL='15 MINUTES'
+  WHEN SYSTEM$STREAM_HAS_DATA('INCIDENT_MANAGEMENT.bronze_zone.documents_stream')
+  AS
+  $$
+    BEGIN
+      LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
+      LET _dbt_nodes := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('select'));
+      LET _eai := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('eai'));
+      LET command := 'run --select tag:document_processing --target '|| _target;
+      EXECUTE dbt project <% ctx.env.dbt_project_name %> args=:command;
+    END;
+  $$;
 
---     EXECUTE dbt project dbt_project_deployments.<% ctx.env.dbt_project_name %> args=:command;
---     END;
---   $$;
+-- Weekly refresh tasks
+create or replace task incm_root_weekly_refresh
+	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
+	schedule='<% ctx.env.weekly_refresh_cron_schedule %>'
+	config='{"target": "<% ctx.env.dbt_target %>"}'
+	as SELECT 1;
 
--- Cortex AI service builder
+create or replace task incm_weekly_models_refresh
+	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
+	after incm_root_weekly_refresh
+	as 
+  EXECUTE IMMEDIATE
+  $$
+    BEGIN
+      LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
+      LET _dbt_nodes := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('select'));
+      LET _eai := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('eai'));
+      LET command := 'run --select tag:weekly --target '|| _target;
+      EXECUTE dbt project <% ctx.env.dbt_project_name %> args=:command;
+    END;
+  $$;
+
+
+
+-- One off operations to deploy Cortex Services and Semantic Views
+create or replace task incm_root_deploy_cortex_services
+	config='{"target": "<% ctx.env.dbt_target %>"}'
+	as SELECT 1;
+
+create or replace task incm_deploy_cortex_services
+	after incm_root_deploy_cortex_services
+	as 
+  EXECUTE IMMEDIATE
+  $$
+    BEGIN
+      LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
+      LET _dbt_nodes := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('select'));
+
+      -- Semantic Views
+      EXECUTE dbt project <% ctx.env.dbt_project_name %> args='run --select semantic_views.incm360 --target '|| _target;
+
+      -- Cortex Search
+      EXECUTE dbt project <% ctx.env.dbt_project_name %> args='run-operation create_document_search_service --args "{service_name: incm_doc_search,search_wh: <% ctx.env.cortex_search_warehouse %>,search_column: chunk,target_lag:  1 day}" --target '|| _target;
+      
+      -- Cortex Agents
+      EXECUTE dbt project <% ctx.env.dbt_project_name %> args='run-operation create_cortex_agent --args "{agent_name: incm360_a1, stage_name: <% ctx.env.dbt_project_database %>.gold_zone.agent_specs, spec_file: incm360_agent_1.yml}" --target '|| _target;
+    END;
+  $$;
+

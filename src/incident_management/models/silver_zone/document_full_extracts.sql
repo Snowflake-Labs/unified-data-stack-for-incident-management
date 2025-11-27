@@ -1,7 +1,8 @@
 {{
     config(
-        materialized='incremental',
-        description='Table that contains the full extracts from the documents'
+        materialized='incremental'
+        ,description='Table that contains the full extracts from the documents'
+        ,tags=['document_processing']
     )
 }}
 

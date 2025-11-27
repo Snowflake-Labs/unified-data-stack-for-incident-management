@@ -1,10 +1,11 @@
 {{
   config(
-    materialized='incremental',
-    incremental_strategy='merge',
-    unique_key=['filename'],
-    merge_exclude_columns=['created_at'],
-    description='Flattened question extracts from documents with quarterly review metrics'
+    materialized='incremental'
+    ,incremental_strategy='merge'
+    ,unique_key=['filename']
+    ,merge_exclude_columns=['created_at']
+    ,description='Flattened question extracts from documents with quarterly review metrics'
+    ,tags=['document_processing']
   )
 }}
 

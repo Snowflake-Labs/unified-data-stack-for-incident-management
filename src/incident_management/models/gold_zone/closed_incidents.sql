@@ -1,7 +1,8 @@
 {{
   config(
-    materialized='table',
-    description='Closed incidents with resolution metrics, SLA compliance analysis, and performance insights'
+    materialized='table'  
+    ,description='Closed incidents with resolution metrics, SLA compliance analysis, and performance insights'
+    ,tags=['daily']
   )
 }}
 

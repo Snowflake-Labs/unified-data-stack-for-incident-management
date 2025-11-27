@@ -1,10 +1,11 @@
 {{
     config(
-        materialized='incremental',
-        incremental_strategy='merge',
-        unique_key=['id'],
-        merge_update_columns=['created_at', 'content', 'author_id', 'incident_number'],
-        description='Simplified incident comment history for tracking communication'
+        materialized='incremental'
+        ,incremental_strategy='merge'
+        ,unique_key=['id']
+        ,merge_update_columns=['created_at', 'content', 'author_id', 'incident_number']
+        ,description='Simplified incident comment history for tracking communication'
+        ,tags=['daily']
     )
 }}
 
