@@ -182,7 +182,7 @@ Start the connector and add the Slack app to a channel. Verify these tables are 
 * `FILE_HASHES`
 * `SLACK_MESSAGES`
 
-.. Test Message and Document Ingestion
+. Test Message and Document Ingestion
 +
 Drop a test message in your Slack channel and verify that a record appears in the `SLACK_MESSAGES` table (might take a few seconds).
 +
