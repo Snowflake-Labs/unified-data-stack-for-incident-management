@@ -17,8 +17,6 @@ The idea is to showcase how teams can now bring in multi-modal data into Snowfla
 
 The platform follows a modern data stack architecture built entirely on Snowflake:
 
-image::architecture.png[width=75%]
-
 === Components
 
 . Sources

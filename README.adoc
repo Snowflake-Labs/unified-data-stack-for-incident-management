@@ -31,6 +31,8 @@ This project is a comprehensive example of building an end-to-end pipeline on Sn
 
 . *Unlock conversational AI* through Snowflake Intelligence for decision-making through all data within a business process
 
+image::ascii-docs/architecture.png[width=75%]
+
 == Getting Started
 
 [cols="1,2"]
