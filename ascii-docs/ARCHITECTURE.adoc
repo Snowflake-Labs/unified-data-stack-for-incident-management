@@ -86,7 +86,7 @@ Semantic View creation using the link:https://hub.getdbt.com/Snowflake-Labs/dbt_
 
 image::UDS_v2.png[width=100%]
 
-[IMPORTANT]
+[NOTE]
 ====
 dbt Projects allows to view this DAG from within Workspace > Projects > dbt Projects.
 
