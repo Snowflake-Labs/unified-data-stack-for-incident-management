@@ -5,33 +5,17 @@ use schema <% ctx.env.dbt_project_database %>.dbt_project_deployments;
 -- Core model refresh tasks
 -- Task to run project dependencies and compile all models, macros, and tests
 -- Does not need to be scheduled
-create or replace task incm_root_deps_and_compile
+
+create or replace task incm_root_daily_incremental_refresh
 	warehouse=<% ctx.env.dbt_pipeline_wh %>
-	config='{"target": "<% ctx.env.dbt_target %>", "eai": "<% ctx.env.dbt_deps_eai %>"}'
+	schedule='<% ctx.env.daily_refresh_cron_schedule %>'
+	config='{"target": "<% ctx.env.dbt_target %>"}'
 	as SELECT 1;
 
 
-
-
-create or replace task incm_project_deps
-	warehouse=<% ctx.env.dbt_pipeline_wh %>
-	after incm_root_deps_and_compile
-	as 
-  EXECUTE IMMEDIATE
-  $$
-    BEGIN
-      LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
-      LET _eai := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('eai'));
-      LET command := 'deps';
-
-      EXECUTE DBT PROJECT <% ctx.env.dbt_project_name %> args=:command external_access_integrations = (:_eai);
-    END;
-  $$
-  ;
-
 create or replace task incm_project_compile
 	warehouse=<% ctx.env.dbt_pipeline_wh %>
-	after incm_project_deps
+	after incm_root_daily_incremental_refresh
 	as 
   EXECUTE IMMEDIATE
   $$
@@ -45,18 +29,9 @@ create or replace task incm_project_compile
   $$
   ;
 
-
-
-
-create or replace task incm_root_daily_incremental_refresh
-	warehouse=<% ctx.env.dbt_pipeline_wh %>
-	schedule='<% ctx.env.daily_refresh_cron_schedule %>'
-	config='{"target": "<% ctx.env.dbt_target %>"}'
-	as SELECT 1;
-
 create or replace task incm_daily_models_refresh
 	warehouse=<% ctx.env.dbt_pipeline_wh %>
-	after incm_root_daily_incremental_refresh
+	after incm_project_compile
 	as 
   EXECUTE IMMEDIATE
   $$
