@@ -32,7 +32,6 @@ Both data engineering scenarios can be run together as well as separately.
 . *Qualification*: dbt Project is run to refresh the daily models (assuming Cortex services are already deployed)
 +
 ** Models are refreshed through the scheduled task graph:
-*** incm_root_deps_and_compile
 *** incm_root_daily_incremental_refresh
 ** dbt Models run to filter relevant incident messages
 ** Uses AI to extract incident number from the message if it is present in the message else generates a new incident number
@@ -53,7 +52,7 @@ Both data engineering scenarios can be run together as well as separately.
 
 . *Processing*: Document models are refreshed through the triggered task:
 ** Document models are refreshed through the triggered task:
-*** incm_triggered_docs_processing
+*** incm_root_triggered_docs_processing
 ** Models use AI to extract text from the documents (PDFs, Word documents, etc.) uploaded to Snowflake.
 ** Models use AI to extract questions and answers from the documents.
 ** Models create a view for processing in Gold Zone.

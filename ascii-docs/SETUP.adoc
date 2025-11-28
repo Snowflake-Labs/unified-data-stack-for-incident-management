@@ -162,7 +162,7 @@ While creating your Slack app, ensure to generate the App token using at least t
 
 .. Update External Access in Snowflake
 +
-link:https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/slack/setup#setup-necessary-ingress-rules[Update] the External Access Integration object to add `slack.com` domain for egress from SPCS containers.
+Update the link:https://docs.snowflake.com/en/user-guide/data-integration/openflow/connectors/slack/setup#setup-necessary-ingress-rules[External Access Integration] object to add `slack.com` domain for egress from SPCS containers.
 
 .. Configure Connector in OpenFlow Runtime Canvas
 +
@@ -182,16 +182,22 @@ Start the connector and add the Slack app to a channel. Verify these tables are 
 * `FILE_HASHES`
 * `SLACK_MESSAGES`
 
-.. Test Message Ingestion
+.. Test Message and Document Ingestion
 +
 Drop a test message in your Slack channel and verify that a record appears in the `SLACK_MESSAGES` table (might take a few seconds).
++
+Drop a test documents (PDFs, Word documents, etc.) in the bronze_zone.DOCUMENTS under _full_ and _qa_ sub-directories each.
+
+. Creating the data models and Cortex AI services
++
+Manually execute the Tasks available in the following order to build the baseline models and the Cortex AI services on top including the Cortex Agent:
++
+* `incm_root_daily_incremental_refresh`
+* `incm_root_triggered_docs_processing`
+* `incm_root_deploy_cortex_services`
++
 
 . Snowflake Intelligence
-+
-Once you have created the dbt Project, execute the Tasks available in the following order to build the baseline models and the Cortex AI services on top including the Cortex Agent:
-
-* `incm_triggered_docs_processing`
-* `incm_root_deploy_cortex_services`
 +
 Once Cortex Agent has been created follow instructions link:https://docs.snowflake.com/en/user-guide/snowflake-cortex/snowflake-intelligence#add-agents[here] to add the Cortex Agent to Snowflake Intelligence.
 

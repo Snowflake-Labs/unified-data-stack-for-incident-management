@@ -18,6 +18,8 @@ CREATE WAREHOUSE IF NOT EXISTS <% ctx.env.dbt_pipeline_wh %> WAREHOUSE_SIZE='X-S
 CREATE WAREHOUSE IF NOT EXISTS <% ctx.env.cortex_search_wh %> WAREHOUSE_SIZE='X-SMALL' INITIALLY_SUSPENDED=TRUE;
 
 grant execute task on account to role <% ctx.env.dbt_project_admin_role %>;
+grant execute managed task on account to role <% ctx.env.dbt_project_admin_role %>;
+
 /**
 
 Optional: 
