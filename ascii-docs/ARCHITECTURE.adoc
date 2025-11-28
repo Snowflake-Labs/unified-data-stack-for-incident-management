@@ -86,6 +86,13 @@ Semantic View creation using the link:https://hub.getdbt.com/Snowflake-Labs/dbt_
 
 image::UDS_v2.png[width=100%]
 
+[IMPORTANT]
+====
+dbt Projects allows to view this DAG from within Workspace > Projects > dbt Projects.
+
+Or, from Horizon Catalog > Database Explorer > Incident Management > dbt Projects > Project Details
+====
+
 === Quick Links for dbt Models for document processing
 
 [cols="1,2"]
