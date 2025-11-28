@@ -1,7 +1,8 @@
 {{
   config(
-    materialized='table',
-    description='Active incidents requiring attention with SLA status and priority ordering'
+    materialized='table'
+    , description='Active incidents requiring attention with SLA status and priority ordering'
+    , tags=['daily']
   )
 }}
 

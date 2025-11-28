@@ -1,0 +1,46 @@
+= Semantic Views with dbt Projects
+:toc:
+:toc-placement!:
+
+toc::[]
+
+
+== Overview
+
+This page describes the approach taken by this project to create Semantic Views from the processed data in Silver Zone.
+
+== Approach
+
+=== Semantic View Creation
+
+This project creates a Semantic View over all the models in the Gold Zone which capture data from various sources like incidents, attachments, documents, etc.
+The data is conformed into tables which are then added to SV as facts, dimensions, and metrics.
+
+The View itself is rendered as such usign the latest materialization type 'semantic_view' created by the link:https://hub.getdbt.com/Snowflake-Labs/dbt_semantic_view/latest/[latest Snowflake Semantic View dbt package].
+
+The View resides in its own schema in targets database which is configured in the dbt_project.yml file.
+
+[source,yml]
+----
+targets:
+  semantic_views:
+    schema: semantic_views
+    database: incident_management
+----
+
+The View is created using the dbt model link:../src/incident_management/models/semantic_views/incm360.sql[`incm360`] in Semantic Views schema. This model is tagged as 'semantic_view' to indicate that it is a semantic view model and needs to only be created whenever its composition changes or any of the underlying models change.
+
+A callout is that the Q&A extracted from unstructured documents are also added to the SV as dimensions and metrics, such as quaterly_review_metrics table.
+
+This is great example of how you can combine both structured and unstructured data into a single view for Text2SQL analysis, and standardize the upstreaming engineering for both types of data using dbt Projects.
+
+The SV ultimately serves as the source of truth for Text2SQL analysis through Cortex Analyst, which in turn is added as a tool to Cortex Agents for natural language queries and answers.
+
+
+'''
+
+link:ARCHITECTURE.adoc[← To Architecture] ||| link:SETUP.adoc[→ To Setup Guide]
+
+'''
+
+

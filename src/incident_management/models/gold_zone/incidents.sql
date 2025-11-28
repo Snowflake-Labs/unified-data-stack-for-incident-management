@@ -2,11 +2,12 @@
 -- they are not related to any existing incident by title and text.
 {{
     config(
-        materialized='incremental',
-        incremental_strategy='merge',
-        unique_key='incident_number',
-        merge_update_columns=['updated_at', 'slack_message_id', 'last_comment'],
-        description='Materialized incidents table with enriched data and calculated fields'
+        materialized='incremental'
+        ,incremental_strategy='merge'
+        ,unique_key='incident_number'
+        ,merge_update_columns=['updated_at', 'slack_message_id', 'last_comment']
+        ,description='Materialized incidents table with enriched data and calculated fields'
+        ,tags=['daily']
     )
 }}
 
@@ -21,7 +22,8 @@ recent_open_incidents as (
 )
 
 , new_slack_messages as (
-    select lh.*
+    select 
+        lh.*
     from {{ref('v_qualify_slack_messages')}} lh 
     left join recent_open_incidents rh 
     on lh.slack_message_id = rh.slack_message_id
@@ -30,13 +32,17 @@ recent_open_incidents as (
 
 -- Split messages based on whether they have valid incident codes
 , messages_with_incident_code as (
-    select *
+    select 
+        * exclude(incident_number),
+        parse_json(incident_number):incident_code::string as incident_number
     from new_slack_messages
     where not IS_NULL_VALUE(parse_json(incident_number):incident_code)
 )
 
 , messages_without_incident_code as (
-    select *
+    select 
+        * exclude(incident_number),
+        '' as incident_number
     from new_slack_messages
     where IS_NULL_VALUE(parse_json(incident_number):incident_code)
 )

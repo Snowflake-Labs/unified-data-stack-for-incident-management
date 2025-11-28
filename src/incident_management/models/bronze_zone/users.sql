@@ -1,10 +1,11 @@
 {{
     config(
-        materialized='incremental',
-        incremental_strategy='merge',
-        unique_key='email',
-        merge_exclude_columns=['created_at'],
-        description='Materialized users table with enriched data'
+        materialized='incremental'
+        ,incremental_strategy='merge'
+        ,unique_key='email'
+        ,merge_exclude_columns=['created_at']
+        ,description='Materialized users table with enriched data'
+        ,tags=['daily']
     )
 }}
 

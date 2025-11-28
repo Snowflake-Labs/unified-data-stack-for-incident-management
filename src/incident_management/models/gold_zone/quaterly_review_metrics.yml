@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: quaterly_review_metrics
+    description: "Flattened question extracts from documents with quarterly review metrics"
+    columns:
+      - name: filename
+        description: "Source document filename parsed from relative_path"
+        tests:
+          - not_null
+      - name: metric
+        description: "Metric key extracted from the JSON response"
+      - name: value
+        description: "Metric value (string) extracted from the JSON response"
+      - name: created_at
+        description: "Record creation timestamp"
+
+

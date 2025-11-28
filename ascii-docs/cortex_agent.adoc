@@ -1,0 +1,36 @@
+= Cortex Agent with dbt Projects
+:toc:
+:toc-placement!:
+
+toc::[]
+
+
+== Overview
+
+This page describes the approach taken by this project to deploy the Cortex Agent from within the same dbt Project.
+
+
+== Approach
+
+=== Cortex Agent Deployment
+
+The Cortex Agent is deployed using the macro link:../src/incident_management/macros/create_cortex_agent.sql[`create_cortex_agent`] in Gold Zone. This macro is used to create the Cortex Agent with the given name, stage name, spec file, and agent profile.
+
+The actual definition of the Cortex Agent is stored in a YAML specification file that should conform to this link:https://docs.snowflake.com/en/sql-reference/sql/create-agent#required-parameters[Cortex Agent Specification], and is expected to be staged in gold_zone.agent_specs stage prior to the deployment of the Cortex Agent.
+
+A sample spec file is provided in the link:../src/cortex_agents/incm360_agent_1.yml[incm360_agent_1.yml] file, and is loaded during the Snowflake setup process.
+
+This macro does not need to be run on a regular basis and can only be run when the composition changes in terms of tools, tool resources, or instructions, etc.
+
+Having Cortex Agent created will allow you to use it in Snowflake Intelligence to answer questions about the incident management process. Post installation you will be required to add this explicitly to Snowflake Intelligence as described link:https://docs.snowflake.com/en/user-guide/snowflake-cortex/snowflake-intelligence#add-agents[here].
+
+
+Refer to the link:DEMOS.adoc[Demo Vignettes] for how to use the Cortex Agent this project deploys in Snowflake Intelligence, and link:sample_questions.adoc[sample queries] that can be used to answer questions about the incident management process.
+
+'''
+
+link:ARCHITECTURE.adoc[← To Architecture] ||| link:SETUP.adoc[→ To Setup Guide]
+
+'''
+
+

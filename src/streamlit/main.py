@@ -74,7 +74,7 @@ class SnowflakeConnection:
                         "user": os.getenv("SNOWFLAKE_USER"),
                         "password": os.getenv("DBT_SNOWFLAKE_PASSWORD"),
                         "role": os.getenv("DBT_PROJECT_ADMIN_ROLE"), 
-                        "warehouse": os.getenv("DBT_SNOWFLAKE_WAREHOUSE"),  # optional
+                        "warehouse": os.getenv("STREAMLIT_QUERY_WH"),  # optional
                         "database": os.getenv("DBT_PROJECT_DATABASE"),  # optional
                         "schema": os.getenv("DBT_PROJECT_SCHEMA"),  # optional
                     }
@@ -710,6 +710,113 @@ def create_recently_closed_incidents_table():
         st.info("No recently closed incidents found.")
 
 
+def create_documents_processed_tab():
+    """Display documents processed in full and for Q&A"""
+    
+    database = st.session_state.snowpark_session.get_current_database()
+    schema = "silver_zone"
+    
+    # Section 1: Documents Processed in Full
+    st.markdown("### 📄 Documents Processed in Full")
+    st.markdown("Documents that have been fully parsed and split into semantic chunks")
+    
+    try:
+        # Query to get documents with chunk counts
+        full_docs_query = f"""
+            SELECT 
+                RELATIVE_PATH,
+                EXTENSION,
+                SIZE,
+                LAST_MODIFIED,
+                COUNT(*) as CHUNK_COUNT
+            FROM {database}.{schema}.document_full_extracts
+            GROUP BY RELATIVE_PATH, EXTENSION, SIZE, LAST_MODIFIED
+            ORDER BY LAST_MODIFIED DESC
+        """
+        full_docs_df = execute_sql(full_docs_query, st.session_state.snowpark_session)
+        
+        if not full_docs_df.empty:
+            # Format file size to be more readable
+            full_docs_df['SIZE_MB'] = (full_docs_df['SIZE'] / 1024 / 1024).round(2)
+            
+            st.dataframe(
+                full_docs_df[['RELATIVE_PATH', 'EXTENSION', 'SIZE_MB', 'CHUNK_COUNT', 'LAST_MODIFIED']],
+                column_config={
+                    "RELATIVE_PATH": st.column_config.TextColumn("Document Path", width="large"),
+                    "EXTENSION": st.column_config.TextColumn("Type", width="small"),
+                    "SIZE_MB": st.column_config.NumberColumn("Size (MB)", width="small", format="%.2f"),
+                    "CHUNK_COUNT": st.column_config.NumberColumn("Chunks Extracted", width="medium"),
+                    "LAST_MODIFIED": st.column_config.DatetimeColumn("Last Modified", width="medium"),
+                },
+                hide_index=True,
+                use_container_width=True
+            )
+            
+            # Summary metrics for full documents
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.metric("Total Documents", len(full_docs_df))
+            with col2:
+                st.metric("Total Chunks", full_docs_df['CHUNK_COUNT'].sum())
+            with col3:
+                st.metric("Avg Chunks per Doc", int(full_docs_df['CHUNK_COUNT'].mean()))
+        else:
+            st.info("No documents processed in full yet.")
+    except Exception as e:
+        st.error(f"Error loading full documents: {str(e)}")
+    
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    
+    # Section 2: Documents Processed for Q&A
+    st.markdown("### ❓ Documents Processed for Q&A")
+    st.markdown("Documents that have been analyzed for question extraction using AI")
+    
+    try:
+        # Query to get documents processed for Q&A
+        qa_docs_query = f"""
+            SELECT 
+                RELATIVE_PATH,
+                EXTENSION,
+                SIZE,
+                LAST_MODIFIED,
+                ANALYSIS_TYPE
+            FROM {database}.{schema}.document_question_extracts
+            ORDER BY LAST_MODIFIED DESC
+        """
+        qa_docs_df = execute_sql(qa_docs_query, st.session_state.snowpark_session)
+        
+        if not qa_docs_df.empty:
+            # Format file size to be more readable
+            qa_docs_df['SIZE_MB'] = (qa_docs_df['SIZE'] / 1024 / 1024).round(2)
+            
+            st.dataframe(
+                qa_docs_df[['RELATIVE_PATH', 'EXTENSION', 'SIZE_MB', 'ANALYSIS_TYPE', 'LAST_MODIFIED']],
+                column_config={
+                    "RELATIVE_PATH": st.column_config.TextColumn("Document Path", width="large"),
+                    "EXTENSION": st.column_config.TextColumn("Type", width="small"),
+                    "SIZE_MB": st.column_config.NumberColumn("Size (MB)", width="small", format="%.2f"),
+                    "ANALYSIS_TYPE": st.column_config.TextColumn("Analysis Type", width="medium"),
+                    "LAST_MODIFIED": st.column_config.DatetimeColumn("Last Modified", width="medium"),
+                },
+                hide_index=True,
+                use_container_width=True
+            )
+            
+            # Summary metrics for Q&A documents
+            col1, col2 = st.columns(2)
+            with col1:
+                st.metric("Total Documents", len(qa_docs_df))
+            with col2:
+                # Count by analysis type
+                analysis_counts = qa_docs_df.groupby('ANALYSIS_TYPE').size()
+                if len(analysis_counts) > 0:
+                    st.metric(f"Question Analysis", analysis_counts.get('question', 0))
+        else:
+            st.info("No documents processed for Q&A yet.")
+    except Exception as e:
+        st.error(f"Error loading Q&A documents: {str(e)}")
+
+
 def main():
 
     initialize_session_state()
@@ -758,25 +865,33 @@ def main():
     
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Key metrics
-    create_metrics_cards()
+    # Create tabs
+    tab1, tab2 = st.tabs(["📊 Dashboard", "📚 Documents Processed"])
     
-    st.markdown("<br><br>", unsafe_allow_html=True)
-    
-    # # Charts section
-    # create_charts()
-    
-    # st.markdown("<br>", unsafe_allow_html=True)
-    
-    
-    # Active incidents table
-    create_active_incidents_table()
-    
-    st.markdown("<br>", unsafe_allow_html=True)
+    with tab1:
+        # Key metrics
+        create_metrics_cards()
+        
+        st.markdown("<br><br>", unsafe_allow_html=True)
+        
+        # # Charts section
+        # create_charts()
+        
+        # st.markdown("<br>", unsafe_allow_html=True)
+        
+        
+        # Active incidents table
+        create_active_incidents_table()
+        
+        st.markdown("<br>", unsafe_allow_html=True)
 
-    # Recently closed incidents table
-    create_recently_closed_incidents_table()
-    st.markdown("<br>", unsafe_allow_html=True)
+        # Recently closed incidents table
+        create_recently_closed_incidents_table()
+        st.markdown("<br>", unsafe_allow_html=True)
+    
+    with tab2:
+        create_documents_processed_tab()
+        st.markdown("<br>", unsafe_allow_html=True)
 
     # Footer with refresh
     st.markdown("---")

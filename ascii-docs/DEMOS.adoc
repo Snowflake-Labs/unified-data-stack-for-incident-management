@@ -1,0 +1,83 @@
+= Demo Vignettes & Usage Examples
+:toc:
+:toc-placement!:
+:dbt_project_database: incident_management
+
+
+
+toc::[]
+
+== Overview
+
+This page provides practical examples and demonstrations of the project's key capabilities.
+
+
+== Demo Scenarios
+
+=== Data Engineering Flow
+
+[NOTE]
+====
+Both data engineering scenarios can be run together as well as separately.
+====
+
+==== Scenario 1: Incident Lifecycle
+
+. *Ingestion*: User posts incident message in Slack where the bot is deployed to capture the incident details and attachments
++
+** OpenFlow captures message metadata
+** Attachments are stored and linked
+** Raw data lands in `SLACK_MESSAGES` table
+
+. *Qualification*: dbt Project is run to refresh the daily models (assuming Cortex services are already deployed)
++
+** Models are refreshed through the scheduled task graph:
+*** incm_root_daily_incremental_refresh
+** dbt Models run to filter relevant incident messages
+** Uses AI to extract incident number from the message if it is present in the message else generates a new incident number
+** Uses AI to classify the incident based on the context of the message or any screenshot attachments
+** Creates qualified view for processing
+
+. *Enrichment*: AI-powered classification
++
+** Text analysis using Cortex AI functions
+** Image classification for attachments
+** Category and priority assignment
+
+==== Scenario 2: Business documents processing
+
+. *Ingestion*: Documents are uploaded to Snowflake
++
+** Document metadata lands in `DOCUMENTS` directory table and its associated stream table
+
+. *Processing*: Document models are refreshed through the triggered task:
+** Document models are refreshed through the triggered task:
+*** incm_root_triggered_docs_processing
+** Models use AI to extract text from the documents (PDFs, Word documents, etc.) uploaded to Snowflake.
+** Models use AI to extract questions and answers from the documents.
+** Models create a view for processing in Gold Zone.
+
+
+=== Consumption dashboards and Interactive Analysis
+
+==== Scenario 1: Snowflake Intelligence for interactive analysis
+
+. *Interactive Analysis*: Incident messages are ingested from Slack
++
+** From the Snowflake Intelligence UI, the user can select the agent ``{dbt_project_database}.gold_zone.agent_specs.incm360_a1`` and ask questions about the incident management process.
+*** Sample questions to start with are here: link:sample_questions.adoc[sample queries]
+
+==== Scenario 2: Streamlit Dashboard for real-time monitoring (minutes latency)
+
+. *Dashboard*: Provides a dashboard for monitoring the incident management process
++
+** Open the dashboard from Snowsight > Projects > Streamlit > INCIDENT_MANAGEMENT_DASHBOARD
+** From the Streamlit dashboard, the user can see the list of incidents, their status, and their attachments.
+
+
+'''
+
+link:../README.adoc[← To README] 
+
+'''
+

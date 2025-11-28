@@ -1,0 +1,40 @@
+= Cortex Search with dbt Projects
+:toc:
+:toc-placement!:
+
+toc::[]
+
+
+== Overview
+
+This page describes the approach taken by this project to deploy the Cortex Search service from within the same dbt Project.
+
+
+== Approach
+
+=== Triggered Document Processing
+It starts with a View in Bronze that contains the raw documents. The documents are expected to land in either one of the following directories to be processed in a certain way:
+
+* `@INCIDENT_MANAGEMENT.bronze_zone.DOCUMENTS/full` - for full documents that are not expected to be split into chunks
+* `@INCIDENT_MANAGEMENT.bronze_zone.DOCUMENTS/qa` - for documents that are expected to be split into chunks for question and answer extraction
+
+For Cortex Search, we need to extract the text chunks from the documents and hence the documents under _full_ sub-directory are then picked up by the dbt model link:../src/incident_management/models/silver_zone/document_full_extracts.sql[`document_full_extracts`] in Silver Zone.
+
+This model is tagged as 'document_processing' to indicate that it is a document processing model and is going to run through a link:https://docs.snowflake.com/en/user-guide/tasks-triggered[Triggered Task] whenever there is a new document added to the _full_ sub-directory.
+
+=== Cortex Search Service Deployment
+
+The Cortex Search service is deployed using the macro link:../src/incident_management/macros/create_document_search_sevice.sql[`create_document_search_service`] in Silver Zone.
+
+This macro does not need to be run on a regular basis as Cortex Search is a managed service which once instantiated automatically and incrementally refreshes the search index as new documentchunks are added to the table it reads from. In this case the table is the model created above.
+
+Hence this macro is only run once when the Cortex Search service is deployed via Task graph which is serverless and has no schedule attached to it.
+
+
+'''
+
+link:ARCHITECTURE.adoc[← To Architecture] ||| link:SETUP.adoc[→ To Setup Guide]
+
+'''
+
+

@@ -14,7 +14,11 @@ CREATE OR REPLACE API INTEGRATION <% ctx.env.snowflake_git_api_int %>
 
 CREATE OR REPLACE DATABASE <% ctx.env.dbt_project_database %>;
 
-CREATE OR REPLACE WAREHOUSE <% ctx.env.dbt_snowflake_warehouse %> WAREHOUSE_SIZE='X-SMALL' INITIALLY_SUSPENDED=TRUE;
+CREATE WAREHOUSE IF NOT EXISTS <% ctx.env.dbt_pipeline_wh %> WAREHOUSE_SIZE='X-SMALL' INITIALLY_SUSPENDED=TRUE;
+CREATE WAREHOUSE IF NOT EXISTS <% ctx.env.cortex_search_wh %> WAREHOUSE_SIZE='X-SMALL' INITIALLY_SUSPENDED=TRUE;
+
+grant execute task on account to role <% ctx.env.dbt_project_admin_role %>;
+grant execute managed task on account to role <% ctx.env.dbt_project_admin_role %>;
 
 /**
 
@@ -28,7 +32,7 @@ with login access to Snowsight by granting the dbt_project_admin_role to the use
 **/ 
 -- create or replace user <% ctx.env.snowflake_user %>
 -- type=service
--- default_warehouse=<% ctx.env.dbt_snowflake_warehouse %>
+-- default_warehouse=<% ctx.env.dbt_pipeline_wh %>
 -- default_namespace=<% ctx.env.dbt_project_database %>
 -- default_role=<% ctx.env.dbt_project_admin_role %>
 -- comment='service user for dbt projects';
@@ -41,7 +45,8 @@ grant all privileges on future schemas in database <% ctx.env.dbt_project_databa
 grant database role snowflake.cortex_user to role <% ctx.env.dbt_project_admin_role %>; 
 
 grant usage on integration <% ctx.env.snowflake_git_api_int %> to role <% ctx.env.dbt_project_admin_role %>;
-grant usage on warehouse <% ctx.env.dbt_snowflake_warehouse %> to role <% ctx.env.dbt_project_admin_role %>;
+grant usage on warehouse <% ctx.env.dbt_pipeline_wh %> to role <% ctx.env.dbt_project_admin_role %>;
+grant usage on warehouse <% ctx.env.cortex_search_wh %> to role <% ctx.env.dbt_project_admin_role %>;
 grant execute task on account to role <% ctx.env.dbt_project_admin_role %>;
 grant role <% ctx.env.dbt_project_admin_role %> to role sysadmin;
 grant role <% ctx.env.dbt_project_admin_role %> to user <% ctx.env.snowflake_user %>;
@@ -56,6 +61,9 @@ create or replace stage <% ctx.env.dbt_project_database %>.bronze_zone.csv_stage
 create stage if not exists <% ctx.env.dbt_project_database %>.bronze_zone.documents
 DIRECTORY=(ENABLE=true)
 ENCRYPTION = (TYPE = 'SNOWFLAKE_SSE');
+
+create or replace stream <% ctx.env.dbt_project_database %>.bronze_zone.documents_stream
+on stage <% ctx.env.dbt_project_database %>.bronze_zone.documents;
 
 create or replace schema <% ctx.env.dbt_project_database %>.gold_zone;
 
@@ -158,92 +166,14 @@ CREATE DBT PROJECT <% ctx.env.dbt_project_database %>.dbt_project_deployments.<%
   FROM '@<% ctx.env.dbt_project_database %>.dbt_project_deployments.project_git_repo/branches/main/src/incident_management'
   COMMENT = 'generates incident management data models';
 
-alter task if exists dbt_project_deployments.im_root_task_scheduler suspend;
-alter task if exists dbt_project_deployments.im_project_run_select_bronze_zone suspend;
-alter task if exists dbt_project_deployments.im_project_run_select_gold_zone suspend;
-alter task if exists dbt_project_deployments.im_project_test suspend;
-alter task if exists dbt_project_deployments.im_project_compile suspend;
-
-
-create or replace task dbt_project_deployments.im_root_task_scheduler
-	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
-	schedule='USING CRON 1 0 * * * America/Toronto'
-	config='{"target": "dev"}'
-	as SELECT 1;
-
-create or replace task dbt_project_deployments.im_project_compile
-	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
-	after dbt_project_deployments.im_root_task_scheduler
-	as 
-  EXECUTE IMMEDIATE
-  $$
-    BEGIN
-    LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
-    LET _dbt_nodes := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('select'));
-    LET _eai := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('eai'));
-    LET command := 'compile --target '|| _target;
-
-    EXECUTE DBT PROJECT dbt_project_deployments.<% ctx.env.dbt_project_name %> args=:command;
-    END;
-  $$
-  ;
-
-create or replace task dbt_project_deployments.im_project_run_select_bronze_zone
-	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
-	after dbt_project_deployments.im_project_compile
-	as 
-  EXECUTE IMMEDIATE
-  $$
-    BEGIN
-    LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
-    LET _dbt_nodes := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('select'));
-    LET _eai := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('eai'));
-    LET command := 'run --select bronze_zone --target '|| _target;
-    EXECUTE dbt project dbt_project_deployments.<% ctx.env.dbt_project_name %> args=:command;
-    END;
-  $$;
-
-create or replace task dbt_project_deployments.im_project_run_select_gold_zone
-	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
-	after dbt_project_deployments.im_project_compile, dbt_project_deployments.im_project_run_select_bronze_zone
-	as 
-  EXECUTE IMMEDIATE
-  $$
-    BEGIN
-    LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
-    LET _dbt_nodes := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('select'));
-    LET _eai := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('eai'));
-    LET command := 'run --select gold_zone --target '|| _target;
-    EXECUTE dbt project dbt_project_deployments.<% ctx.env.dbt_project_name %> args=:command;
-    END;
-  $$;
-
-
--- create or replace task dbt_project_deployments.im_project_test
--- 	warehouse=<% ctx.env.dbt_snowflake_warehouse %>
--- 	after dbt_project_deployments.im_project_compile, dbt_project_deployments.im_project_run_select_bronze_zone, dbt_project_deployments.im_project_run_select_gold_zone
--- 	as
---   EXECUTE IMMEDIATE 
---   $$
---     BEGIN
---     LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
---     LET _dbt_nodes := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('select'));
---     LET _eai := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('eai'));
---     LET command := 'test --target '|| _target;
-
---     EXECUTE dbt project dbt_project_deployments.<% ctx.env.dbt_project_name %> args=:command;
---     END;
---   $$;
-
 
 -------------------------------------------------
--- Create Streamlit App for Incident Management Dashboard
+-- Create Stage for Agent Specifications
 -------------------------------------------------
 
-CREATE OR REPLACE STREAMLIT <% ctx.env.dbt_project_database %>.gold_zone.incident_management_dashboard
-  ROOT_LOCATION = '@<% ctx.env.dbt_project_database %>.dbt_project_deployments.project_git_repo/branches/main/src/streamlit'
-  MAIN_FILE = '/main.py'
-  QUERY_WAREHOUSE = <% ctx.env.dbt_snowflake_warehouse %>
-  COMMENT = 'Incident Management Dashboard - Monitor, track, and analyze incidents in real-time';
+CREATE OR REPLACE STAGE <% ctx.env.dbt_project_database %>.gold_zone.agent_specs
+  DIRECTORY = ( ENABLE = true )
+  ENCRYPTION = (TYPE = 'SNOWFLAKE_SSE')
+  COMMENT = 'Stage for storing agent specification files with server-side encryption';
 
-
+PUT file://../cortex_agents/incm360_agent_1.yml  @<% ctx.env.dbt_project_database %>.gold_zone.agent_specs overwrite=true auto_compress=false;

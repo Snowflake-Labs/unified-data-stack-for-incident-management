@@ -1,0 +1,28 @@
+= Sample Questions for Cortex Agent
+:toc:
+:toc-placement!:
+
+toc::[]
+
+. *What are the top 5 incidents by priority this month?*
+. *What is our incident escalation policy?*
+. *Show me incident trends over the last quarter*
+. *How many critical payment incidents are currently open?*
+. *What is the average resolution time for incidents this month?*
+. *Are we meeting our SLA targets for incident resolution?*
+. *Show me all active incidents assigned to the authentication team*
+. *What incidents had attachments in the last week?*
+. *What does the global policy document say about incident response?*
+. *What is the MTTA metrics from the last 6 months?*
+. *Are we meeting our SLA targets for incident resolution?*
+. *Show me all active incidents assigned to the authentication team*
+. *What incidents had attachments in the last week?*
+. *What does the global policy document say about incident response?*
+
+
+
+'''
+
+link:../README.adoc[← To README] ||| link:DEMOS.adoc[→ To Demo Vignettes]
+
+'''
