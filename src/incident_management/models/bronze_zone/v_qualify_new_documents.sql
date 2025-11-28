@@ -1,7 +1,8 @@
 {{
     config(
-        materialized='view',
-        description='View to qualify new documents that could be staged under the designated location'
+        materialized='view'
+        , description='View to qualify new documents that could be staged under the designated location'
+        , tags=['document_processing']
     )
 }}
 
