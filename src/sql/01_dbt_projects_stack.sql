@@ -38,6 +38,8 @@ create or replace role <% ctx.env.dbt_project_admin_role %>;
 grant usage on database <% ctx.env.dbt_project_database %> to role <% ctx.env.dbt_project_admin_role %>;
 grant create schema on database <% ctx.env.dbt_project_database %> to role <% ctx.env.dbt_project_admin_role %>; 
 grant all privileges on future schemas in database <% ctx.env.dbt_project_database %> to role <% ctx.env.dbt_project_admin_role %>;
+grant select on future tables in schema <% ctx.env.dbt_project_database %>.bronze_zone to role <% ctx.env.dbt_project_admin_role %>;
+grant select on future views in schema <% ctx.env.dbt_project_database %>.bronze_zone to role <% ctx.env.dbt_project_admin_role %>;
 grant database role snowflake.cortex_user to role <% ctx.env.dbt_project_admin_role %>; 
 
 grant usage on integration <% ctx.env.snowflake_git_api_int %> to role <% ctx.env.dbt_project_admin_role %>;
