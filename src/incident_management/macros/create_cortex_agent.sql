@@ -1,10 +1,10 @@
-{% macro create_cortex_agent(agent_name, stage_name, spec_file, agent_profile) %}
+{% macro create_cortex_agent(agent_name, database, schema, stage_name, agent_spec_file) %}
 
 {% call statement('agent_spec_builder', fetch_result=True) %}
     EXECUTE IMMEDIATE $$
     BEGIN
-        LET scoped_file_path STRING := BUILD_SCOPED_FILE_URL(@{{ stage_name }}, '{{ spec_file }}');
-        LET agent_spec STRING := INCIDENT_MANAGEMENT.DBT_PROJECT_DEPLOYMENTS.READ_STAGE_FILE(:scoped_file_path);
+        LET scoped_file_path STRING := BUILD_SCOPED_FILE_URL(@{{ stage_name }}, '{{ agent_spec_file }}');
+        LET agent_spec STRING := {{database}}.dbt_project_deployments.READ_STAGE_FILE(:scoped_file_path);
     
         RETURN agent_spec;           
     END;
@@ -13,19 +13,42 @@
 
 {%- set agent_spec = load_result('agent_spec_builder') -%}
 
-{% set cortex_agent_ddl %}
-    CREATE OR REPLACE AGENT {{ target.database }}.GOLD_ZONE.{{ agent_name }}
-    COMMENT = $$
-    This is a Cortex Agent that can be used to answer a variety of questions about the incident management process.
-    It has access to different tools to help it answer the questions. 
-    It can use hybrid search to answer questions about the incident management process from the unstructured incident documentation like policy documents, runbooks, and best practices etc.
-    It can also use the a semantic view to query structured data including incident details, metrics, trends, and quaterly review metrics etc.
-    $$
-    PROFILE = '{"display_name": "Incident Management 360", "avatar": "Agent", "color": "green"}'
-    FROM SPECIFICATION
-    $$
-    {{ agent_spec['data'][0][0] | indent(4) }}
+{% call statement('agent_exists', fetch_result=True) %}
+   EXECUTE IMMEDIATE $$
+    DECLARE
+        agent_comment VARCHAR DEFAULT NULL;
+    BEGIN
+        DESCRIBE AGENT {{database}}.{{schema}}.{{agent_name}};
+        agent_comment := (SELECT "comment" FROM TABLE(RESULT_SCAN(LAST_QUERY_ID())));
+        RETURN agent_comment;
+    EXCEPTION
+        WHEN STATEMENT_ERROR THEN
+            RETURN NULL;
+    END;
     $$;
+{% endcall %}
+
+{%- set agent_exists = load_result('agent_exists') -%}
+
+{% set cortex_agent_ddl %}
+    {% if agent_exists is none or agent_exists['data'][0][0] is false %}
+        CREATE OR REPLACE AGENT {{ target.database }}.{{schema}}.{{ agent_name }}
+        COMMENT = $${'spec_file_name': '{{agent_spec_file}}'}$$
+        PROFILE = '{"display_name": "Agent assisted Incident Management", "color": "green"}'
+        FROM SPECIFICATION
+        $$
+        {{ agent_spec['data'][0][0] | indent(4) }}
+        $$;
+    {% else %}
+        ALTER AGENT {{ target.database }}.{{schema}}.{{ agent_name }} 
+        SET COMMENT = $${'spec_file_name': '{{agent_spec_file}}'}$$;
+        
+        ALTER AGENT {{ target.database }}.{{schema}}.{{ agent_name }} 
+        MODIFY LIVE VERSION SET SPECIFICATION = 
+        $$
+        {{ agent_spec['data'][0][0] | indent(4) }}
+        $$;
+    {% endif %}
 {% endset %}
 
 {% do run_query(cortex_agent_ddl) %}

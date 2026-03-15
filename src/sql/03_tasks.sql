@@ -70,26 +70,44 @@ create or replace task incm_root_deploy_cortex_services
 	config='{"target": "<% ctx.env.dbt_target %>"}'
 	as SELECT 1;
 
-create or replace task incm_deploy_cortex_services
+create or replace task incm_deploy_semantic_view
   warehouse=<% ctx.env.dbt_pipeline_wh %>
 	after incm_root_deploy_cortex_services
-	as 
+	as
   EXECUTE IMMEDIATE
   $$
     BEGIN
       LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
-      
-      -- Semantic Views
-      LET sv_command := 'run --select semantic_views.incm360 --target '|| _target;
-      EXECUTE DBT PROJECT <% ctx.env.dbt_project_name %> args=:sv_command;
+      LET command := 'run --select semantic_views.incm360 --target '|| _target;
+      EXECUTE DBT PROJECT <% ctx.env.dbt_project_name %> args=:command;
+    END;
+  $$
+  ;
 
-      -- Cortex Search
-      LET cs_command := 'run-operation create_document_search_service --args "{service_name: incm_doc_search,search_wh: <% ctx.env.cortex_search_wh %>,search_column: chunk,target_lag:  1 day}" --target '|| _target;
-      EXECUTE DBT PROJECT <% ctx.env.dbt_project_name %> args=:cs_command;
-      
-      -- Cortex Agents
-      LET ca_command := 'run-operation create_cortex_agent --args "{agent_name: incm360_a1, stage_name: <% ctx.env.dbt_project_database %>.gold_zone.agent_specs, spec_file: incm360_agent_1.yml}" --target '|| _target;
-      EXECUTE DBT PROJECT <% ctx.env.dbt_project_name %> args=:ca_command;
+create or replace task incm_deploy_search_service
+  warehouse=<% ctx.env.dbt_pipeline_wh %>
+	after incm_root_deploy_cortex_services
+	as
+  EXECUTE IMMEDIATE
+  $$
+    BEGIN
+      LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
+      LET command := 'run-operation create_document_search_service --args "{service_name: incm_doc_search,search_wh: <% ctx.env.cortex_search_wh %>,search_column: chunk,target_lag:  1 day, embedding_model: snowflake-arctic-embed-l-v2.0}" --target '|| _target;
+      EXECUTE DBT PROJECT <% ctx.env.dbt_project_name %> args=:command;
+    END;
+  $$
+  ;
+
+create or replace task incm_deploy_cortex_agent
+  warehouse=<% ctx.env.dbt_pipeline_wh %>
+	after incm_deploy_semantic_view, incm_deploy_search_service
+	as
+  EXECUTE IMMEDIATE
+  $$
+    BEGIN
+      LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
+      LET command := 'run-operation create_cortex_agent --args "{agent_name: incm360_a1, database: <% ctx.env.dbt_project_database %>, schema: gold_zone, stage_name: agent_specs, agent_spec_file: incm360_agent_1.yml}" --target '|| _target;
+      EXECUTE DBT PROJECT <% ctx.env.dbt_project_name %> args=:command;
     END;
   $$
   ;

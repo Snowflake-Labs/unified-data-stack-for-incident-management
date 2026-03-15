@@ -1,7 +1,7 @@
 # Makefile for Incident Management Project Setup
 # Automates installation steps 1-3 as documented in README.md
 
-.PHONY: help install setup-snowflake generate-yaml setup-dbt-stack setup-slack-connector setup-tasks setup-procs-funcs deploy-streamlit all
+.PHONY: help install setup-snowflake generate-yaml setup-dbt-stack setup-slack-connector setup-tasks setup-procs-funcs deploy-streamlit teardown all
 
 # Default target
 help:
@@ -17,6 +17,7 @@ help:
 	@echo "  setup-tasks       Setup Snowflake tasks (step 2.4)"
 	@echo "  setup-procs-funcs Setup procedures and functions (step 2.5)"
 	@echo "  deploy-streamlit  Deploy Streamlit app (requires STREAMLIT_DEPLOYMENT_ENABLED=true)"
+	@echo "  teardown          Teardown all project-owned Snowflake resources"
 	@echo ""
 	@echo "Prerequisites:"
 	@echo "  - Snowflake CLI installed"
@@ -31,6 +32,7 @@ help:
 	@echo "  make setup-tasks CONN=myconn    # Setup Snowflake tasks"
 	@echo "  make setup-procs-funcs CONN=myconn  # Setup procedures and functions"
 	@echo "  make deploy-streamlit CONN=myconn  # Deploy Streamlit app (requires STREAMLIT_DEPLOYMENT_ENABLED=true)"
+	@echo "  make teardown CONN=myconn         # Teardown project-owned resources"
 	@echo ""
 	@echo "Note: Python dependencies are installed separately when running the dashboard"
 	@echo "See README 'Running the Dashboard' section for Python setup instructions"
@@ -207,6 +209,35 @@ deploy-streamlit:
 	@echo ""
 	@echo "📱 Access your Streamlit app in Snowsight:"
 	@echo "   Navigate to: Data Products > Streamlit > INCIDENT_MANAGEMENT_DASHBOARD"
+
+# Teardown: Remove all project-owned Snowflake resources
+teardown:
+	@if [ -z "$(CONN)" ]; then \
+		echo "❌ Error: CONN parameter required"; \
+		echo "Usage: make teardown CONN=<connection-name>"; \
+		echo "Connection should be defined in ~/.snowflake/config.toml"; \
+		exit 1; \
+	fi
+	@if ! command -v snow >/dev/null 2>&1; then \
+		echo "❌ Error: Snowflake CLI (snow) is not installed"; \
+		echo "Please install it first: https://docs.snowflake.com/en/developer-guide/snowflake-cli/installation/installation"; \
+		exit 1; \
+	fi
+	@echo "================================================================================================================"
+	@echo "================================================================================================================"
+	@echo "🗑️  Tearing down project-owned Snowflake resources..."
+	@echo "================================================================================================================"
+	@echo "================================================================================================================"
+	@echo "⚠️  WARNING: This will drop all objects owned by dbt_project_admin_role"
+	@echo "   (tasks, cortex services, streamlit app, dbt project, tables, schemas, etc.)"
+	@echo "   ACCOUNTADMIN-owned resources (database, warehouses, roles) are NOT affected."
+	@echo ""
+	@read -p "Are you sure you want to proceed? (y/N): " confirm && [ "$$confirm" = "y" ] || { echo "Teardown cancelled."; exit 1; }
+	cd src/sql && snow sql --connection $(CONN) -f 06_teardown.sql
+	@echo "✅ Teardown complete! Project-owned resources have been removed."
+	@echo ""
+	@echo "📝 Note: ACCOUNTADMIN-owned resources (database, warehouses, integrations, roles)"
+	@echo "   were NOT dropped. See src/sql/06_teardown.sql for optional manual cleanup steps."
 
 # Check prerequisites
 check-prereqs:

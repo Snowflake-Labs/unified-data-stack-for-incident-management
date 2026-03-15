@@ -1,4 +1,4 @@
-{% macro create_document_search_service(service_name, search_wh, search_column, target_lag) %}
+{% macro create_document_search_service(service_name, search_wh, search_column, target_lag, embedding_model) %}
 
 {% set sql %}
     CREATE OR REPLACE CORTEX SEARCH SERVICE {{ target.database }}.SILVER_ZONE.{{ service_name }}
@@ -6,7 +6,7 @@
       ATTRIBUTES RELATIVE_PATH, EXTENSION
       WAREHOUSE = {{ search_wh }}
       TARGET_LAG = '{{ target_lag }}'
-      EMBEDDING_MODEL = 'snowflake-arctic-embed-l-v2.0'
+      EMBEDDING_MODEL = '{{embedding_model}}'
     AS (
       SELECT
         CHUNK,
