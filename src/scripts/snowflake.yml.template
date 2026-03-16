@@ -11,6 +11,7 @@ env:
   git_user_repo_pat: "${GIT_USER_REPO_PAT}"
   git_repository_url: "${GIT_REPOSITORY_URL}"
   repo_dbt_projects_yml_path: "${REPO_DBT_PROJECTS_YML_PATH}"
+  git_branch: "${GIT_BRANCH}"
   snowflake_git_api_int: "${SNOWFLAKE_GIT_API_INT}"
   slack_connector_role: "${SLACK_CONNECTOR_ROLE}"
   slack_connector_wh: "${SLACK_CONNECTOR_WH}"
