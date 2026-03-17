@@ -46,13 +46,14 @@ create or replace task incm_daily_models_refresh
 
 -- Triggered Task for document based model refreshes
 create or replace task incm_root_triggered_docs_processing
+	warehouse=<% ctx.env.dbt_pipeline_wh %>
 	config='{"target": "<% ctx.env.dbt_target %>"}'
+  WHEN SYSTEM$STREAM_HAS_DATA('INCIDENT_MANAGEMENT.bronze_zone.documents_stream')
 	as SELECT 1;
 
 CREATE OR REPLACE TASK incm_triggered_docs_processing
   warehouse=<% ctx.env.dbt_pipeline_wh %>
   after incm_root_triggered_docs_processing
-  WHEN SYSTEM$STREAM_HAS_DATA('INCIDENT_MANAGEMENT.bronze_zone.documents_stream')
   AS
   EXECUTE IMMEDIATE
   $$
@@ -67,6 +68,7 @@ CREATE OR REPLACE TASK incm_triggered_docs_processing
 
 -- One off operations to deploy Cortex Services and Semantic Views
 create or replace task incm_root_deploy_cortex_services
+	warehouse=<% ctx.env.dbt_pipeline_wh %>
 	config='{"target": "<% ctx.env.dbt_target %>"}'
 	as SELECT 1;
 

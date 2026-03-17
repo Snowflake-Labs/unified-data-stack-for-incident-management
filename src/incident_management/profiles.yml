@@ -4,10 +4,10 @@ incident_management:
       type: snowflake
       account: ""
       database: "incident_management"
-      role: "dbt_projects_engineer"
+      role: "incm_projects_engineer"
       schema: "bronze_zone"
       user: ""
-      warehouse: "demo_wh"
+      warehouse: "v1_demo_wh"
       query_tag: '{"dbt_project": "incident_management", "environment": "dev"}'
 
   target: "dev"

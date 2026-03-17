@@ -4,7 +4,7 @@
 # Every target is independently runnable — no implicit prerequisite chains.
 # Use 'make install FROM=<step>' to resume from a specific step.
 
-.PHONY: help install setup-snowflake generate-yaml setup-dbt-stack setup-accountadmin setup-sysadmin-objects setup-slack-connector setup-tasks setup-procs-funcs deploy-streamlit teardown check-prereqs
+.PHONY: help install setup-snowflake generate-yaml setup-dbt-stack setup-accountadmin setup-sysadmin-objects setup-slack-connector setup-tasks setup-procs-funcs deploy-streamlit load-test-data teardown check-prereqs
 
 # Step numbering (used by FROM= parameter)
 #   1  generate-yaml
@@ -35,6 +35,7 @@ help:
 	@echo ""
 	@echo "Optional (not included in 'install'):"
 	@echo "  deploy-streamlit  Deploy Streamlit app (run separately after install)"
+	@echo "  load-test-data    Load CSV test data into bronze & gold tables"
 	@echo ""
 	@echo "Other:"
 	@echo "  teardown          Teardown all project-owned Snowflake resources"
@@ -206,6 +207,16 @@ deploy-streamlit:
 	@echo ""
 	@echo "📱 Access your Streamlit app in Snowsight:"
 	@echo "   Navigate to: Data Products > Streamlit > INCIDENT_MANAGEMENT_DASHBOARD"
+
+# Load test data (optional, not part of 'install')
+load-test-data:
+	$(check_conn)
+	@echo "================================================================================================================"
+	@echo "📦 Loading test data into bronze & gold tables..."
+	@echo "================================================================================================================"
+	@echo "⚠️  Note: This will truncate existing data before loading. Requires step 3 (setup-sysadmin-objects) to have been run."
+	cd src/sql && snow sql --connection $(CONN) -f 07_load_test_data.sql
+	@echo "✅ Test data loaded successfully!"
 
 # Teardown: Remove all project-owned Snowflake resources
 teardown:

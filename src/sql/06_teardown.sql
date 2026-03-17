@@ -30,23 +30,33 @@ USE DATABASE <% ctx.env.dbt_project_database %>;
 USE SCHEMA <% ctx.env.dbt_project_database %>.dbt_project_deployments;
 
 -- Suspend all tasks first (child tasks before parent tasks)
-ALTER TASK IF EXISTS incm_deploy_cortex_services SUSPEND;
+-- DAG 3: Deploy Cortex Services
+ALTER TASK IF EXISTS incm_deploy_cortex_agent SUSPEND;
+ALTER TASK IF EXISTS incm_deploy_search_service SUSPEND;
+ALTER TASK IF EXISTS incm_deploy_semantic_view SUSPEND;
 ALTER TASK IF EXISTS incm_root_deploy_cortex_services SUSPEND;
 
+-- DAG 2: Triggered Docs Processing
 ALTER TASK IF EXISTS incm_triggered_docs_processing SUSPEND;
 ALTER TASK IF EXISTS incm_root_triggered_docs_processing SUSPEND;
 
+-- DAG 1: Daily Incremental Refresh
 ALTER TASK IF EXISTS incm_daily_models_refresh SUSPEND;
 ALTER TASK IF EXISTS incm_project_compile SUSPEND;
 ALTER TASK IF EXISTS incm_root_daily_incremental_refresh SUSPEND;
 
 -- Drop tasks (child tasks before parent tasks)
-DROP TASK IF EXISTS incm_deploy_cortex_services;
+-- DAG 3: Deploy Cortex Services
+DROP TASK IF EXISTS incm_deploy_cortex_agent;
+DROP TASK IF EXISTS incm_deploy_search_service;
+DROP TASK IF EXISTS incm_deploy_semantic_view;
 DROP TASK IF EXISTS incm_root_deploy_cortex_services;
 
+-- DAG 2: Triggered Docs Processing
 DROP TASK IF EXISTS incm_triggered_docs_processing;
 DROP TASK IF EXISTS incm_root_triggered_docs_processing;
 
+-- DAG 1: Daily Incremental Refresh
 DROP TASK IF EXISTS incm_daily_models_refresh;
 DROP TASK IF EXISTS incm_project_compile;
 DROP TASK IF EXISTS incm_root_daily_incremental_refresh;
@@ -60,10 +70,10 @@ USE ROLE <% ctx.env.dbt_project_admin_role %>;
 USE DATABASE <% ctx.env.dbt_project_database %>;
 
 -- Drop Cortex Agent
-DROP CORTEX AGENT IF EXISTS <% ctx.env.dbt_project_database %>.gold_zone.incm360_a1;
+DROP AGENT IF EXISTS <% ctx.env.dbt_project_database %>.gold_zone.incm360_a1;
 
 -- Drop Cortex Search Service
-DROP CORTEX SEARCH SERVICE IF EXISTS <% ctx.env.dbt_project_database %>.silver_zone.incm_doc_search;
+-- DROP CORTEX SEARCH SERVICE IF EXISTS <% ctx.env.dbt_project_database %>.silver_zone.incm_doc_search;
 
 -- Drop Semantic View
 DROP VIEW IF EXISTS <% ctx.env.dbt_project_database %>.gold_zone.incm360;

@@ -22,6 +22,8 @@ USE DATABASE <% ctx.env.dbt_project_database %>;
 -- ----- Schemas -----
 
 CREATE OR REPLACE SCHEMA <% ctx.env.dbt_project_database %>.bronze_zone;
+
+CREATE OR REPLACE SCHEMA <% ctx.env.dbt_project_database %>.silver_zone;
 CREATE OR REPLACE SCHEMA <% ctx.env.dbt_project_database %>.gold_zone;
 CREATE OR REPLACE SCHEMA <% ctx.env.dbt_project_database %>.dbt_project_deployments;
 
@@ -141,6 +143,9 @@ PUT file://../cortex_agents/*.yml @<% ctx.env.dbt_project_database %>.gold_zone.
 -- ============================================================================
 
 GRANT OWNERSHIP ON SCHEMA <% ctx.env.dbt_project_database %>.bronze_zone
+  TO ROLE <% ctx.env.dbt_project_admin_role %> COPY CURRENT GRANTS;
+
+GRANT OWNERSHIP ON SCHEMA <% ctx.env.dbt_project_database %>.silver_zone
   TO ROLE <% ctx.env.dbt_project_admin_role %> COPY CURRENT GRANTS;
 
 GRANT OWNERSHIP ON SCHEMA <% ctx.env.dbt_project_database %>.gold_zone

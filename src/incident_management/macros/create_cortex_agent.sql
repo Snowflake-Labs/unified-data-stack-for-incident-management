@@ -39,6 +39,8 @@
         $$
         {{ agent_spec['data'][0][0] | indent(4) }}
         $$;
+
+        ALTER SNOWFLAKE INTELLIGENCE {{var('snowflake_intelligence_object')}} ADD AGENT {{ target.database }}.{{schema}}.{{ agent_name }};
     {% else %}
         ALTER AGENT {{ target.database }}.{{schema}}.{{ agent_name }} 
         SET COMMENT = $${'spec_file_name': '{{agent_spec_file}}'}$$;
