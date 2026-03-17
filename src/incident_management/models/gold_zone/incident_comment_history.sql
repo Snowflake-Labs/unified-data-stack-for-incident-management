@@ -16,9 +16,9 @@ select
     i.last_comment as content,
     current_timestamp() as created_at
 from {{ref('incidents')}} i
-
+where i.slack_message_id is not null
 {% if is_incremental() %}
-where i.updated_at > (select coalesce(max(created_at), dateadd('day', -1, current_timestamp())) from {{this}})
+and i.updated_at > (select coalesce(max(created_at), dateadd('day', -1, current_timestamp())) from {{this}})
 and i.updated_at >= dateadd('day', -1, current_timestamp())
 and i.status = 'open'
 {% endif %}

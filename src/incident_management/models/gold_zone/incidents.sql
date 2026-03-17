@@ -68,7 +68,7 @@ recent_open_incidents as (
     select *, incident_number as final_incident_number
     from messages_with_incident_code
     
-    union
+    union all
     
     -- Messages without incident codes, use existing if found, otherwise generate new
     select 
