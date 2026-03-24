@@ -3,7 +3,7 @@
 {% call statement('agent_spec_builder', fetch_result=True) %}
     EXECUTE IMMEDIATE $$
     BEGIN
-        LET scoped_file_path STRING := BUILD_SCOPED_FILE_URL(@{{ stage_name }}, '{{ agent_spec_file }}');
+        LET scoped_file_path STRING := BUILD_SCOPED_FILE_URL(@{{ database }}.{{ schema }}.{{ stage_name }}, '{{ agent_spec_file }}');
         LET agent_spec STRING := {{database}}.dbt_project_deployments.READ_STAGE_FILE(:scoped_file_path);
     
         RETURN agent_spec;           

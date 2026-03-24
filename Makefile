@@ -4,7 +4,7 @@
 # Every target is independently runnable — no implicit prerequisite chains.
 # Use 'make install FROM=<step>' to resume from a specific step.
 
-.PHONY: help install setup-snowflake generate-yaml setup-dbt-stack setup-accountadmin setup-sysadmin-objects setup-slack-connector setup-tasks setup-procs-funcs deploy-streamlit load-test-data teardown check-prereqs
+.PHONY: help install setup-snowflake generate-yaml setup-dbt-stack only-dbt setup-accountadmin setup-sysadmin-objects setup-slack-connector setup-tasks setup-procs-funcs deploy-streamlit load-test-data teardown check-prereqs
 
 # Step numbering (used by FROM= parameter)
 #   1  generate-yaml
@@ -32,6 +32,7 @@ help:
 	@echo "  install           Run steps 1-6 (or resume with FROM=<step>)"
 	@echo "  setup-snowflake   Alias for install"
 	@echo "  setup-dbt-stack   Run steps 2+3 together"
+	@echo "  only-dbt          Run steps 1+2+3+5+6 (skip Slack connector)"
 	@echo ""
 	@echo "Optional (not included in 'install'):"
 	@echo "  deploy-streamlit  Deploy Streamlit app (run separately after install)"
@@ -46,6 +47,7 @@ help:
 	@echo "  make install ENV_FILE=.env CONN=myconn FROM=3 # Resume from step 3"
 	@echo "  make setup-accountadmin CONN=myconn            # Run a single step"
 	@echo "  make setup-dbt-stack CONN=myconn               # Steps 2+3 only"
+	@echo "  make only-dbt ENV_FILE=.env CONN=myconn       # Steps 1+2+3+5+6 (no Slack)"
 	@echo "  make deploy-streamlit CONN=myconn              # Optional Streamlit"
 	@echo "  make teardown CONN=myconn                      # Teardown resources"
 	@echo ""
@@ -95,6 +97,25 @@ setup-dbt-stack:
 	@$(MAKE) setup-accountadmin CONN=$(CONN)
 	@$(MAKE) setup-sysadmin-objects CONN=$(CONN)
 	@echo "✅ dbt Projects infrastructure setup complete!"
+
+# Run generate-yaml + dbt-stack + tasks + procs-funcs (skips Slack connector)
+only-dbt:
+	@if [ -z "$(ENV_FILE)" ] || [ -z "$(CONN)" ]; then \
+		echo "❌ Error: Both ENV_FILE and CONN parameters required"; \
+		echo "Usage: make only-dbt ENV_FILE=.env CONN=<connection-name>"; \
+		exit 1; \
+	fi
+	@echo "================================================================================================================"
+	@echo "🚀 Running dbt-only setup (steps 1+2+3+5+6, skipping Slack connector)..."
+	@echo "================================================================================================================"
+	@$(MAKE) generate-yaml ENV_FILE=$(ENV_FILE)
+	@$(MAKE) setup-dbt-stack CONN=$(CONN)
+	@$(MAKE) setup-tasks CONN=$(CONN)
+	@$(MAKE) setup-procs-funcs CONN=$(CONN)
+	@$(MAKE) load-test-data CONN=$(CONN)
+
+	@echo ""
+	@echo "✅ dbt-only setup complete!"
 
 # ---------------------------------------------------------------------------
 # Individual steps (each independently runnable)

@@ -1,0 +1,14 @@
+unit_tests:
+  - name: test_closed_incidents_filters_and_calculates_resolution
+    description: "Verify closed_incidents only includes closed/resolved incidents and calculates resolution hours"
+    model: closed_incidents
+    given:
+      - input: ref('incidents')
+        rows:
+          - {incident_number: "INC-2025-001", title: "payment gateway error", category: "payment gateway error", priority: "critical", status: "open", assignee_id: "", reportee_id: "U001", created_at: "2025-01-15 10:00:00", closed_at: null, updated_at: "2025-01-15 10:00:00", source_system: "Slack", external_source_id: "C001", has_attachments: true}
+          - {incident_number: "INC-2025-004", title: "login error", category: "login error", priority: "high", status: "closed", assignee_id: "", reportee_id: "U002", created_at: "2025-01-15 10:00:00", closed_at: "2025-01-16 10:00:00", updated_at: "2025-01-16 10:00:00", source_system: "Slack", external_source_id: "C001", has_attachments: false}
+          - {incident_number: "INC-2025-005", title: "other", category: "other", priority: "low", status: "resolved", assignee_id: "", reportee_id: "U003", created_at: "2025-01-15 12:00:00", closed_at: "2025-01-17 12:00:00", updated_at: "2025-01-17 12:00:00", source_system: "Slack", external_source_id: "C001", has_attachments: false}
+    expect:
+      rows:
+        - {incident_number: "INC-2025-004", title: "login error", category: "login error", priority: "high", status: "closed", assignee_id: "", reportee_id: "U002", created_at: "2025-01-15 10:00:00", closed_at: "2025-01-16 10:00:00", updated_at: "2025-01-16 10:00:00", source_system: "Slack", external_source_id: "C001", has_attachments: false, total_resolution_hours: 24.0, closed_month: "2025-01-01", closed_year: 2025, closed_quarter: 1}
+        - {incident_number: "INC-2025-005", title: "other", category: "other", priority: "low", status: "resolved", assignee_id: "", reportee_id: "U003", created_at: "2025-01-15 12:00:00", closed_at: "2025-01-17 12:00:00", updated_at: "2025-01-17 12:00:00", source_system: "Slack", external_source_id: "C001", has_attachments: false, total_resolution_hours: 48.0, closed_month: "2025-01-01", closed_year: 2025, closed_quarter: 1}

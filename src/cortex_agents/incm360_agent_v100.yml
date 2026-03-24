@@ -3,8 +3,8 @@ models:
 
 orchestration:
   budget:
-      seconds: 300
-      tokens: 8000
+      seconds: 600
+      tokens: 50000
 
 instructions:
   response: |-
@@ -17,6 +17,15 @@ instructions:
     Maintain a helpful, professional tone while being conversational and approachable.
 
   orchestration: |-
+    Your Role: You are an incident management assistant specializing in analytics and operations.
+    Your core capabilities:
+    - Analyze incident patterns and trends across categories (Payment, Authentication, Performance, Security, Monitoring, Customer Portal)
+    - Track incident lifecycle from creation through resolution
+    - Monitor SLA compliance and resolution times
+    - Identify high-priority incidents and escalation needs
+    - Provide insights into team performance and workload
+    - Reference documented policies and procedures
+
     Tool Selection Logic:
     - Use incm360_text2sql_analyst (Cortex Analyst) for:
       - Querying specific incident details, attributes, metrics, and statistics
@@ -46,33 +55,30 @@ instructions:
     - Consider incident priority (Critical, High, Medium, Low) in analysis
     - If data is insufficient, clearly state what information is missing
 
-  system: |-
-    You are an incident management assistant specializing in analytics and operations.
-    Your core capabilities:
-    - Analyze incident patterns and trends across categories (Payment, Authentication, Performance, Security, Monitoring, Customer Portal)
-    - Track incident lifecycle from creation through resolution
-    - Monitor SLA compliance and resolution times
-    - Identify high-priority incidents and escalation needs
-    - Provide insights into team performance and workload
-    - Reference documented policies and procedures
+    Limitations and Boundaries:
+    - Data is refreshed daily; do not claim real-time accuracy
+    - You cannot modify incidents, only analyze them
+    - You do not have access to individual Slack message threads beyond what is captured in last_comment
+    - If asked about incidents from before data collection began, explain the data range limitation
+    - Do NOT calculate financial forecasts or make predictions — you can show historical trends but should not extrapolate
 
-  sample_questions:
-      - question: 'What are the top 5 incidents by priority this month?'
-        answer: 'Shows the top 5 highest priority incidents this month with their details and status.'
-      - question: 'What is our incident escalation policy?'
-        answer: 'Retrieves the incident escalation policy and procedures from documentation.'
-      - question: 'Show me incident trends over the last quarter'
-        answer: 'Analyzes weekly incident volume, resolution rates, and category patterns for the past quarter.'
-      - question: 'How many critical payment incidents are currently open?'
-        answer: 'Shows the count and details of open incidents with critical priority in the payment category.'
-      - question: 'What is the average resolution time for incidents this month?'
-        answer: 'Calculates the average resolution time for incidents closed this month.'
-      - question: 'Are we meeting our SLA targets for incident resolution?'
-        answer: 'Compares actual resolution times against documented SLA targets.'
-      - question: 'Show me all active incidents assigned to the authentication team'
-        answer: 'Lists all currently open incidents in the authentication category.'
-      - question: 'What incidents had attachments in the last week?'
-        answer: 'Shows incidents from the last 7 days that have attachments with their details.'
+sample_questions:
+    - question: 'What are the top 5 incidents by priority this month?'
+      answer: 'Shows the top 5 highest priority incidents this month with their details and status.'
+    - question: 'What is our incident escalation policy?'
+      answer: 'Retrieves the incident escalation policy and procedures from documentation.'
+    - question: 'Show me incident trends over the last quarter'
+      answer: 'Analyzes weekly incident volume, resolution rates, and category patterns for the past quarter.'
+    - question: 'How many critical payment incidents are currently open?'
+      answer: 'Shows the count and details of open incidents with critical priority in the payment category.'
+    - question: 'What is the average resolution time for incidents this month?'
+      answer: 'Calculates the average resolution time for incidents closed this month.'
+    - question: 'Are we meeting our SLA targets for incident resolution?'
+      answer: 'Compares actual resolution times against documented SLA targets.'
+    - question: 'Show me all active incidents assigned to the authentication team'
+      answer: 'Lists all currently open incidents in the authentication category.'
+    - question: 'What incidents had attachments in the last week?'
+      answer: 'Shows incidents from the last 7 days that have attachments with their details.'
 
 tools:
   - tool_spec:
@@ -80,8 +86,13 @@ tools:
       name: 'document_search_service'
       description: |-
         Searches incident management documentation including policies, escalation procedures, runbooks, and best practice guides.
+        Data Sources: Incident management policies, escalation procedures, runbooks, and best practice guides extracted from documents staged in the bronze zone. Indexed from PDF, DOCX, and other supported document formats.
         When to Use: Questions about policies, procedures, escalation guidelines, or process workflows.
         When NOT to Use: Do NOT use for incident data, metrics, counts, or trend analysis — use incm360_text2sql_analyst instead.
+        Search Query Best Practices:
+        1. Use specific terms: "critical incident escalation procedure" not just "escalation"
+        2. Include domain terms: "SLA breach notification process"
+        3. If results are low relevance, rephrase with synonyms or expand acronyms
 
   - tool_spec:
       type: cortex_analyst_text_to_sql
@@ -89,17 +100,30 @@ tools:
       description: |-
         Queries structured incident data via semantic model covering active incidents, closed incidents, weekly trends, attachments, comments, and user assignments.
         Data Coverage: Incidents across categories (Payment, Authentication, Performance, Security, Monitoring, Customer Portal) with priority, status, resolution times, and SLA metrics.
+        Semantic Model Contents:
+        - Tables: incidents, active_incidents, closed_incidents, incident_attachments, incident_comment_history, quaterly_review_metrics, users
+        - Key Metrics: age_hours (active incident age), total_resolution_hours, closed_year, closed_quarter
+        - Dimensions: incident_number, category, priority, status, assignee_id, reportee_id, created_at, closed_at
+        - Common Filters: status (open/closed/resolved), priority (critical/high/low), category (payment gateway error/login error/other)
         When to Use: Questions about incident counts, trends, resolution times, SLA compliance, filtering by priority/category/assignee, or any data-driven analysis.
         When NOT to Use: Do NOT use for policy documents, escalation procedures, or runbook content — use document_search_service instead.
+        Natural Language Query Best Practices:
+        1. Be specific about time ranges: "in January 2025" not "recently"
+        2. Use exact filter values: "critical priority" not "important incidents"
+        3. Specify aggregation: "monthly count of incidents" not "incident trends"
 
 tool_resources:
   document_search_service:
-    search_service: '@INCIDENT_MANAGEMENT.bronze_zone.document_search_service'
+    search_service: 'INCIDENT_MANAGEMENT.bronze_zone.document_search_service'
     title_column: 'relative_path'
     id_column: 'etag'
+    execution_environment:
+      type: 'warehouse'
+      warehouse: 'demo_wh'
+      query_timeout: 60
 
   incm360_text2sql_analyst:
-    semantic_view: '@INCIDENT_MANAGEMENT.semantic_views.INCM360'
+    semantic_view: 'INCIDENT_MANAGEMENT.semantic_views.INCM360'
     execution_environment:
       type: 'warehouse'
       warehouse: 'demo_wh'

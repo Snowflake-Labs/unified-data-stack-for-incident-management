@@ -2,9 +2,28 @@ use role <% ctx.env.dbt_project_admin_role %>;
 use database <% ctx.env.dbt_project_database %>;
 use schema <% ctx.env.dbt_project_database %>.dbt_project_deployments;
 
--- Core model refresh tasks
--- Task to run project dependencies and compile all models, macros, and tests
--- Does not need to be scheduled
+-- ============================================================================
+-- Suspend all tasks (root first, then children) before recreating
+-- ============================================================================
+
+-- DAG 1: Daily incremental refresh (root first, then children)
+ALTER TASK IF EXISTS incm_root_daily_incremental_refresh SUSPEND;
+ALTER TASK IF EXISTS incm_project_compile SUSPEND;
+ALTER TASK IF EXISTS incm_daily_models_refresh SUSPEND;
+
+-- DAG 2: Triggered docs processing (root first, then children)
+ALTER TASK IF EXISTS incm_root_triggered_docs_processing SUSPEND;
+ALTER TASK IF EXISTS incm_triggered_docs_processing SUSPEND;
+
+-- DAG 3: Cortex services deployment (root first, then children)
+ALTER TASK IF EXISTS incm_root_deploy_cortex_services SUSPEND;
+ALTER TASK IF EXISTS incm_deploy_semantic_view SUSPEND;
+ALTER TASK IF EXISTS incm_deploy_search_service SUSPEND;
+ALTER TASK IF EXISTS incm_deploy_cortex_agent SUSPEND;
+
+-- ============================================================================
+-- Recreate tasks
+-- ============================================================================
 
 create or replace task incm_root_daily_incremental_refresh
 	warehouse=<% ctx.env.dbt_pipeline_wh %>
@@ -65,7 +84,6 @@ CREATE OR REPLACE TASK incm_triggered_docs_processing
   $$
   ;
 
-
 -- One off operations to deploy Cortex Services and Semantic Views
 create or replace task incm_root_deploy_cortex_services
 	warehouse=<% ctx.env.dbt_pipeline_wh %>
@@ -108,7 +126,7 @@ create or replace task incm_deploy_cortex_agent
   $$
     BEGIN
       LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
-      LET command := 'run-operation create_cortex_agent --args "{agent_name: incm360_a1, database: <% ctx.env.dbt_project_database %>, schema: gold_zone, stage_name: agent_specs, agent_spec_file: incm360_agent_1.yml}" --target '|| _target;
+      LET command := 'run-operation create_cortex_agent --args "{agent_name: incident_management_agent, database: <% ctx.env.dbt_project_database %>, schema: gold_zone, stage_name: agent_specs, agent_spec_file: incm360_agent_v100.yml}" --target '|| _target;
       EXECUTE DBT PROJECT <% ctx.env.dbt_project_name %> args=:command;
     END;
   $$

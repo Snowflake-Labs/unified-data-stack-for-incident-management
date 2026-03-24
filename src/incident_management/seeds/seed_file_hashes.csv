@@ -1,0 +1,3 @@
+hash_value,source_system,doc_id,event_ts,algorithm
+sha256_abc123,slack,F001,2025-01-15 10:00:01,SHA-256
+sha256_def456,slack,F002,2025-01-15 10:00:02,SHA-256

@@ -1,0 +1,7 @@
+hasfiles,type,subtype,team,channel,user,username,reporter_id,text,ts,slack_message_id,file_id,file_name,file_mimetype,file_size,staged_file_path,attachment_file,incident_number
+true,message,,T001,C001,U001,alice,U001,Incident INC-2025-001 payment gateway timeout on checkout,1737000001.000000,msg-001,F001,payment_error_screenshot.png,image/png,204800,incidents/payment_error_screenshot.png,,"{""incident_code"":""INC-2025-001""}"
+true,message,,T001,C001,U002,bob,U002,Incident INC-2025-002 users unable to login after password reset,1737000002.000000,msg-002,F002,login_error_log.pdf,application/pdf,102400,incidents/login_error_log.pdf,,"{""incident_code"":""INC-2025-002""}"
+true,message,,T001,C001,U003,carol,U003,Incident INC-2025-003 dashboard loading slow for reports,1737000003.000000,msg-003,F003,dashboard_metrics.png,image/png,153600,incidents/dashboard_metrics.png,,"{""incident_code"":""INC-2025-003""}"
+false,message,,T001,C001,U001,alice,U001,Update on INC-2025-001 payment issue still ongoing,1737000004.000000,msg-004,,,,,,,"{""incident_code"":""INC-2025-001""}"
+false,message,,T001,C001,U002,bob,U002,INC-2025-004 resolved the login error was a config issue,1737000005.000000,msg-005,,,,,,,"{""incident_code"":""INC-2025-004""}"
+false,message,,T001,C001,U003,carol,U003,INC-2025-005 network latency spike in us-east region,1737000006.000000,msg-006,,,,,,,"{""incident_code"":""INC-2025-005""}"

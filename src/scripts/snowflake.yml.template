@@ -18,7 +18,6 @@ env:
   openflow_runtime_usage_role: "${OPENFLOW_RUNTIME_USAGE_ROLE}"
   openflow_user: "${OPENFLOW_USER}"
   daily_refresh_cron_schedule: "${DAILY_REFRESH_CRON_SCHEDULE}"
-  weekly_refresh_cron_schedule: "${WEEKLY_REFRESH_CRON_SCHEDULE}"
   cortex_search_wh: "${CORTEX_SEARCH_WH}"
   streamlit_deployment_enabled: "${STREAMLIT_DEPLOYMENT_ENABLED}"
   streamlit_query_wh: "${STREAMLIT_QUERY_WH}"

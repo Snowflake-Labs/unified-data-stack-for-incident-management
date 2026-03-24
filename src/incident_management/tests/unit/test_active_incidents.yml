@@ -1,0 +1,18 @@
+unit_tests:
+  - name: test_active_incidents_filters_open_only
+    description: "Verify active_incidents only includes open incidents and correctly joins user names"
+    model: active_incidents
+    given:
+      - input: ref('incidents')
+        rows:
+          - {incident_number: "INC-2025-001", title: "payment gateway error", category: "payment gateway error", priority: "critical", status: "open", assignee_id: "", reportee_id: "U001", created_at: "1737000001.000000", updated_at: "1737000001.000000", source_system: "Slack", external_source_id: "C001", has_attachments: true}
+          - {incident_number: "INC-2025-002", title: "login error", category: "login error", priority: "high", status: "open", assignee_id: "", reportee_id: "U002", created_at: "1737000002.000000", updated_at: "1737000002.000000", source_system: "Slack", external_source_id: "C001", has_attachments: true}
+          - {incident_number: "INC-2025-004", title: "login error", category: "login error", priority: "high", status: "closed", assignee_id: "", reportee_id: "U002", created_at: "1737000005.000000", closed_at: "2025-01-16 10:00:00", updated_at: "2025-01-16 10:00:00", source_system: "Slack", external_source_id: "C001", has_attachments: false}
+      - input: ref('users')
+        rows:
+          - {id: "U001", email: "alice@acme.com", first_name: "alice", last_name: "acme.com"}
+          - {id: "U002", email: "bob@acme.com", first_name: "bob", last_name: "acme.com"}
+    expect:
+      rows:
+        - {incident_number: "INC-2025-001", title: "payment gateway error", category: "payment gateway error", priority: "critical", status: "open", assignee_id: "", assignee_name: " ", reportee_id: "U001", reportee_name: "alice acme.com", source_system: "Slack", external_source_id: "C001", has_attachments: true}
+        - {incident_number: "INC-2025-002", title: "login error", category: "login error", priority: "high", status: "open", assignee_id: "", assignee_name: " ", reportee_id: "U002", reportee_name: "bob acme.com", source_system: "Slack", external_source_id: "C001", has_attachments: true}

@@ -29,21 +29,22 @@ USE ROLE <% ctx.env.dbt_project_admin_role %>;
 USE DATABASE <% ctx.env.dbt_project_database %>;
 USE SCHEMA <% ctx.env.dbt_project_database %>.dbt_project_deployments;
 
--- Suspend all tasks first (child tasks before parent tasks)
--- DAG 3: Deploy Cortex Services
-ALTER TASK IF EXISTS incm_deploy_cortex_agent SUSPEND;
-ALTER TASK IF EXISTS incm_deploy_search_service SUSPEND;
-ALTER TASK IF EXISTS incm_deploy_semantic_view SUSPEND;
-ALTER TASK IF EXISTS incm_root_deploy_cortex_services SUSPEND;
-
--- DAG 2: Triggered Docs Processing
-ALTER TASK IF EXISTS incm_triggered_docs_processing SUSPEND;
-ALTER TASK IF EXISTS incm_root_triggered_docs_processing SUSPEND;
+-- Suspend all tasks (root tasks MUST be suspended before child tasks)
 
 -- DAG 1: Daily Incremental Refresh
-ALTER TASK IF EXISTS incm_daily_models_refresh SUSPEND;
-ALTER TASK IF EXISTS incm_project_compile SUSPEND;
 ALTER TASK IF EXISTS incm_root_daily_incremental_refresh SUSPEND;
+ALTER TASK IF EXISTS incm_project_compile SUSPEND;
+ALTER TASK IF EXISTS incm_daily_models_refresh SUSPEND;
+
+-- DAG 2: Triggered Docs Processing
+ALTER TASK IF EXISTS incm_root_triggered_docs_processing SUSPEND;
+ALTER TASK IF EXISTS incm_triggered_docs_processing SUSPEND;
+
+-- DAG 3: Deploy Cortex Services
+ALTER TASK IF EXISTS incm_root_deploy_cortex_services SUSPEND;
+ALTER TASK IF EXISTS incm_deploy_semantic_view SUSPEND;
+ALTER TASK IF EXISTS incm_deploy_search_service SUSPEND;
+ALTER TASK IF EXISTS incm_deploy_cortex_agent SUSPEND;
 
 -- Drop tasks (child tasks before parent tasks)
 -- DAG 3: Deploy Cortex Services
@@ -121,10 +122,9 @@ DROP TABLE IF EXISTS <% ctx.env.dbt_project_database %>.gold_zone.incidents;
 DROP TABLE IF EXISTS <% ctx.env.dbt_project_database %>.bronze_zone.users;
 
 -- Drop any dbt-generated models/views in gold_zone
-DROP VIEW IF EXISTS <% ctx.env.dbt_project_database %>.gold_zone.active_incidents;
-DROP VIEW IF EXISTS <% ctx.env.dbt_project_database %>.gold_zone.closed_incidents;
-DROP VIEW IF EXISTS <% ctx.env.dbt_project_database %>.gold_zone.weekly_incident_trends;
-DROP VIEW IF EXISTS <% ctx.env.dbt_project_database %>.gold_zone.quaterly_review_metrics;
+DROP TABLE IF EXISTS <% ctx.env.dbt_project_database %>.gold_zone.active_incidents;
+DROP TABLE IF EXISTS <% ctx.env.dbt_project_database %>.gold_zone.closed_incidents;
+DROP TABLE IF EXISTS <% ctx.env.dbt_project_database %>.gold_zone.quaterly_review_metrics;
 
 -- Drop any dbt-generated models/views in silver_zone
 DROP TABLE IF EXISTS <% ctx.env.dbt_project_database %>.silver_zone.document_full_extracts;

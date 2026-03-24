@@ -1,0 +1,12 @@
+unit_tests:
+  - name: test_users_email_splitting_and_dedup
+    description: "Verify users model correctly splits emails into first/last name and assigns role"
+    model: users
+    given:
+      - input: source('bronze_zone', 'slack_members')
+        rows:
+          - {conversationid: "C001", conversationtype: "channel", memberids: '["U001","U002"]', memberemails: '["alice@acme.com","bob@acme.com"]', isprivate: false, lastupdated: "2025-01-15 10:00:00"}
+    expect:
+      rows:
+        - {id: "U001", email: "alice@acme.com", first_name: "alice", last_name: "acme.com", role: "reporter", department: "", team: "", is_active: true}
+        - {id: "U002", email: "bob@acme.com", first_name: "bob", last_name: "acme.com", role: "reporter", department: "", team: "", is_active: true}

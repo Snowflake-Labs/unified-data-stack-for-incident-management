@@ -17,7 +17,7 @@
 -- ============================================================================
 
 USE ROLE SYSADMIN;
-USE DATABASE <% ctx.env.dbt_project_database %>;
+CREATE OR REPLACE DATABASE <% ctx.env.dbt_project_database %>;
 
 -- ----- Schemas -----
 
@@ -142,6 +142,9 @@ PUT file://../cortex_agents/*.yml @<% ctx.env.dbt_project_database %>.gold_zone.
 -- PHASE 2: SYSADMIN - Transfer Ownership to dbt_project_admin_role
 -- ============================================================================
 
+GRANT OWNERSHIP ON DATABASE <% ctx.env.dbt_project_database %> TO ROLE <% ctx.env.dbt_project_admin_role %>;
+GRANT CREATE SCHEMA ON DATABASE <% ctx.env.dbt_project_database %> TO ROLE <% ctx.env.dbt_project_admin_role %>;
+GRANT ALL PRIVILEGES ON FUTURE SCHEMAS IN DATABASE <% ctx.env.dbt_project_database %> TO ROLE <% ctx.env.dbt_project_admin_role %>;
 GRANT OWNERSHIP ON SCHEMA <% ctx.env.dbt_project_database %>.bronze_zone
   TO ROLE <% ctx.env.dbt_project_admin_role %> COPY CURRENT GRANTS;
 

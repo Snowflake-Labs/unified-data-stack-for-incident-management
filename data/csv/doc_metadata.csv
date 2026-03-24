@@ -1,7 +1,0 @@
-event_ts,channel_id,user_id,file_id,file_name,file_mimetype,file_size,content_sha256,staged_file_path
-2026-03-10 08:20:00,C01INC001,U003,F001,connection_pool_metrics.png,image/png,245760,a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6abcd,@incident_docs/2026/03/10/F001_connection_pool_metrics.png
-2026-03-11 14:40:00,C01INC002,U006,F002,grafana_dashboard.pdf,application/pdf,1048576,b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6bcde,@incident_docs/2026/03/11/F002_grafana_dashboard.pdf
-2026-03-11 14:40:01,C01INC002,U006,F003,api_error_logs.txt,text/plain,524288,c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6cdef,@incident_docs/2026/03/11/F003_api_error_logs.txt
-2026-03-12 10:05:00,C01INC003,U009,F004,postmortem_template.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document,204800,d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6d012,@incident_docs/2026/03/12/F004_postmortem_template.docx
-2026-03-12 11:30:00,C01INC003,U001,F005,runbook_database_recovery.md,text/markdown,15360,e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6e345,@incident_docs/2026/03/12/F005_runbook_database_recovery.md
-2026-03-13 09:15:00,C01INC001,U004,F006,rca_connection_pool.pdf,application/pdf,2097152,f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6f678,@incident_docs/2026/03/13/F006_rca_connection_pool.pdf

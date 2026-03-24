@@ -1,11 +1,11 @@
 -- ============================================================================
 -- Incident Management Project - Load Test Data
 --
--- PURPOSE: Uploads CSV test data to the CSV_STAGE and loads into bronze and
---          gold tables. Truncates existing data before loading.
+-- PURPOSE: Uploads CSV test data to the CSV_STAGE, creates tables if they
+--          don't exist, and loads data into bronze and gold tables.
+--          Truncates existing data before loading.
 --
--- PREREQUISITE: 01b_sysadmin_objects.sql must be executed first to create
---               all schemas, tables, and stages.
+-- PREREQUISITE: Schemas and stages must exist (created by 01b_sysadmin_objects.sql).
 --
 -- Context variables are populated from the yaml file under src/sql/snowflake.yml
 -- ============================================================================
@@ -27,7 +27,88 @@ PUT file://../../data/csv/incidents.csv @<% ctx.env.dbt_project_database %>.bron
 PUT file://../../data/csv/incident_comment_history.csv @<% ctx.env.dbt_project_database %>.bronze_zone.csv_stage/incident_comment_history/ AUTO_COMPRESS=FALSE OVERWRITE=TRUE;
 
 -- ============================================================================
--- PHASE 2: TRUNCATE EXISTING DATA
+-- PHASE 2: CREATE BRONZE TABLES (if not exist)
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS <% ctx.env.dbt_project_database %>.bronze_zone.users (
+    id STRING PRIMARY KEY DEFAULT UUID_STRING(),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    role VARCHAR(50) NOT NULL,
+    department VARCHAR(100),
+    team VARCHAR(100),
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP_TZ DEFAULT CURRENT_TIMESTAMP(),
+    updated_at TIMESTAMP_TZ DEFAULT CURRENT_TIMESTAMP()
+);
+
+CREATE TABLE IF NOT EXISTS <% ctx.env.dbt_project_database %>.bronze_zone.slack_messages (
+    hasfile BOOLEAN,
+    hasfiles BOOLEAN,
+    type STRING,
+    subtype STRING,
+    team STRING,
+    channel STRING,
+    user STRING,
+    username STRING,
+    text STRING,
+    ts STRING NOT NULL,
+    threadts STRING,
+    intro BOOLEAN,
+    starred BOOLEAN,
+    wibblr BOOLEAN,
+    appid STRING,
+    botid STRING,
+    botlink STRING,
+    displayasbot BOOLEAN,
+    upload BOOLEAN,
+    parentuserid STRING,
+    clientmsgid STRING,
+    unfurllinks BOOLEAN,
+    unfurlmedia BOOLEAN,
+    threadbroadcast BOOLEAN,
+    locked BOOLEAN,
+    subscribed BOOLEAN,
+    hidden BOOLEAN,
+    nonotifications BOOLEAN,
+    chunkindex NUMBER,
+    chunkcount NUMBER,
+    ingestts TIMESTAMP_TZ,
+    workspaceid STRING
+);
+
+CREATE TABLE IF NOT EXISTS <% ctx.env.dbt_project_database %>.bronze_zone.slack_members (
+    conversationid STRING NOT NULL,
+    conversationtype STRING,
+    memberids ARRAY,
+    memberemails ARRAY,
+    isprivate BOOLEAN,
+    lastupdated TIMESTAMP_TZ NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS <% ctx.env.dbt_project_database %>.bronze_zone.file_hashes (
+    hash_value STRING NOT NULL,
+    source_system STRING,
+    doc_id STRING,
+    event_ts TIMESTAMP_TZ,
+    algorithm STRING
+);
+
+CREATE TABLE IF NOT EXISTS <% ctx.env.dbt_project_database %>.bronze_zone.doc_metadata (
+    event_ts TIMESTAMP_TZ NOT NULL,
+    channel_id STRING NOT NULL,
+    user_id STRING,
+    file_id STRING NOT NULL,
+    file_name STRING,
+    file_mimetype STRING,
+    file_size NUMBER,
+    content_sha256 STRING,
+    staged_file_path STRING
+);
+
+-- ============================================================================
+-- PHASE 3: TRUNCATE EXISTING DATA
 -- Gold tables first (foreign key dependencies), then bronze
 -- ============================================================================
 
@@ -41,7 +122,7 @@ TRUNCATE TABLE IF EXISTS <% ctx.env.dbt_project_database %>.bronze_zone.doc_meta
 TRUNCATE TABLE IF EXISTS <% ctx.env.dbt_project_database %>.bronze_zone.users;
 
 -- ============================================================================
--- PHASE 3: LOAD BRONZE TABLES
+-- PHASE 4: LOAD BRONZE TABLES
 -- ============================================================================
 
 -- Users (load first - referenced by foreign keys)
@@ -73,21 +154,7 @@ COPY INTO <% ctx.env.dbt_project_database %>.bronze_zone.doc_metadata
   FILE_FORMAT = (TYPE = CSV SKIP_HEADER = 1 FIELD_OPTIONALLY_ENCLOSED_BY = '"' EMPTY_FIELD_AS_NULL = TRUE);
 
 -- ============================================================================
--- PHASE 4: LOAD GOLD TABLES
--- ============================================================================
-
--- Incidents (load before comment history - foreign key dependency)
-COPY INTO <% ctx.env.dbt_project_database %>.gold_zone.incidents
-  FROM @<% ctx.env.dbt_project_database %>.bronze_zone.csv_stage/incidents/
-  FILE_FORMAT = (TYPE = CSV SKIP_HEADER = 1 FIELD_OPTIONALLY_ENCLOSED_BY = '"' EMPTY_FIELD_AS_NULL = TRUE);
-
--- Incident Comment History
-COPY INTO <% ctx.env.dbt_project_database %>.gold_zone.incident_comment_history (id, incident_number, author_id, content, created_at)
-  FROM @<% ctx.env.dbt_project_database %>.bronze_zone.csv_stage/incident_comment_history/
-  FILE_FORMAT = (TYPE = CSV SKIP_HEADER = 1 FIELD_OPTIONALLY_ENCLOSED_BY = '"' EMPTY_FIELD_AS_NULL = TRUE);
-
--- ============================================================================
--- PHASE 5: VALIDATION
+-- PHASE 6: VALIDATION
 -- ============================================================================
 
 SELECT 'USERS' AS table_name, COUNT(*) AS row_count FROM <% ctx.env.dbt_project_database %>.bronze_zone.users
@@ -95,5 +162,3 @@ UNION ALL SELECT 'SLACK_MESSAGES', COUNT(*) FROM <% ctx.env.dbt_project_database
 UNION ALL SELECT 'SLACK_MEMBERS', COUNT(*) FROM <% ctx.env.dbt_project_database %>.bronze_zone.slack_members
 UNION ALL SELECT 'FILE_HASHES', COUNT(*) FROM <% ctx.env.dbt_project_database %>.bronze_zone.file_hashes
 UNION ALL SELECT 'DOC_METADATA', COUNT(*) FROM <% ctx.env.dbt_project_database %>.bronze_zone.doc_metadata
-UNION ALL SELECT 'INCIDENTS', COUNT(*) FROM <% ctx.env.dbt_project_database %>.gold_zone.incidents
-UNION ALL SELECT 'INCIDENT_COMMENT_HISTORY', COUNT(*) FROM <% ctx.env.dbt_project_database %>.gold_zone.incident_comment_history;

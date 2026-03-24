@@ -1,6 +1,0 @@
-conversationid,conversationtype,memberids,memberemails,isprivate,lastupdated
-C01INC001,channel,"[""U001"",""U002"",""U003"",""U004"",""U007""]","[""alice.johnson@acme.com"",""bob.smith@acme.com"",""carol.davis@acme.com"",""dave.wilson@acme.com"",""grace.kim@acme.com""]",false,2026-03-10 08:15:00
-C01INC002,channel,"[""U002"",""U005"",""U006"",""U008""]","[""bob.smith@acme.com"",""eve.martinez@acme.com"",""frank.lee@acme.com"",""henry.chen@acme.com""]",false,2026-03-11 14:30:00
-C01INC003,channel,"[""U001"",""U003"",""U005"",""U009""]","[""alice.johnson@acme.com"",""carol.davis@acme.com"",""eve.martinez@acme.com"",""iris.patel@acme.com""]",true,2026-03-12 10:00:00
-C01GENERAL,channel,"[""U001"",""U002"",""U003"",""U004"",""U005"",""U006"",""U007"",""U008"",""U009"",""U010""]","[""alice.johnson@acme.com"",""bob.smith@acme.com"",""carol.davis@acme.com"",""dave.wilson@acme.com"",""eve.martinez@acme.com"",""frank.lee@acme.com"",""grace.kim@acme.com"",""henry.chen@acme.com"",""iris.patel@acme.com"",""jack.taylor@acme.com""]",false,2026-03-09 12:00:00
-C01ONCALL,group,"[""U001"",""U002"",""U005""]","[""alice.johnson@acme.com"",""bob.smith@acme.com"",""eve.martinez@acme.com""]",true,2026-03-13 08:00:00

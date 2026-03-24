@@ -20,11 +20,6 @@ CREATE OR REPLACE API INTEGRATION <% ctx.env.snowflake_git_api_int %>
   API_ALLOWED_PREFIXES = ('<% ctx.env.git_repository_url %>')
   ALLOWED_AUTHENTICATION_SECRETS = ALL
   ENABLED = TRUE;
-
--- ----- Database & Warehouses -----
-
-CREATE OR REPLACE DATABASE <% ctx.env.dbt_project_database %>;
-
 CREATE WAREHOUSE IF NOT EXISTS <% ctx.env.dbt_pipeline_wh %>
   WAREHOUSE_SIZE = 'X-SMALL'
   INITIALLY_SUSPENDED = TRUE;
@@ -32,8 +27,6 @@ CREATE WAREHOUSE IF NOT EXISTS <% ctx.env.dbt_pipeline_wh %>
 CREATE WAREHOUSE IF NOT EXISTS <% ctx.env.cortex_search_wh %>
   WAREHOUSE_SIZE = 'X-SMALL'
   INITIALLY_SUSPENDED = TRUE;
-
--- ----- Role & Grants -----
 
 CREATE OR REPLACE ROLE <% ctx.env.dbt_project_admin_role %>;
 
@@ -44,10 +37,6 @@ GRANT DATABASE ROLE snowflake.cortex_user TO ROLE <% ctx.env.dbt_project_admin_r
 GRANT USAGE ON INTEGRATION <% ctx.env.snowflake_git_api_int %> TO ROLE <% ctx.env.dbt_project_admin_role %>;
 GRANT USAGE ON WAREHOUSE <% ctx.env.dbt_pipeline_wh %> TO ROLE <% ctx.env.dbt_project_admin_role %>;
 GRANT USAGE ON WAREHOUSE <% ctx.env.cortex_search_wh %> TO ROLE <% ctx.env.dbt_project_admin_role %>;
-
-GRANT USAGE ON DATABASE <% ctx.env.dbt_project_database %> TO ROLE <% ctx.env.dbt_project_admin_role %>;
-GRANT CREATE SCHEMA ON DATABASE <% ctx.env.dbt_project_database %> TO ROLE <% ctx.env.dbt_project_admin_role %>;
-GRANT ALL PRIVILEGES ON FUTURE SCHEMAS IN DATABASE <% ctx.env.dbt_project_database %> TO ROLE <% ctx.env.dbt_project_admin_role %>;
 
 GRANT USAGE ON INTEGRATION <% ctx.env.snowflake_git_api_int %> TO ROLE <% ctx.env.dbt_project_admin_role %>;
 GRANT USAGE ON INTEGRATION <% ctx.env.dbt_deps_eai %> TO ROLE <% ctx.env.dbt_project_admin_role %>;

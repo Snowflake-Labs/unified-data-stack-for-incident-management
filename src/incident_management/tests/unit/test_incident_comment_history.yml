@@ -1,0 +1,14 @@
+unit_tests:
+  - name: test_incident_comment_history_maps_fields
+    description: "Verify incident_comment_history correctly maps slack_message_id to id and reportee_id to author_id"
+    model: incident_comment_history
+    given:
+      - input: ref('incidents')
+        rows:
+          - {incident_number: "INC-2025-001", slack_message_id: "msg-001", reportee_id: "U001", last_comment: "Payment gateway timeout on checkout", status: "open", updated_at: "2025-01-15 10:00:01"}
+          - {incident_number: "INC-2025-002", slack_message_id: "msg-002", reportee_id: "U002", last_comment: "Users unable to login after password reset", status: "open", updated_at: "2025-01-15 10:00:02"}
+          - {incident_number: "INC-2025-003", slack_message_id: null, reportee_id: "U003", last_comment: "Dashboard loading slow", status: "open", updated_at: "2025-01-15 10:00:03"}
+    expect:
+      rows:
+        - {id: "msg-001", incident_number: "INC-2025-001", author_id: "U001", content: "Payment gateway timeout on checkout"}
+        - {id: "msg-002", incident_number: "INC-2025-002", author_id: "U002", content: "Users unable to login after password reset"}
