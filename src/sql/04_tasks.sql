@@ -84,7 +84,8 @@ CREATE OR REPLACE TASK incm_triggered_docs_processing
   $$
   ;
 
--- One off operations to deploy Cortex Services and Semantic Views
+-- DAG 3: Triggered task graph for Cortex Services and Semantic Views deployment
+-- No schedule — invoke manually via: EXECUTE TASK incm_root_deploy_cortex_services;
 create or replace task incm_root_deploy_cortex_services
 	warehouse=<% ctx.env.dbt_pipeline_wh %>
 	config='{"target": "<% ctx.env.dbt_target %>"}'

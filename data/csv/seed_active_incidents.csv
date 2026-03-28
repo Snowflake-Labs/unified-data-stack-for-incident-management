@@ -1,0 +1,4 @@
+incident_number,title,category,priority,status,assignee_id,assignee_name,reportee_id,reportee_name,created_at,updated_at,age_hours,source_system,external_source_id,has_attachments
+INC-2025-001,payment gateway error,payment gateway error,critical,open,,alice acme.com,U001,alice acme.com,1737000001.000000,1737000001.000000,24,Slack,C001,true
+INC-2025-002,login error,login error,high,open,,bob acme.com,U002,bob acme.com,1737000002.000000,1737000002.000000,24,Slack,C001,true
+INC-2025-003,other,other,low,open,,carol acme.com,U003,carol acme.com,1737000003.000000,1737000003.000000,24,Slack,C001,true
