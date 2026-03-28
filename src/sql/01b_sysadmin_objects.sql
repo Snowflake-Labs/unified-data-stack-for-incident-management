@@ -98,24 +98,6 @@ CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.gold_zone.incident_at
     CONSTRAINT fk_attachments_incident FOREIGN KEY (incident_number) REFERENCES <% ctx.env.dbt_project_database %>.gold_zone.incidents(incident_number)
 );
 
--- ----- Seed Data -----
-
-PUT file://../../data/csv/users.csv @<% ctx.env.dbt_project_database %>.bronze_zone.csv_stage OVERWRITE=TRUE;
-PUT file://../../data/csv/incidents.csv @<% ctx.env.dbt_project_database %>.bronze_zone.csv_stage OVERWRITE=TRUE;
-PUT file://../../data/csv/incident_comment_history.csv @<% ctx.env.dbt_project_database %>.bronze_zone.csv_stage OVERWRITE=TRUE;
-
-COPY INTO <% ctx.env.dbt_project_database %>.bronze_zone.users
-  FROM @<% ctx.env.dbt_project_database %>.bronze_zone.csv_stage/users.csv
-  FILE_FORMAT = (TYPE = CSV FIELD_DELIMITER = ',' SKIP_HEADER = 1);
-
-COPY INTO <% ctx.env.dbt_project_database %>.gold_zone.incidents
-  FROM @<% ctx.env.dbt_project_database %>.bronze_zone.csv_stage/incidents.csv
-  FILE_FORMAT = (TYPE = CSV FIELD_DELIMITER = ',' SKIP_HEADER = 1);
-
-COPY INTO <% ctx.env.dbt_project_database %>.gold_zone.incident_comment_history
-  FROM @<% ctx.env.dbt_project_database %>.bronze_zone.csv_stage/incident_comment_history.csv
-  FILE_FORMAT = (TYPE = CSV FIELD_DELIMITER = ',' SKIP_HEADER = 1);
-
 -- ----- Git Repository & dbt Project -----
 
 CREATE OR REPLACE SECRET <% ctx.env.dbt_project_database %>.dbt_project_deployments.incident_management_git_secret
