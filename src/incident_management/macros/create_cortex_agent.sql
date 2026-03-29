@@ -31,7 +31,7 @@
 -- Make sure the Jinja template for agent_spec is not indented at all and starts on column 0 of the line in the editor.
     {% if agent_exists is none or agent_exists['data'][0][0] is false %}
         CREATE OR REPLACE AGENT {{ target.database }}.{{schema}}.{{ agent_name }}
-        COMMENT = $${'spec_file_name': '{{agent_spec_file}}', 'version' : '{{next_version}}', 'updated_at': '{{current_timestamp()}}' }$$
+        COMMENT = $${'spec_file_name': '{{agent_spec_file}}', 'version' : '{{next_version}}', 'updated_at': '{{ modules.datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") }}' }$$
         PROFILE = '{"display_name": "Agent assisted Incident Management", "color": "green"}'
         FROM SPECIFICATION
         $$
@@ -42,7 +42,7 @@
     {% else %}
 -- Make sure the Jinja template for agent_spec is not indented at all and starts on column 0 of the line in the editor.
         ALTER AGENT {{ target.database }}.{{schema}}.{{ agent_name }} 
-        SET COMMENT = $${'spec_file_name': '{{agent_spec_file}}', 'version': '{{next_version}}' 'updated_at': '{{current_timestamp()}}' }$$;
+        SET COMMENT = $${'spec_file_name': '{{agent_spec_file}}', 'version': '{{next_version}}', 'updated_at': '{{ modules.datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") }}' }$$;
         
         ALTER AGENT {{ target.database }}.{{schema}}.{{ agent_name }} 
         MODIFY LIVE VERSION SET SPECIFICATION = 

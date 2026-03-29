@@ -28,7 +28,7 @@ ALTER TASK IF EXISTS incm_deploy_cortex_agent SUSPEND;
 create or replace task incm_root_daily_incremental_refresh
 	warehouse=<% ctx.env.dbt_pipeline_wh %>
 	schedule='<% ctx.env.daily_refresh_cron_schedule %>'
-	config='{"target": "<% ctx.env.dbt_target %>"}'
+	config='{dbt_project_name: "<% ctx.env.dbt_project_name %>", target: "<% ctx.env.dbt_target %>"}'
 	as SELECT 1;
 
 
@@ -39,11 +39,10 @@ create or replace task incm_project_compile
   EXECUTE IMMEDIATE
   $$
     BEGIN
-      LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
       LET _dbt_nodes := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('select'));
-      LET command := 'compile --target '|| _target;
+      LET command := 'compile --target '|| SYSTEM$GET_TASK_GRAPH_CONFIG('target');
 
-      EXECUTE DBT PROJECT <% ctx.env.dbt_project_name %> args=:command;
+      EXECUTE DBT PROJECT SYSTEM$GET_TASK_GRAPH_CONFIG('dbt_project_name') args=:command;
     END;
   $$
   ;
@@ -55,9 +54,8 @@ create or replace task incm_daily_models_refresh
   EXECUTE IMMEDIATE
   $$
     BEGIN
-      LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
-      LET command := 'run --select tag:daily --target '|| _target;
-      EXECUTE DBT PROJECT <% ctx.env.dbt_project_name %> args=:command;
+      LET command := 'run --select tag:daily --target '|| SYSTEM$GET_TASK_GRAPH_CONFIG('target');
+      EXECUTE DBT PROJECT SYSTEM$GET_TASK_GRAPH_CONFIG('dbt_project_name') args=:command;
     END;
   $$
   ;
@@ -66,7 +64,7 @@ create or replace task incm_daily_models_refresh
 -- Triggered Task for document based model refreshes
 create or replace task incm_root_triggered_docs_processing
 	warehouse=<% ctx.env.dbt_pipeline_wh %>
-	config='{"target": "<% ctx.env.dbt_target %>"}'
+	config='{dbt_project_name: "<% ctx.env.dbt_project_name %>", target: "<% ctx.env.dbt_target %>"}'
   WHEN SYSTEM$STREAM_HAS_DATA('INCIDENT_MANAGEMENT.bronze_zone.documents_stream')
 	as SELECT 1;
 
@@ -77,9 +75,8 @@ CREATE OR REPLACE TASK incm_triggered_docs_processing
   EXECUTE IMMEDIATE
   $$
     BEGIN
-      LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
-      LET command := 'run --select tag:document_processing --target '|| _target;
-      EXECUTE DBT PROJECT <% ctx.env.dbt_project_name %> args=:command;
+      LET command := 'run --select tag:document_processing --target '|| SYSTEM$GET_TASK_GRAPH_CONFIG('target');
+      EXECUTE DBT PROJECT SYSTEM$GET_TASK_GRAPH_CONFIG('dbt_project_name') args=:command;
     END;
   $$
   ;
@@ -88,7 +85,7 @@ CREATE OR REPLACE TASK incm_triggered_docs_processing
 -- No schedule — invoke manually via: EXECUTE TASK incm_root_deploy_cortex_services;
 create or replace task incm_root_deploy_cortex_tools
 	warehouse=<% ctx.env.dbt_pipeline_wh %>
-	config='{"target": "<% ctx.env.dbt_target %>"}'
+	config='{dbt_project_name: "<% ctx.env.dbt_project_name %>", target: "<% ctx.env.dbt_target %>", cortex_search_wh: "<% ctx.env.cortex_search_wh %>", cortex_search_service_name: "<% ctx.env.cortex_search_service_name %>"}'
 	as SELECT 1;
 
 create or replace task incm_deploy_semantic_view
@@ -98,9 +95,8 @@ create or replace task incm_deploy_semantic_view
   EXECUTE IMMEDIATE
   $$
     BEGIN
-      LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
-      LET command := 'run --select semantic_views.incm360 --target '|| _target;
-      EXECUTE DBT PROJECT <% ctx.env.dbt_project_name %> args=:command;
+      LET command := 'run --select semantic_views.incm360 --target '|| SYSTEM$GET_TASK_GRAPH_CONFIG('target');
+      EXECUTE DBT PROJECT SYSTEM$GET_TASK_GRAPH_CONFIG('dbt_project_name') args=:command;
     END;
   $$
   ;
@@ -112,21 +108,27 @@ create or replace task incm_deploy_search_service
   EXECUTE IMMEDIATE
   $$
     BEGIN
-      LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
-      LET command := 'run-operation create_document_search_service --args "{service_name: incm_doc_search,search_wh: <% ctx.env.cortex_search_wh %>,search_column: chunk,target_lag:  1 day, embedding_model: snowflake-arctic-embed-l-v2.0}" --target '|| _target;
-      EXECUTE DBT PROJECT <% ctx.env.dbt_project_name %> args=:command;
+      LET command := 'run-operation create_document_search_service --args '||
+      '"{' ||
+      'service_name: ' || SYSTEM$GET_TASK_GRAPH_CONFIG('cortex_search_service_name') || ', ' ||
+      'search_wh: ' || SYSTEM$GET_TASK_GRAPH_CONFIG('cortex_search_wh') || ', ' ||
+      'search_column: chunk, ' ||
+      'target_lag:  1 day, ' ||
+      'embedding_model: snowflake-arctic-embed-l-v2.0' ||
+      '}' || ' --target ' || SYSTEM$GET_TASK_GRAPH_CONFIG('target');
+
+      EXECUTE DBT PROJECT SYSTEM$GET_TASK_GRAPH_CONFIG('dbt_project_name') args=:command;
     END;
   $$
   ;
 
 create or replace task incm_deploy_cortex_agent
   warehouse=<% ctx.env.dbt_pipeline_wh %>
-  config='{"target": "<% ctx.env.dbt_target %>"}'
+  config='{dbt_project_name: "<% ctx.env.dbt_project_name %>", target: "<% ctx.env.dbt_target %>", database: "<% ctx.env.dbt_project_database %>", schema: "gold_zone", stage_name: "agent_specs", agent_spec_file: "incm360_agent_v200.yml"}'
 	as
   EXECUTE IMMEDIATE
   $$
     BEGIN
-      LET _target := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('target'));
       LET next_version := (SELECT
                             'v'|| '_' ||
                             ARRAY_CONSTRUCT(
@@ -141,9 +143,19 @@ create or replace task incm_deploy_cortex_agent
                                 'puma','mantis','osprey','bison','crane','otter','badger','heron'
                             )[ABS(MOD(RANDOM(), 24))]::STRING
                             AS version_name);
-        LET command := 'run-operation create_cortex_agent --args "{agent_name: incident_management_agent, database: <% ctx.env.dbt_project_database %>, schema: gold_zone, stage_name: agent_specs, agent_spec_file: incm360_agent_v100.yml, next_version: '
-        || next_version || '}" --target '|| _target;
-      EXECUTE DBT PROJECT <% ctx.env.dbt_project_name %> args=:command;
+
+        LET command := 'run-operation create_cortex_agent --args '||
+        '"{' ||
+        'agent_name: incident_management_agent, ' || 
+        'database: ' || SYSTEM$GET_TASK_GRAPH_CONFIG('database') || ', ' ||
+        'schema: ' || SYSTEM$GET_TASK_GRAPH_CONFIG('schema') || ', ' ||
+        'stage_name: ' || SYSTEM$GET_TASK_GRAPH_CONFIG('stage_name') || ', ' ||
+        'agent_spec_file: ' || SYSTEM$GET_TASK_GRAPH_CONFIG('agent_spec_file') || ', ' ||
+        'next_version: ' || next_version || 
+        '}' ||
+        ' --target ' || SYSTEM$GET_TASK_GRAPH_CONFIG('target');
+
+      EXECUTE DBT PROJECT SYSTEM$GET_TASK_GRAPH_CONFIG('dbt_project_name') args=:command;
     END;
   $$
   ;
