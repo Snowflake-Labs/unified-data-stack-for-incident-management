@@ -17,11 +17,10 @@
    EXECUTE IMMEDIATE $$
     DECLARE
         agent_name VARCHAR := '';
-        agent_exists BOOLEAN DEFAULT FALSE;
     BEGIN
-        SHOW AGENTS LIKE '{{agent_name}}';
-        agent_name := (SELECT "name" FROM TABLE(RESULT_SCAN(LAST_QUERY_ID())) WHERE contains("name", '{{agent_name}}'));
-        RETURN (agent_name IS NOT NULL AND agent_name != '' AND agent_name ='{{agent_name}}');
+        SHOW AGENTS IN DATABASE {{target.database}};
+        agent_name := (SELECT LOWER(TRIM("name")) FROM TABLE(RESULT_SCAN(LAST_QUERY_ID())));
+        RETURN (agent_name IS NOT NULL AND agent_name != '' AND  contains(agent_name, LOWER('{{agent_name}}')));
     END;
     $$;
 {% endcall %}
