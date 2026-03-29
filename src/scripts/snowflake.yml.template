@@ -20,6 +20,7 @@ env:
   openflow_user: "${OPENFLOW_USER}"
   daily_refresh_cron_schedule: "${DAILY_REFRESH_CRON_SCHEDULE}"
   cortex_search_wh: "${CORTEX_SEARCH_WH}"
+  cortex_search_service_name: "${CORTEX_SEARCH_SERVICE_NAME}"
   streamlit_deployment_enabled: "${STREAMLIT_DEPLOYMENT_ENABLED}"
   streamlit_query_wh: "${STREAMLIT_QUERY_WH}"
   dbt_deps_eai: "${DBT_DEPS_EAI}"
