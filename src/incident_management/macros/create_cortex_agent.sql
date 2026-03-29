@@ -28,24 +28,26 @@
 {%- set agent_exists = load_result('agent_exists') -%}
 
 {% set cortex_agent_ddl %}
+-- Make sure the Jinja template for agent_spec is not indented and is on a single line.
     {% if agent_exists is none or agent_exists['data'][0][0] is false %}
         CREATE OR REPLACE AGENT {{ target.database }}.{{schema}}.{{ agent_name }}
         COMMENT = $${'spec_file_name': '{{agent_spec_file}}'}$$
         PROFILE = '{"display_name": "Agent assisted Incident Management", "color": "green"}'
         FROM SPECIFICATION
         $$
-        {{ agent_spec['data'][0][0] }}
+{{agent_spec['data'][0][0]}}
         $$;
 
         ALTER SNOWFLAKE INTELLIGENCE {{var('snowflake_intelligence_object')}} ADD AGENT {{ target.database }}.{{schema}}.{{ agent_name }};
     {% else %}
+-- Make sure the Jinja template for agent_spec is not indented and is on a single line.
         ALTER AGENT {{ target.database }}.{{schema}}.{{ agent_name }} 
         SET COMMENT = $${'spec_file_name': '{{agent_spec_file}}'}$$;
         
         ALTER AGENT {{ target.database }}.{{schema}}.{{ agent_name }} 
         MODIFY LIVE VERSION SET SPECIFICATION = 
         $$
-        {{ agent_spec['data'][0][0] }}
+{{agent_spec['data'][0][0]}}
         $$;
     {% endif %}
 {% endset %}
