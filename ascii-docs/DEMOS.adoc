@@ -51,8 +51,8 @@ Both data engineering scenarios can be run together as well as separately.
 ** Document metadata lands in `DOCUMENTS` directory table and its associated stream table
 
 . *Processing*: Document models are refreshed through the triggered task:
-** Document models are refreshed through the triggered task:
-*** incm_root_triggered_docs_processing
++
+*** `incm_root_triggered_docs_processing`
 ** Models use AI to extract text from the documents (PDFs, Word documents, etc.) uploaded to Snowflake.
 ** Models use AI to extract questions and answers from the documents.
 ** Models create a view for processing in Gold Zone.
