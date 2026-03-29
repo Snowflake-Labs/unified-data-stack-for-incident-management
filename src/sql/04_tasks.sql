@@ -141,8 +141,8 @@ create or replace task incm_deploy_cortex_agent
                                 'puma','mantis','osprey','bison','crane','otter','badger','heron'
                             )[ABS(MOD(RANDOM(), 24))]::STRING
                             AS version_name);
-        LET command := 'run-operation create_cortex_agent --args "{agent_name: incident_management_agent, database: <% ctx.env.dbt_project_database %>, schema: gold_zone, stage_name: agent_specs, agent_spec_file: incm360_agent_v100.yml, next_version: :next_version}" --target '|| _target;
-
+        LET command := 'run-operation create_cortex_agent --args "{agent_name: incident_management_agent, database: <% ctx.env.dbt_project_database %>, schema: gold_zone, stage_name: agent_specs, agent_spec_file: incm360_agent_v100.yml, next_version: '
+        || next_version || '}" --target '|| _target;
       EXECUTE DBT PROJECT <% ctx.env.dbt_project_name %> args=:command;
     END;
   $$
