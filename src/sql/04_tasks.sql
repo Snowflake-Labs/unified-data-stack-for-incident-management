@@ -16,7 +16,7 @@ ALTER TASK IF EXISTS incm_root_triggered_docs_processing SUSPEND;
 ALTER TASK IF EXISTS incm_triggered_docs_processing SUSPEND;
 
 -- DAG 3: Cortex services deployment (root first, then children)
-ALTER TASK IF EXISTS incm_root_deploy_cortex_services SUSPEND;
+ALTER TASK IF EXISTS incm_root_deploy_cortex_tools SUSPEND;
 ALTER TASK IF EXISTS incm_deploy_semantic_view SUSPEND;
 ALTER TASK IF EXISTS incm_deploy_search_service SUSPEND;
 ALTER TASK IF EXISTS incm_deploy_cortex_agent SUSPEND;
@@ -86,14 +86,14 @@ CREATE OR REPLACE TASK incm_triggered_docs_processing
 
 -- DAG 3: Triggered task graph for Cortex Services and Semantic Views deployment
 -- No schedule — invoke manually via: EXECUTE TASK incm_root_deploy_cortex_services;
-create or replace task incm_root_deploy_cortex_services
+create or replace task incm_root_deploy_cortex_tools
 	warehouse=<% ctx.env.dbt_pipeline_wh %>
 	config='{"target": "<% ctx.env.dbt_target %>"}'
 	as SELECT 1;
 
 create or replace task incm_deploy_semantic_view
   warehouse=<% ctx.env.dbt_pipeline_wh %>
-	after incm_root_deploy_cortex_services
+	after incm_root_deploy_cortex_tools
 	as
   EXECUTE IMMEDIATE
   $$
@@ -107,7 +107,7 @@ create or replace task incm_deploy_semantic_view
 
 create or replace task incm_deploy_search_service
   warehouse=<% ctx.env.dbt_pipeline_wh %>
-	after incm_root_deploy_cortex_services
+	after incm_root_deploy_cortex_tools
 	as
   EXECUTE IMMEDIATE
   $$
@@ -121,7 +121,7 @@ create or replace task incm_deploy_search_service
 
 create or replace task incm_deploy_cortex_agent
   warehouse=<% ctx.env.dbt_pipeline_wh %>
-	after incm_deploy_semantic_view, incm_deploy_search_service
+  config='{"target": "<% ctx.env.dbt_target %>"}'
 	as
   EXECUTE IMMEDIATE
   $$

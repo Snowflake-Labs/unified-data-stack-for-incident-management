@@ -62,24 +62,6 @@ instructions:
     - If asked about incidents from before data collection began, explain the data range limitation
     - Do NOT calculate financial forecasts or make predictions — you can show historical trends but should not extrapolate
 
-sample_questions:
-    - question: 'What are the top 5 incidents by priority this month?'
-      answer: 'Shows the top 5 highest priority incidents this month with their details and status.'
-    - question: 'What is our incident escalation policy?'
-      answer: 'Retrieves the incident escalation policy and procedures from documentation.'
-    - question: 'Show me incident trends over the last quarter'
-      answer: 'Analyzes weekly incident volume, resolution rates, and category patterns for the past quarter.'
-    - question: 'How many critical payment incidents are currently open?'
-      answer: 'Shows the count and details of open incidents with critical priority in the payment category.'
-    - question: 'What is the average resolution time for incidents this month?'
-      answer: 'Calculates the average resolution time for incidents closed this month.'
-    - question: 'Are we meeting our SLA targets for incident resolution?'
-      answer: 'Compares actual resolution times against documented SLA targets.'
-    - question: 'Show me all active incidents assigned to the authentication team'
-      answer: 'Lists all currently open incidents in the authentication category.'
-    - question: 'What incidents had attachments in the last week?'
-      answer: 'Shows incidents from the last 7 days that have attachments with their details.'
-
 tools:
   - tool_spec:
       type: cortex_search

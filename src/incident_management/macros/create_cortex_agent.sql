@@ -1,4 +1,4 @@
-{% macro create_cortex_agent(agent_name, database, schema, stage_name, agent_spec_file) %}
+{% macro create_cortex_agent(agent_name, database, schema, stage_name, agent_spec_file, next_version) %}
 
 {% call statement('agent_spec_builder', fetch_result=True) %}
     EXECUTE IMMEDIATE $$
@@ -28,10 +28,10 @@
 {%- set agent_exists = load_result('agent_exists') -%}
 
 {% set cortex_agent_ddl %}
--- Make sure the Jinja template for agent_spec is not indented and is on a single line.
+-- Make sure the Jinja template for agent_spec is not indented at all and starts on column 0 of the line in the editor.
     {% if agent_exists is none or agent_exists['data'][0][0] is false %}
         CREATE OR REPLACE AGENT {{ target.database }}.{{schema}}.{{ agent_name }}
-        COMMENT = $${'spec_file_name': '{{agent_spec_file}}'}$$
+        COMMENT = $${'spec_file_name': '{{agent_spec_file}}', 'version' : '{{next_version}}', 'updated_at': '{{current_timestamp()}}' }$$
         PROFILE = '{"display_name": "Agent assisted Incident Management", "color": "green"}'
         FROM SPECIFICATION
         $$
@@ -40,9 +40,9 @@
 
         ALTER SNOWFLAKE INTELLIGENCE {{var('snowflake_intelligence_object')}} ADD AGENT {{ target.database }}.{{schema}}.{{ agent_name }};
     {% else %}
--- Make sure the Jinja template for agent_spec is not indented and is on a single line.
+-- Make sure the Jinja template for agent_spec is not indented at all and starts on column 0 of the line in the editor.
         ALTER AGENT {{ target.database }}.{{schema}}.{{ agent_name }} 
-        SET COMMENT = $${'spec_file_name': '{{agent_spec_file}}'}$$;
+        SET COMMENT = $${'spec_file_name': '{{agent_spec_file}}', 'version': '{{next_version}}' 'updated_at': '{{current_timestamp()}}' }$$;
         
         ALTER AGENT {{ target.database }}.{{schema}}.{{ agent_name }} 
         MODIFY LIVE VERSION SET SPECIFICATION = 
