@@ -1,6 +1,6 @@
 incident_number,category,title,priority,status,assignee_id,reportee_id,created_at,closed_at,updated_at,source_system,external_source_id,has_attachments,slack_message_id,last_comment
-INC-2025-001,payment gateway error,payment gateway error,critical,open,,U001,1737000001.000000,,1737000001.000000,Slack,C001,true,msg-001,Incident INC-2025-001 payment gateway timeout on checkout
-INC-2025-002,login error,login error,high,open,,U002,1737000002.000000,,1737000002.000000,Slack,C001,true,msg-002,Incident INC-2025-002 users unable to login after password reset
-INC-2025-003,other,other,low,open,,U003,1737000003.000000,,1737000003.000000,Slack,C001,true,msg-003,Incident INC-2025-003 dashboard loading slow for reports
-INC-2025-004,login error,login error,high,closed,,U002,1737000005.000000,2025-01-16 10:00:00,2025-01-16 10:00:00,Slack,C001,false,msg-005,INC-2025-004 resolved the login error was a config issue
-INC-2025-005,other,other,low,closed,,U003,1737000006.000000,2025-01-17 12:00:00,2025-01-17 12:00:00,Slack,C001,false,msg-006,INC-2025-005 network latency spike in us-east region
+INC-2025-001,payment gateway error,payment gateway error,critical,open,,U001,2025-01-16 04:00:01,,2025-01-16 04:00:01,Slack,C001,true,msg-001,Incident INC-2025-001 payment gateway timeout on checkout
+INC-2025-002,login error,login error,high,open,,U002,2025-01-16 04:00:02,,2025-01-16 04:00:02,Slack,C001,true,msg-002,Incident INC-2025-002 users unable to login after password reset
+INC-2025-003,other,other,low,open,,U003,2025-01-16 04:00:03,,2025-01-16 04:00:03,Slack,C001,true,msg-003,Incident INC-2025-003 dashboard loading slow for reports
+INC-2025-004,login error,login error,high,closed,,U002,2025-01-16 04:00:05,2025-01-16 10:00:00,2025-01-16 10:00:00,Slack,C001,false,msg-005,INC-2025-004 resolved the login error was a config issue
+INC-2025-005,other,other,low,closed,,U003,2025-01-16 04:00:06,2025-01-17 12:00:00,2025-01-17 12:00:00,Slack,C001,false,msg-006,INC-2025-005 network latency spike in us-east region

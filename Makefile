@@ -15,6 +15,7 @@
 #   6  setup-procs-funcs
 
 FROM ?= 1
+ENV_FILE ?= .env
 
 # Default target
 help:
@@ -43,11 +44,12 @@ help:
 	@echo "  check-prereqs     Verify required tools are installed"
 	@echo ""
 	@echo "Usage:"
-	@echo "  make install ENV_FILE=.env CONN=myconn        # Full setup"
-	@echo "  make install ENV_FILE=.env CONN=myconn FROM=3 # Resume from step 3"
+	@echo "  make install CONN=myconn                       # Full setup (uses .env by default)"
+	@echo "  make install CONN=myconn FROM=3                # Resume from step 3"
+	@echo "  make install CONN=myconn ENV_FILE=prod.env     # Use a custom env file"
 	@echo "  make setup-accountadmin CONN=myconn            # Run a single step"
 	@echo "  make setup-dbt-stack CONN=myconn               # Steps 2+3 only"
-	@echo "  make only-dbt ENV_FILE=.env CONN=myconn       # Steps 1+2+3+5+6 (no Slack)"
+	@echo "  make only-dbt CONN=myconn                      # Steps 1+2+3+5+6 (no Slack)"
 	@echo "  make deploy-streamlit CONN=myconn              # Optional Streamlit"
 	@echo "  make teardown CONN=myconn                      # Teardown resources"
 	@echo ""
@@ -62,10 +64,11 @@ help:
 
 # Complete installation with optional resume
 install:
-	@if [ -z "$(ENV_FILE)" ] || [ -z "$(CONN)" ]; then \
-		echo "❌ Error: Both ENV_FILE and CONN parameters required"; \
-		echo "Usage: make install ENV_FILE=.env CONN=<connection-name>"; \
-		echo "       make install ENV_FILE=.env CONN=<connection-name> FROM=3  # resume from step 3"; \
+	@if [ -z "$(CONN)" ]; then \
+		echo "❌ Error: CONN parameter required"; \
+		echo "Usage: make install CONN=<connection-name>"; \
+		echo "       make install CONN=<connection-name> FROM=3  # resume from step 3"; \
+		echo "       (ENV_FILE defaults to .env; override with ENV_FILE=<path>)"; \
 		exit 1; \
 	fi
 	@echo "================================================================================================================"
@@ -100,9 +103,10 @@ setup-dbt-stack:
 
 # Run generate-yaml + dbt-stack + tasks + procs-funcs (skips Slack connector)
 only-dbt:
-	@if [ -z "$(ENV_FILE)" ] || [ -z "$(CONN)" ]; then \
-		echo "❌ Error: Both ENV_FILE and CONN parameters required"; \
-		echo "Usage: make only-dbt ENV_FILE=.env CONN=<connection-name>"; \
+	@if [ -z "$(CONN)" ]; then \
+		echo "❌ Error: CONN parameter required"; \
+		echo "Usage: make only-dbt CONN=<connection-name>"; \
+		echo "       (ENV_FILE defaults to .env; override with ENV_FILE=<path>)"; \
 		exit 1; \
 	fi
 	@echo "================================================================================================================"
@@ -138,11 +142,6 @@ endef
 
 # Step 1: Generate snowflake.yml file
 generate-yaml:
-	@if [ -z "$(ENV_FILE)" ]; then \
-		echo "❌ Error: ENV_FILE parameter required"; \
-		echo "Usage: make generate-yaml ENV_FILE=.env"; \
-		exit 1; \
-	fi
 	@if [ ! -f "$(ENV_FILE)" ]; then \
 		echo "❌ Error: Environment file $(ENV_FILE) not found"; \
 		echo "Please copy .env.template to $(ENV_FILE) and configure it"; \
@@ -201,7 +200,7 @@ setup-tasks:
 	@echo "================================================================================================================"
 	@echo "⏰ [Step 5] Setting up Snowflake tasks..."
 	@echo "================================================================================================================"
-	cd src/sql && snow sql --connection $(CONN) -f 03_tasks.sql
+	cd src/sql && snow sql --connection $(CONN) -f 04_tasks.sql
 	@echo "✅ Snowflake tasks setup complete!"
 
 # Step 6: Procedures and functions
@@ -210,7 +209,7 @@ setup-procs-funcs:
 	@echo "================================================================================================================"
 	@echo "⚙️  [Step 6] Setting up procedures and functions..."
 	@echo "================================================================================================================"
-	cd src/sql && snow sql --connection $(CONN) -f 04_procs_and_funcs.sql
+	cd src/sql && snow sql --connection $(CONN) -f 03_procs_and_funcs.sql
 	@echo "✅ Procedures and functions setup complete!"
 
 # ---------------------------------------------------------------------------

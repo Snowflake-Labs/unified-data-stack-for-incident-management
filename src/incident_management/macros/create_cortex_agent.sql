@@ -16,14 +16,12 @@
 {% call statement('agent_exists', fetch_result=True) %}
    EXECUTE IMMEDIATE $$
     DECLARE
-        agent_comment VARCHAR DEFAULT NULL;
+        agent_name VARCHAR := '';
+        agent_exists BOOLEAN DEFAULT FALSE;
     BEGIN
-        DESCRIBE AGENT {{database}}.{{schema}}.{{agent_name}};
-        agent_comment := (SELECT "comment" FROM TABLE(RESULT_SCAN(LAST_QUERY_ID())));
-        RETURN agent_comment;
-    EXCEPTION
-        WHEN STATEMENT_ERROR THEN
-            RETURN NULL;
+        SHOW AGENTS LIKE '{{agent_name}}';
+        agent_name := (SELECT "name" FROM TABLE(RESULT_SCAN(LAST_QUERY_ID())) WHERE contains("name", '{{agent_name}}'));
+        RETURN (agent_name IS NOT NULL AND agent_name != '' AND agent_name ='{{agent_name}}');
     END;
     $$;
 {% endcall %}

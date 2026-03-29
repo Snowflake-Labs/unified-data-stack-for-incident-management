@@ -5,7 +5,7 @@ use schema <% ctx.env.dbt_project_database %>.dbt_project_deployments;
 -- ============================================================================
 -- Upload Cortex Agent Specification File to Stage
 -- ============================================================================
-PUT file://../../cortex_agents/incm360_agent_v100.yml @<% ctx.env.dbt_project_database %>.gold_zone.agent_specs/ AUTO_COMPRESS=FALSE OVERWRITE=TRUE;
+PUT file://../cortex_agents/incm360_agent_v100.yml @<% ctx.env.dbt_project_database %>.gold_zone.agent_specs/ AUTO_COMPRESS=FALSE OVERWRITE=TRUE;
 
 -- ============================================================================
 -- Snowpark Python Function: Read File from Stage

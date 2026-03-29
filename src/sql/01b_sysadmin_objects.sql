@@ -47,56 +47,56 @@ CREATE OR REPLACE STREAM <% ctx.env.dbt_project_database %>.bronze_zone.document
 
 -- ----- Tables -----
 
-CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.bronze_zone.users (
-    id STRING PRIMARY KEY DEFAULT UUID_STRING(),
-    email VARCHAR(255) UNIQUE NOT NULL,
-    first_name VARCHAR(100) NOT NULL,
-    last_name VARCHAR(100) NOT NULL,
-    role VARCHAR(50) NOT NULL,
-    department VARCHAR(100),
-    team VARCHAR(100),
-    is_active BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP_TZ DEFAULT CURRENT_TIMESTAMP(),
-    updated_at TIMESTAMP_TZ DEFAULT CURRENT_TIMESTAMP()
-);
+-- CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.bronze_zone.users (
+--     id STRING PRIMARY KEY DEFAULT UUID_STRING(),
+--     email VARCHAR(255) UNIQUE NOT NULL,
+--     first_name VARCHAR(100) NOT NULL,
+--     last_name VARCHAR(100) NOT NULL,
+--     role VARCHAR(50) NOT NULL,
+--     department VARCHAR(100),
+--     team VARCHAR(100),
+--     is_active BOOLEAN DEFAULT TRUE,
+--     created_at TIMESTAMP_TZ DEFAULT CURRENT_TIMESTAMP(),
+--     updated_at TIMESTAMP_TZ DEFAULT CURRENT_TIMESTAMP()
+-- );
 
-CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.gold_zone.incidents (
-    incident_number VARCHAR(50) PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    category STRING,
-    priority VARCHAR(20) NOT NULL,
-    status VARCHAR(30) NOT NULL DEFAULT 'open',
-    assignee_id STRING,
-    reportee_id STRING,
-    created_at TIMESTAMP_TZ DEFAULT CURRENT_TIMESTAMP(),
-    closed_at TIMESTAMP_TZ,
-    updated_at TIMESTAMP_TZ DEFAULT CURRENT_TIMESTAMP(),
-    source_system VARCHAR(100),
-    external_source_id VARCHAR(100),
-    has_attachments BOOLEAN DEFAULT FALSE,
-    slack_message_id VARCHAR(100),
-    last_comment STRING,
-    CONSTRAINT fk_incidents_assignee FOREIGN KEY (assignee_id) REFERENCES <% ctx.env.dbt_project_database %>.bronze_zone.users(id),
-    CONSTRAINT fk_incidents_reportee FOREIGN KEY (reportee_id) REFERENCES <% ctx.env.dbt_project_database %>.bronze_zone.users(id)
-);
+-- CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.gold_zone.incidents (
+--     incident_number VARCHAR(50) PRIMARY KEY,
+--     title VARCHAR(255) NOT NULL,
+--     category STRING,
+--     priority VARCHAR(20) NOT NULL,
+--     status VARCHAR(30) NOT NULL DEFAULT 'open',
+--     assignee_id STRING,
+--     reportee_id STRING,
+--     created_at TIMESTAMP_TZ DEFAULT CURRENT_TIMESTAMP(),
+--     closed_at TIMESTAMP_TZ,
+--     updated_at TIMESTAMP_TZ DEFAULT CURRENT_TIMESTAMP(),
+--     source_system VARCHAR(100),
+--     external_source_id VARCHAR(100),
+--     has_attachments BOOLEAN DEFAULT FALSE,
+--     slack_message_id VARCHAR(100),
+--     last_comment STRING,
+--     CONSTRAINT fk_incidents_assignee FOREIGN KEY (assignee_id) REFERENCES <% ctx.env.dbt_project_database %>.bronze_zone.users(id),
+--     CONSTRAINT fk_incidents_reportee FOREIGN KEY (reportee_id) REFERENCES <% ctx.env.dbt_project_database %>.bronze_zone.users(id)
+-- );
 
-CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.gold_zone.incident_comment_history (
-    id STRING PRIMARY KEY DEFAULT UUID_STRING(),
-    incident_number VARCHAR(50) NOT NULL,
-    author_id STRING NOT NULL,
-    content STRING NOT NULL,
-    created_at TIMESTAMP_TZ DEFAULT CURRENT_TIMESTAMP(),
-    CONSTRAINT fk_comment_history_incident FOREIGN KEY (incident_number) REFERENCES <% ctx.env.dbt_project_database %>.gold_zone.incidents(incident_number),
-    CONSTRAINT fk_comment_history_author FOREIGN KEY (author_id) REFERENCES <% ctx.env.dbt_project_database %>.bronze_zone.users(id)
-);
+-- CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.gold_zone.incident_comment_history (
+--     id STRING PRIMARY KEY DEFAULT UUID_STRING(),
+--     incident_number VARCHAR(50) NOT NULL,
+--     author_id STRING NOT NULL,
+--     content STRING NOT NULL,
+--     created_at TIMESTAMP_TZ DEFAULT CURRENT_TIMESTAMP(),
+--     CONSTRAINT fk_comment_history_incident FOREIGN KEY (incident_number) REFERENCES <% ctx.env.dbt_project_database %>.gold_zone.incidents(incident_number),
+--     CONSTRAINT fk_comment_history_author FOREIGN KEY (author_id) REFERENCES <% ctx.env.dbt_project_database %>.bronze_zone.users(id)
+-- );
 
-CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.gold_zone.incident_attachments (
-    id STRING PRIMARY KEY DEFAULT UUID_STRING(),
-    incident_number VARCHAR(50) NOT NULL,
-    attachment_file FILE,
-    uploaded_at TIMESTAMP_TZ DEFAULT CURRENT_TIMESTAMP(),
-    CONSTRAINT fk_attachments_incident FOREIGN KEY (incident_number) REFERENCES <% ctx.env.dbt_project_database %>.gold_zone.incidents(incident_number)
-);
+-- CREATE OR REPLACE TABLE <% ctx.env.dbt_project_database %>.gold_zone.incident_attachments (
+--     id STRING PRIMARY KEY DEFAULT UUID_STRING(),
+--     incident_number VARCHAR(50) NOT NULL,
+--     attachment_file FILE,
+--     uploaded_at TIMESTAMP_TZ DEFAULT CURRENT_TIMESTAMP(),
+--     CONSTRAINT fk_attachments_incident FOREIGN KEY (incident_number) REFERENCES <% ctx.env.dbt_project_database %>.gold_zone.incidents(incident_number)
+-- );
 
 -- ----- Git Repository & dbt Project -----
 

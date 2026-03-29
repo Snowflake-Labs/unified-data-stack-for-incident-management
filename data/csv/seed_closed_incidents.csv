@@ -1,3 +1,3 @@
 incident_number,title,category,priority,status,assignee_id,reportee_id,created_at,closed_at,updated_at,source_system,external_source_id,has_attachments,total_resolution_hours,closed_month,closed_year,closed_quarter
-INC-2025-004,login error,login error,high,closed,,U002,1737000005.000000,2025-01-16 10:00:00,2025-01-16 10:00:00,Slack,C001,false,227.78,2025-01-01,2025,1
-INC-2025-005,other,other,low,closed,,U003,1737000006.000000,2025-01-17 12:00:00,2025-01-17 12:00:00,Slack,C001,false,201.50,2025-01-01,2025,1
+INC-2025-004,login error,login error,high,closed,,U002,2025-01-16 04:00:05,2025-01-16 10:00:00,2025-01-16 10:00:00,Slack,C001,false,227.78,2025-01-01,2025,1
+INC-2025-005,other,other,low,closed,,U003,2025-01-16 04:00:06,2025-01-17 12:00:00,2025-01-17 12:00:00,Slack,C001,false,201.50,2025-01-01,2025,1
