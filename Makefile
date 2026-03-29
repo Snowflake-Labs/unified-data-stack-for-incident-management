@@ -4,7 +4,7 @@
 # Every target is independently runnable — no implicit prerequisite chains.
 # Use 'make install FROM=<step>' to resume from a specific step.
 
-.PHONY: help install setup-snowflake generate-yaml setup-dbt-stack only-dbt setup-accountadmin setup-sysadmin-objects setup-slack-connector setup-tasks setup-procs-funcs deploy-streamlit load-test-data teardown check-prereqs
+.PHONY: help install setup-snowflake generate-yaml setup-dbt-stack only-dbt setup-accountadmin setup-sysadmin-objects setup-slack-connector setup-tasks setup-procs-funcs deploy-streamlit load-test-data redeploy-dbt teardown check-prereqs
 
 # Step numbering (used by FROM= parameter)
 #   1  generate-yaml
@@ -38,6 +38,7 @@ help:
 	@echo "Optional (not included in 'install'):"
 	@echo "  deploy-streamlit  Deploy Streamlit app (run separately after install)"
 	@echo "  load-test-data    Load CSV test data into bronze & gold tables"
+	@echo "  redeploy-dbt      Fetch latest git and redeploy dbt project"
 	@echo ""
 	@echo "Other:"
 	@echo "  teardown          Teardown all project-owned Snowflake resources"
@@ -237,6 +238,15 @@ load-test-data:
 	@echo "⚠️  Note: This will truncate existing data before loading. Requires step 3 (setup-sysadmin-objects) to have been run."
 	cd src/sql && snow sql --connection $(CONN) -f 07_load_test_data.sql
 	@echo "✅ Test data loaded successfully!"
+
+# Redeploy dbt project (fetch latest git, add new version)
+redeploy-dbt:
+	$(check_conn)
+	@echo "================================================================================================================"
+	@echo "🔄 Redeploying dbt project from latest git..."
+	@echo "================================================================================================================"
+	cd src/sql && snow sql --connection $(CONN) -f 08_dbt_redeploy.sql
+	@echo "✅ dbt project redeployed successfully!"
 
 # Teardown: Remove all project-owned Snowflake resources
 teardown:

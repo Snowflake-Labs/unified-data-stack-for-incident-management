@@ -6,6 +6,7 @@ env:
   dbt_pipeline_wh: "${DBT_PIPELINE_WH}"
   dbt_project_admin_role: "${DBT_PROJECT_ADMIN_ROLE}"
   dbt_target: "${DBT_TARGET}"
+  snowflake_intelligence_int: "${SNOWFLAKE_INTELLIGENCE_INT_OBJECT}"
   snowflake_user: "${SNOWFLAKE_USER}"
   git_user_email: "${GIT_USER_EMAIL}"
   git_user_repo_pat: "${GIT_USER_REPO_PAT}"

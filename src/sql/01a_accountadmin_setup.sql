@@ -44,6 +44,9 @@ GRANT USAGE ON INTEGRATION <% ctx.env.dbt_deps_eai %> TO ROLE <% ctx.env.dbt_pro
 GRANT ROLE <% ctx.env.dbt_project_admin_role %> TO ROLE SYSADMIN;
 GRANT ROLE <% ctx.env.dbt_project_admin_role %> TO USER <% ctx.env.snowflake_user %>;
 
+GRANT USAGE ON SNOWFLAKE INTELLIGENCE <% ctx.env.snowflake_intelligence_int_object %> TO ROLE <% ctx.env.dbt_project_admin_role %>;
+GRANT MODIFY ON SNOWFLAKE INTELLIGENCE <% ctx.env.snowflake_intelligence_int_object %> TO ROLE <% ctx.env.dbt_project_admin_role %>;
+
 /**
 
 Optional:

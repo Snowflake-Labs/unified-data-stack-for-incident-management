@@ -35,7 +35,7 @@
         PROFILE = '{"display_name": "Agent assisted Incident Management", "color": "green"}'
         FROM SPECIFICATION
         $$
-        {{ agent_spec['data'][0][0] | indent(4) }}
+        {{ agent_spec['data'][0][0] }}
         $$;
 
         ALTER SNOWFLAKE INTELLIGENCE {{var('snowflake_intelligence_object')}} ADD AGENT {{ target.database }}.{{schema}}.{{ agent_name }};
@@ -46,7 +46,7 @@
         ALTER AGENT {{ target.database }}.{{schema}}.{{ agent_name }} 
         MODIFY LIVE VERSION SET SPECIFICATION = 
         $$
-        {{ agent_spec['data'][0][0] | indent(4) }}
+        {{ agent_spec['data'][0][0] }}
         $$;
     {% endif %}
 {% endset %}
