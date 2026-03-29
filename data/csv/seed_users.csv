@@ -1,0 +1,4 @@
+id,email,first_name,last_name,role,department,team,is_active,created_at,updated_at
+U001,alice@acme.com,alice,acme.com,reporter,,,true,2025-01-15 10:00:00,2025-01-15 10:00:00
+U002,bob@acme.com,bob,acme.com,reporter,,,true,2025-01-15 10:00:00,2025-01-15 10:00:00
+U003,carol@acme.com,carol,acme.com,reporter,,,true,2025-01-15 10:00:00,2025-01-15 10:00:00

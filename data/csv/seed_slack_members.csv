@@ -1,0 +1,2 @@
+conversationid,conversationtype,memberids,memberemails,isprivate,lastupdated
+C001,channel,"[""U001"",""U002"",""U003""]","[""alice@acme.com"",""bob@acme.com"",""carol@acme.com""]",false,2025-01-15 10:00:00

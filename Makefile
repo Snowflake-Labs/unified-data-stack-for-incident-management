@@ -1,80 +1,155 @@
 # Makefile for Incident Management Project Setup
-# Automates installation steps 1-3 as documented in README.md
+# Automates installation steps as documented in README.md
+#
+# Every target is independently runnable — no implicit prerequisite chains.
+# Use 'make install FROM=<step>' to resume from a specific step.
 
-.PHONY: help install setup-snowflake generate-yaml setup-dbt-stack setup-slack-connector setup-tasks setup-procs-funcs deploy-streamlit all
+.PHONY: help install setup-snowflake generate-yaml setup-dbt-stack only-dbt setup-accountadmin setup-sysadmin-objects setup-slack-connector setup-tasks setup-procs-funcs deploy-streamlit load-test-data redeploy-dbt teardown check-prereqs
+
+# Step numbering (used by FROM= parameter)
+#   1  generate-yaml
+#   2  setup-accountadmin
+#   3  setup-sysadmin-objects
+#   4  setup-slack-connector
+#   5  setup-tasks
+#   6  setup-procs-funcs
+
+FROM ?= 1
+ENV_FILE ?= .env
 
 # Default target
 help:
 	@echo "Incident Management Project - Installation Automation"
 	@echo ""
-	@echo "Available targets:"
-	@echo "  help              Show this help message"
-	@echo "  install           Run complete installation (step 2)"
-	@echo "  setup-snowflake   Setup Snowflake infrastructure (step 2)"
-	@echo "  generate-yaml     Generate snowflake.yml from template (step 2.1)"
-	@echo "  setup-dbt-stack   Setup dbt Projects infrastructure (step 2.2)"
-	@echo "  setup-slack-connector Setup Slack connector infrastructure (step 2.3)"
-	@echo "  setup-tasks       Setup Snowflake tasks (step 2.4)"
-	@echo "  setup-procs-funcs Setup procedures and functions (step 2.5)"
-	@echo "  deploy-streamlit  Deploy Streamlit app (requires STREAMLIT_DEPLOYMENT_ENABLED=true)"
+	@echo "Installation steps (in order):"
+	@echo "  Step 1  generate-yaml          Generate snowflake.yml from template"
+	@echo "  Step 2  setup-accountadmin      Account-level infra (ACCOUNTADMIN)"
+	@echo "  Step 3  setup-sysadmin-objects  DB-level objects & ownership (SYSADMIN)"
+	@echo "  Step 4  setup-slack-connector   Slack connector infrastructure"
+	@echo "  Step 5  setup-tasks             Snowflake tasks"
+	@echo "  Step 6  setup-procs-funcs       Procedures and functions"
+	@echo ""
+	@echo "Composite targets:"
+	@echo "  install           Run steps 1-6 (or resume with FROM=<step>)"
+	@echo "  setup-snowflake   Alias for install"
+	@echo "  setup-dbt-stack   Run steps 2+3 together"
+	@echo "  only-dbt          Run steps 1+2+3+5+6 (skip Slack connector)"
+	@echo ""
+	@echo "Optional (not included in 'install'):"
+	@echo "  deploy-streamlit  Deploy Streamlit app (run separately after install)"
+	@echo "  load-test-data    Load CSV test data into bronze & gold tables"
+	@echo "  redeploy-dbt      Fetch latest git and redeploy dbt project"
+	@echo ""
+	@echo "Other:"
+	@echo "  teardown          Teardown all project-owned Snowflake resources"
+	@echo "  check-prereqs     Verify required tools are installed"
+	@echo ""
+	@echo "Usage:"
+	@echo "  make install CONN=myconn                       # Full setup (uses .env by default)"
+	@echo "  make install CONN=myconn FROM=3                # Resume from step 3"
+	@echo "  make install CONN=myconn ENV_FILE=prod.env     # Use a custom env file"
+	@echo "  make setup-accountadmin CONN=myconn            # Run a single step"
+	@echo "  make setup-dbt-stack CONN=myconn               # Steps 2+3 only"
+	@echo "  make only-dbt CONN=myconn                      # Steps 1+2+3+5+6 (no Slack)"
+	@echo "  make deploy-streamlit CONN=myconn              # Optional Streamlit"
+	@echo "  make teardown CONN=myconn                      # Teardown resources"
 	@echo ""
 	@echo "Prerequisites:"
 	@echo "  - Snowflake CLI installed"
-	@echo "  - .env file configured (copy from env.template)"
+	@echo "  - .env file configured (copy from .env.template)"
 	@echo "  - Snowflake connection configured in ~/.snowflake/config.toml"
-	@echo ""
-	@echo "Usage:"
-	@echo "  make install                    # Complete setup"
-	@echo "  make generate-yaml ENV_FILE=.env  # Generate snowflake.yml"
-	@echo "  make setup-dbt-stack CONN=myconn  # Setup dbt with connection name"
-	@echo "  make setup-slack-connector CONN=myconn  # Setup Slack connector"
-	@echo "  make setup-tasks CONN=myconn    # Setup Snowflake tasks"
-	@echo "  make setup-procs-funcs CONN=myconn  # Setup procedures and functions"
-	@echo "  make deploy-streamlit CONN=myconn  # Deploy Streamlit app (requires STREAMLIT_DEPLOYMENT_ENABLED=true)"
-	@echo ""
-	@echo "Note: Python dependencies are installed separately when running the dashboard"
-	@echo "See README 'Running the Dashboard' section for Python setup instructions"
 
-# Complete installation (step 2)
+# ---------------------------------------------------------------------------
+# Composite targets
+# ---------------------------------------------------------------------------
+
+# Complete installation with optional resume
 install:
-	@if [ -z "$(ENV_FILE)" ] || [ -z "$(CONN)" ]; then \
-		echo "❌ Error: Both ENV_FILE and CONN parameters required"; \
-		echo "Usage: make install ENV_FILE=.env CONN=<connection-name>"; \
+	@if [ -z "$(CONN)" ]; then \
+		echo "❌ Error: CONN parameter required"; \
+		echo "Usage: make install CONN=<connection-name>"; \
+		echo "       make install CONN=<connection-name> FROM=3  # resume from step 3"; \
+		echo "       (ENV_FILE defaults to .env; override with ENV_FILE=<path>)"; \
 		exit 1; \
 	fi
 	@echo "================================================================================================================"
+	@echo "🚀 Starting Snowflake infrastructure setup (from step $(FROM))..."
 	@echo "================================================================================================================"
-	@echo "🚀 Starting complete Snowflake infrastructure setup..."
+	@if [ $(FROM) -le 1 ]; then $(MAKE) generate-yaml ENV_FILE=$(ENV_FILE); fi
+	@if [ $(FROM) -le 2 ]; then $(MAKE) setup-accountadmin CONN=$(CONN); fi
+	@if [ $(FROM) -le 3 ]; then $(MAKE) setup-sysadmin-objects CONN=$(CONN); fi
+	@if [ $(FROM) -le 4 ]; then $(MAKE) setup-slack-connector CONN=$(CONN); fi
+	@if [ $(FROM) -le 5 ]; then $(MAKE) setup-tasks CONN=$(CONN); fi
+	@if [ $(FROM) -le 6 ]; then $(MAKE) setup-procs-funcs CONN=$(CONN); fi
+	@echo ""
+	@echo "✅ Installation complete!"
+	@echo ""
+	@echo "Optional next steps:"
+	@echo "  make deploy-streamlit CONN=$(CONN)  # Deploy Streamlit app"
+	@echo "  See README 'Running the Dashboard' section for Python setup instructions"
+
+# Alias
+setup-snowflake: install
+
+# Run accountadmin + sysadmin-objects together
+setup-dbt-stack:
+	@if [ -z "$(CONN)" ]; then \
+		echo "❌ Error: CONN parameter required"; \
+		echo "Usage: make setup-dbt-stack CONN=<connection-name>"; \
+		exit 1; \
+	fi
+	@$(MAKE) setup-accountadmin CONN=$(CONN)
+	@$(MAKE) setup-sysadmin-objects CONN=$(CONN)
+	@echo "✅ dbt Projects infrastructure setup complete!"
+
+# Run generate-yaml + dbt-stack + tasks + procs-funcs (skips Slack connector)
+only-dbt:
+	@if [ -z "$(CONN)" ]; then \
+		echo "❌ Error: CONN parameter required"; \
+		echo "Usage: make only-dbt CONN=<connection-name>"; \
+		echo "       (ENV_FILE defaults to .env; override with ENV_FILE=<path>)"; \
+		exit 1; \
+	fi
 	@echo "================================================================================================================"
+	@echo "🚀 Running dbt-only setup (steps 1+2+3+5+6, skipping Slack connector)..."
 	@echo "================================================================================================================"
 	@$(MAKE) generate-yaml ENV_FILE=$(ENV_FILE)
 	@$(MAKE) setup-dbt-stack CONN=$(CONN)
-	@$(MAKE) setup-slack-connector CONN=$(CONN)
 	@$(MAKE) setup-tasks CONN=$(CONN)
 	@$(MAKE) setup-procs-funcs CONN=$(CONN)
-	@echo "✅ Installation complete!"
-	@echo "5. For Python dependencies (when running dashboard), see README 'Running the Dashboard' section"
+	@$(MAKE) load-test-data CONN=$(CONN)
 
-# Step 2: Setup Snowflake Infrastructure
-setup-snowflake: generate-yaml setup-dbt-stack setup-slack-connector setup-tasks setup-procs-funcs
-	@echo "✅ Snowflake infrastructure setup complete!"
+	@echo ""
+	@echo "✅ dbt-only setup complete!"
 
-# Step 2.1: Generate snowflake.yml file
-generate-yaml:
-	@if [ -z "$(ENV_FILE)" ]; then \
-		echo "❌ Error: ENV_FILE parameter required"; \
-		echo "Usage: make generate-yaml ENV_FILE=.env"; \
+# ---------------------------------------------------------------------------
+# Individual steps (each independently runnable)
+# ---------------------------------------------------------------------------
+
+# Shared validation fragments
+define check_conn
+	@if [ -z "$(CONN)" ]; then \
+		echo "❌ Error: CONN parameter required"; \
+		echo "Usage: make $@ CONN=<connection-name>"; \
+		echo "Connection should be defined in ~/.snowflake/config.toml"; \
 		exit 1; \
 	fi
+	@if ! command -v snow >/dev/null 2>&1; then \
+		echo "❌ Error: Snowflake CLI (snow) is not installed"; \
+		echo "Please install it first: https://docs.snowflake.com/en/developer-guide/snowflake-cli/installation/installation"; \
+		exit 1; \
+	fi
+endef
+
+# Step 1: Generate snowflake.yml file
+generate-yaml:
 	@if [ ! -f "$(ENV_FILE)" ]; then \
 		echo "❌ Error: Environment file $(ENV_FILE) not found"; \
-		echo "Please copy env.template to $(ENV_FILE) and configure it"; \
+		echo "Please copy .env.template to $(ENV_FILE) and configure it"; \
 		exit 1; \
 	fi
 	@echo "================================================================================================================"
-	@echo "================================================================================================================"
-	@echo "🔧 Generating snowflake.yml configuration..."
-	@echo "================================================================================================================"
+	@echo "🔧 [Step 1] Generating snowflake.yml configuration..."
 	@echo "================================================================================================================"
 	cd src/scripts && ./create_snowflake_yaml.sh -e ../../$(ENV_FILE)
 	@if [ -f "src/sql/snowflake.yml" ]; then \
@@ -84,51 +159,34 @@ generate-yaml:
 		exit 1; \
 	fi
 
-# Step 2.2: Setup dbt Projects infrastructure
-setup-dbt-stack:
-	@if [ -z "$(CONN)" ]; then \
-		echo "❌ Error: CONN parameter required"; \
-		echo "Usage: make setup-dbt-stack CONN=<connection-name>"; \
-		echo "Connection should be defined in ~/.snowflake/config.toml"; \
-		exit 1; \
-	fi
-	@if ! command -v snow >/dev/null 2>&1; then \
-		echo "❌ Error: Snowflake CLI (snow) is not installed"; \
-		echo "Please install it first: https://docs.snowflake.com/en/developer-guide/snowflake-cli/installation/installation"; \
-		exit 1; \
-	fi
+# Step 2: Account-level infrastructure (ACCOUNTADMIN)
+setup-accountadmin:
+	$(check_conn)
 	@echo "================================================================================================================"
-	@echo "================================================================================================================"
-	@echo "❄️  Setting up dbt Projects infrastructure..."
-	@echo "================================================================================================================"
+	@echo "❄️  [Step 2] Setting up account-level infrastructure (ACCOUNTADMIN)..."
 	@echo "================================================================================================================"
 	@echo "⚠️  Note: This requires ACCOUNTADMIN privileges"
-	cd src/sql && snow sql --connection $(CONN) -f 01_dbt_projects_stack.sql
-	@echo "✅ dbt Projects infrastructure setup complete!"
-	@echo ""
+	cd src/sql && snow sql --connection $(CONN) -f 01a_accountadmin_setup.sql
+	@echo "✅ Account-level infrastructure setup complete!"
 
-# Step 2.3: Setup Slack connector infrastructure
+# Step 3: Database-level objects & ownership transfer (SYSADMIN)
+setup-sysadmin-objects:
+	$(check_conn)
+	@echo "================================================================================================================"
+	@echo "❄️  [Step 3] Setting up database-level objects (SYSADMIN)..."
+	@echo "================================================================================================================"
+	@echo "⚠️  Note: This requires SYSADMIN privileges. Assumes step 2 (setup-accountadmin) has been run."
+	cd src/sql && snow sql --connection $(CONN) -f 01b_sysadmin_objects.sql
+	@echo "✅ Database-level objects & ownership transfer complete!"
+
+# Step 4: Slack connector infrastructure
 setup-slack-connector:
-	@if [ -z "$(CONN)" ]; then \
-		echo "❌ Error: CONN parameter required"; \
-		echo "Usage: make setup-slack-connector CONN=<connection-name>"; \
-		echo "Connection should be defined in ~/.snowflake/config.toml"; \
-		exit 1; \
-	fi
-	@if ! command -v snow >/dev/null 2>&1; then \
-		echo "❌ Error: Snowflake CLI (snow) is not installed"; \
-		echo "Please install it first: https://docs.snowflake.com/en/developer-guide/snowflake-cli/installation/installation"; \
-		exit 1; \
-	fi
+	$(check_conn)
 	@echo "================================================================================================================"
+	@echo "💬 [Step 4] Setting up Slack connector backend infrastructure..."
 	@echo "================================================================================================================"
-	@echo "💬 Setting up Slack connector backend infrastructure..."
-	@echo "================================================================================================================"
-	@echo "================================================================================================================"
-	@echo "⚠️  Note: This requires ACCOUNTADMIN privileges"
 	cd src/sql && snow sql --connection $(CONN) -f 02_slack_connector.sql
 	@echo "✅ Slack connector backend infrastructure setup complete!"
-	@echo ""
 	@echo ""
 	@echo "🔗 Next steps for Slack connector:"
 	@echo "1. Login to your OpenFlow SPCS runtime"
@@ -137,70 +195,33 @@ setup-slack-connector:
 	@echo "4. Start the connector and add the Slack app to your channel"
 	@echo "5. Verify tables are created: SLACK_MEMBERS, SLACK_MESSAGES, etc."
 
-# Step 2.4: Setup Snowflake tasks
+# Step 5: Snowflake tasks
 setup-tasks:
-	@if [ -z "$(CONN)" ]; then \
-		echo "❌ Error: CONN parameter required"; \
-		echo "Usage: make setup-tasks CONN=<connection-name>"; \
-		echo "Connection should be defined in ~/.snowflake/config.toml"; \
-		exit 1; \
-	fi
-	@if ! command -v snow >/dev/null 2>&1; then \
-		echo "❌ Error: Snowflake CLI (snow) is not installed"; \
-		echo "Please install it first: https://docs.snowflake.com/en/developer-guide/snowflake-cli/installation/installation"; \
-		exit 1; \
-	fi
+	$(check_conn)
 	@echo "================================================================================================================"
+	@echo "⏰ [Step 5] Setting up Snowflake tasks..."
 	@echo "================================================================================================================"
-	@echo "⏰ Setting up Snowflake tasks..."
-	@echo "================================================================================================================"
-	@echo "================================================================================================================"
-	cd src/sql && snow sql --connection $(CONN) -f 03_tasks.sql
+	cd src/sql && snow sql --connection $(CONN) -f 04_tasks.sql
 	@echo "✅ Snowflake tasks setup complete!"
 
-# Step 2.5: Setup procedures and functions
+# Step 6: Procedures and functions
 setup-procs-funcs:
-	@if [ -z "$(CONN)" ]; then \
-		echo "❌ Error: CONN parameter required"; \
-		echo "Usage: make setup-procs-funcs CONN=<connection-name>"; \
-		echo "Connection should be defined in ~/.snowflake/config.toml"; \
-		exit 1; \
-	fi
-	@if ! command -v snow >/dev/null 2>&1; then \
-		echo "❌ Error: Snowflake CLI (snow) is not installed"; \
-		echo "Please install it first: https://docs.snowflake.com/en/developer-guide/snowflake-cli/installation/installation"; \
-		exit 1; \
-	fi
+	$(check_conn)
 	@echo "================================================================================================================"
+	@echo "⚙️  [Step 6] Setting up procedures and functions..."
 	@echo "================================================================================================================"
-	@echo "⚙️  Setting up procedures and functions..."
-	@echo "================================================================================================================"
-	@echo "================================================================================================================"
-	cd src/sql && snow sql --connection $(CONN) -f 04_procs_and_funcs.sql
+	cd src/sql && snow sql --connection $(CONN) -f 03_procs_and_funcs.sql
 	@echo "✅ Procedures and functions setup complete!"
 
-# Deploy Streamlit app
+# ---------------------------------------------------------------------------
+# Optional / utility targets
+# ---------------------------------------------------------------------------
+
+# Deploy Streamlit app (optional, not part of 'install')
 deploy-streamlit:
-	@if [ "$(STREAMLIT_DEPLOYMENT_ENABLED)" != "true" ]; then \
-		echo "⚠️  Streamlit deployment is disabled"; \
-		echo "Set STREAMLIT_DEPLOYMENT_ENABLED=true to enable deployment"; \
-		exit 0; \
-	fi
-	@if [ -z "$(CONN)" ]; then \
-		echo "❌ Error: CONN parameter required"; \
-		echo "Usage: make deploy-streamlit CONN=<connection-name>"; \
-		echo "Connection should be defined in ~/.snowflake/config.toml"; \
-		exit 1; \
-	fi
-	@if ! command -v snow >/dev/null 2>&1; then \
-		echo "❌ Error: Snowflake CLI (snow) is not installed"; \
-		echo "Please install it first: https://docs.snowflake.com/en/developer-guide/snowflake-cli/installation/installation"; \
-		exit 1; \
-	fi
-	@echo "================================================================================================================"
+	$(check_conn)
 	@echo "================================================================================================================"
 	@echo "🎨 Deploying Streamlit app..."
-	@echo "================================================================================================================"
 	@echo "================================================================================================================"
 	cd src/sql && snow sql --connection $(CONN) -f 05_streamlit_app.sql
 	@echo "✅ Streamlit app deployment complete!"
@@ -208,18 +229,50 @@ deploy-streamlit:
 	@echo "📱 Access your Streamlit app in Snowsight:"
 	@echo "   Navigate to: Data Products > Streamlit > INCIDENT_MANAGEMENT_DASHBOARD"
 
+# Load test data (optional, not part of 'install')
+load-test-data:
+	$(check_conn)
+	@echo "================================================================================================================"
+	@echo "📦 Loading test data into bronze & gold tables..."
+	@echo "================================================================================================================"
+	@echo "⚠️  Note: This will truncate existing data before loading. Requires step 3 (setup-sysadmin-objects) to have been run."
+	cd src/sql && snow sql --connection $(CONN) -f 07_load_test_data.sql
+	@echo "✅ Test data loaded successfully!"
+
+# Redeploy dbt project (fetch latest git, add new version)
+redeploy-dbt:
+	$(check_conn)
+	@echo "================================================================================================================"
+	@echo "🔄 Redeploying dbt project from latest git..."
+	@echo "================================================================================================================"
+	cd src/sql && snow sql --connection $(CONN) -f 08_dbt_redeploy.sql
+	@echo "✅ dbt project redeployed successfully!"
+
+# Teardown: Remove all project-owned Snowflake resources
+teardown:
+	$(check_conn)
+	@echo "================================================================================================================"
+	@echo "🗑️  Tearing down project-owned Snowflake resources..."
+	@echo "================================================================================================================"
+	@echo "⚠️  WARNING: This will drop all objects owned by dbt_project_admin_role"
+	@echo "   (tasks, cortex services, streamlit app, dbt project, tables, schemas, etc.)"
+	@echo "   ACCOUNTADMIN-owned resources (database, warehouses, roles) are NOT affected."
+	@echo ""
+	@read -p "Are you sure you want to proceed? (y/N): " confirm && [ "$$confirm" = "y" ] || { echo "Teardown cancelled."; exit 1; }
+	cd src/sql && snow sql --connection $(CONN) -f 06_teardown.sql
+	@echo "✅ Teardown complete! Project-owned resources have been removed."
+	@echo ""
+	@echo "📝 Note: ACCOUNTADMIN-owned resources (database, warehouses, integrations, roles)"
+	@echo "   were NOT dropped. See src/sql/06_teardown.sql for optional manual cleanup steps."
+
 # Check prerequisites
 check-prereqs:
-	@echo "================================================================================================================"
-	@echo "================================================================================================================"
 	@echo "🔍 Checking prerequisites..."
-	@echo "================================================================================================================"
-	@echo "================================================================================================================"
 	@echo -n "uv: "
 	@if command -v uv >/dev/null 2>&1; then echo "✅ installed"; else echo "❌ not found"; fi
 	@echo -n "snow CLI: "
 	@if command -v snow >/dev/null 2>&1; then echo "✅ installed"; else echo "❌ not found"; fi
 	@echo -n ".env file: "
-	@if [ -f ".env" ]; then echo "✅ found"; else echo "⚠️  not found (copy from env.template)"; fi
+	@if [ -f ".env" ]; then echo "✅ found"; else echo "⚠️  not found (copy from .env.template)"; fi
 	@echo -n "requirements.txt: "
 	@if [ -f "requirements.txt" ]; then echo "✅ found"; else echo "❌ not found"; fi

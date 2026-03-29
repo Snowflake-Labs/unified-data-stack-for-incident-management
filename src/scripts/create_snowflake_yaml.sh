@@ -74,18 +74,29 @@ generate_snowflake_yml() {
     
     echo "Generating $OUTPUT_FILE from $TEMPLATE_FILE..."
     
-    # Read template and substitute environment variables
-    while IFS= read -r line; do
-        # Replace ${VAR_NAME} patterns with actual environment variable values
+    # Read template and substitute environment variables, skipping unset ones
+    while IFS= read -r line || [[ -n "$line" ]]; do
+        local skip=false
+
+        # Check all referenced vars; skip the line if any are unset
+        local check_line="$line"
+        while [[ $check_line =~ \$\{([^}]+)\} ]]; do
+            local var_name="${BASH_REMATCH[1]}"
+            if [ -z "${!var_name+x}" ] || [ -z "${!var_name}" ]; then
+                skip=true
+                break
+            fi
+            check_line="${check_line#*\}}"
+        done
+
+        if $skip; then
+            continue
+        fi
+
+        # Substitute all ${VAR_NAME} patterns with their values
         while [[ $line =~ \$\{([^}]+)\} ]]; do
             local var_name="${BASH_REMATCH[1]}"
             local var_value="${!var_name}"
-            
-            if [ -z "$var_value" ]; then
-                echo "Warning: Environment variable '$var_name' is not set"
-                var_value=""
-            fi
-            
             line="${line//\$\{$var_name\}/$var_value}"
         done
         echo "$line"

@@ -1,0 +1,3 @@
+relative_path,size,last_modified,md5,etag,file_url,doc_type,extension,question_extracts_json
+qa/report_q1.pdf,512000,2025-01-10 08:00:00,md5hash001,etag001,snowflake://docs/qa/report_q1.pdf,question,pdf,"{""response"":{""quarter"":""Q1 2025"",""overall_uptime"":""99.95%"",""critical_services_uptime"":""99.99%"",""sev_1_incidents"":""2"",""sev_2_incidents"":""5"",""mtta"":""4 min"",""mttr"":""45 min""},""error"":null}"
+qa/report_q2.pdf,480000,2025-01-11 09:00:00,md5hash002,etag002,snowflake://docs/qa/report_q2.pdf,question,pdf,"{""response"":{""quarter"":""Q2 2025"",""overall_uptime"":""99.90%"",""critical_services_uptime"":""99.97%"",""sev_1_incidents"":""3"",""sev_2_incidents"":""8"",""mtta"":""5 min"",""mttr"":""60 min""},""error"":null}"

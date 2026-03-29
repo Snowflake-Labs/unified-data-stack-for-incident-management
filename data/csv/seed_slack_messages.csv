@@ -1,0 +1,7 @@
+hasfile,hasfiles,type,subtype,team,channel,user,username,text,ts,threadts,intro,starred,wibblr,appid,botid,botlink,displayasbot,upload,parentuserid,clientmsgid,unfurllinks,unfurlmedia,threadbroadcast,locked,subscribed,hidden,nonotifications,chunkindex,chunkcount,ingestts,workspaceid
+false,true,message,,T001,C001,U001,alice,Incident INC-2025-001 payment gateway timeout on checkout,1737000001.000000,,false,false,false,,,,,,,msg-001,,,,,,,,,1,1,2025-01-15 10:00:01,W001
+false,true,message,,T001,C001,U002,bob,Incident INC-2025-002 users unable to login after password reset,1737000002.000000,,false,false,false,,,,,,,msg-002,,,,,,,,,1,1,2025-01-15 10:00:02,W001
+false,true,message,,T001,C001,U003,carol,Incident INC-2025-003 dashboard loading slow for reports,1737000003.000000,,false,false,false,,,,,,,msg-003,,,,,,,,,1,1,2025-01-15 10:00:03,W001
+false,false,message,,T001,C001,U001,alice,Update on INC-2025-001 payment issue still ongoing,1737000004.000000,,false,false,false,,,,,,,msg-004,,,,,,,,,1,1,2025-01-15 10:00:04,W001
+false,false,message,,T001,C001,U002,bob,INC-2025-004 resolved the login error was a config issue,1737000005.000000,,false,false,false,,,,,,,msg-005,,,,,,,,,1,1,2025-01-15 10:00:05,W001
+false,false,message,,T001,C001,U003,carol,INC-2025-005 network latency spike in us-east region,1737000006.000000,,false,false,false,,,,,,,msg-006,,,,,,,,,1,1,2025-01-15 10:00:06,W001

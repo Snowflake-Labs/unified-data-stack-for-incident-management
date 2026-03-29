@@ -78,9 +78,17 @@ If you change any of the below parameters, be sure to change the `profiles.yml` 
 ** `DBT_PROJECT_ADMIN_ROLE={default-role}`
 ====
 +
-Edit the `{env-file}` file and configure all variables except this one (generated later):
+Edit the `{env-file}` file and configure *required* variables:
 +
-** `DBT_SNOWFLAKE_PASSWORD`
+** `GIT_REPOSITORY_URL` — your forked repository URL
+** `GIT_USER_EMAIL` — your Git email
+** `GIT_USER_REPO_PAT` — a GitHub personal access token
+** `DBT_DEPS_EAI` — external access integration object
+** `SNOWFLAKE_INTELLIGENCE_INT_OBJECT` — Snowflake Intelligence integration object
+** `CORTEX_SEARCH_WH` — warehouse for the Cortex Search service
+** `CORTEX_SEARCH_SERVICE_NAME` — name for the Cortex Search service
++
+Leave `DBT_SNOWFLAKE_PASSWORD` empty (generated later).
 
 
 . Setup Snowflake Infrastructure
@@ -101,8 +109,11 @@ Role setup commands require ACCOUNTADMIN privileges
 +
 [source,bash,subs="attributes+"]
 ----
-# Run complete installation
-make install ENV_FILE={env-file} CONN=<{conn-placeholder}>
+# Run complete installation (ENV_FILE defaults to .env)
+make install CONN=<{conn-placeholder}>
+
+# Or specify a custom env file
+make install CONN=<{conn-placeholder}> ENV_FILE=prod.env
 ----
 
 .. Option B: Step-by-Step Setup
@@ -118,10 +129,10 @@ Run each step individually:
 +
 [source,bash,subs="attributes+"]
 ----
-# Step 1: Generate snowflake.yml configuration
-make generate-yaml ENV_FILE={env-file}
+# Step 1: Generate snowflake.yml configuration (ENV_FILE defaults to .env)
+make generate-yaml
 
-# Step 2: Setup dbt Projects infrastructure
+# Step 2: Setup dbt Projects infrastructure (accountadmin + sysadmin objects)
 make setup-dbt-stack CONN=<{conn-placeholder}>
 
 # Step 3: Setup Slack connector infrastructure
@@ -136,6 +147,16 @@ make setup-procs-funcs CONN=<{conn-placeholder}>
 # Step 6: Deploy Streamlit app (optional, requires {streamlit-env-var}=true)
 {streamlit-env-var}=true make deploy-streamlit CONN=<{conn-placeholder}>
 ----
++
+[TIP]
+====
+*Quick start without Slack:* Use the `only-dbt` target to run steps 1+2+3+5+6 and load sample test data, skipping the Slack connector setup:
+
+[source,bash,subs="attributes+"]
+----
+make only-dbt CONN=<{conn-placeholder}>
+----
+====
 +
 [NOTE]
 ====
@@ -192,14 +213,41 @@ Drop a test documents (PDFs, Word documents, etc.) in the bronze_zone.DOCUMENTS 
 +
 Manually execute the Tasks available in the following order to build the baseline models and the Cortex AI services on top including the Cortex Agent:
 +
-* `incm_root_daily_incremental_refresh`
-* `incm_root_triggered_docs_processing`
-* `incm_root_deploy_cortex_services`
+* `incm_root_daily_incremental_refresh` — refreshes daily incremental models (incidents, comment history, etc.)
+* `incm_root_triggered_docs_processing` — processes newly uploaded documents (triggered by stream)
+* `incm_root_deploy_cortex_tools` — deploys Semantic View, Cortex Search service, and Cortex Agent
 +
 
 . Snowflake Intelligence
 +
 Once Cortex Agent has been created follow instructions link:https://docs.snowflake.com/en/user-guide/snowflake-cortex/snowflake-intelligence#add-agents[here] to add the Cortex Agent to Snowflake Intelligence.
+
+. Loading Sample Test Data (Optional)
++
+If you are not using the Slack connector or want to quickly populate the gold zone tables with sample data for testing, use:
++
+[source,bash,subs="attributes+"]
+----
+make load-test-data CONN=<{conn-placeholder}>
+----
++
+This uploads CSV seed files from `data/csv/` to the stage, creates gold zone tables, and loads the sample data. The tables created are: `incidents`, `active_incidents`, `closed_incidents`, `incident_comment_history`, `incident_attachments`, `document_full_extracts`, and `quaterly_review_metrics`.
++
+[NOTE]
+====
+This target uses `CREATE OR REPLACE TABLE` so it will overwrite existing gold zone tables. It is intended for initial setup and testing only.
+====
+
+. Redeploying the dbt Project (Optional)
++
+After pushing changes to the git repository (e.g., updated dbt models, macros, or agent specs), redeploy the dbt project in Snowflake:
++
+[source,bash,subs="attributes+"]
+----
+make redeploy-dbt CONN=<{conn-placeholder}>
+----
++
+This fetches the latest code from the git repository and adds a new version to the dbt project.
 
 . Streamlit Dashboard (Optional)
 +
@@ -223,6 +271,120 @@ After completing the setup, a Streamlit in Snowflake (SiS) app will be deployed 
 * *Recently Closed Incidents*: Track resolution times and outcomes
 * *Attachment Viewer*: Click on incidents with attachments to view images
 * *Trend Analysis*: Monthly and weekly incident patterns (when data is available)
+
+
+== Teardown / Cleanup
+
+If you need to remove resources created by this project from your Snowflake account, a teardown script is provided.
+
+[CAUTION]
+====
+*This operation is destructive and irreversible!*
+
+The teardown script will permanently delete all objects *owned by `{default-role}`*:
+
+* All schemas (bronze_zone, silver_zone, gold_zone, dbt_project_deployments)
+* All tables and data within those schemas
+* All Cortex services (Cortex Agent, Cortex Search Service, Semantic Views)
+* All tasks, procedures, and functions
+* All stages and their contents (including uploaded documents)
+* Git repository and secrets
+
+*Before proceeding:*
+
+. Ensure you have backed up any data you need to retain
+. Verify no other projects or users depend on these resources
+====
+
+=== Ownership Model
+
+The teardown script respects the ownership model used during setup:
+
+[cols="1,2"]
+|===
+|Owner |Resources
+
+|`{default-role}`
+|Schemas, tables, views, stages, streams, tasks, functions, DBT project, Git repository, secrets, Cortex services, Streamlit app
+
+|`ACCOUNTADMIN`
+|Database, warehouses, API integration, roles
+|===
+
+The main teardown script only drops objects owned by `{default-role}`. ACCOUNTADMIN-owned resources are listed in a separate commented section at the end of the script for optional manual cleanup.
+
+=== Running the Teardown
+
+The teardown script is located at `src/sql/06_teardown.sql`. It uses the same templating mechanism as the setup scripts. Use the Makefile target to run it with a confirmation prompt:
+
+[source,bash,subs="attributes+"]
+----
+# Run the teardown (drops only dbt_project_admin_role-owned objects)
+make teardown CONN=<{conn-placeholder}>
+----
+
+=== Teardown Phases
+
+The script removes resources owned by `{default-role}` in the following order:
+
+[cols="1,3"]
+|===
+|Phase |Resources Removed
+
+|1. Validation
+|Pre-checks for active sessions and running queries
+
+|2. Tasks
+|All scheduled and triggered tasks (suspended then dropped)
+
+|3. Cortex Services
+|Cortex Agent, Cortex Search Service, Semantic Views
+
+|4. Streamlit
+|Dashboard application
+
+|5. DBT Project
+|DBT project, Git repository, and secrets
+
+|6. Functions
+|User-defined functions and procedures
+
+|7. Tables
+|All tables (respecting foreign key order)
+
+|8. Streams
+|Document streams
+
+|9. Stages
+|All stages and uploaded files
+
+|10. Schemas
+|All project schemas
+|===
+
+=== Complete Infrastructure Cleanup (Optional)
+
+If you want to also remove ACCOUNTADMIN-owned resources (database, warehouses, integrations, roles), uncomment the relevant sections at the end of `src/sql/06_teardown.sql` and run the teardown again:
+
+[source,bash,subs="attributes+"]
+----
+# After uncommenting ACCOUNTADMIN sections in 06_teardown.sql
+make teardown CONN=<{conn-placeholder}>
+----
+
+[WARNING]
+====
+ACCOUNTADMIN-owned resources may be shared with other projects. Review carefully before dropping:
+
+* *Warehouses* (`{default-warehouse}`, `document_search_service_wh`) - may be used by other applications
+* *API Integration* - may be used for other Git repositories
+* *Roles* - may have grants to other users or projects
+====
+
+[NOTE]
+====
+If you perform a partial teardown, be aware that some resources may have dependencies on others. Dropping schemas will automatically remove all objects within them (tables, views, stages, etc.).
+====
 
 
 '''

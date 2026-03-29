@@ -1,0 +1,243 @@
+version: 2
+
+seeds:
+  - name: seed_slack_members
+    description: "Seed data for bronze_zone.slack_members source"
+    config:
+      column_types:
+        conversationid: varchar
+        conversationtype: varchar
+        memberids: varchar
+        memberemails: varchar
+        isprivate: boolean
+        lastupdated: timestamp_ntz
+
+  - name: seed_slack_messages
+    description: "Seed data for bronze_zone.slack_messages source"
+    config:
+      column_types:
+        hasfile: boolean
+        hasfiles: boolean
+        type: varchar
+        subtype: varchar
+        team: varchar
+        channel: varchar
+        user: varchar
+        username: varchar
+        text: varchar
+        ts: varchar
+        threadts: varchar
+        intro: boolean
+        starred: boolean
+        wibblr: boolean
+        appid: varchar
+        botid: varchar
+        botlink: varchar
+        displayasbot: boolean
+        upload: boolean
+        parentuserid: varchar
+        clientmsgid: varchar
+        unfurllinks: boolean
+        unfurlmedia: boolean
+        threadbroadcast: boolean
+        locked: boolean
+        subscribed: boolean
+        hidden: boolean
+        nonotifications: boolean
+        chunkindex: number
+        chunkcount: number
+        ingestts: timestamp_ntz
+        workspaceid: varchar
+
+  - name: seed_doc_metadata
+    description: "Seed data for bronze_zone.doc_metadata source"
+    config:
+      column_types:
+        event_ts: varchar
+        channel_id: varchar
+        user_id: varchar
+        file_id: varchar
+        file_name: varchar
+        file_mimetype: varchar
+        file_size: number
+        content_sha256: varchar
+        staged_file_path: varchar
+
+  - name: seed_documents_stream
+    description: "Seed data for bronze_zone.documents_stream source"
+    config:
+      column_types:
+        relative_path: varchar
+        size: number
+        last_modified: timestamp_ntz
+        md5: varchar
+        etag: varchar
+        file_url: varchar
+
+  - name: seed_file_hashes
+    description: "Seed data for bronze_zone.file_hashes source"
+    config:
+      column_types:
+        hash_value: varchar
+        source_system: varchar
+        doc_id: varchar
+        event_ts: timestamp_ntz
+        algorithm: varchar
+
+  - name: seed_users
+    description: "Seed data representing materialized users model output"
+    config:
+      column_types:
+        id: varchar
+        email: varchar
+        first_name: varchar
+        last_name: varchar
+        role: varchar
+        department: varchar
+        team: varchar
+        is_active: boolean
+        created_at: timestamp_ntz
+        updated_at: timestamp_ntz
+
+  - name: seed_incidents
+    description: "Seed data representing materialized incidents model output"
+    config:
+      column_types:
+        incident_number: varchar
+        category: varchar
+        title: varchar
+        priority: varchar
+        status: varchar
+        assignee_id: varchar
+        reportee_id: varchar
+        created_at: varchar
+        closed_at: timestamp_ntz
+        updated_at: varchar
+        source_system: varchar
+        external_source_id: varchar
+        has_attachments: boolean
+        slack_message_id: varchar
+        last_comment: varchar
+
+  - name: seed_v_qualify_slack_messages
+    description: "Seed data representing v_qualify_slack_messages view output"
+    config:
+      column_types:
+        hasfiles: boolean
+        type: varchar
+        subtype: varchar
+        team: varchar
+        channel: varchar
+        user: varchar
+        username: varchar
+        reporter_id: varchar
+        text: varchar
+        ts: varchar
+        slack_message_id: varchar
+        file_id: varchar
+        file_name: varchar
+        file_mimetype: varchar
+        file_size: number
+        staged_file_path: varchar
+        attachment_file: varchar
+        incident_number: varchar
+
+  - name: seed_document_question_extracts
+    description: "Seed data representing document_question_extracts model output"
+    config:
+      column_types:
+        relative_path: varchar
+        size: number
+        last_modified: timestamp_ntz
+        md5: varchar
+        etag: varchar
+        file_url: varchar
+        doc_type: varchar
+        extension: varchar
+        question_extracts_json: variant
+
+  - name: seed_active_incidents
+    description: "Seed data representing active_incidents gold model output"
+    config:
+      column_types:
+        incident_number: varchar
+        title: varchar
+        category: varchar
+        priority: varchar
+        status: varchar
+        assignee_id: varchar
+        assignee_name: varchar
+        reportee_id: varchar
+        reportee_name: varchar
+        created_at: varchar
+        updated_at: varchar
+        age_hours: number
+        source_system: varchar
+        external_source_id: varchar
+        has_attachments: boolean
+
+  - name: seed_closed_incidents
+    description: "Seed data representing closed_incidents gold model output"
+    config:
+      column_types:
+        incident_number: varchar
+        title: varchar
+        category: varchar
+        priority: varchar
+        status: varchar
+        assignee_id: varchar
+        reportee_id: varchar
+        created_at: varchar
+        closed_at: timestamp_ntz
+        updated_at: varchar
+        source_system: varchar
+        external_source_id: varchar
+        has_attachments: boolean
+        total_resolution_hours: number
+        closed_month: date
+        closed_year: number
+        closed_quarter: number
+
+  - name: seed_incident_comment_history
+    description: "Seed data representing incident_comment_history gold model output"
+    config:
+      column_types:
+        id: varchar
+        incident_number: varchar
+        author_id: varchar
+        content: varchar
+        created_at: timestamp_ntz
+
+  - name: seed_incident_attachments
+    description: "Seed data representing incident_attachments gold model output"
+    config:
+      column_types:
+        id: varchar
+        incident_number: varchar
+        attachment_file: varchar
+        uploaded_at: varchar
+
+  - name: seed_document_full_extracts
+    description: "Seed data representing document_full_extracts gold model output"
+    config:
+      column_types:
+        relative_path: varchar
+        size: number
+        last_modified: timestamp_ntz
+        md5: varchar
+        etag: varchar
+        file_url: varchar
+        doc_type: varchar
+        extension: varchar
+        page_num: number
+        chunk: varchar
+        headers: varchar
+
+  - name: seed_quaterly_review_metrics
+    description: "Seed data representing quaterly_review_metrics gold model output"
+    config:
+      column_types:
+        filename: varchar
+        metric: varchar
+        value: varchar
+        created_at: timestamp_ntz

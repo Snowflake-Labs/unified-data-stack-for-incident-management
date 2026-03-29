@@ -4,8 +4,8 @@
 
 *Author*: Chinmayee Lakkad
 *Email*: link:mailto:chinmayee.lakkad@snowflake.com[chinmayee.lakkad@snowflake.com]
-*Release Date*: November 2025
-*Version*: 2.0.0
+*Release Date*: March 2026
+*Version*: 2.1.0
 
 toc::[]
 

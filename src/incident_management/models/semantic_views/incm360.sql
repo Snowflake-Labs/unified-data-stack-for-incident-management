@@ -17,9 +17,6 @@ TABLES(
   , incident_comment_history as {{ ref('incident_comment_history') }}
     COMMENT = 'Simplified incident comment history for tracking communication'
 
-  , weekly_incident_trends as {{ ref('weekly_incident_trends') }}
-    COMMENT = 'Weekly incident trends for the last 12 weeks'
-
   , quaterly_review_metrics as {{ ref('quaterly_review_metrics') }}
     COMMENT = 'Quarterly review metrics'
 
@@ -50,38 +47,6 @@ FACTS (
     , closed_incidents.closed_quarter AS closed_quarter
       COMMENT = 'Quarter when the incident was closed'
 
-    , weekly_incident_trends.total_incidents AS total_incidents
-      COMMENT = 'Total incidents created in the week'
-    , weekly_incident_trends.resolved_incidents AS resolved_incidents
-      COMMENT = 'Incidents resolved in the week'
-    , weekly_incident_trends.closed_incidents AS closed_incidents
-      COMMENT = 'Incidents closed in the week'
-    , weekly_incident_trends.open_incidents AS open_incidents
-      COMMENT = 'Incidents open in the week'
-    , weekly_incident_trends.critical_incidents AS critical_incidents
-      COMMENT = 'Incidents with critical priority'
-    , weekly_incident_trends.high_incidents AS high_incidents
-      COMMENT = 'Incidents with high priority'
-    , weekly_incident_trends.high_severity_incidents AS high_severity_incidents
-      COMMENT = 'Incidents with critical or high priority'
-    , weekly_incident_trends.payment_incidents AS payment_incidents
-      COMMENT = 'Payment category incidents'
-    , weekly_incident_trends.authentication_incidents AS authentication_incidents
-      COMMENT = 'Authentication category incidents'
-    , weekly_incident_trends.performance_incidents AS performance_incidents
-      COMMENT = 'Performance category incidents'
-    , weekly_incident_trends.security_incidents AS security_incidents
-      COMMENT = 'Security category incidents'
-    , weekly_incident_trends.monitoring_incidents AS monitoring_incidents
-      COMMENT = 'Incidents from monitoring source system'
-    , weekly_incident_trends.customer_portal_incidents AS customer_portal_incidents
-      COMMENT = 'Incidents from customer portal source system'
-    , weekly_incident_trends.avg_resolution_time_hours AS avg_resolution_time_hours
-      COMMENT = 'Average resolution time in hours'
-    , weekly_incident_trends.incidents_with_attachments AS incidents_with_attachments
-      COMMENT = 'Incidents that had attachments'
-    , weekly_incident_trends.resolution_rate_percentage AS resolution_rate_percentage
-      COMMENT = 'Share of resolved/closed incidents as a percentage'
  )
 
  DIMENSIONS (
@@ -97,37 +62,37 @@ FACTS (
    , incidents.priority AS priority
       COMMENT = 'Incident priority'
    , incidents.status AS status
-      WITH SYNONYMS = ('incident status', 'issue status', 'problem status', 'problem status')
+      WITH SYNONYMS = ('incident status', 'issue status', 'problem status', 'state')
       COMMENT = 'Incident status'
    , incidents.assignee_id AS assignee_id
-      WITH SYNONYMS = ('assignee user id', 'assignee user id', 'assignee user id', 'assignee user id')
+      WITH SYNONYMS = ('assignee', 'assigned to', 'owner', 'resolver')
       COMMENT = 'Assignee user id'
    , incidents.reportee_id AS reportee_id
-      WITH SYNONYMS = ('reportee user id', 'reportee user id', 'reportee user id', 'reportee user id')
+      WITH SYNONYMS = ('reporter', 'reported by', 'submitter', 'requester')
       COMMENT = 'Reportee user id'
    , incidents.created_at AS created_at
-      WITH SYNONYMS = ('creation timestamp', 'creation timestamp', 'creation timestamp', 'creation timestamp')
+      WITH SYNONYMS = ('created date', 'open date', 'reported at', 'submission time')
       COMMENT = 'Creation timestamp'
    , incidents.closed_at AS closed_at
-      WITH SYNONYMS = ('close timestamp', 'close timestamp', 'close timestamp', 'close timestamp')
+      WITH SYNONYMS = ('closed date', 'resolved at', 'resolution date', 'end time')
       COMMENT = 'Close timestamp'
    , incidents.updated_at AS updated_at
-      WITH SYNONYMS = ('last update timestamp', 'last update timestamp', 'last update timestamp', 'last update timestamp')
+      WITH SYNONYMS = ('last modified', 'modified date', 'last changed', 'update time')
       COMMENT = 'Last update timestamp'
    , incidents.source_system AS source_system
-      WITH SYNONYMS = ('source system', 'source system', 'source system', 'source system')
+      WITH SYNONYMS = ('origin', 'source app', 'reporting channel', 'intake system')
       COMMENT = 'Source system for the incident'
    ,incidents.external_source_id AS external_source_id
-      WITH SYNONYMS = ('external source identifier', 'external source identifier', 'external source identifier', 'external source identifier')
+      WITH SYNONYMS = ('external id', 'channel id', 'source reference', 'external ticket')
       COMMENT = 'External source identifier'
    , incidents.has_attachments AS has_attachments
-      WITH SYNONYMS = ('has attachments', 'has attachments', 'has attachments', 'has attachments')
+      WITH SYNONYMS = ('attachments', 'files attached', 'has files', 'includes documents')
       COMMENT = 'Whether the incident has attachments'
    , incidents.slack_message_id AS slack_message_id
-      WITH SYNONYMS = ('slack message id', 'slack message id', 'slack message id', 'slack message id')
+      WITH SYNONYMS = ('message id', 'slack msg', 'chat message', 'conversation id')
       COMMENT = 'Associated Slack message id'
    , incidents.last_comment AS last_comment
-      WITH SYNONYMS = ('latest comment content', 'latest comment content', 'latest comment content', 'latest comment content')
+      WITH SYNONYMS = ('latest note', 'recent comment', 'last update text', 'last message')
       COMMENT = 'Latest comment content'
 
    , active_incidents.incident_number AS incident_number
@@ -211,10 +176,7 @@ FACTS (
       COMMENT = 'Comment content'
    , incident_comment_history.created_at AS created_at
       COMMENT = 'Comment creation timestamp'
-   
-   , weekly_incident_trends.week AS week
-      COMMENT = 'Week bucket (date truncated to week)'
-
+    
    , quaterly_review_metrics.filename AS filename
       COMMENT = 'Source document filename parsed from relative_path'
    , quaterly_review_metrics.metric AS metric

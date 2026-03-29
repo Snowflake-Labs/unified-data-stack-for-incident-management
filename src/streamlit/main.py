@@ -348,7 +348,7 @@ def create_charts():
     database = st.session_state.snowpark_session.get_current_database()
     schema = "gold_zone"
     
-    col1, col2, col3 = st.columns(3)
+    col1, col2 = st.columns(2)
     
     with col1:
         st.subheader("📈 Monthly Incident Trends")
@@ -389,44 +389,6 @@ def create_charts():
             st.error(f"Error loading monthly trends: {str(e)}")
     
     with col2:
-        st.subheader("🎯 Weekly Incident Trends")
-        try:
-            # Get weekly trends data
-            weekly_query = f"""
-                SELECT 
-                    week,
-                    total_incidents,
-                    critical_incidents,
-                    high_incidents
-                FROM {database}.{schema}.weekly_incident_trends
-                ORDER BY week DESC
-                LIMIT 12
-            """
-            weekly_df = execute_sql(weekly_query, st.session_state.snowpark_session)
-            
-            if not weekly_df.empty:
-                import altair as alt
-                chart = alt.Chart(weekly_df).mark_line(
-                    color='#10b981',
-                    strokeWidth=3,
-                    point=True
-                ).encode(
-                    x=alt.X('WEEK:T', title='Week'),
-                    y=alt.Y('TOTAL_INCIDENTS:Q', title='Total Incidents'),
-                    tooltip=['WEEK:T', 'TOTAL_INCIDENTS:Q']
-                ).properties(
-                    height=400
-                ).configure_axis(
-                    grid=True,
-                    gridColor='#f3f4f6'
-                )
-                st.altair_chart(chart, use_container_width=True)
-            else:
-                st.info("No weekly trend data available")
-        except Exception as e:
-            st.error(f"Error loading weekly trends: {str(e)}")
-    
-    with col3:
         st.subheader("🎯 Incidents by Category - To date")
         try:
             # Get category breakdown from current incidents
@@ -753,7 +715,7 @@ def create_documents_processed_tab():
             )
             
             # Summary metrics for full documents
-            col1, col2, col3 = st.columns(3)
+    col1, col2 = st.columns(2)
             with col1:
                 st.metric("Total Documents", len(full_docs_df))
             with col2:

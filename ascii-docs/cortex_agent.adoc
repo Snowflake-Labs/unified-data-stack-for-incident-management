@@ -14,13 +14,19 @@ This page describes the approach taken by this project to deploy the Cortex Agen
 
 === Cortex Agent Deployment
 
-The Cortex Agent is deployed using the macro link:../src/incident_management/macros/create_cortex_agent.sql[`create_cortex_agent`] in Gold Zone. This macro is used to create the Cortex Agent with the given name, stage name, spec file, and agent profile.
+The Cortex Agent is deployed using the macro link:../src/incident_management/macros/create_cortex_agent.sql[`create_cortex_agent`] in Gold Zone. This macro accepts the following parameters: `agent_name`, `database`, `schema`, `stage_name`, `agent_spec_file`, and `next_version`.
 
-The actual definition of the Cortex Agent is stored in a YAML specification file that should conform to this link:https://docs.snowflake.com/en/sql-reference/sql/create-agent#required-parameters[Cortex Agent Specification], and is expected to be staged in gold_zone.agent_specs stage prior to the deployment of the Cortex Agent.
+The macro is *idempotent*: it checks whether the agent already exists in the database. If the agent does not exist, it creates it with `CREATE OR REPLACE AGENT` and registers it with Snowflake Intelligence. If the agent already exists, it updates the live version specification with `ALTER AGENT ... MODIFY LIVE VERSION` instead.
 
-A sample spec file is provided in the link:../src/cortex_agents/incm360_agent_1.yml[incm360_agent_1.yml] file, and is loaded during the Snowflake setup process.
+Each deployment is tagged with a version identifier and timestamp in the agent's `COMMENT` metadata, making it easy to track which spec version is deployed and when.
 
-This macro does not need to be run on a regular basis and can only be run when the composition changes in terms of tools, tool resources, or instructions, etc.
+The actual definition of the Cortex Agent is stored in a YAML specification file that should conform to this link:https://docs.snowflake.com/en/sql-reference/sql/create-agent#required-parameters[Cortex Agent Specification], and is expected to be staged in `gold_zone.agent_specs` stage prior to deployment.
+
+The current spec file is link:../src/cortex_agents/incm360_agent_v200.yml[incm360_agent_v200.yml], loaded during the Snowflake setup process by `03_procs_and_funcs.sql`.
+
+The agent spec is read from the stage at deployment time using a Python UDF (`READ_STAGE_FILE`) created in the `dbt_project_deployments` schema. The YAML content is passed verbatim into the `FROM SPECIFICATION` clause, preserving original indentation.
+
+This macro does not need to be run on a regular basis and can only be run when the composition changes in terms of tools, tool resources, or instructions, etc. It is invoked via the `incm_deploy_cortex_agent` task in the Cortex services deployment task graph.
 
 Having Cortex Agent created will allow you to use it in Snowflake Intelligence to answer questions about the incident management process. Post installation you will be required to add this explicitly to Snowflake Intelligence as described link:https://docs.snowflake.com/en/user-guide/snowflake-cortex/snowflake-intelligence#add-agents[here].
 

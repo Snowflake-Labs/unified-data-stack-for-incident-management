@@ -1,0 +1,15 @@
+filename,metric,value,created_at
+report_q1.pdf,quarter,Q1 2025,2025-01-16 12:00:00
+report_q1.pdf,overall_uptime,99.95%,2025-01-16 12:00:00
+report_q1.pdf,critical_services_uptime,99.99%,2025-01-16 12:00:00
+report_q1.pdf,sev_1_incidents,2,2025-01-16 12:00:00
+report_q1.pdf,sev_2_incidents,5,2025-01-16 12:00:00
+report_q1.pdf,mtta,4 min,2025-01-16 12:00:00
+report_q1.pdf,mttr,45 min,2025-01-16 12:00:00
+report_q2.pdf,quarter,Q2 2025,2025-01-16 12:00:00
+report_q2.pdf,overall_uptime,99.90%,2025-01-16 12:00:00
+report_q2.pdf,critical_services_uptime,99.97%,2025-01-16 12:00:00
+report_q2.pdf,sev_1_incidents,3,2025-01-16 12:00:00
+report_q2.pdf,sev_2_incidents,8,2025-01-16 12:00:00
+report_q2.pdf,mtta,5 min,2025-01-16 12:00:00
+report_q2.pdf,mttr,60 min,2025-01-16 12:00:00

@@ -1,0 +1,4 @@
+event_ts,channel_id,user_id,file_id,file_name,file_mimetype,file_size,content_sha256,staged_file_path
+1737000001.000000,C001,U001,F001,payment_error_screenshot.png,image/png,204800,abc123sha256,incidents/payment_error_screenshot.png
+1737000002.000000,C001,U002,F002,login_error_log.pdf,application/pdf,102400,def456sha256,incidents/login_error_log.pdf
+1737000003.000000,C001,U003,F003,dashboard_metrics.png,image/png,153600,ghi789sha256,incidents/dashboard_metrics.png

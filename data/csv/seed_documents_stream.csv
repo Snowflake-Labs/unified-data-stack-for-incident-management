@@ -1,0 +1,5 @@
+relative_path,size,last_modified,md5,etag,file_url
+qa/report_q1.pdf,512000,2025-01-10 08:00:00,md5hash001,etag001,snowflake://docs/qa/report_q1.pdf
+qa/report_q2.pdf,480000,2025-01-11 09:00:00,md5hash002,etag002,snowflake://docs/qa/report_q2.pdf
+full/runbook.pdf,1024000,2025-01-12 10:00:00,md5hash003,etag003,snowflake://docs/full/runbook.pdf
+full/architecture.docx,768000,2025-01-13 11:00:00,md5hash004,etag004,snowflake://docs/full/architecture.docx

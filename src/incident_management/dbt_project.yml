@@ -17,6 +17,7 @@ vars:
   page_split: true
   max_chunk_size: 500
   max_chunk_depth: 5
+  snowflake_intelligence_object: 'SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT'
 
 
 # These configurations specify where dbt should look for different types of files.
@@ -55,3 +56,7 @@ models:
     semantic_views:
       +schema: semantic_views
       +materialized: semantic_view
+
+seeds:
+  incident_management:
+    +schema: test_seeds
