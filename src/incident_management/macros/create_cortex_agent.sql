@@ -38,7 +38,10 @@
 {{agent_spec['data'][0][0]}}
         $$;
 
-        ALTER SNOWFLAKE INTELLIGENCE {{var('snowflake_intelligence_object')}} ADD AGENT {{ target.database }}.{{schema}}.{{ agent_name }};
+        {% if var('toggle_si_agent_deployment') %}
+            ALTER SNOWFLAKE INTELLIGENCE {{var('snowflake_intelligence_object')}} ADD AGENT {{ target.database }}.{{schema}}.{{ agent_name }};
+        {% endif %}
+        
     {% else %}
 -- Make sure the Jinja template for agent_spec is not indented at all and starts on column 0 of the line in the editor.
         ALTER AGENT {{ target.database }}.{{schema}}.{{ agent_name }} 

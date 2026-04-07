@@ -155,7 +155,7 @@ create or replace task incm_deploy_cortex_agent
 
     LET args_yaml VARCHAR := :dq || '{agent_name: incident_management_agent, ' ||
       'database: ' || :db || ', ' ||
-      'schema: ' || :sch || ', ' ||
+      'schema: ' || :sch || ', ' ||sch
       'stage_name: ' || :stage || ', ' ||
       'agent_spec_file: ' || :spec_file || ', ' ||
       'next_version: ' || :next_version || '}' || :dq;
