@@ -11,11 +11,12 @@ profile: 'incident_management'
 
 # Variables
 vars:
+  dmf_freshness_tables: ['INCIDENTS']
   docs_stage_path: '@INCIDENT_MANAGEMENT.bronze_zone.DOCUMENTS'
   supported_doc_formats: ['pdf', 'docx', 'doc', 'txt', 'text', 'html', 'md', 'pptx', 'ppt', 'png', 'eml', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff', 'tif', 'webp', 'htm']
   parse_mode: "LAYOUT"
   page_split: true
-  max_chunk_size: 500
+  max_chunk_size: 50
   max_chunk_depth: 5
   toggle_si_agent_deployment: true
   snowflake_intelligence_object: 'SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT'

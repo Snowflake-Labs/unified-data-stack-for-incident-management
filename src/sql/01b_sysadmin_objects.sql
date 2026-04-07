@@ -163,6 +163,7 @@ GRANT OWNERSHIP ON ALL GIT REPOSITORIES IN SCHEMA <% ctx.env.dbt_project_databas
 GRANT OWNERSHIP ON ALL DBT PROJECTS IN SCHEMA <% ctx.env.dbt_project_database %>.dbt_project_deployments
   TO ROLE <% ctx.env.dbt_project_admin_role %> COPY CURRENT GRANTS;
 
+GRANT APPLICATION ROLE SNOWFLAKE.DATA_QUALITY_MONITORING_VIEWER TO ROLE <% ctx.env.dbt_project_admin_role %>;
 
 -- ============================================================================
 -- PHASE 3: Verification (as dbt_project_admin_role)

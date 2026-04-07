@@ -23,6 +23,9 @@ TABLES(
   , users as {{ ref('users') }}
     COMMENT = 'Materialized users table with enriched data'
 
+  , data_freshness_checks as {{ ref('data_freshness_checks') }}
+    COMMENT = 'Data freshness monitoring results for incident tables'
+
 )
 
 RELATIONSHIPS (
@@ -47,6 +50,11 @@ FACTS (
     , closed_incidents.closed_quarter AS closed_quarter
       COMMENT = 'Quarter when the incident was closed'
 
+ )
+
+ METRICS (
+    data_freshness_summary AS data_freshness_checks.table_name || 'was last updated ' || data_freshness_checks.value || ' seconds ago'
+      WITH SYNONYMS = ('data freshness', 'last updated', 'data staleness')
  )
 
  DIMENSIONS (
@@ -203,6 +211,23 @@ FACTS (
       COMMENT = 'User department'
    , users.team AS team
       COMMENT = 'User team'
-   , users.is_active AS is_active
-      COMMENT = 'Active flag'
+    , users.is_active AS is_active
+       COMMENT = 'Active flag'
+
+   , data_freshness_checks.scheduled_time AS scheduled_time
+       WITH SYNONYMS = ('scheduled check time', 'planned measurement time')
+       COMMENT = 'Scheduled time for the freshness check'
+   , data_freshness_checks.measurement_time AS measurement_time
+       WITH SYNONYMS = ('measured at', 'check time', 'observation time')
+       COMMENT = 'Actual measurement time of the freshness check'
+   , data_freshness_checks.table_database AS table_database
+       COMMENT = 'Database containing the monitored table'
+   , data_freshness_checks.table_schema AS table_schema
+       COMMENT = 'Schema containing the monitored table'
+   , data_freshness_checks.table_name AS table_name
+       WITH SYNONYMS = ('monitored table', 'checked table')
+       COMMENT = 'Name of the table being monitored for freshness'
+   , data_freshness_checks.metric_name AS metric_name
+       WITH SYNONYMS = ('freshness metric', 'check type', 'quality metric')
+       COMMENT = 'Name of the data freshness metric'
   )

@@ -2,11 +2,12 @@ incident_management:
   outputs:
     dev:
       type: snowflake
-      account: ""
+      account: "uib27272"
       database: "incident_management"
       role: "incm_projects_engineer"
       schema: "bronze_zone"
-      user: ""
+      user: "clakkad"
+      password: "eyJraWQiOiIxNDEyODIwNDczMTIxOTk3NCIsImFsZyI6IkVTMjU2In0.eyJwIjoiODQyMTA2NjI4OjIxNTU3OTMwMTg5MyIsImlzcyI6IlNGOjEwNDkiLCJleHAiOjE3NzU2NzkyMDV9.ghcCANdVjCQi3clnsW5sHgaiw3OfDhPK1NY3ZZBqAkuBZHTjRUf4On-cVlDUQMWam53CF2usm4wKCqpJMkk7Cg"
       warehouse: "v1_demo_wh"
       query_tag: '{"dbt_project": "incident_management", "environment": "dev"}'
 

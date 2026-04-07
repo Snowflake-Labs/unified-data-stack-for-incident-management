@@ -39,7 +39,6 @@ create or replace task incm_project_compile
   EXECUTE IMMEDIATE
   $$
     BEGIN
-      LET _dbt_nodes := (SELECT SYSTEM$GET_TASK_GRAPH_CONFIG('select'));
       LET command := 'compile --target '|| SYSTEM$GET_TASK_GRAPH_CONFIG('target');
 
       EXECUTE DBT PROJECT SYSTEM$GET_TASK_GRAPH_CONFIG('dbt_project_name') args=:command;
