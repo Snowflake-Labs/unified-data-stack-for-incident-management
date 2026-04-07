@@ -8,6 +8,7 @@
         ,merge_update_columns=['updated_at', 'slack_message_id', 'last_comment']
         ,description='Materialized incidents table with enriched data and calculated fields'
         ,tags=['daily']
+        ,post_hook="{{ attach_freshness_dmf(schedule='TRIGGER_ON_CHANGES') }}"
     )
 }}
 
