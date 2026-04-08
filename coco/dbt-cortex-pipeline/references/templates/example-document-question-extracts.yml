@@ -1,0 +1,37 @@
+# Example schema YAML for a silver-zone AI_EXTRACT Python model
+# Place in: models/silver_zone/document_question_extracts.yml
+# Configures the Python dbt model that uses AI_EXTRACT to pull
+# structured answers from documents.
+# Customize the extraction_config.schema.properties with domain-specific
+# questions relevant to your document corpus.
+
+version: 2
+
+models:
+  - name: document_question_extracts
+    description: "AI-extracted structured data from documents"
+    config:
+      docs_stage_path: "@<DATABASE>.<SCHEMA>.DOCUMENTS"
+      meta:
+        extraction_config:
+          enabled: true
+          schema:
+            type: "object"
+            properties:
+              'document_title': { description: "Title of the document", type: "string" }
+              'author': { description: "Author of the document", type: "string" }
+              'summary': { description: "Brief summary of the document contents", type: "string" }
+              'date_published': { description: "Date the document was published", type: "string" }
+              'key_topics': { description: "Main topics covered in the document", type: "string" }
+    columns:
+      - name: RELATIVE_PATH
+        description: "Path to the source file on the stage"
+        tests:
+          - not_null
+      - name: DOC_TYPE
+        description: "Classification of document type"
+      - name: EXTENSION
+        description: "File extension"
+      - name: EXTRACTED_JSON
+        description: "JSON object with AI-extracted answers to configured questions"
+        data_type: VARIANT

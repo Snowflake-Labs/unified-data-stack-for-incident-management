@@ -1,0 +1,34 @@
+# Example schema YAML for a gold-zone document chunking model
+# Place in: models/gold_zone/document_full_extracts.yml
+# Describes the output of a model that uses AI_PARSE_DOCUMENT +
+# SPLIT_TEXT_MARKDOWN_HEADER to parse and chunk documents for
+# Cortex Search indexing.
+
+version: 2
+
+models:
+  - name: document_full_extracts
+    description: "Document text split into searchable chunks via AI_PARSE_DOCUMENT and SPLIT_TEXT_MARKDOWN_HEADER"
+    columns:
+      - name: RELATIVE_PATH
+        description: "Path to the file on the stage"
+        tests:
+          - not_null
+      - name: CHUNK
+        description: "Text chunk extracted from the document"
+        data_type: VARCHAR(16777216)
+        tests:
+          - not_null
+      - name: HEADERS
+        description: "Detected markdown headers for the chunk (h1, h2, etc.)"
+        data_type: OBJECT
+      - name: PAGE_NUM
+        description: "Source page number within the document"
+        data_type: NUMBER(38,0)
+      - name: EXTENSION
+        description: "File extension (pdf, docx, etc.)"
+      - name: DOC_TYPE
+        description: "Classification of document type"
+      - name: SIZE
+        description: "File size in bytes"
+        data_type: NUMBER(38,0)
