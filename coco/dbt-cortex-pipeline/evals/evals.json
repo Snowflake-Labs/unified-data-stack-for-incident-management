@@ -1,0 +1,163 @@
+{
+  "skill_name": "dbt-cortex-pipeline",
+  "evals": [
+    {
+      "id": 1,
+      "scenario": "net_new",
+      "prompt": "I have a Snowflake account with two source tables in RAW_DATA schema: SUPPORT_TICKETS (ticket_id, customer_id, subject, description, priority, status, created_at, resolved_at, assigned_to) and CUSTOMERS (customer_id, name, email, plan_tier, signup_date). I also have PDF knowledge base articles staged at @MY_DB.RAW_DATA.KB_DOCS. I want to build a complete dbt project that I can deploy with snow dbt deploy. It should have bronze/silver/gold zones, a semantic view for querying ticket metrics, a cortex search service over the KB articles, and a cortex agent that uses both. Please scaffold the whole thing.",
+      "expected_output": "Detects Scenario 1 (Net New). Creates a complete dbt project with: dbt_project.yml (medallion zones, semantic_view materialization, vars for docs_stage_path and document parsing), packages.yml (dbt_semantic_view), profiles.yml (no password/env_var), generate_schema_name macro, sources.yml for SUPPORT_TICKETS/CUSTOMERS/KB_DOCS, bronze models (raw_support_tickets, raw_customers, raw_kb_articles with stage directory listing), silver models (enriched_tickets with incremental merge joining tickets+customers, parsed_kb_articles with AI_PARSE_DOCUMENT + SPLIT_TEXT_MARKDOWN_HEADER), gold models (tickets, kb_article_chunks), semantic view model with TABLES/RELATIONSHIPS/FACTS/DIMENSIONS referencing gold zone, cortex search macro pointing at kb_article_chunks, cortex agent macro (idempotent create/alter), full agent spec YAML with cortex_analyst_text_to_sql + cortex_search tools with detailed instructions, and schema .yml files for all models. Uses dbt-projects-on-snowflake skill to deploy.",
+      "files": [],
+      "expectations": [
+        "dbt_project.yml exists and contains medallion zone configuration (bronze, silver, gold)",
+        "packages.yml includes Snowflake-Labs/dbt_semantic_view",
+        "profiles.yml exists with no password field and no env_var() calls",
+        "generate_schema_name.sql macro exists in macros/ directory",
+        "sources.yml defines SUPPORT_TICKETS and CUSTOMERS sources",
+        "Bronze layer models exist for both SUPPORT_TICKETS and CUSTOMERS",
+        "Silver layer models include incremental materialization with is_incremental() guard",
+        "A silver or gold model uses AI_PARSE_DOCUMENT for document processing",
+        "Gold layer models exist as materialized tables",
+        "Semantic view model exists using materialized='semantic_view' with TABLES(), RELATIONSHIPS(), FACTS(), DIMENSIONS()",
+        "Cortex search macro exists (create_cortex_search_service.sql) targeting KB article chunks",
+        "Cortex agent macro exists (create_cortex_agent.sql) with idempotent create/alter logic",
+        "Agent spec YAML includes both cortex_analyst_text_to_sql and cortex_search tools",
+        "Schema YAML files exist with model descriptions and column definitions"
+      ]
+    },
+    {
+      "id": 2,
+      "scenario": "net_new_no_docs",
+      "prompt": "I have tables in ANALYTICS.PUBLIC: ORDERS (order_id, customer_id, product_id, amount, status, created_at), CUSTOMERS (customer_id, name, email, plan), and PRODUCTS (product_id, name, category, price). No documents or unstructured data. I want a dbt project with a cortex agent for querying order analytics. Set it up end to end.",
+      "expected_output": "Detects Scenario 1 (Net New) without document data. Creates dbt project WITHOUT cortex search (no chunk columns). Agent spec has only cortex_analyst_text_to_sql tool. No document processing models, no docs_stage_path var, no create_cortex_search_service macro. Semantic view includes all three tables with RELATIONSHIPS (orders-customers, orders-products), FACTS (amount), DIMENSIONS (status, category, plan, dates) with SYNONYMS.",
+      "files": [],
+      "expectations": [
+        "dbt_project.yml exists with project configuration",
+        "packages.yml includes Snowflake-Labs/dbt_semantic_view",
+        "No cortex search macro exists (no document data)",
+        "Agent spec YAML includes cortex_analyst_text_to_sql tool only (no cortex_search)",
+        "No AI_PARSE_DOCUMENT or document processing models exist",
+        "Semantic view includes all three tables (ORDERS, CUSTOMERS, PRODUCTS)",
+        "Semantic view has RELATIONSHIPS defining joins between orders-customers and orders-products",
+        "Semantic view has FACTS for amount column",
+        "Semantic view has DIMENSIONS with SYNONYMS for categorical columns"
+      ]
+    },
+    {
+      "id": 3,
+      "scenario": "extension",
+      "prompt": "I have an existing dbt project at ./my_sales_project that's deployed on Snowflake. It has gold zone models for orders, customers, products, and returns. I need to add Cortex AI services on top — specifically a semantic view for text2sql analytics, and a cortex agent. We don't have any document data so no need for cortex search. Can you explore my project and add what's needed?",
+      "expected_output": "Detects Scenario 2 (Extension). Uses fdbt to explore existing project structure. Reads dbt_project.yml and packages.yml. Adds Snowflake-Labs/dbt_semantic_view to packages.yml if missing. Adds semantic_views section to dbt_project.yml. Creates semantic view model referencing existing gold zone models (orders, customers, products, returns) with inferred FACTS/DIMENSIONS from column names. Creates cortex agent macro and agent spec YAML with cortex_analyst_text_to_sql only (no search). Preserves existing project conventions. Does NOT create cortex search macro since no document data.",
+      "files": [],
+      "expectations": [
+        "Snowflake-Labs/dbt_semantic_view is added to packages.yml",
+        "semantic_views section added to dbt_project.yml",
+        "Semantic view model references existing gold zone models (orders, customers, products, returns)",
+        "No cortex search macro created (no document data)",
+        "Cortex agent macro and spec YAML created",
+        "Agent spec includes only cortex_analyst_text_to_sql tool",
+        "Existing project structure is preserved (no renaming or restructuring of original models)",
+        "generate_schema_name macro exists or was added"
+      ]
+    },
+    {
+      "id": 4,
+      "scenario": "extension_with_search",
+      "prompt": "My existing dbt project has a gold zone model called knowledge_base_chunks that produces text chunks from parsed documents. It has columns: chunk_id, chunk (text), source_file, category. I want to add a cortex search service over this model and a cortex agent that can query both structured data and documents.",
+      "expected_output": "Detects Scenario 2 (Extension) with text chunk column detected (column named 'chunk' in knowledge_base_chunks). Creates cortex search service macro pointing at knowledge_base_chunks model with ATTRIBUTES source_file, category. Creates cortex agent spec with BOTH cortex_analyst_text_to_sql and cortex_search tools. Agent instructions include tool selection logic for data queries vs. document search vs. combined workflows.",
+      "files": [],
+      "expectations": [
+        "Cortex search macro created targeting the chunk column of knowledge_base_chunks",
+        "Cortex search macro includes ATTRIBUTES for source_file and/or category",
+        "Agent spec YAML includes BOTH cortex_analyst_text_to_sql AND cortex_search tools",
+        "Agent instructions include tool selection logic for data queries vs document search",
+        "Cortex agent macro with idempotent create/alter pattern exists"
+      ]
+    },
+    {
+      "id": 5,
+      "scenario": "migration_dynamic_tables",
+      "prompt": "We have a pipeline built entirely with Snowflake Dynamic Tables in the ANALYTICS schema. There are about 8 dynamic tables that transform raw event data into user sessions, page views, conversion funnels, and revenue metrics. One of them produces text chunks from product reviews. I want to migrate this whole thing to a dbt project and add cortex AI services on top. The SQL is all in Snowflake, not in a local repo.",
+      "expected_output": "Detects Scenario 3a (Dynamic Table Migration). Queries Snowflake: SHOW DYNAMIC TABLES, GET_DDL for each. Maps lineage to reconstruct dependency DAG. Creates dbt project with each DT as a dbt model using materialized='dynamic_table', carrying over target_lag and snowflake_warehouse from original DDL. Replaces hardcoded table refs with ref()/source(). Adds Migrated from: DT_<name> comments. Detects text chunk column in product_review_chunks, creates cortex search macro. Creates semantic view over gold tables (using materialized='semantic_view', not dynamic_table). Creates cortex agent with both text2sql and search tools.",
+      "files": [],
+      "expectations": [
+        "dbt models use materialized='dynamic_table' (not incremental or table)",
+        "Models include target_lag configuration carried from original DTs",
+        "Models include snowflake_warehouse in config",
+        "Hardcoded table references replaced with ref() or source()",
+        "Models include '-- Migrated from: DT_<name>' comments",
+        "Models organized into bronze/silver/gold zones",
+        "Semantic view uses materialized='semantic_view' (NOT dynamic_table)",
+        "Cortex search macro exists targeting product review text chunks",
+        "Cortex agent spec includes both cortex_analyst_text_to_sql and cortex_search tools"
+      ]
+    },
+    {
+      "id": 6,
+      "scenario": "migration_stored_procedures",
+      "prompt": "We have a data pipeline implemented as 5 Snowflake stored procedures in the REPORTING schema. They run sequentially: load_raw_data, clean_and_deduplicate, join_with_dimensions, calculate_metrics, and generate_summary. All are SQL procedures. I want to convert this to dbt with a cortex agent for analytics.",
+      "expected_output": "Detects Scenario 3b (Stored Procedure Migration). Queries Snowflake: SHOW PROCEDURES, GET_DDL for each. Extracts SELECT logic from each procedure's INSERT/CREATE TABLE AS statements. Maps execution order to dbt ref() chain. Creates models: load_raw_data (bronze), clean_and_deduplicate (silver incremental), join_with_dimensions (silver), calculate_metrics (gold), generate_summary (gold). Creates semantic view over gold tables. Creates cortex agent with cortex_analyst_text_to_sql tool. No cortex search since no document data detected.",
+      "files": [],
+      "expectations": [
+        "5 dbt models created corresponding to the 5 stored procedures",
+        "Models use SELECT statements (not INSERT/MERGE/CREATE TABLE)",
+        "Models use ref() to express dependencies matching the sequential execution order",
+        "Models include '-- Migrated from: SP_<name>' comments",
+        "Models organized into appropriate zones (bronze for load_raw, silver for clean/join, gold for metrics/summary)",
+        "Semantic view created over gold zone models",
+        "No cortex search macro created (no document data)",
+        "Cortex agent spec includes cortex_analyst_text_to_sql tool"
+      ]
+    },
+    {
+      "id": 7,
+      "scenario": "migration_python_procedures",
+      "prompt": "We have two Python stored procedures that do data transformation using Snowpark. One cleans customer data and the other enriches it with sentiment scores using Cortex AI. Convert them to dbt models.",
+      "expected_output": "Detects Scenario 3b (Stored Procedure Migration) with Python procedures. Converts to dbt Python models using Snowpark: replaces session.table() with dbt.ref(), removes write.save_as_table() and returns DataFrame instead, adds dbt.config() for materialization. Preserves Snowpark logic including Cortex AI function calls. Flags any non-data operations for manual review.",
+      "files": [],
+      "expectations": [
+        "At least one dbt Python model (.py) is created",
+        "Python models use dbt.ref() instead of session.table()",
+        "Python models return a DataFrame (no write.save_as_table())",
+        "Python models include dbt.config() for materialization settings",
+        "Cortex AI sentiment function usage is preserved in the enrichment model",
+        "Models include '-- Migrated from: SP_<name>' comment or equivalent Python docstring"
+      ]
+    },
+    {
+      "id": 8,
+      "scenario": "net_new_with_requirements_doc",
+      "prompt": "Here's a requirements document for our incident management system. [Provides a document describing incident tracking with tables for incidents, users, comments, attachments, plus PDF runbooks staged at @INCM.BRONZE_ZONE.DOCUMENTS]. Build the complete dbt + cortex pipeline.",
+      "expected_output": "Detects Scenario 1 (Net New) from requirements doc. Reads the document to extract entity definitions, relationships, and business questions. Creates full medallion-layer project following the reference implementation pattern: bronze, silver (document extracts with AI enrichment), gold (incidents, document_full_extracts), semantic view with all gold tables, cortex search over document chunks, cortex agent with detailed domain-specific instructions including tool selection logic for data vs. documentation queries.",
+      "files": [],
+      "expectations": [
+        "Sources defined for INCIDENTS, USERS, COMMENTS, and ATTACHMENTS tables",
+        "Bronze layer models created for each source table",
+        "Silver layer includes document processing model using AI_PARSE_DOCUMENT or AI_EXTRACT",
+        "Gold layer includes incident-focused analytical models",
+        "Semantic view includes FACTS for incident metrics (resolution time, counts)",
+        "Semantic view includes DIMENSIONS for severity, status, department, role",
+        "Cortex search macro targets document/runbook chunks",
+        "Agent spec includes both cortex_analyst_text_to_sql and cortex_search tools",
+        "Agent instructions reference incident management domain context"
+      ]
+    },
+    {
+      "id": 9,
+      "scenario": "extension_with_freshness",
+      "prompt": "I have an existing dbt project with gold zone models for orders, customers, and inventory. I want to add data freshness monitoring using Snowflake DMFs so I can track when each table was last updated. I also want to expose freshness information through the semantic view so users can ask 'how fresh is the data?' via the cortex agent. Set up the freshness monitoring and update the semantic view.",
+      "expected_output": "Detects Scenario 2 (Extension) with data freshness monitoring request. Creates attach_freshness_dmf macro that sets DATA_METRIC_SCHEDULE and attaches SNOWFLAKE.CORE.FRESHNESS via post-hook. Creates data_freshness_checks view model querying SNOWFLAKE.LOCAL.DATA_QUALITY_MONITORING_RESULTS filtered by dmf_freshness_tables var. Adds dmf_freshness_tables var to dbt_project.yml. Applies post_hook to monitored gold zone models. Includes data_freshness_checks in semantic view TABLES clause. Adds METRICS clause with data_freshness_summary metric. Adds DIMENSIONS for freshness check columns (scheduled_time, measurement_time, table_name, metric_name).",
+      "files": [],
+      "expectations": [
+        "attach_freshness_dmf macro created in macros/ directory",
+        "Macro sets DATA_METRIC_SCHEDULE and attaches SNOWFLAKE.CORE.FRESHNESS ON (<table_fqn>)",
+        "data_freshness_checks view model created in gold_zone querying SNOWFLAKE.LOCAL.DATA_QUALITY_MONITORING_RESULTS",
+        "data_freshness_checks model filters by dmf_freshness_tables var and METRIC_NAME LIKE '%FRESHNESS%'",
+        "dmf_freshness_tables var added to dbt_project.yml with list of uppercase table names",
+        "post_hook with attach_freshness_dmf applied to monitored models",
+        "Semantic view TABLES clause includes data_freshness_checks",
+        "Semantic view has METRICS clause with freshness summary metric",
+        "Semantic view has DIMENSIONS for data_freshness_checks columns"
+      ]
+    }
+  ]
+}

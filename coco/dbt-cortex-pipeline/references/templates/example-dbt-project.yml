@@ -1,0 +1,58 @@
+# Example dbt_project.yml for a dbt + Cortex AI pipeline
+# Replace <project_name> and <DATABASE>.<SCHEMA> with actual values.
+# Remove the vars section for document settings if no unstructured documents.
+
+name: '<project_name>'
+version: '1.0.0'
+config-version: 2
+profile: '<project_name>'
+
+vars:
+  # Stage path for unstructured documents (if applicable)
+  docs_stage_path: '@<DATABASE>.<SCHEMA>.DOCUMENTS'
+  # Supported document formats for parsing
+  supported_doc_formats: ['pdf', 'docx', 'doc', 'txt', 'text', 'html',
+    'md', 'pptx', 'ppt', 'png', 'eml', 'jpg', 'jpeg', 'gif', 'bmp',
+    'tiff', 'tif', 'webp', 'htm']
+  # AI_PARSE_DOCUMENT settings
+  parse_mode: "LAYOUT"
+  page_split: true
+  max_chunk_size: 500
+  max_chunk_depth: 5
+  # Snowflake Intelligence object name (for agent registration)
+  snowflake_intelligence_object: 'SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT'
+  # Toggle Snowflake Intelligence agent deployment (true to register agent with SI)
+  toggle_si_agent_deployment: false
+  # Tables to monitor for data freshness via DMFs (list of uppercase table names)
+  # Uncomment and populate if using data freshness monitoring
+  # dmf_freshness_tables: ['MY_TABLE']
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+snapshot-paths: ["snapshots"]
+analysis-paths: ["analyses"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  <project_name>:
+    bronze_zone:
+      +schema: bronze_zone
+      +materialized: table
+    silver_zone:
+      +schema: silver_zone
+      +materialized: incremental
+    gold_zone:
+      +schema: gold_zone
+      +materialized: table
+    semantic_views:
+      +schema: semantic_views
+      +materialized: semantic_view
+
+seeds:
+  <project_name>:
+    +schema: test_seeds

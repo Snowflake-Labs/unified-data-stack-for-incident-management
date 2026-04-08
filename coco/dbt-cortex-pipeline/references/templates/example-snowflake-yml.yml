@@ -1,0 +1,15 @@
+# Example snowflake.yml for task orchestration parameterization
+# Keeps environment-specific values out of SQL and enables the same
+# scripts across dev/staging/prod.
+# Used with Snowflake CLI templating: <% ctx.env.variable_name %>
+
+definition_version: 2
+env:
+  dbt_project_name: "my_project"
+  dbt_project_database: "MY_DB"
+  dbt_pipeline_wh: "my_wh"
+  dbt_project_admin_role: "my_role"
+  dbt_target: "dev"
+  daily_refresh_cron_schedule: "USING CRON 1 0 * * * America/Toronto"
+  cortex_search_wh: "search_wh"
+  cortex_search_service_name: "my_search_service"

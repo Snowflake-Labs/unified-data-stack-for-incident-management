@@ -1,0 +1,21 @@
+# Example profiles.yml for Snowflake-native dbt deployment
+# Replace <project_name>, <DATABASE>, <ROLE>, <WAREHOUSE> with actual values.
+#
+# Important for Snowflake-native deployment:
+# - Do NOT include password or authenticator fields
+# - Do NOT use env_var() — dbt runs inside Snowflake
+# - account and user can be empty strings (Snowflake fills them)
+# - profiles.yml must be inside the project directory (not ~/.dbt/)
+
+<project_name>:
+  outputs:
+    dev:
+      type: snowflake
+      account: ""
+      database: "<DATABASE>"
+      role: "<ROLE>"
+      schema: "bronze_zone"
+      user: ""
+      warehouse: "<WAREHOUSE>"
+      query_tag: '{"dbt_project": "<project_name>", "environment": "dev"}'
+  target: "dev"
