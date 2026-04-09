@@ -52,3 +52,10 @@
 14. If `dmf_freshness_tables` var is set, `attach_freshness_dmf` macro exists
 15. Models with freshness post-hooks use `materialized='table'` or
     `materialized='incremental'` (DMFs cannot attach to views)
+
+### Iceberg Configuration (if applicable)
+16. If Iceberg is enabled, `catalogs.yml` exists at project root with valid
+    external volume and catalog integration references
+17. If Iceberg is enabled, gold-zone config in `dbt_project.yml` includes
+    `+catalog: <iceberg_catalog_name>`
+18. If Iceberg is enabled, dbt-snowflake adapter version is 1.10+

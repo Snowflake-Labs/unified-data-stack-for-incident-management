@@ -308,6 +308,45 @@ The freshness results view can be included in the Semantic View to
 enable natural language queries about data freshness (see
 `semantic-view-patterns.md` — METRICS clause).
 
+### Iceberg Configuration (Gold Zone)
+
+When the user opts in to Iceberg table format during the pre-scenario step,
+gold-zone models are materialized as Snowflake-managed Iceberg tables. This
+requires dbt-snowflake 1.10+ and a `catalogs.yml` file at the project root.
+
+**Project-level config in `dbt_project.yml`:**
+
+```yaml
+models:
+  <project_name>:
+    gold_zone:
+      +schema: gold_zone
+      +materialized: table
+      +catalog: <iceberg_catalog_name>   # references the catalog defined in catalogs.yml
+```
+
+The `+catalog` config applied at the gold-zone level means individual gold
+models do **not** need any extra Iceberg-specific config. Both
+`materialized: table` and `materialized: incremental` support Iceberg — no
+model SQL changes are needed.
+
+**What dbt generates:** With the catalog config, dbt creates Iceberg tables
+instead of standard Snowflake tables:
+
+```sql
+CREATE OR REPLACE ICEBERG TABLE <DATABASE>.GOLD_ZONE.<TABLE_NAME>
+  EXTERNAL_VOLUME = '<external_volume>'
+  CATALOG = '<catalog_integration>'
+  BASE_LOCATION = '<table_name>'
+  AS SELECT ...;
+```
+
+**Materializations unaffected by Iceberg:**
+- `view` — views are not physical tables; Iceberg does not apply
+- `semantic_view` — custom materialization for Cortex Analyst; not a table
+
+**`catalogs.yml` template:** See `../templates/example-catalogs-yml.yml`.
+
 ### Schema YAML Pattern
 
 Create a `.yml` file alongside each model. See
