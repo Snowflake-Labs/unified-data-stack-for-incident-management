@@ -147,11 +147,24 @@ If the user points to an existing database/schema, run `SHOW TABLES` and
 - **Key entities and relationships**: primary keys, foreign keys, join patterns.
 - **Staged files**: Are there PDFs, Word docs, or other unstructured documents
 on a Snowflake stage? What stage path? What file formats?
+- **Unstructured text in source columns**: If no staged files exist, ask the
+user whether any source table already contains a column with unstructured or
+semi-structured text (e.g., ticket descriptions, comments, notes, knowledge-base
+articles, resolution summaries). If yes, record the source table and column
+name — this will drive the Cortex Search decision in Step 7.
 - **Business questions**: What questions should the Cortex Agent answer? This can be understood from requirements doc if available.  
 This informs the Semantic View dimensions/facts and agent instructions.
 
 If the user provides a requirements document or local files, read them to
 extract this context.
+
+**Cortex Search eligibility (record for Step 7):**
+
+| Source data signal | Cortex Search? | Action |
+|---|---|---|
+| Staged unstructured files (PDF, DOCX, etc.) | Yes | Build document processing models (bronze → silver → gold chunking) and search service |
+| No staged files, but user identifies a source column with unstructured text | Yes | Surface that column through a gold-layer model and build search service over it |
+| No staged files and no unstructured text columns | No | Skip Cortex Search; agent uses only `cortex_analyst_text_to_sql` |
 
 ### Step 2: Scaffold the dbt Project
 
@@ -287,14 +300,37 @@ DIMENSIONS) to the user for review before proceeding to agent creation.
 
 ### Step 7: Create Cortex Search Macro (if applicable)
 
-Scan gold zone models for text chunk columns. Column name heuristic:
-`chunk`, `text_chunk`, `content`, `extract`, `body`, `text_content`,
-`document_text`, `page_text`, `section_text`, `embedding_text`.
+This step is driven by the **Cortex Search eligibility** determined in
+Step 1. Do not scan gold-layer models (they do not exist yet).
 
-If found, create `macros/create_cortex_search_service.sql`. The macro
-takes parameters: `service_name`, `search_wh`, `search_column`,
-`target_lag`, `embedding_model`. See `references/workflows/cortex-agent-patterns.md`
+**If staged unstructured files were identified in Step 1:**
+
+The document processing models created in Steps 3-5 (bronze qualifying
+view → silver `AI_EXTRACT` → gold `AI_PARSE_DOCUMENT` + chunking) will
+produce a gold-layer table with a text chunk column. Use that chunk
+column as the `search_column`.
+
+Create `macros/create_cortex_search_service.sql`. The macro takes
+parameters: `service_name`, `search_wh`, `search_column`, `target_lag`,
+`embedding_model`. See `references/workflows/cortex-agent-patterns.md`
 for the template.
+
+**If the user identified a source column with unstructured text (no staged files):**
+
+1. Ensure a gold-layer model surfaces that column (it may already be
+   included in a pass-through or join model created in Step 5, or create
+   a dedicated gold model for it). The column does **not** need chunking
+   — Cortex Search handles embedding directly on the raw text.
+2. Create `macros/create_cortex_search_service.sql` using the
+   user-provided column as the `search_column` parameter. All other
+   macro parameters (`service_name`, `search_wh`, `target_lag`,
+   `embedding_model`) are the same as the staged-files path.
+3. Wire the search service into the Cortex Agent spec as a
+   `cortex_search` tool (Step 8).
+
+**If the user confirmed no unstructured text in any form:**
+
+Skip this step. The agent will use only `cortex_analyst_text_to_sql`.
 
 ### Step 8: Create Cortex Agent Macro + Spec
 
@@ -410,8 +446,18 @@ DIMENSIONS) to the user for review before proceeding to agent creation.
 
 ### Step 5: Create Cortex Search Macro (if applicable)
 
-Scan top-layer models for text chunk columns (same heuristic as Scenario 1
-Step 7). If found, create the macro.
+Follow the same source-data-driven decision as Scenario 1 Step 7.
+Since this is an extension of an existing project, determine eligibility by
+inspecting the existing top-layer model SQL (from Step 2) and source
+definitions:
+
+- If existing models already process staged documents and produce text
+  chunk columns, use that chunk column for the search service.
+- If no document processing exists, ask the user whether any source table
+  contains a column with pre-extracted unstructured text (e.g., ticket
+  descriptions, comments, notes). If yes, ensure a top-layer model
+  surfaces that column and use it as the `search_column`.
+- If no unstructured text exists in any form, skip Cortex Search.
 
 ### Step 6: Create Cortex Agent Macro + Spec
 
