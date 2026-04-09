@@ -6,43 +6,36 @@ description: >
   deployable dbt project. Use this skill whenever the user wants to create a dbt
   project that includes natural language querying, text2sql, document search, or
   a Cortex Agent — whether starting from scratch, extending an existing dbt
-  project, or migrating from Dynamic Tables or Stored Procedures. Also trigger
+  project, or migrating from Dynamic Tables. Also trigger
   when the user mentions: dbt with cortex, dbt with semantic view and agent, dbt
   AI pipeline, dbt with AI_PARSE_DOCUMENT or AI_EXTRACT, dbt + cortex search,
-  dbt + cortex analyst, convert dynamic tables to dbt with cortex, convert stored
-  procedures to dbt with cortex, scaffold a dbt project with an agent, dbt
-  project for structured and unstructured data, or any request to build a dbt
-  project that also deploys Cortex AI services. Do NOT use this skill for
-  standalone cortex agent creation without dbt, standalone semantic view SQL
-  without dbt, debugging existing dbt models, deploying an already-built dbt
-  project, or single AI function SQL queries without a pipeline.
+  dbt + cortex analyst, convert dynamic tables to dbt with cortex, scaffold a
+  dbt project with an agent, dbt project for structured and unstructured data,
+  or any request to build a dbt project that also deploys Cortex AI services.
+  Do NOT use this skill for standalone cortex agent creation without dbt,
+  standalone semantic view SQL without dbt, debugging existing dbt models,
+  deploying an already-built dbt project, or single AI function SQL queries
+  without a pipeline.
   # version: 1.0.0  (informational only)
+  # Iceberg triggers: dbt with iceberg, iceberg tables in dbt, materialize as
+  # iceberg, dbt iceberg pipeline, gold layer iceberg, snowflake managed iceberg
 ---
 
 # dbt + Cortex AI Pipeline Skill
 
-Create data pipelines that deploy dbt models and Cortex AI services (Semantic
-Views, Cortex Search, Cortex Agents) as a unified dbt project on Snowflake.
-
 ## Prerequisites
 
 - Snowflake account with permissions for databases, schemas, tables, views, stages, tasks, UDFs
-- A warehouse for dbt and Cortex AI operations
 - `snow` CLI installed and configured
-- For document processing: a Snowflake stage with uploaded files
-- An **external access integration** that allows the deployed dbt project to
-  download packages from GitHub and the dbt Hub (required by `dbt deps`)
+- An **external access integration** for egress to `github.com`, `codeload.github.com`, `hub.getdbt.com`
 
 ## Pre-Scenario Step: External Access Integration
 
-**⚠️ CHECKPOINT — Before starting any scenario**, ask the user for the name of
-an existing external access integration that grants egress to `github.com`,
-`codeload.github.com`, and `hub.getdbt.com`. This is required because the
-deployed dbt project runs `dbt deps` inside Snowflake, which must reach
-these hosts to download packages such as `dbt_semantic_view`.
+Ask the user for the name of an existing external access integration
+that grants egress to `github.com`, `codeload.github.com`, and
+`hub.getdbt.com`.
 
-If the user does not have one, provide this example and ask them to create it
-(or have an ACCOUNTADMIN run it) before proceeding:
+If the user does not have one, provide this example:
 
 ```sql
 USE ROLE ACCOUNTADMIN;
@@ -59,39 +52,71 @@ CREATE OR REPLACE EXTERNAL ACCESS INTEGRATION GITHUB_DBT_ACCESS_INTEGRATION
   COMMENT = 'Access to github.com and hub.getdbt.com';
 ```
 
-Record the integration name the user provides — it will be needed in the
-`snowflake.yml` configuration during the deploy step via the
-`--external-access-integration` option of `snow dbt deploy`.
-
-**⚠️ Snowflake CLI version caveat:** The `--external-access-integration` flag
-for `snow dbt deploy` is only available in recent versions of the Snowflake CLI.
-Before proceeding, ask the user to verify their installed version:
+Verify `snow` CLI supports `--external-access-integration`:
 
 ```bash
 snow --version
 ```
 
-If the version does not support `--external-access-integration`, the user must
-upgrade to the latest Snowflake CLI before continuing. Do **not** proceed to any
-scenario until both the integration name and CLI version are confirmed.
+Do **not** proceed until both the integration name and CLI version are confirmed.
 
 ## Pre-Scenario Step: Snowflake Intelligence Toggle
 
-**⚠️ CHECKPOINT — Before starting any scenario**, ask the user whether they
-want to register the Cortex Agent with **Snowflake Intelligence** (SI).
+Ask the user whether they want to register the Cortex Agent with
+**Snowflake Intelligence** (SI).
 
-- **If yes**: Ask for the fully qualified name of the Snowflake Intelligence
-  object (e.g., `MY_DB.MY_SCHEMA.MY_SI_OBJECT`). Record this value —
-  when generating `dbt_project.yml`, set:
+- **If yes**: Ask for the SI object name. Set:
   - `toggle_si_agent_deployment: true`
   - `snowflake_intelligence_object: '<user-provided name>'`
-- **If no** (default): When generating `dbt_project.yml`, keep the defaults:
+- **If no** (default): Keep defaults:
   - `toggle_si_agent_deployment: false`
   - `snowflake_intelligence_object: 'SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT'`
 
-These vars control whether `macros/create_cortex_agent.sql` runs the
-`ALTER SNOWFLAKE INTELLIGENCE ... ADD AGENT` statement after agent creation.
-Do **not** proceed to any scenario until the user has confirmed their choice.
+## Pre-Scenario Step: Iceberg Table Format Toggle
+
+Ask the user whether they want gold-layer models as
+**Snowflake-managed Iceberg tables**.
+
+- **If yes**: Collect these details:
+  - **External volume name** — the Snowflake external volume for Iceberg
+    storage (e.g., `MY_EXTERNAL_VOLUME`). If the user does not have one,
+    provide this example and ask them to create it first:
+
+    ```sql
+    CREATE OR REPLACE EXTERNAL VOLUME MY_EXTERNAL_VOLUME
+      STORAGE_LOCATIONS = (
+        (
+          NAME = 'my-s3-location'
+          STORAGE_BASE_URL = 's3://<bucket>/<path>/'
+          STORAGE_PROVIDER = 'S3'
+          STORAGE_AWS_ROLE_ARN = 'arn:aws:iam::<account_id>:role/<role_name>'
+        )
+      );
+    ```
+
+  - **Catalog integration name** — the Snowflake catalog integration for
+    the built-in Iceberg catalog (e.g., `MY_ICEBERG_CATALOG_INT`). If the
+    user does not have one, provide this example:
+
+    ```sql
+    CREATE OR REPLACE CATALOG INTEGRATION MY_ICEBERG_CATALOG_INT
+      CATALOG_SOURCE = SNOWFLAKE
+      TABLE_FORMAT = ICEBERG
+      ENABLED = TRUE;
+    ```
+
+  - **dbt version check** — confirm the dbt-snowflake adapter is **1.10+**
+    (catalog support requirement). Ask the user to verify:
+
+    ```bash
+    pip show dbt-snowflake | grep Version
+    ```
+
+  Record the external volume and catalog integration names. Set:
+  - `iceberg_enabled: true`
+  - `iceberg_catalog_name: '<user-provided catalog logical name>'`
+
+- **If no** (default): Set `iceberg_enabled: false`, `iceberg_catalog_name: ''`.
 
 ## Scenario Detection
 
@@ -99,8 +124,7 @@ Do **not** proceed to any scenario until the user has confirmed their choice.
 | ------------------ | ------------------------------------------------------------ |
 | **Net New** — No existing dbt project        | [Scenario 1](#scenario-1-net-new)                      |
 | **Extension** — Existing dbt project in a local repo      | [Scenario 2](#scenario-2-extension)                    |
-| **Migration (DT)** — Existing Dynamic Table pipeline | [Scenario 3a](#scenario-3a-dynamic-table-migration)    |
-| **Migration (SP)** — Existing Stored Procedure pipeline | [Scenario 3b](#scenario-3b-stored-procedure-migration) |
+| **Migration (DT)** — Existing Dynamic Table pipeline | [Scenario 3](#scenario-3-dynamic-table-migration)      |
 
 If unclear, ask the user which applies.
 
@@ -111,12 +135,7 @@ You **MUST** load it for any `snow dbt` command.
 
 ## Scenario 1: Net New
 
-> **GATE:** Do not begin this scenario until both pre-scenario steps are
-> complete: [External Access Integration](#pre-scenario-step-external-access-integration)
-> and [Snowflake Intelligence Toggle](#pre-scenario-step-snowflake-intelligence-toggle).
-
-Starting fresh. The user has data source descriptions, a requirements doc,
-or points to a Snowflake database/schema with existing tables.
+> **GATE:** Complete all pre-scenario steps first.
 
 ### Step 1: Gather Data Source Context
 
@@ -154,15 +173,17 @@ Create these configuration files:
 4. **macros/generate_schema_name.sql** that uses the custom schema name directly
   (no target prefix).
 5. **models/sources.yml** — standard dbt sources declaration.
+6. **catalogs.yml** (if Iceberg enabled) — use
+   `references/templates/example-catalogs-yml.yml` as template. Populate
+   with the external volume and catalog integration names collected in the
+   [Iceberg Table Format Toggle](#pre-scenario-step-iceberg-table-format-toggle)
+   pre-scenario step. Also add `+catalog: <iceberg_catalog_name>` to the
+   gold-zone config in `dbt_project.yml` so all gold models automatically
+   use Iceberg format.
 
-**⚠️ CHECKPOINT — Vars audit:** After generating `dbt_project.yml`, cross-reference
-the `vars` section against all sample SQL scripts and Python models that will be
-used as templates in later steps. Scan every `var()` and `dbt.config.get()` call
-in the scripts under `scripts/` and `references/workflows/` to ensure every
-referenced var has a default value declared in `dbt_project.yml`. Present the
-user with a table of vars, their default values, and the scripts that use them.
-Ask the user to confirm or adjust defaults before proceeding. This prevents
-runtime failures from undeclared vars.
+**Vars audit:** After generating `dbt_project.yml`, ensure every `var()`
+and `dbt.config.get()` call in scripts has a default declared. Present the
+vars table to the user for confirmation.
 
 The current known vars are:
 
@@ -176,12 +197,13 @@ The current known vars are:
 | `max_chunk_depth` | `5` | `document_full_extracts.sql` |
 | `snowflake_intelligence_object` | `'SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT'` | `create_cortex_agent.sql` |
 | `toggle_si_agent_deployment` | `false` | `create_cortex_agent.sql` |
-| `dmf_freshness_tables` | `[]` (commented out) | `data_freshness_checks.sql`, `attach_freshness_dmf` macro |
+| `dmf_freshness_tables` | `[]` (populate with all gold-zone table names) | `data_freshness_checks.sql`, `attach_freshness_dmf` macro |
+| `iceberg_enabled` | `false` | gold-zone model configs, `catalogs.yml` generation |
+| `iceberg_catalog_name` | `''` | gold-zone `+catalog` config |
 
 If the project does not use unstructured documents, remove the document-related
 vars (`docs_stage_path`, `supported_doc_formats`, `parse_mode`, `page_split`,
-`max_chunk_size`, `max_chunk_depth`) and confirm with the user. If the user
-does not need data freshness monitoring, omit the `dmf_freshness_tables` var.
+`max_chunk_size`, `max_chunk_depth`) and confirm with the user.
 
 ### Step 3: Create Bronze-Layer Models
 
@@ -225,14 +247,22 @@ and chunk documents for Cortex Search indexing. This model uses
 append-heavy. See `references/workflows/net-new-patterns.md` for
 the chunking pattern and `references/templates/example-document-full-extracts.yml`
 for the schema YAML template.
-- **Data freshness monitoring (optional):** If the user wants continuous
-freshness tracking, create the `attach_freshness_dmf` macro
+- **Data freshness monitoring:** Create the `attach_freshness_dmf` macro
 (see `scripts/example_attach_freshness_dmf.sql`) and a
 `data_freshness_checks` view model that queries DMF results. Add
-`dmf_freshness_tables` to `dbt_project.yml` vars. Apply the macro as
-a `post_hook` on each monitored model. See
-`references/workflows/net-new-patterns.md` — "Data Freshness Monitoring"
-for the full pattern.
+`dmf_freshness_tables` to `dbt_project.yml` vars, populated with all
+gold-zone table names. Apply the macro as a `post_hook` on each
+monitored model. See `references/workflows/net-new-patterns.md` —
+"Data Freshness Monitoring" for the full pattern.
+- **Iceberg table format (if enabled):** When the user opted in during the
+[Iceberg Table Format Toggle](#pre-scenario-step-iceberg-table-format-toggle)
+pre-scenario step, the `+catalog: <iceberg_catalog_name>` config applied at
+the gold-zone level in `dbt_project.yml` means individual gold models do
+**not** need any extra Iceberg-specific config. Both `materialized: table`
+and `materialized: incremental` support Iceberg — no model SQL changes are
+needed. Views and semantic views are unaffected. See
+`references/workflows/net-new-patterns.md` — "Iceberg Configuration (Gold Zone)"
+for details.
 
 ### Step 6: Create the Semantic View
 
@@ -244,8 +274,9 @@ Build `models/semantic_views/<view_name>.sql` over all gold zone tables:
 1. List all gold zone tables in the `TABLES()` clause using `{{ ref() }}`.
 2. Define `RELATIONSHIPS()` from foreign keys identified in Step 1.
 3. Add `FACTS()` for numeric/measure columns (amounts, durations, counts).
-4. Add `METRICS()` for computed expressions (optional). If a
-   `data_freshness_checks` model exists, add a freshness summary metric.
+4. Add `METRICS()` for computed expressions (optional). Add the
+   `data_freshness_checks` model to the `TABLES()` clause and include a
+   freshness summary metric.
    See `references/workflows/semantic-view-patterns.md` — METRICS clause.
 5. Add `DIMENSIONS()` for categorical/filter columns with `SYNONYMS` that
    capture how users naturally refer to each field and `COMMENT` that lists
@@ -309,11 +340,7 @@ Proceed to [Final Step: Provision Database and Deploy](#final-step-all-scenarios
 
 ## Scenario 2: Extension
 
-> **GATE:** Do not begin this scenario until both pre-scenario steps are
-> complete: [External Access Integration](#pre-scenario-step-external-access-integration)
-> and [Snowflake Intelligence Toggle](#pre-scenario-step-snowflake-intelligence-toggle).
-
-An existing dbt project needs Cortex AI services added.
+> **GATE:** Complete all pre-scenario steps first.
 
 ### Step 1: Explore the Existing Project
 
@@ -356,10 +383,20 @@ vars table in Scenario 1 Step 2 for the full list.
 **Preserve all existing project conventions.** Do not rename models, change
 materialization strategies, or alter existing macros.
 
-If the user wants data freshness monitoring, also add the
-`attach_freshness_dmf` macro, `data_freshness_checks` view model, and
-`dmf_freshness_tables` var at this step. See
+Also add the `attach_freshness_dmf` macro, `data_freshness_checks` view
+model, and `dmf_freshness_tables` var (populated with all top-layer table
+names) at this step. See
 `references/workflows/net-new-patterns.md` — "Data Freshness Monitoring".
+
+If the user opted in to Iceberg during the
+[Iceberg Table Format Toggle](#pre-scenario-step-iceberg-table-format-toggle)
+pre-scenario step, also:
+
+1. Create `catalogs.yml` at the project root using
+   `references/templates/example-catalogs-yml.yml` as template.
+2. Add `+catalog: <iceberg_catalog_name>` to the gold-zone (or equivalent
+   top-layer) config in `dbt_project.yml`.
+3. Add `iceberg_enabled: true` and `iceberg_catalog_name` to `vars`.
 
 ### Step 4: Create the Semantic View
 
@@ -389,13 +426,9 @@ Proceed to [Final Step: Provision Database and Deploy](#final-step-all-scenarios
 
 ---
 
-## Scenario 3a: Dynamic Table Migration
+## Scenario 3: Dynamic Table Migration
 
-> **GATE:** Do not begin this scenario until both pre-scenario steps are
-> complete: [External Access Integration](#pre-scenario-step-external-access-integration)
-> and [Snowflake Intelligence Toggle](#pre-scenario-step-snowflake-intelligence-toggle).
-
-Convert a Dynamic Table pipeline to dbt with Cortex AI services.
+> **GATE:** Complete all pre-scenario steps first.
 
 ### Step 1: Discover Dynamic Tables
 
@@ -452,6 +485,18 @@ For each Dynamic Table:
 See `references/workflows/migration-patterns.md` for the full `dynamic_table` config
 reference, `target_lag` mapping by zone, and `on_configuration_change` options.
 
+**Iceberg note:** The `dynamic_table` materialization also supports Iceberg
+format. When the user opted in during the
+[Iceberg Table Format Toggle](#pre-scenario-step-iceberg-table-format-toggle)
+pre-scenario step, gold-zone dynamic tables will automatically pick up the
+`+catalog` config from `dbt_project.yml` — no per-model changes needed.
+
+**Freshness DMF note:** Dynamic tables are physical tables, so the
+`attach_freshness_dmf` macro and `post_hook` apply to
+`materialized='dynamic_table'` models the same way as `table` or
+`incremental`. Include all gold-zone dynamic table names in the
+`dmf_freshness_tables` var.
+
 ### Steps 5-8: Cortex Services + Deploy
 
 Follow Scenario 1 Steps 6-10 (Semantic View, Cortex Search, Cortex Agent,
@@ -460,60 +505,7 @@ see `references/workflows/task-orchestration-patterns.md`.
 
 ---
 
-## Scenario 3b: Stored Procedure Migration
-
-> **GATE:** Do not begin this scenario until both pre-scenario steps are
-> complete: [External Access Integration](#pre-scenario-step-external-access-integration)
-> and [Snowflake Intelligence Toggle](#pre-scenario-step-snowflake-intelligence-toggle).
-
-Convert a Stored Procedure pipeline to dbt with Cortex AI services.
-
-### Step 1: Discover Stored Procedures
-
-Read `references/workflows/migration-patterns.md` for the discovery workflow.
-
-**Ask first:** Does the user have the procedure source in a local repo?
-If yes, read those files. If no, query Snowflake:
-
-```sql
-SHOW PROCEDURES IN SCHEMA <database>.<schema>;
-SELECT GET_DDL('PROCEDURE', '<database>.<schema>.<proc_name>(<arg_types>)');
-```
-
-Capture: procedure name, language (SQL/Python/JavaScript), body, parameters.
-
-### Step 2: Trace Execution Order
-
-Reconstruct the lineage DAG from procedure logic — identify which tables
-each procedure reads/writes, map execution order, and identify final
-output tables (gold zone candidates).
-
-### Step 3: Scaffold dbt Project
-
-Same structure as Scenario 1 Step 2.
-
-### Step 4: Convert Each SP to dbt Models
-
-- **SQL**: Extract SELECT from INSERT/MERGE/CREATE TABLE, replace table
-  references with `{{ ref() }}` / `{{ source() }}`, drop procedural wrapper.
-- **Python**: Convert to dbt Python models (Snowpark), replace
-  `session.table()` with `dbt.ref()`, replace `write.save_as_table()` with
-  `return result`.
-- **JavaScript/Java**: Flag for manual conversion; rewrite as SQL if possible.
-- Add `-- Migrated from: SP_<original_name>` comment.
-
-See `references/workflows/migration-patterns.md` for detailed conversion patterns.
-
-### Steps 5-8: Cortex Services + Deploy
-
-Follow Scenario 1 Steps 6-10 (Semantic View, Cortex Search, Cortex Agent,
-Schema YAMLs, Deploy). All checkpoints apply.
-
----
-
 ## Final Step (All Scenarios): Provision Database and Deploy
-
-Runs last after all models, macros, and specs are generated.
 
 ### 1. Configure `snowflake.yml`
 
@@ -533,6 +525,19 @@ database or have an admin run it.
 ```bash
 snow sql -f scripts/example_sysadmin_objects.sql
 ```
+
+**Iceberg prerequisites (if enabled):** Before proceeding, verify that the
+external volume and catalog integration collected during the
+[Iceberg Table Format Toggle](#pre-scenario-step-iceberg-table-format-toggle)
+pre-scenario step exist in Snowflake:
+
+```sql
+SHOW EXTERNAL VOLUMES LIKE '<external_volume_name>';
+SHOW CATALOG INTEGRATIONS LIKE '<catalog_integration_name>';
+```
+
+If either is missing, ask the user to create them before continuing
+(see the example SQL in the pre-scenario step).
 
 ### 3. Create the `READ_STAGE_FILE` UDF
 
@@ -556,29 +561,82 @@ snow dbt deploy <project_name> \
   --external-access-integration <INTEGRATION_NAME>
 ```
 
-Replace `<INTEGRATION_NAME>` with the external access integration name
-collected in the [Pre-Scenario Step](#pre-scenario-step-external-access-integration).
+This deploys the project as a Snowflake object. It does **not** execute it.
 
-This deploys the project as a Snowflake object. It does **not** execute it —
-running models, Cortex Search, and the Agent are separate operations afterward.
-
-**⚠️ CHECKPOINT:** Ask the user to confirm successful deployment:
+**⚠️ CHECKPOINT:** Confirm successful deployment:
 
 ```bash
 snow dbt list --in schema DBT_PROJECT_DEPLOYMENTS --database <DATABASE>
+```
+
+### 5. Deploy Task Graphs
+
+Create Snowflake tasks to orchestrate execution. See
+`references/workflows/task-orchestration-patterns.md` and
+`scripts/example_deploy_cortex_tasks.sql` for templates.
+
+Create up to three independent task DAGs:
+
+**DAG 1: Scheduled Model Refresh** (always)
+
+CRON-scheduled. Root task carries `dbt_project_name` and `target` in `CONFIG`;
+child tasks read via `SYSTEM$GET_TASK_GRAPH_CONFIG()`.
+
+- Root: CRON schedule (e.g., daily at midnight)
+- Child 1: `dbt compile`
+- Child 2: `dbt run --select tag:daily`
+
+**DAG 2: Stream-Triggered Document Processing** (if unstructured documents exist)
+
+Triggered by `SYSTEM$STREAM_HAS_DATA(...)` on a stage directory table.
+
+- Root: stream trigger
+- Child: `dbt run --select tag:document_processing`
+
+Skip if no document models.
+
+**DAG 3: Manual Cortex Services Deployment** (always)
+
+No schedule — invoke with `EXECUTE TASK root_deploy_cortex;`.
+Children run in parallel (all depend on root only).
+
+- Root: manual trigger with config (database, schema, stage, agent spec file)
+- Child 1: `dbt run --select semantic_views.<view_name>`
+- Child 2: `dbt run-operation create_cortex_search_service` (if search exists)
+- Child 3: `dbt run-operation create_cortex_agent` with random version tag
+
+Parameterize all tasks via `snowflake.yml` env vars (warehouse, schedule,
+project name, target).
+
+**Task lifecycle:** Suspend root-first before recreating; resume child-first
+after recreation.
+
+**⚠️ CHECKPOINT:** After creating all task DAGs, resume them and confirm
+they are active:
+
+```sql
+SHOW TASKS IN SCHEMA <DATABASE>.DBT_PROJECT_DEPLOYMENTS;
+```
+
+Ask the user to manually trigger DAG 3 to deploy the semantic view and
+Cortex Agent for the first time:
+
+```sql
+EXECUTE TASK <DATABASE>.DBT_PROJECT_DEPLOYMENTS.ROOT_DEPLOY_CORTEX;
 ```
 
 ---
 
 ## Reference Files
 
-Load on demand — only read files relevant to the current step.
+Load on demand — only files relevant to the current step.
 
 **Workflows:** `references/workflows/` — `net-new-patterns.md`, `extension-patterns.md`,
 `migration-patterns.md`, `semantic-view-patterns.md`, `cortex-agent-patterns.md`,
 `task-orchestration-patterns.md`, `conventions.md`
 
-**Templates:** `references/templates/` — `example-agent-spec.yml`, `example-dbt-project.yml`,
+**Templates:** `references/templates/` — `example-agent-spec.yml`, `example-catalogs-yml.yml`,
+`example-dbt-project.yml`,
 `example-profiles.yml`, `example-document-full-extracts.yml`,
 `example-document-question-extracts.yml`, `example-snowflake-yml.yml`
 

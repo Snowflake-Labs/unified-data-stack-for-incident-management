@@ -1,14 +1,13 @@
 # Semantic View Patterns
 
-A semantic view model uses `{{ config(materialized='semantic_view') }}` with
-up to five clauses: TABLES, RELATIONSHIPS, FACTS, METRICS, DIMENSIONS.
+Uses `{{ config(materialized='semantic_view') }}` with up to five
+clauses: TABLES, RELATIONSHIPS, FACTS, METRICS, DIMENSIONS.
 
-See `scripts/example_semantic_view.sql` for the full template and a
-filled-in example.
+See `scripts/example_semantic_view.sql` for the full template.
 
 ## Required Package
 
-`Snowflake-Labs/dbt_semantic_view` — run `dbt deps` to install.
+`Snowflake-Labs/dbt_semantic_view`
 
 ## Key Rules
 
@@ -43,8 +42,9 @@ METRICS (
 
 ### Data Freshness Metric Example
 
-When a `data_freshness_checks` view is included in the semantic view,
-add a metric that produces a human-readable freshness summary:
+Always include the `data_freshness_checks` model in the semantic view
+`TABLES()` clause and add a metric that produces a human-readable freshness
+summary:
 
 ```sql
 METRICS (
@@ -54,9 +54,6 @@ METRICS (
       WITH SYNONYMS = ('data freshness', 'last updated', 'data staleness')
 )
 ```
-
-This enables natural language questions like "how fresh is the incidents
-data?" or "when was the data last updated?" through Cortex Analyst.
 
 ## Tips for Effective Text2SQL
 

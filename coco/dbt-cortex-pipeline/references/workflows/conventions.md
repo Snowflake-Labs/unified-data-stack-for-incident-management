@@ -1,27 +1,4 @@
-# Key Principles and Validation
-
-## Key Principles
-
-1. **Macros for services, materializations for data.** Cortex Search and
-   Agent use `run-operation` macros. Semantic Views use the `semantic_view`
-   materialization.
-2. **Idempotent everything.** Agent macro checks existence; tasks use
-   `CREATE OR REPLACE`; updates use `ALTER ... MODIFY LIVE VERSION`.
-3. **Separate orchestration concerns.** Daily refresh, event-driven
-   processing, and Cortex deployment are independent DAGs.
-4. **Agent spec lives outside dbt.** Staged as YAML, read at deploy time
-   via a Python UDF.
-5. **Semantic View bridges data and AI.** Defines business vocabulary for
-   Text2SQL between gold tables and the Cortex Agent.
-6. **Auto-detect chunk columns for search.** Scan model columns for text
-   chunk patterns to determine Cortex Search need.
-7. **Preserve existing conventions.** When extending (Scenario 2), match
-   existing naming, tagging, and materialization patterns.
-8. **DMFs complement dbt tests.** dbt tests gate at build time; DMFs
-   monitor continuously after data lands. Attach via post-hooks, query
-   results via a gold-zone view.
-
-## Validation Checklist
+# Validation Checklist
 
 ### Project Structure
 1. All `{{ ref() }}` calls point to existing models
@@ -47,8 +24,16 @@
 ### Deployment
 12. Use `dbt-projects-on-snowflake` bundled skill to deploy and run
 
-### Data Freshness Monitoring (if applicable)
-13. If `dmf_freshness_tables` var is set, `data_freshness_checks` model exists
-14. If `dmf_freshness_tables` var is set, `attach_freshness_dmf` macro exists
-15. Models with freshness post-hooks use `materialized='table'` or
-    `materialized='incremental'` (DMFs cannot attach to views)
+### Data Freshness Monitoring
+13. `data_freshness_checks` model exists
+14. `attach_freshness_dmf` macro exists
+15. Models with freshness post-hooks use `materialized='table'`,
+    `materialized='incremental'`, or `materialized='dynamic_table'`
+    (DMFs cannot attach to views)
+
+### Iceberg Configuration (if applicable)
+16. If Iceberg is enabled, `catalogs.yml` exists at project root with valid
+    external volume and catalog integration references
+17. If Iceberg is enabled, gold-zone config in `dbt_project.yml` includes
+    `+catalog: <iceberg_catalog_name>`
+18. If Iceberg is enabled, dbt-snowflake adapter version is 1.10+

@@ -1,0 +1,14 @@
+# Example catalogs.yml for Snowflake-managed Iceberg tables (built-in catalog)
+# Requires dbt-snowflake adapter 1.10+ and two Snowflake objects:
+#   1. An external volume (CREATE EXTERNAL VOLUME ...)
+#   2. A catalog integration (CREATE CATALOG INTEGRATION ... CATALOG_SOURCE=SNOWFLAKE TABLE_FORMAT=ICEBERG)
+# Replace <iceberg_catalog_name>, <catalog_integration>, and <external_volume> with actual values.
+
+catalogs:
+  - name: <iceberg_catalog_name>          # logical name referenced by +catalog in dbt_project.yml
+    catalog_name: <catalog_integration>    # Snowflake CATALOG INTEGRATION object name
+    external_volume: <external_volume>     # Snowflake EXTERNAL VOLUME object name
+    table_format: iceberg
+    catalog_type: built_in
+    adapter_properties:
+      storage_serialization_policy: OPTIMIZED  # optional; default is COMPATIBLE

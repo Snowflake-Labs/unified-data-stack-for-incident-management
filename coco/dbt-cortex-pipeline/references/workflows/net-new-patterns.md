@@ -1,8 +1,5 @@
 # Net-New Project Patterns
 
-Templates and patterns for scaffolding a new dbt project with Cortex AI
-services from scratch.
-
 ## Configuration Files
 
 ### dbt_project.yml
@@ -13,9 +10,8 @@ See `../templates/example-dbt-project.yml`.
 
 See `../templates/example-profiles.yml`.
 
-**Snowflake-native deployment rules:** No `password`, no `authenticator`,
-no `env_var()`. `account`/`user` can be empty strings. `profiles.yml`
-must be inside the project directory.
+No `password`, no `authenticator`, no `env_var()`. `account`/`user` can
+be empty strings. `profiles.yml` must be inside the project directory.
 
 ### packages.yml
 
@@ -34,9 +30,6 @@ release version (`snow dbt list-packages --like 'dbt_semantic_view'`).
   {%- endif -%}
 {%- endmacro %}
 ```
-
-This override ensures that `+schema: gold_zone` creates a schema named
-exactly `gold_zone` rather than `<target_schema>_gold_zone`.
 
 ## sources.yml
 
@@ -85,14 +78,10 @@ CREATE STREAM IF NOT EXISTS <DATABASE>.<SCHEMA>.<STREAM_NAME>
   ON STAGE <DATABASE>.<SCHEMA>.<STAGE_NAME>;
 ```
 
-Declare the stream as a source in `sources.yml`. If the user declines,
-fall back to a full-scan view over the directory table (remove the
-`WHERE METADATA$ACTION != 'DELETE'` filter).
+If the user declines, fall back to a full-scan view over the directory
+table (remove the `WHERE METADATA$ACTION != 'DELETE'` filter).
 
----
-
-Once the stream is confirmed, create the qualifying view that filters by
-supported formats:
+Once the stream is confirmed, create the qualifying view:
 
 ```sql
 -- models/bronze_zone/v_qualify_new_documents.sql
@@ -158,18 +147,11 @@ WHERE a.updated_at > (
 
 ### Python Model for AI Enrichment (Silver)
 
-Use Python dbt models (Snowpark) for complex AI pipelines like
-`AI_EXTRACT`:
+See `scripts/example_document_question_extracts.py` for the Python model template
+and `../templates/example-document-question-extracts.yml` for the schema YAML.
 
-See `scripts/example_document_question_extracts.py` for the full Python model template.
-
-The model uses Snowpark to call `AI_EXTRACT` on staged documents. It builds
-a response schema dynamically from `dbt_project.yml` meta config and filters
-the qualifying view for `doc_type = 'question'`.
-
-Configure the Python model's stage path and extraction schema via
-its companion `.yml` file using `config.meta`. See
-`../templates/example-document-question-extracts.yml` for the complete template.
+Customize extraction properties in the `.yml` file's `config.meta` with
+domain-specific questions.
 
 ## Gold-Layer Model Patterns
 
@@ -202,22 +184,11 @@ FROM {{ ref('<silver_model>') }} e
 
 ### Document Chunking Model (Gold)
 
-For text data that will feed Cortex Search. Uses `AI_PARSE_DOCUMENT`
-for parsing and `SPLIT_TEXT_MARKDOWN_HEADER` for chunking:
-
-See `scripts/example_document_full_extracts.sql` for the full model template.
-
-The model uses `AI_PARSE_DOCUMENT` to extract page-by-page content from
-staged files, then `SPLIT_TEXT_MARKDOWN_HEADER` to chunk each page into
-searchable segments. It is materialized as `incremental` (append-only)
-and tagged `document_processing` so the stream-triggered DAG picks it up.
+See `scripts/example_document_full_extracts.sql` for the model template.
+Uses `AI_PARSE_DOCUMENT` + `SPLIT_TEXT_MARKDOWN_HEADER`. Materialized as
+`incremental` (append-only), tagged `document_processing`.
 
 ### Data Freshness Monitoring (Gold)
-
-Use Snowflake Data Metric Functions (DMFs) to monitor data freshness
-continuously after models are built. This complements dbt tests: tests
-gate your pipeline at build time, DMFs monitor data quality continuously
-after data lands.
 
 #### Freshness DMF Macro
 
@@ -263,9 +234,6 @@ models:
 | `60 MINUTE`                           | Evaluates every 60 minutes                      |
 | `USING CRON 0 9 * * * America/Chicago`| Evaluates daily at 9 AM Central                 |
 
-`TRIGGER_ON_CHANGES` is recommended for dbt-managed tables since it
-aligns evaluation with `dbt run` rebuilds.
-
 #### Freshness Results View
 
 Create a view to surface DMF results for monitored tables. This model
@@ -304,9 +272,28 @@ vars:
   dmf_freshness_tables: ['MY_TABLE']
 ```
 
-The freshness results view can be included in the Semantic View to
-enable natural language queries about data freshness (see
-`semantic-view-patterns.md` — METRICS clause).
+### Iceberg Configuration (Gold Zone)
+
+When the user opts in to Iceberg table format during the pre-scenario step,
+gold-zone models are materialized as Snowflake-managed Iceberg tables. This
+requires dbt-snowflake 1.10+ and a `catalogs.yml` file at the project root.
+
+**Project-level config in `dbt_project.yml`:**
+
+```yaml
+models:
+  <project_name>:
+    gold_zone:
+      +schema: gold_zone
+      +materialized: table
+      +catalog: <iceberg_catalog_name>   # references the catalog defined in catalogs.yml
+```
+
+The `+catalog` config at the gold-zone level means individual models
+need no extra Iceberg config. `view` and `semantic_view` materializations
+are unaffected.
+
+See `../templates/example-catalogs-yml.yml` for the `catalogs.yml` template.
 
 ### Schema YAML Pattern
 

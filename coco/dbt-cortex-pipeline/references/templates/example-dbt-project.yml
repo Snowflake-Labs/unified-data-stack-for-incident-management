@@ -26,6 +26,10 @@ vars:
   # Tables to monitor for data freshness via DMFs (list of uppercase table names)
   # Uncomment and populate if using data freshness monitoring
   # dmf_freshness_tables: ['MY_TABLE']
+  # Iceberg table format for gold-zone models (requires dbt-snowflake 1.10+)
+  # Set to true and provide the catalog name if using Snowflake-managed Iceberg tables
+  iceberg_enabled: false
+  iceberg_catalog_name: ''
 
 model-paths: ["models"]
 macro-paths: ["macros"]

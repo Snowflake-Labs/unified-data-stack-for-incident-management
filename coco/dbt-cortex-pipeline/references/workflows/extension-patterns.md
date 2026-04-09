@@ -1,7 +1,5 @@
 # Extension Patterns
 
-Patterns for adding Cortex AI services to an existing dbt project.
-
 ## Project Exploration Workflow
 
 ### Step 1: Use fdbt for Structure Discovery
@@ -103,6 +101,4 @@ RELATIONSHIPS (
 )
 ```
 
-If the model uses `LEFT JOIN`, the relationship is typically `many_to_one`.
-If it uses `INNER JOIN` on a shared key, examine the cardinality to choose
-the appropriate relationship type.
+If the model uses `LEFT JOIN`, the relationship is `many_to_one`.
