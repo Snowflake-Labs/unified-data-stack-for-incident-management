@@ -51,15 +51,20 @@ RELATIONSHIPS (
 -- Numeric columns used for aggregation (amounts, durations, counts, scores).
 -- Include temporal aggregation fields (year, quarter, month) when used
 -- for time-series grouping. Always add COMMENT with units.
+--
+-- CRITICAL: The syntax is table_alias.semantic_name AS physical_column,
+-- NOT physical_column AS semantic_name. The semantic name (how Cortex
+-- Analyst exposes the column) goes on the LEFT; the physical column goes
+-- on the RIGHT.
 
 FACTS (
-    <table_alias>.<numeric_column> AS <fact_name>
+    <table_alias>.<fact_name> AS <numeric_column>
       COMMENT = '<description with units, e.g. "Total amount in USD">'
-    , <table_alias>.<another_numeric_column> AS <fact_name>
+    , <table_alias>.<fact_name> AS <another_numeric_column>
       COMMENT = '<description with units>'
-    , <table_alias>.<year_column> AS <year_fact>
+    , <table_alias>.<year_fact> AS <year_column>
       COMMENT = '<e.g. "Year when the transaction occurred">'
-    , <table_alias>.<quarter_column> AS <quarter_fact>
+    , <table_alias>.<quarter_fact> AS <quarter_column>
       COMMENT = '<e.g. "Quarter when the transaction occurred">'
 )
 
@@ -70,39 +75,42 @@ FACTS (
 -- Columns used for filtering and grouping. Use SYNONYMS for informal terms,
 -- abbreviations, and domain jargon. Use COMMENT to list valid values for
 -- fixed-value columns.
+--
+-- CRITICAL: Same syntax as FACTS — table_alias.semantic_name AS physical_column.
+-- The semantic name goes on the LEFT; the physical column goes on the RIGHT.
 
 DIMENSIONS (
    -- Identifier dimension
-   <table_alias>.<id_column> AS <id_column>
+   <table_alias>.<id_dimension> AS <id_column>
      WITH SYNONYMS = ('<informal name>', '<abbreviation>')
      COMMENT = '<description of the identifier>'
 
    -- Category dimension with valid values
-   , <table_alias>.<category_column> AS <category_column>
+   , <table_alias>.<category_dimension> AS <category_column>
      WITH SYNONYMS = ('<alternate term 1>', '<alternate term 2>',
                       '<domain jargon term>')
      COMMENT = '<description>. Valid values: value_a, value_b, value_c'
 
    -- Status dimension with valid values
-   , <table_alias>.<status_column> AS <status_column>
+   , <table_alias>.<status_dimension> AS <status_column>
      WITH SYNONYMS = ('<alternate term>', '<abbreviation>')
      COMMENT = '<description>. Valid values: active, inactive, pending'
 
    -- Temporal dimension
-   , <table_alias>.<timestamp_column> AS <timestamp_column>
+   , <table_alias>.<timestamp_dimension> AS <timestamp_column>
      WITH SYNONYMS = ('<informal date name>', '<alternate date term>')
      COMMENT = '<e.g. "Creation timestamp">'
 
    -- People/Entity dimension
-   , <table_alias>.<person_id_column> AS <person_id_column>
+   , <table_alias>.<person_dimension> AS <person_id_column>
      WITH SYNONYMS = ('<role name>', '<informal reference>')
      COMMENT = '<e.g. "Assigned user identifier">'
 
    -- Multi-table dimension: add SYNONYMS only on the primary table
-   , <primary_table>.<column> AS <column>
+   , <primary_table>.<dimension_name> AS <column>
      WITH SYNONYMS = ('<synonym 1>', '<synonym 2>')
      COMMENT = '<description>'
-   , <secondary_table>.<column> AS <column>
+   , <secondary_table>.<dimension_name> AS <column>
      COMMENT = '<description>'
 )
 
@@ -112,6 +120,11 @@ DIMENSIONS (
 -- =============================================================================
 -- A filled-in semantic view combining multiple gold zone tables.
 -- File: models/semantic_views/my_analytics.sql
+--
+-- NOTE: FACTS and DIMENSIONS use the syntax:
+--   table_alias.semantic_name AS physical_column
+-- The semantic name (left) is what Cortex Analyst exposes; the physical
+-- column (right) is the underlying table column.
 
 {{ config(materialized='semantic_view') }}
 
