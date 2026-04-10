@@ -284,9 +284,16 @@ and `scripts/example_semantic_view.sql` for the full template.
 
 Build `models/semantic_views/<view_name>.sql` over all gold zone tables:
 
+**⚠️ CRITICAL — FACTS/DIMENSIONS column syntax:** In FACTS and DIMENSIONS
+clauses, the format is `table_alias.semantic_name AS physical_column_expression`,
+**not** the reverse. The semantic name (how Cortex Analyst exposes the column)
+goes on the left; the physical column or expression goes on the right.
+Getting this backwards causes Cortex Analyst to generate incorrect SQL.
+
 1. List all gold zone tables in the `TABLES()` clause using `{{ ref() }}`.
 2. Define `RELATIONSHIPS()` from foreign keys identified in Step 1.
 3. Add `FACTS()` for numeric/measure columns (amounts, durations, counts).
+   Use the correct syntax: `table_alias.semantic_name AS physical_column`.
 4. Add `METRICS()` for computed expressions (optional). Add the
    `data_freshness_checks` model to the `TABLES()` clause and include a
    freshness summary metric.
@@ -294,6 +301,7 @@ Build `models/semantic_views/<view_name>.sql` over all gold zone tables:
 5. Add `DIMENSIONS()` for categorical/filter columns with `SYNONYMS` that
    capture how users naturally refer to each field and `COMMENT` that lists
    valid values where applicable.
+   Use the correct syntax: `table_alias.semantic_name AS physical_column`.
 
 **⚠️ CHECKPOINT:** Present the Semantic View (TABLES, RELATIONSHIPS, FACTS,
 DIMENSIONS) to the user for review before proceeding to agent creation.
@@ -440,6 +448,12 @@ Create `models/semantic_views/<view_name>.sql` referencing the top-layer
 models identified in Step 2. Infer TABLES, RELATIONSHIPS, FACTS,
 DIMENSIONS from the model schemas. See `references/workflows/semantic-view-patterns.md`
 and `scripts/example_semantic_view.sql`.
+
+**⚠️ CRITICAL — FACTS/DIMENSIONS column syntax:** In FACTS and DIMENSIONS
+clauses, the format is `table_alias.semantic_name AS physical_column_expression`,
+**not** the reverse. The semantic name goes on the left; the physical column
+or expression goes on the right. Getting this backwards causes Cortex Analyst
+to generate incorrect SQL.
 
 **⚠️ CHECKPOINT:** Present the Semantic View (TABLES, RELATIONSHIPS, FACTS,
 DIMENSIONS) to the user for review before proceeding to agent creation.

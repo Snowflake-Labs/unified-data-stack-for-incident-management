@@ -16,6 +16,13 @@ See `scripts/example_semantic_view.sql` for the full template.
 - Naming convention for relationships: `<child>_to_<parent>`
 - When multiple tables expose the same dimension, add SYNONYMS only on
   the primary/canonical table to avoid ambiguity
+- **CRITICAL — FACTS and DIMENSIONS column syntax:** The correct format is
+  `table_alias.semantic_name AS physical_column_expression`, **not** the
+  reverse. The semantic name (how Cortex Analyst exposes the column) goes
+  on the left, and the physical column or expression goes on the right.
+  Example: `orders.order_total AS total_amount_usd` means the semantic
+  name is `order_total` and the underlying column is `total_amount_usd`.
+  Getting this backwards causes Cortex Analyst to generate incorrect SQL.
 
 ## METRICS Clause
 
