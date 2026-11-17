@@ -5,7 +5,7 @@
 # the repo. Unless a later match takes precedence,
 # @global-owner1 and @global-owner2 will be requested for
 # review when someone opens a pull request.
-*       @sfc-gh-clakkad (chinmayee.lakkad@snowflake.com) @sfc-gh-plakhanpal (puneet.lakhanpal@snowflake.com)
+*       @sfc-gh-clakkad @sfc-gh-plakhanpal
 
 # Order is important; the last matching pattern takes the most
 # precedence. When someone opens a pull request that only
